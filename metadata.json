@@ -1,0 +1,8 @@
+{
+  "name": "Vlad Petre Portfolio 3",
+  "description": "An interactive, SEO-optimized portfolio for a Senior Game Designer built with hexagonal architecture.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

@@ -1,0 +1,173 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400..700&family=Outfit:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  /* Surface & Ink (Backgrounds & Text) */
+  --color-surface-base: #F7F4EB;
+  --color-surface-elevated: #EFEBDF;
+  --color-surface-inverse: #1C1A22;
+  --color-surface-soft: #FAF8F2;
+  
+  --color-ink-base: #191919;
+  --color-ink-subtle: #4D4D4D;
+  --color-ink-whisper: #8C8C8C;
+  
+  /* Brand/Interaction */
+  --color-theme-accent: #FF9EBB;
+  --color-theme-accent-hover: #E386A2;
+  --color-theme-primary: #FF9EBB;
+  
+  /* Keeping backward compatibility aliases for current components */
+  --surface-base: var(--color-surface-base);
+  --surface-elevated: var(--color-surface-elevated);
+  --surface-inverse: var(--color-surface-inverse);
+  --surface-soft: var(--color-surface-soft);
+  
+  --ink-base: var(--color-ink-base);
+  --ink-subtle: var(--color-ink-subtle);
+  --ink-whisper: var(--color-ink-whisper);
+  
+  --theme-accent: var(--color-theme-accent);
+  --theme-accent-hover: var(--color-theme-accent-hover);
+  --theme-primary: var(--color-theme-primary);
+  
+  /* Secondary Palette for Data / Specific usages */
+  --color-coral: #FF9EBB;
+  --color-coral-deep: #E386A2;
+  --color-mint: #C6EE71;
+  --color-mint-deep: #AAD05C;
+  --color-sky: #9AE2D8;
+  --color-sky-deep: #7FC0B6;
+  --color-butter: #F9E56C;
+  --color-butter-deep: #DEC956;
+  --color-rose: #FF9EBB;
+  --color-rose-deep: #E386A2;
+  --color-periwinkle: #C8B2F8;
+  --color-periwinkle-deep: #AC96DB;
+  --color-lilac: #DCCDF9;
+  
+  /* State */
+  --color-success: var(--color-mint);
+  --color-warning: #FFB84D;
+  --color-error: #E8554A;
+
+  /* Rules */
+  --color-rule: var(--color-ink);
+  --color-rule-soft: #E0D9C6;
+  
+  /* Geometry */
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-pill: 9999px;
+  
+  /* Spacing */
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+  
+  /* Physics / Interaction */
+  --transition-defaults: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  --hover-transform: translateY(-2px);
+  --active-transform: scale(0.98);
+
+  /* Shadows */
+  --shadow-applet-sm: 0 3px 0 0 var(--ink-base);
+  --shadow-applet-md: 0 5px 0 0 var(--ink-base);
+  --shadow-applet-lg: 0 8px 0 0 var(--ink-base);
+  --shadow-applet-xl: 0 12px 0 0 var(--ink-base);
+
+  /* Fonts */
+  --font-display: 'Space Grotesk', sans-serif;
+  --font-body: 'Outfit', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  /* Font sizes — named label tiers */
+  --text-label: 11px;
+  --text-label-sm: 10px;
+
+  /* Slot machine motif — the tactile hardware aesthetic */
+  --color-slot-casing: #E2D4C1;
+  --color-slot-surface: #F4ECE1;
+  --color-slot-text: #2D2A26;
+
+  /* Border radius additions */
+  --radius-slot: 22px;
+
+  /* Interaction physics */
+  --press-depth: 5px;
+  --press-inset-depth: 4px;
+
+  /* Chrome dimensions */
+  --chrome-navbar-height: 64px;
+  --chrome-titlebar-height: 40px;
+  --chrome-traffic-light-border: 1.5px;
+  --chrome-icon-slot-size: 90px;
+
+  /* Background texture */
+  --texture-dot-size: 1px;
+  --texture-dot-gap: 28px;
+  --texture-overlay-opacity: 0.96;
+  --texture-stripe-width: 2px;
+  --texture-stripe-period: 8px;
+}
+
+* { box-sizing: border-box; }
+
+/* Global hidden scrollbars */
+* {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+*::-webkit-scrollbar {
+  display: none;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--surface-base);
+  color: var(--ink-base);
+  font-family: var(--font-body);
+  font-size: 17px;
+  line-height: 1.6;
+  font-feature-settings: 'ss01', 'cv11';
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  background-image: radial-gradient(var(--color-ink-base) var(--texture-dot-size), transparent calc(var(--texture-dot-size) + 0.5px));
+  background-size: var(--texture-dot-gap) var(--texture-dot-gap);
+  background-position: 0 0;
+  background-attachment: fixed;
+  background-color: var(--surface-base);
+  background-blend-mode: normal;
+}
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: var(--surface-base);
+  opacity: var(--texture-overlay-opacity);
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0ms !important;
+  }
+}
+
+/* Focus */
+:focus-visible {
+  outline: 3px solid var(--color-sky);
+  outline-offset: 3px;
+}

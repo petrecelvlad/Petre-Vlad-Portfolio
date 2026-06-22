@@ -1,0 +1,30 @@
+# Agent Onboarding: Experience Engine
+
+Welcome! If you are reading this, you are a new AI agent onboarded to help build this project. **Before writing a single line of code, read this document and the referenced architecture files in `/docs/Architecture/`.**
+
+## Purpose of the Project
+This is an **Experience Engine**—an interactive, highly-stylized portfolio application for a Game Designer/Producer. 
+It moves away from traditional web "page" flows towards a "Scene" or "Canvas" system, emphasizing spatial navigation (a timeline), bold 2D aesthetics, and high user delight.
+
+## Core Tech Stack
+- **Framework:** React 19 + TypeScript + Vite (`tsx` dev server)
+- **Styling:** Tailwind CSS V4 (`@tailwindcss/vite`)
+- **Animation:** Motion (`motion/react`)
+- **Icons:** `lucide-react`
+- **Data Source:** Static JSON mapped to interfaces (`/src/infrastructure/data/portfolio.json`)
+
+## The Golden Rules for Agents
+1. **Never delete `package.json`** or the setup configurations unless explicitly requested and safe. 
+2. **Never mock data:** The "database" is `portfolio.json`. Use the actual JSON repo to see or iterate on real user data (`src/infrastructure/data/portfolio.json`). If you need to add an item, modify the JSON. Do not inject mock data directly into components.
+3. **Respect the Layout Architecture:** We use a split architecture. There is the "Global Chrome" (fixed navigation, HUD) and the "Content Canvas" (the interactive timeline area with bento grids). Do not make components fight for the active scroll index—let the overarching `Scene` or `TimelineTrack` manage state.
+4. **Adhere closely to the Design System:** No generic Tailwind components. We use strict "Bauhaus/Applet" UI styles (think thick borders, flat vibrant colors, hard shadows). Reference `applet.ts` and `bauhaus.ts`. See `/docs/Architecture/Design_System.md`.
+5. **Always log major architectural changes:** We maintain a ledger of decisions. If you modify core systems or make design calls, add an entry to `/docs/Logs.md`.
+
+## Essential Reading (Your Next Steps)
+To understand how to build specific pieces, read the following:
+- `/docs/Architecture/README.md` (The global index)
+- `/docs/Architecture/Project_Template.md` (Everything about `IProject` and Bento layouts—our most important template!)
+- `/docs/Architecture/Design_System.md` (Our exact visual language classes and styles)
+- `/docs/Architecture/Component_Architecture.md` (How our atoms, molecules, and organisms communicate)
+
+**You now have your bearings. Review the Architecture docs when modifying their respective systems.**
