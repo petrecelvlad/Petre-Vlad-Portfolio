@@ -1,0 +1,381 @@
+[
+  {
+    "id": "exp-metacore-2024",
+    "company": "Metacore",
+    "companyLogo": "",
+    "location": "Remote",
+    "startDate": "2024-08-01",
+    "endDate": "2025-01-30",
+    "projects": [
+      {
+        "id": "proj-merge-mansion",
+        "title": "Merge Mansion",
+        "role": "Level Designer (Contract)",
+        "startDate": "2024-08-01",
+        "endDate": "2025-01-30",
+        "icon": "/assets/icons/Icon_MM.png",
+        "type": "GAME",
+        "responsibilities": [
+          "Game Design and Game Balance.",
+          "Level Design for various live events and core game progression."
+        ],
+        "achievements": [
+          "Contributed to one of the world's top-grossing merge games."
+        ],
+        "technologies": ["Game Design", "Game Balance", "Level Design"],
+        "keyScreenshots": [],
+        "links": {
+          "youtube": "https://www.youtube.com/watch?v=DUZSjukx2OI"
+        }
+      }
+    ]
+  },
+  {
+    "id": "exp-deca-games-2023",
+    "company": "DECA Games",
+    "companyLogo": "",
+    "location": "Remote",
+    "startDate": "2023-05-01",
+    "endDate": "2023-10-31",
+    "projects": [
+      {
+        "id": "proj-deca-rotmg",
+        "title": "Realm of the Mad God",
+        "role": "Sr. Game Designer",
+        "startDate": "2023-05-01",
+        "endDate": "2023-10-31",
+        "icon": "/assets/icons/Icon_ROTMG.png",
+        "type": "GAME",
+        "responsibilities": [
+          "Senior Game Design across DECA's live portfolio of acquired titles.",
+          "Managing live operations and feature design for Realm of the Mad God."
+        ],
+        "achievements": [
+          "Optimized live ops events for higher player engagement."
+        ],
+        "technologies": ["Game Design", "Live Ops", "Economy Design"],
+        "keyScreenshots": [],
+        "links": {
+          "youtube": "https://www.youtube.com/watch?v=fFNaSLSmp2k"
+        }
+      }
+    ]
+  },
+  {
+    "id": "exp-amber-2019-2023",
+    "company": "Amber Studio",
+    "companyLogo": "/assets/icons/Icon_Amber.png",
+    "location": "Bucharest",
+    "startDate": "2019-03-01",
+    "endDate": "2023-04-30",
+    "projects": [
+      {
+        "id": "proj-lead-level-designer",
+        "title": "Lead Level Designer",
+        "role": "Lead Level Designer",
+        "startDate": "2019-03-01",
+        "endDate": "2022-10-30",
+        "icon": "/assets/icons/Icon_Amber.png",
+        "type": "GAME",
+        "responsibilities": [
+          "Coordinated 6 teams simultaneously to produce and deliver levels across multiple King puzzle games.",
+          "Managed 15 people across all teams; trained 9 Junior Level Designers.",
+          "Single-handedly produced 1,000+ levels; led teams to a combined output of 5,000+ levels.",
+          "Standardized Level Design procedures and centralized resources."
+        ],
+        "achievements": [
+          "Managed 6 concurrent teams while maintaining delivery quality."
+        ],
+        "technologies": ["Level Design", "Team Leadership", "Agile Planning", "Process Standardization"],
+        "keyScreenshots": ["/assets/screenshots/SS_Alphabetty.png"],
+        "links": {}
+      },
+      {
+        "id": "proj-fe-high-voltage",
+        "title": "Formula E High Voltage",
+        "role": "Principal Game Designer",
+        "startDate": "2022-11-01",
+        "endDate": "2023-04-30",
+        "icon": "/assets/icons/Icon_FEHV.png",
+        "type": "GAME",
+        "responsibilities": [
+          "Oversaw design of core gameplay features, ensuring alignment with the REVV token blockchain integration.",
+          "Designed Game Modes, Team Management System, AI Manager Personas, Attack Zone & Energy Regen systems.",
+          "Created the full game screen flow diagram and collaborated closely with UX and UI teams.",
+          "Worked with the Game Economy Designer to validate and balance all proposed game values."
+        ],
+        "achievements": [
+          "Integrated NFT Cars and Drivers as playable team management assets."
+        ],
+        "technologies": ["Blockchain / NFTs", "Game Design", "Economy Design", "UX Design"],
+        "keyScreenshots": ["/assets/screenshots/Game_FEHV.png"],
+        "links": {
+          "youtube": "https://www.youtube.com/watch?v=NlQGp6XngcI"
+        }
+      }
+    ]
+  },
+  {
+    "id": "exp-idle-td-2018-2019",
+    "company": "Independent",
+    "companyLogo": "",
+    "startDate": "2018-05-01",
+    "endDate": "2019-02-28",
+    "projects": [
+      {
+        "id": "proj-idle-td",
+        "title": "Tap TD",
+        "role": "Game Producer",
+        "startDate": "2018-05-01",
+        "endDate": "2019-02-28",
+        "icon": "/assets/icons/Icon_TapTD.png",
+        "type": "GAME",
+        "responsibilities": [
+          "Produced the full game in partnership with 3 former King employees.",
+          "Led project planning, team coordination, and backlog management.",
+          "Created all Game Design documentation and designed the full UX flow."
+        ],
+        "achievements": [
+          "100K App Installs."
+        ],
+        "technologies": ["Game Production", "Game Design", "Economy Design"],
+        "keyScreenshots": [],
+        "links": {
+          "youtube": "https://www.youtube.com/watch?v=6OuN6ncCRNo"
+        }
+      }
+    ]
+  },
+  {
+    "id": "exp-newton-slots-2017-2018",
+    "company": "Newton Slots",
+    "companyLogo": "/assets/icons/Icon_Slots.jpg",
+    "startDate": "2017-10-01",
+    "endDate": "2018-04-30",
+    "projects": [
+      {
+        "id": "proj-newton-slots",
+        "title": "Lucky Slots & Friends",
+        "role": "Game Designer",
+        "startDate": "2017-10-01",
+        "endDate": "2018-04-30",
+        "icon": "/assets/icons/Icon_Slots.jpg",
+        "type": "GAME",
+        "responsibilities": [
+          "Re-designed a Slots game with Match-3 mechanics.",
+          "Researched and documented the Swapping mechanic.",
+          "Designed new Bonus Games mechanics and a Loot Box reward system."
+        ],
+        "achievements": [
+          "Innovative Spin Mechanic — a first-of-kind Slots + Match-3 hybrid interaction."
+        ],
+        "technologies": ["Game Design", "Economy Design", "Mechanics Design"],
+        "keyScreenshots": ["/assets/screenshots/SS_Slots.jpg"],
+        "links": { "website": "https://newtonslots.com" }
+      }
+    ]
+  },
+  {
+    "id": "exp-clash-of-towers-2017",
+    "company": "Independent",
+    "companyLogo": "/assets/icons/Icon_COT.jpg",
+    "startDate": "2017-07-01",
+    "endDate": "2017-09-30",
+    "projects": [
+      {
+        "id": "proj-clash-of-towers",
+        "title": "Clash of Towers",
+        "role": "Indie Game Producer",
+        "startDate": "2017-07-01",
+        "endDate": "2017-09-30",
+        "icon": "/assets/icons/Icon_COT.jpg",
+        "type": "GAME",
+        "responsibilities": [
+          "Produced and launched an indie game on the Google Play Store.",
+          "Coordinated a team of 3 people fully online.",
+          "Designed Game Graphics and Economy."
+        ],
+        "achievements": [
+          "Game released in 2 months."
+        ],
+        "technologies": ["Game Production", "Game Design", "Game Art"],
+        "keyScreenshots": ["/assets/screenshots/SS_COT.png", "/assets/screenshots/SS_COT_2.png"],
+        "links": {
+          "youtube": "https://www.youtube.com/watch?v=jEIxA66bLrc"
+        }
+      }
+    ]
+  },
+  {
+    "id": "exp-intense-life-2016-2017",
+    "company": "Intense Life",
+    "companyLogo": "/assets/icons/Icon_Fitkin.png",
+    "startDate": "2016-07-01",
+    "endDate": "2017-06-30",
+    "projects": [
+      {
+        "id": "proj-fitkin",
+        "title": "FitKin",
+        "role": "Game Designer",
+        "startDate": "2016-07-01",
+        "endDate": "2017-06-30",
+        "icon": "/assets/icons/Icon_Fitkin.png",
+        "type": "GAME",
+        "responsibilities": [
+          "Designed a gamified health app where users advance story progress through step tracking.",
+          "Worked with a team of 8 people.",
+          "Classified users into Personas based on behavior research."
+        ],
+        "achievements": [
+          "Designed User Personas classification system."
+        ],
+        "technologies": ["Gamification", "UX Design", "User Research"],
+        "keyScreenshots": ["/assets/screenshots/SS_Fitkin.png"],
+        "links": { "website": "https://fitkingame.com" }
+      }
+    ]
+  },
+  {
+    "id": "exp-freelance-2015-2016",
+    "company": "Freelance",
+    "companyLogo": "",
+    "startDate": "2015-11-01",
+    "endDate": "2016-06-30",
+    "projects": [
+      {
+        "id": "proj-castellum",
+        "title": "Castellum",
+        "role": "Freelance Game Designer",
+        "startDate": "2015-11-01",
+        "endDate": "2016-06-30",
+        "icon": "/assets/icons/Icon_Castellum.png",
+        "type": "GAME",
+        "responsibilities": [
+          "Contracted to design and produce the complete game.",
+          "Managed a team of 4 people.",
+          "Handled UX & UI Design."
+        ],
+        "achievements": [
+          "Delivered a complete game to a freelance client."
+        ],
+        "technologies": ["Game Design", "UX Design", "UI Design"],
+        "keyScreenshots": ["/assets/screenshots/SS_Castellum.jpg", "/assets/screenshots/SS_Castellum_2.png"],
+        "links": {
+          "youtube": "https://www.youtube.com/watch?v=dRoPBmkO5iY"
+        }
+      }
+    ]
+  },
+  {
+    "id": "exp-king-2013-2015",
+    "company": "King",
+    "companyLogo": "/assets/icons/Icon_BWS1.png",
+    "startDate": "2013-10-01",
+    "endDate": "2015-10-30",
+    "projects": [
+      {
+        "id": "proj-bubble-witch-saga",
+        "title": "Bubble Witch Saga",
+        "role": "Jr. Level Designer",
+        "startDate": "2013-10-01",
+        "endDate": "2014-03-30",
+        "icon": "/assets/icons/Icon_BWS1.png",
+        "type": "GAME",
+        "responsibilities": [
+          "Designed and balanced levels for Bubble Witch Saga.",
+          "Learned core Level Design principles at King."
+        ],
+        "achievements": [
+          "Contributed to one of King's founding hits."
+        ],
+        "technologies": ["Level Design", "Puzzle Design"],
+        "keyScreenshots": ["/assets/screenshots/SS_BWS2.jpg"],
+        "links": { "website": "https://king.com" }
+      },
+      {
+        "id": "proj-alphabetty-saga",
+        "title": "AlphaBetty Saga",
+        "role": "Level Designer",
+        "startDate": "2014-04-01",
+        "endDate": "2015-10-30",
+        "icon": "/assets/icons/Icon_Alphabetty.png",
+        "type": "GAME",
+        "responsibilities": [
+          "Designed in-game tutorials for player onboarding.",
+          "Trained 1 Jr. Level Designer.",
+          "Held presentations across multiple King studios."
+        ],
+        "achievements": [
+          "Shipped a live King title reaching millions of players."
+        ],
+        "technologies": ["Level Design", "Puzzle Design", "Tutorial Design"],
+        "keyScreenshots": ["/assets/screenshots/SS_Alphabetty.png"],
+        "links": { "website": "https://king.com" }
+      }
+    ]
+  },
+  {
+    "id": "exp-flash-era-2008-2013",
+    "company": "Independent (Flash Era)",
+    "companyLogo": "",
+    "startDate": "2008-01-01",
+    "endDate": "2013-09-30",
+    "projects": [
+      {
+        "id": "proj-newgrounds",
+        "title": "Newgrounds Flash Games",
+        "role": "Game Designer & Artist",
+        "startDate": "2008-01-01",
+        "endDate": "2011-12-31",
+        "icon": "",
+        "type": "GAME",
+        "responsibilities": [
+          "Designed, developed, and published 20+ Flash games and tutorials on Newgrounds.",
+          "Handled all aspects of game creation: design, art, programming, and release."
+        ],
+        "achievements": [
+          "Built a portfolio of 20+ published Flash games across multiple genres."
+        ],
+        "technologies": ["Flash", "ActionScript", "Game Design", "Game Art"],
+        "keyScreenshots": [],
+        "links": { "website": "https://www.newgrounds.com" }
+      },
+      {
+        "id": "proj-bounzy",
+        "title": "Bounzy",
+        "role": "Lead Designer & Artist",
+        "startDate": "2012-01-01",
+        "endDate": "2012-12-31",
+        "icon": "/assets/icons/Icon_Bounzy.png",
+        "type": "GAME",
+        "responsibilities": [
+          "Designed bouncing bullet mechanic for a zombie shooter."
+        ],
+        "achievements": [
+          "Classic Flash era game with massive web reach."
+        ],
+        "technologies": ["Flash", "Game Design", "Game Art"],
+        "keyScreenshots": ["/assets/screenshots/SS_Bounzy.jpg"],
+        "links": { "website": "https://www.newgrounds.com/portal/view/587105", "youtube": "https://www.youtube.com/watch?v=r6ZpABMwLmQ" }
+      },
+      {
+        "id": "proj-marble-frenzy-2",
+        "title": "Marble Frenzy 2",
+        "role": "Lead Designer & Artist",
+        "startDate": "2013-01-01",
+        "endDate": "2013-09-30",
+        "icon": "/assets/icons/Icon_MF.png",
+        "type": "GAME",
+        "responsibilities": [
+          "Designed core Match-3 marble breaking mechanics."
+        ],
+        "achievements": [
+          "Innovative Match-3 hybrid mechanics."
+        ],
+        "technologies": ["Flash", "Game Design", "Game Art"],
+        "keyScreenshots": ["/assets/screenshots/SS_MF.png"],
+        "links": { "website": "https://www.newgrounds.com/portal/view/540922", "youtube": "https://www.youtube.com/watch?v=wTmoO1LFgWs" }
+      }
+    ]
+  }
+]
