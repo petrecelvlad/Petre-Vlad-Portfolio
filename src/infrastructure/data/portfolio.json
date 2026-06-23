@@ -81,18 +81,17 @@
         "icon": "/assets/icons/Icon_Amber.png",
         "type": "GAME",
         "responsibilities": [
-          "Coordinated 6 teams simultaneously to produce and deliver levels across multiple King puzzle games.",
-          "Conducted day-to-day project coordination, planning, and delivery for level content.",
-          "Responsible for King's partnership.",
-          "Cumulatively managed 15 people across all teams.",
-          "Trained 9 Junior Level Designers.",
-          "Single-handedly produced 1,000+ levels; led teams to a combined output of 5,000+ levels.",
-          "Standardized Level Design procedures and centralized resources.",
-          "Participated in Leadership Training Courses.",
-          "Mentored 1 student to Game Design path."
+          "Led 6 concurrent level design teams across multiple King puzzle titles, coordinating daily delivery schedules and cross-team dependencies",
+          "Owned the King partnership end-to-end,acted as the primary point of contact between Amber and King's studio leads",
+          "Managed a cumulative headcount of 15 designers, running standups, reviews, and milestone planning across all active projects",
+          "Trained 9 Junior Level Designers from onboarding to production-ready, building a structured training pipeline that scaled with team growth",
+          "Personally produced over 1,000 levels while guiding teams to a combined output exceeding 5,000 levels across all projects",
+          "Standardized Level Design procedures and centralized shared resources into a unified knowledge base used across all teams",
+          "Completed internal Leadership Training programs focused on people management, conflict resolution, and cross-functional coordination",
+          "Mentored 1 university student through a Game Design internship, guiding them from academic theory to hands-on production work"
         ],
         "achievements": [
-          "Managed 6 concurrent teams while maintaining delivery quality."
+          "Managed 6 concurrent teams while maintaining delivery quality and production velocity"
         ],
         "technologies": ["Level Design", "Team Leadership", "Agile Planning", "Process Standardization"],
         "keyScreenshots": ["/assets/screenshots/SS_Alphabetty.png"],
@@ -190,7 +189,7 @@
           "Designed Loot Box system."
         ],
         "achievements": [
-          "Innovative Spin Mechanic — a first-of-kind Slots + Match-3 hybrid interaction."
+          "Innovative Spin Mechanic,a first-of-kind Slots + Match-3 hybrid interaction."
         ],
         "technologies": ["Game Design", "Economy Design", "Mechanics Design"],
         "keyScreenshots": ["/assets/screenshots/SS_Slots.jpg"],
