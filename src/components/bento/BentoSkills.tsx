@@ -26,7 +26,7 @@ function SkillSlot({ label, icon, active }: SkillSlotProps) {
   return (
     <div className="flex flex-col items-center gap-2 flex-1 min-w-0 group">
       <div className={`
-        w-full aspect-square max-w-[var(--chrome-icon-slot-size)] rounded-slot relative overflow-hidden bg-slot-casing flex-shrink-0
+        w-full aspect-square max-w-[var(--chrome-icon-slot-size)] rounded-slot relative overflow-hidden bg-slot-casing shadow-sunken flex-shrink-0
       `}>
         {/* The main slot floor - extended downwards to prevent bottom-corner artifacts */}
         <div className="absolute inset-x-0 top-[14%] h-full bg-slot-surface rounded-slot transition-colors" />
