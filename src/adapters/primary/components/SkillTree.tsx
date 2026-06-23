@@ -364,10 +364,9 @@ function TreeCanvas({ category, activeId, onSelect }: {
   );
 }
 
-// Detail panel (bottom-anchored, full width)
 function DetailPanel({ skill }: { skill: Skill | null }) {
   return (
-    <WindowCard title="skill.detail.app" color="periwinkle" lights>
+    <WindowCard title="skill.detail.app" color="periwinkle" lights className="h-full">
       <AnimatePresence mode="wait">
         {skill === null ? (
           <motion.div
@@ -376,7 +375,7 @@ function DetailPanel({ skill }: { skill: Skill | null }) {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.15 }}
-            className="flex items-center justify-center h-12"
+            className="flex items-center justify-center h-full"
           >
             <Text variant="mono" color="subtle" className="uppercase tracking-widest text-[10px]">
               Select a skill to inspect
@@ -389,38 +388,36 @@ function DetailPanel({ skill }: { skill: Skill | null }) {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -4 }}
             transition={{ duration: 0.2 }}
-            className="flex flex-col md:flex-row md:items-start gap-3 md:gap-6"
+            className="flex flex-col gap-4"
           >
-            {/* Identity block */}
-            <div className="flex flex-col gap-2 md:w-52 flex-shrink-0">
-              <div className="font-display font-black text-lg leading-none text-ink-base uppercase">
-                {skill.name}
-              </div>
-              <div className="flex items-center gap-2 flex-wrap">
-                <Badge color={CATEGORIES[skill.category].color} size="sm" mono>
-                  {CATEGORIES[skill.category].label}
-                </Badge>
-                <Dots level={skill.proficiency} large />
-                <Text variant="mono" size="sm" color="subtle">{skill.years}y</Text>
-              </div>
+            <div className="font-display font-black text-lg leading-none text-ink-base uppercase">
+              {skill.name}
             </div>
 
-            <div className="hidden md:block w-px self-stretch bg-ink-base/10 flex-shrink-0" />
+            <div className="flex items-center gap-2 flex-wrap">
+              <Badge color={CATEGORIES[skill.category].color} size="sm" mono>
+                {CATEGORIES[skill.category].label}
+              </Badge>
+              <Dots level={skill.proficiency} large />
+              <Text variant="mono" size="sm" color="subtle">{skill.years}y</Text>
+            </div>
 
-            {/* Description + evidence */}
-            <div className="flex flex-col gap-2 flex-1 min-w-0">
-              <Text variant="body" size="sm" color="subtle">{skill.description}</Text>
-              {skill.projects.length > 0 && (
-                <div className="flex items-center flex-wrap gap-1.5">
-                  <Text variant="mono" color="subtle" className="uppercase tracking-widest text-[10px]">
-                    Seen in:
-                  </Text>
+            <div className="h-px bg-ink-base/10" />
+
+            <Text variant="body" size="sm" color="subtle">{skill.description}</Text>
+
+            {skill.projects.length > 0 && (
+              <div className="flex flex-col gap-2">
+                <Text variant="mono" color="subtle" className="uppercase tracking-widest text-[10px]">
+                  Seen in:
+                </Text>
+                <div className="flex flex-wrap gap-1.5">
                   {skill.projects.map(p => (
                     <Badge key={p} color="base" size="sm" mono>{p}</Badge>
                   ))}
                 </div>
-              )}
-            </div>
+              </div>
+            )}
           </motion.div>
         )}
       </AnimatePresence>
@@ -430,69 +427,52 @@ function DetailPanel({ skill }: { skill: Skill | null }) {
 
 // ── Main export ────────────────────────────────────────────────────────────────
 
+const DEFAULT_SKILL = SKILLS.find(s => s.id === 'system-design')!;
+
 export function SkillTree() {
-  const [activeSkill, setActiveSkill] = useState<Skill | null>(null);
+  const [activeSkill, setActiveSkill] = useState<Skill | null>(DEFAULT_SKILL);
 
   const handleSelect = (skill: Skill) =>
     setActiveSkill(prev => prev?.id === skill.id ? null : skill);
 
   return (
     <motion.section
-      className="h-full w-full flex flex-col"
+      className="h-full w-full flex flex-row"
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-100px' }}
       transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
     >
-      {/* Tree zone */}
-      <div className="flex-1 flex flex-col justify-center gap-5 px-6 md:px-8 overflow-x-auto">
-
-        {/* Section label */}
-        <div className="flex items-center gap-3">
-          <Text variant="mono" color="subtle" className="uppercase tracking-widest text-xs">
-            Skill System
-          </Text>
-          <div className="flex-1 h-px bg-ink-base/10" />
-          <Text variant="mono" color="subtle" className="text-[10px]">
-            24 skills · 4 branches
-          </Text>
-        </div>
-
-        {/* Four category rows */}
-        <div className="flex flex-col gap-6">
-          {(Object.keys(CATEGORIES) as Skill['category'][]).map(cat => (
-            <div key={cat} className="flex items-start">
-              {/*
-                Badge + HLine shifted down by rootTop so they vertically center
-                on the root pill regardless of where d3 places it in the canvas.
-              */}
-              <div
-                className="flex items-center gap-3 flex-shrink-0"
-                style={{ marginTop: LAYOUTS[cat].rootTop }}
+      {/* Left column — skill tree */}
+      <div className="flex-1 flex flex-col justify-center gap-6 px-6 md:px-8 py-4 overflow-x-auto min-w-0">
+        {(Object.keys(CATEGORIES) as Skill['category'][]).map(cat => (
+          <div key={cat} className="flex items-start">
+            <div
+              className="flex items-center gap-3 flex-shrink-0"
+              style={{ marginTop: LAYOUTS[cat].rootTop }}
+            >
+              <Badge
+                color={CATEGORIES[cat].color}
+                size="sm"
+                mono
+                className="w-[96px] justify-center flex-shrink-0 text-[9px]"
               >
-                <Badge
-                  color={CATEGORIES[cat].color}
-                  size="sm"
-                  mono
-                  className="w-[96px] justify-center flex-shrink-0 text-[9px]"
-                >
-                  {CATEGORIES[cat].label}
-                </Badge>
-                <div className="h-0.5 w-4 flex-shrink-0" style={{ background: 'var(--color-ink-base)', opacity: 0.4 }} />
-              </div>
-
-              <TreeCanvas
-                category={cat}
-                activeId={activeSkill?.id ?? null}
-                onSelect={handleSelect}
-              />
+                {CATEGORIES[cat].label}
+              </Badge>
+              <div className="h-0.5 w-4 flex-shrink-0" style={{ background: 'var(--color-ink-base)', opacity: 0.4 }} />
             </div>
-          ))}
-        </div>
+
+            <TreeCanvas
+              category={cat}
+              activeId={activeSkill?.id ?? null}
+              onSelect={handleSelect}
+            />
+          </div>
+        ))}
       </div>
 
-      {/* Detail panel anchored to bottom */}
-      <div className="flex-shrink-0 px-6 md:px-8 pb-4 md:pb-6">
+      {/* Right column — detail panel */}
+      <div className="hidden lg:flex w-[320px] flex-shrink-0 py-4 pr-6 md:pr-8">
         <DetailPanel skill={activeSkill} />
       </div>
     </motion.section>
