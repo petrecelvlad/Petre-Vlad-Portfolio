@@ -25,20 +25,12 @@ interface SkillSlotProps {
 function SkillSlot({ label, icon, active }: SkillSlotProps) {
   return (
     <div className="flex flex-col items-center gap-2 flex-1 min-w-0 group">
-      <div className={`
-        w-full aspect-square max-w-[var(--chrome-icon-slot-size)] rounded-slot relative overflow-hidden bg-slot-casing shadow-sunken flex-shrink-0
-      `}>
-        {/* The main slot floor - extended downwards to prevent bottom-corner artifacts */}
-        <div className="absolute inset-x-0 top-[14%] h-full bg-slot-surface rounded-slot transition-colors" />
-        
-        {/* Centered content container - padded top to visually center within the floor */}
-        <div className="absolute inset-0 pt-[2%] flex items-center justify-center">
-          {active && icon && (
-            <div className="text-slot-text transition-transform duration-200 group-hover:-translate-y-0.5">
-              {React.cloneElement(icon as React.ReactElement, { size: 36, strokeWidth: 2 })}
-            </div>
-          )}
-        </div>
+      <div className="w-full aspect-square max-w-[var(--chrome-icon-slot-size)] rounded-slot bg-slot-surface shadow-sunken flex-shrink-0 flex items-center justify-center">
+        {active && icon && (
+          <div className="text-slot-text transition-transform duration-200 group-hover:-translate-y-0.5">
+            {React.cloneElement(icon as React.ReactElement, { size: 36, strokeWidth: 2 })}
+          </div>
+        )}
       </div>
       <div className="min-h-[1rem] flex items-center justify-center">
         {active && label && (
