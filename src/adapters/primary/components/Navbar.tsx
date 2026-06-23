@@ -2,7 +2,7 @@ import { Circle, Square, Triangle } from 'lucide-react';
 import { Row } from '@/src/components/atoms/Row';
 import { Heading } from '@/src/components/atoms/Heading';
 import { Text } from '@/src/components/atoms/Text';
-import { Container } from '@/src/components/atoms/Container';
+
 
 interface NavbarProps {
   onToggleBacklog: () => void;
@@ -12,7 +12,7 @@ interface NavbarProps {
 export function Navbar({ onToggleBacklog, isBacklog }: NavbarProps) {
   return (
     <nav className="h-[var(--chrome-navbar-height)] flex-shrink-0 relative w-full z-50 bg-surface-base border-b-2 border-ink-base">
-      <Container className="h-full flex items-center justify-between">
+      <div className="h-full flex items-center justify-between px-6 md:px-8">
         <Row gap="md">
           <Row gap="xs">
             <Circle className="w-5 h-5 fill-coral text-ink-base" />
@@ -35,7 +35,7 @@ export function Navbar({ onToggleBacklog, isBacklog }: NavbarProps) {
           </button>
           <Text variant="mono" size="sm" color="subtle" className="uppercase tracking-widest font-medium">Portfolio v2.0</Text>
         </Row>
-      </Container>
+      </div>
     </nav>
   );
 }

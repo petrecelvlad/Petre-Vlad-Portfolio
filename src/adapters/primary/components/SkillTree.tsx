@@ -265,12 +265,12 @@ const LAYOUTS: Record<Skill['category'], TreeLayout> = {
   vision:     computeLayout('vision'),
 };
 
-// Full class strings so Tailwind's scanner keeps all variants
+// Solid desaturated tints per depth — no transparency so background dots never bleed through
 const PILL_BG: Record<'coral' | 'sky' | 'butter' | 'mint', readonly string[]> = {
-  coral:  ['bg-coral',  'bg-coral/50',  'bg-coral/25'],
-  sky:    ['bg-sky',    'bg-sky/50',    'bg-sky/25'],
-  butter: ['bg-butter', 'bg-butter/50', 'bg-butter/25'],
-  mint:   ['bg-mint',   'bg-mint/50',   'bg-mint/25'],
+  coral:  ['bg-coral',    'bg-[#FFCFDD]', 'bg-[#FFE7EE]'],
+  sky:    ['bg-sky',      'bg-[#CDF1EC]', 'bg-[#E6F8F5]'],
+  butter: ['bg-butter',   'bg-[#FCF2B6]', 'bg-[#FDF8DA]'],
+  mint:   ['bg-mint',     'bg-[#E3F7B8]', 'bg-[#F1FBDC]'],
 };
 
 // ── Sub-components ─────────────────────────────────────────────────────────────

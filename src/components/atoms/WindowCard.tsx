@@ -26,9 +26,9 @@ const colorMap = {
 
 const TrafficLights = () => (
   <div className="flex gap-[6px] items-center shrink-0">
-    <div className="w-3 h-3 rounded-full border-[var(--chrome-traffic-light-border)] border-ink-base bg-error" />
-    <div className="w-3 h-3 rounded-full border-[var(--chrome-traffic-light-border)] border-ink-base bg-warning" />
-    <div className="w-3 h-3 rounded-full border-[var(--chrome-traffic-light-border)] border-ink-base bg-mint" />
+    <div className="w-3.5 h-3.5 rounded-full border-2 border-ink-base bg-error" />
+    <div className="w-3.5 h-3.5 rounded-full border-2 border-ink-base bg-warning" />
+    <div className="w-3.5 h-3.5 rounded-full border-2 border-ink-base bg-mint" />
   </div>
 );
 

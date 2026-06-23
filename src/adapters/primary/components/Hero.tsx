@@ -43,7 +43,7 @@ export function Hero() {
         <WindowCard
           title="identity.app"
           color="sky"
-          titlebarState="striped"
+          titlebarState="normal"
           lights={true}
           primary={true}
           noPad={false}
