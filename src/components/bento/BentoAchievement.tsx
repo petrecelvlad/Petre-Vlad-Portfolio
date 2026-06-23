@@ -10,7 +10,7 @@ interface BentoAchievementProps {
 export function BentoAchievement({ achievement }: BentoAchievementProps) {
   const isEmpty = !achievement;
   return (
-    <div className={`border-2 border-ink-base px-4 py-3 rounded-xl shadow-applet-md ${isEmpty ? 'bg-surface-base border-dashed opacity-40' : 'bg-butter'}`}>
+    <div className={`border-2 border-ink-base px-4 py-3 rounded-xl shadow-raised ${isEmpty ? 'bg-surface-base border-dashed opacity-40' : 'bg-butter'}`}>
       <Row gap="sm" align="center">
         <div className="flex-shrink-0 flex items-center justify-center">
           <Trophy size={20} className="text-ink-base" />

@@ -128,7 +128,7 @@ export function BentoVideoFrame({ screenshot, youtubeUrl, isActive }: BentoVideo
         <div className="absolute -top-[6px] left-[20%] md:left-[25%] w-12 md:w-16 h-[6px] bg-ink-base rounded-t-md z-0" />
         <div className="absolute -top-[6px] left-[40%] md:left-[45%] w-16 md:w-20 h-[6px] bg-ink-base rounded-t-md z-0" />
 
-        <div className="relative group w-full h-full border-[8px] border-ink-base rounded-[40px] bg-ink-base overflow-hidden shadow-applet-lg z-10">
+        <div className="relative group w-full h-full border-[8px] border-ink-base rounded-[40px] bg-ink-base overflow-hidden shadow-raised z-10">
           {/* Device Notch */}
           <div className="absolute left-0 top-1/2 -translate-y-1/2 w-4 h-20 bg-ink-base rounded-r-[12px] z-20" />
 

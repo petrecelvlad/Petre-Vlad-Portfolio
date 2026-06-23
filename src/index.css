@@ -72,13 +72,19 @@
   /* Physics / Interaction */
   --transition-defaults: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   --hover-transform: translateY(-2px);
-  --active-transform: scale(0.98);
 
-  /* Shadows */
-  --shadow-applet-sm: 0 3px 0 0 var(--ink-base);
-  --shadow-applet-md: 0 5px 0 0 var(--ink-base);
-  --shadow-applet-lg: 0 8px 0 0 var(--ink-base);
-  --shadow-applet-xl: 0 12px 0 0 var(--ink-base);
+  /* Unified depth system — one physical depth for the entire UI */
+  --ui-depth: 4px;
+  --shadow-color: #000000;
+  --inset-color: #E4DAC4;
+
+  /* Shadows — all use the same --ui-depth */
+  --shadow-raised: 0 var(--ui-depth) 0 0 var(--shadow-color);
+  --shadow-sunken: inset 0 var(--ui-depth) 0 0 var(--inset-color);
+  --shadow-applet-sm: 0 var(--ui-depth) 0 0 var(--shadow-color);
+  --shadow-applet-md: 0 var(--ui-depth) 0 0 var(--shadow-color);
+  --shadow-applet-lg: 0 var(--ui-depth) 0 0 var(--shadow-color);
+  --shadow-applet-xl: 0 var(--ui-depth) 0 0 var(--shadow-color);
 
   /* Fonts */
   --font-display: 'Space Grotesk', sans-serif;
@@ -97,9 +103,9 @@
   /* Border radius additions */
   --radius-slot: 22px;
 
-  /* Interaction physics */
-  --press-depth: 5px;
-  --press-inset-depth: 4px;
+  /* Interaction physics — press depth matches ui-depth */
+  --press-depth: var(--ui-depth);
+  --press-inset-depth: var(--ui-depth);
 
   /* Chrome dimensions */
   --chrome-navbar-height: 64px;

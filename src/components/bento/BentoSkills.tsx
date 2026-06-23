@@ -34,7 +34,7 @@ function SkillSlot({ label, icon, active }: SkillSlotProps) {
         {/* Centered content container - padded top to visually center within the floor */}
         <div className="absolute inset-0 pt-[2%] flex items-center justify-center">
           {active && icon && (
-            <div className="text-slot-text transform transition-transform duration-200 group-hover:scale-[1.15]">
+            <div className="text-slot-text transition-transform duration-200 group-hover:-translate-y-0.5">
               {React.cloneElement(icon as React.ReactElement, { size: 36, strokeWidth: 2 })}
             </div>
           )}

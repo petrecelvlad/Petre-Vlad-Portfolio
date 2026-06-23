@@ -10,7 +10,7 @@ export interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
 
 const variantMap = {
   base: 'bg-surface-base border-2 border-ink-base',
-  elevated: 'bg-surface-elevated border-2 border-ink-base shadow-applet-md',
+  elevated: 'bg-surface-elevated border-2 border-ink-base shadow-raised',
   soft: 'bg-surface-soft border-2 border-ink-base',
   interactive: 'bg-surface-base border-2 border-ink-base hover:bg-surface-soft cursor-pointer transition-all duration-200 hover:-translate-y-1',
 };

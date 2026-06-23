@@ -24,7 +24,7 @@ function initials(name: string) {
 }
 
 export const Avatar = ({ src, name, size = 'md', className = '' }: AvatarProps) => {
-  const base = `flex-shrink-0 border-2 border-ink-base shadow-applet-sm overflow-hidden ${sizeMap[size]} ${className}`;
+  const base = `flex-shrink-0 border-2 border-ink-base shadow-raised overflow-hidden ${sizeMap[size]} ${className}`;
 
   if (src) {
     return (

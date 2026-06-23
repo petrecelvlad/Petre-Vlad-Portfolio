@@ -46,7 +46,7 @@ export const WindowCard = ({
   ...props
 }: WindowCardProps) => {
   const borderWidth = primary ? 'border-[3px]' : 'border-2';
-  const shadow = primary ? 'shadow-applet-xl' : 'shadow-applet-lg';
+  const shadow = 'shadow-raised';
 
   return (
     <div 

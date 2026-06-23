@@ -28,7 +28,7 @@ export function Navbar({ onToggleBacklog, isBacklog }: NavbarProps) {
             className={`font-mono text-[10px] uppercase tracking-[0.15em] px-3 py-1.5 border-2 border-ink-base rounded-md transition-all duration-100 ${
               isBacklog
                 ? 'bg-ink-base text-surface-base shadow-none'
-                : 'bg-transparent text-ink-base shadow-[2px_2px_0_0_var(--color-ink-base)] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[1px_1px_0_0_var(--color-ink-base)] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none'
+                : 'bg-transparent text-ink-base shadow-[0_var(--ui-depth)_0_0_var(--shadow-color)] hover:translate-y-[1px] hover:shadow-[0_2px_0_0_var(--shadow-color)] active:translate-y-[var(--press-depth)] active:shadow-none'
             }`}
           >
             {isBacklog ? '← PORTFOLIO' : '[DEBUG] BACKLOG'}

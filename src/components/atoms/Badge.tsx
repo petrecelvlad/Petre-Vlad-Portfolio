@@ -36,7 +36,7 @@ export const Badge = ({
     <div 
       className={`
         inline-flex items-center justify-center 
-        border-2 border-ink-base rounded-[12px] shadow-applet-sm
+        border-2 border-ink-base rounded-[12px] shadow-raised
         ${colorMap[color]} 
         ${sizeMap[size]}
         ${mono ? "font-mono font-bold" : "font-body font-bold tracking-tight"}

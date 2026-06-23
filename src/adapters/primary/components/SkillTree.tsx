@@ -301,8 +301,8 @@ function SkillPill({ skill, active, onSelect, depth, color }: {
         w-[160px] flex-shrink-0 flex items-center gap-2 px-2.5 py-2
         rounded border-2 border-ink-base transition-all duration-150 cursor-pointer text-left
         ${active
-          ? 'bg-periwinkle shadow-applet-md'
-          : `${bg} hover:shadow-applet-sm`
+          ? 'bg-periwinkle shadow-raised'
+          : `${bg} hover:shadow-raised`
         }
       `}
     >
