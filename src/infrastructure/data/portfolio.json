@@ -13,6 +13,7 @@
         "role": "Level Designer (Contract)",
         "startDate": "2024-08-01",
         "endDate": "2025-01-30",
+        "description": "One of the world's top-grossing merge games. Contracted to design levels for live events and core game progression.",
         "icon": "/assets/icons/Icon_MM.png",
         "type": "GAME",
         "responsibilities": [
@@ -44,6 +45,7 @@
         "role": "Sr. Game Designer",
         "startDate": "2023-05-01",
         "endDate": "2023-10-31",
+        "description": "Senior Game Design across DECA's live portfolio of acquired titles, managing live operations and feature design for Realm of the Mad God.",
         "icon": "/assets/icons/Icon_ROTMG.png",
         "type": "GAME",
         "responsibilities": [
@@ -75,13 +77,19 @@
         "role": "Lead Level Designer",
         "startDate": "2019-03-01",
         "endDate": "2022-10-30",
+        "description": "Coordinated 6 teams to produce and deliver levels for multiple King puzzle games. Responsible for King's partnership and day-to-day project coordination, planning, and delivery for level content.",
         "icon": "/assets/icons/Icon_Amber.png",
         "type": "GAME",
         "responsibilities": [
           "Coordinated 6 teams simultaneously to produce and deliver levels across multiple King puzzle games.",
-          "Managed 15 people across all teams; trained 9 Junior Level Designers.",
+          "Conducted day-to-day project coordination, planning, and delivery for level content.",
+          "Responsible for King's partnership.",
+          "Cumulatively managed 15 people across all teams.",
+          "Trained 9 Junior Level Designers.",
           "Single-handedly produced 1,000+ levels; led teams to a combined output of 5,000+ levels.",
-          "Standardized Level Design procedures and centralized resources."
+          "Standardized Level Design procedures and centralized resources.",
+          "Participated in Leadership Training Courses.",
+          "Mentored 1 student to Game Design path."
         ],
         "achievements": [
           "Managed 6 concurrent teams while maintaining delivery quality."
@@ -96,13 +104,15 @@
         "role": "Principal Game Designer",
         "startDate": "2022-11-01",
         "endDate": "2023-04-30",
+        "description": "Developed by Animoca Brands, the game integrates with the broader REVV token ecosystem and features Cars and Drivers as NFTs, enabling players to manage their own Formula E teams.",
         "icon": "/assets/icons/Icon_FEHV.png",
         "type": "GAME",
         "responsibilities": [
-          "Oversaw design of core gameplay features, ensuring alignment with the REVV token blockchain integration.",
-          "Designed Game Modes, Team Management System, AI Manager Personas, Attack Zone & Energy Regen systems.",
-          "Created the full game screen flow diagram and collaborated closely with UX and UI teams.",
-          "Worked with the Game Economy Designer to validate and balance all proposed game values."
+          "Oversaw the design of core gameplay features, ensuring alignment with the blockchain component of the game.",
+          "Designed most of the game's core features: Game Modes, Team Management System, AI Manager Personas, Attack Zone & Energy Regen systems, Circuit Tracks research.",
+          "Created the game screen flow diagram and worked closely with UX and UI teams to create an intuitive user experience.",
+          "Collaborated closely with the Game Economy Designer to validate and balance proposed values.",
+          "Researched the actual Formula E sport to maintain high fidelity in gameplay mechanics."
         ],
         "achievements": [
           "Integrated NFT Cars and Drivers as playable team management assets."
@@ -128,17 +138,26 @@
         "role": "Game Producer",
         "startDate": "2018-05-01",
         "endDate": "2019-02-28",
+        "description": "Tap TD combines an addictive idle gameplay with the complexity of tower defense. Produced independently in partnership with 3 former King employees.",
         "icon": "/assets/icons/Icon_TapTD.png",
         "type": "GAME",
         "responsibilities": [
-          "Produced the full game in partnership with 3 former King employees.",
-          "Led project planning, team coordination, and backlog management.",
-          "Created all Game Design documentation and designed the full UX flow."
+          "Partnership with 3 former King employees.",
+          "Project Planning & Team Coordination.",
+          "Organized Project Backlog.",
+          "Created all Game Design documentation.",
+          "Maps Level Design.",
+          "Designed full UX flow.",
+          "Balanced Enemies & Towers stats.",
+          "Designed Monetization Strategy.",
+          "Ideated Story / Lore / Branding.",
+          "Community Manager on Reddit.",
+          "YouTube channel videos, vlogs & promos."
         ],
         "achievements": [
           "100K App Installs."
         ],
-        "technologies": ["Game Production", "Game Design", "Economy Design"],
+        "technologies": ["Game Production", "Game Design", "Economy Design", "Level Design", "UX Design", "Community Management"],
         "keyScreenshots": [],
         "links": {
           "youtube": "https://www.youtube.com/watch?v=6OuN6ncCRNo"
@@ -159,12 +178,16 @@
         "role": "Game Designer",
         "startDate": "2017-10-01",
         "endDate": "2018-04-30",
+        "description": "Newton Slots has a unique take on Slot games, introducing the option to interact with elements on the screen. A Slots + Match-3 hybrid.",
         "icon": "/assets/icons/Icon_Slots.jpg",
         "type": "GAME",
         "responsibilities": [
-          "Re-designed a Slots game with Match-3 mechanics.",
+          "Re-designed a Slots game mixed with Match-3 mechanics.",
           "Researched and documented the Swapping mechanic.",
-          "Designed new Bonus Games mechanics and a Loot Box reward system."
+          "Designed new Bonus Games mechanics.",
+          "Coordinated implementation of all design features.",
+          "Balanced games payout reward formula.",
+          "Designed Loot Box system."
         ],
         "achievements": [
           "Innovative Spin Mechanic — a first-of-kind Slots + Match-3 hybrid interaction."
@@ -188,6 +211,7 @@
         "role": "Indie Game Producer",
         "startDate": "2017-07-01",
         "endDate": "2017-09-30",
+        "description": "An indie game produced and launched on the Google Play Store in just 2 months, coordinated fully online.",
         "icon": "/assets/icons/Icon_COT.jpg",
         "type": "GAME",
         "responsibilities": [
@@ -219,12 +243,17 @@
         "role": "Game Designer",
         "startDate": "2016-07-01",
         "endDate": "2017-06-30",
+        "description": "FitKin is a gamified app designed to encourage users to live a healthy lifestyle. Users advance the story's progress by tracking their steps in the real world.",
         "icon": "/assets/icons/Icon_Fitkin.png",
         "type": "GAME",
         "responsibilities": [
-          "Designed a gamified health app where users advance story progress through step tracking.",
           "Worked with a team of 8 people.",
-          "Classified users into Personas based on behavior research."
+          "Wrote Game Design documentation.",
+          "Designed Game Scenes.",
+          "Prototyped New Features.",
+          "Classified Users based on Personas.",
+          "Researched User Behavior.",
+          "Conducted User Testing events."
         ],
         "achievements": [
           "Designed User Personas classification system."
@@ -248,12 +277,16 @@
         "role": "Freelance Game Designer",
         "startDate": "2015-11-01",
         "endDate": "2016-06-30",
+        "description": "Contracted to design and produce an idle brawler game for a client. Managed the full production cycle including client communication.",
         "icon": "/assets/icons/Icon_Castellum.png",
         "type": "GAME",
         "responsibilities": [
           "Contracted to design and produce the complete game.",
           "Managed a team of 4 people.",
-          "Handled UX & UI Design."
+          "Gathered client feedback through regular update calls.",
+          "Designed Game Document.",
+          "UX & UI Design.",
+          "Created Promo Videos."
         ],
         "achievements": [
           "Delivered a complete game to a freelance client."
@@ -279,10 +312,12 @@
         "role": "Jr. Level Designer",
         "startDate": "2013-10-01",
         "endDate": "2014-03-30",
+        "description": "One of King's founding hits. Started as Jr. Level Designer learning core Level Design principles.",
         "icon": "/assets/icons/Icon_BWS1.png",
         "type": "GAME",
         "responsibilities": [
-          "Designed and balanced levels for Bubble Witch Saga.",
+          "Jr. Level Designer for Bubble Witch Saga.",
+          "Designed and balanced levels.",
           "Learned core Level Design principles at King."
         ],
         "achievements": [
@@ -298,12 +333,16 @@
         "role": "Level Designer",
         "startDate": "2014-04-01",
         "endDate": "2015-10-30",
+        "description": "AlphaBetty Saga is a unique match-3 puzzle game that replaces colored candies with letters. Link letters to create Words & Blasters! Ranked as the Top 5th Word game in the world.",
         "icon": "/assets/icons/Icon_Alphabetty.png",
         "type": "GAME",
         "responsibilities": [
-          "Designed in-game tutorials for player onboarding.",
+          "Promoted to Level Designer on AlphaBetty Saga.",
+          "Designed in-game Tutorials.",
           "Trained 1 Jr. Level Designer.",
-          "Held presentations across multiple King studios."
+          "Updated project documentation.",
+          "Held Presentations across multiple King studios.",
+          "Participated in various growth programs."
         ],
         "achievements": [
           "Shipped a live King title reaching millions of players."
@@ -327,6 +366,7 @@
         "role": "Game Designer & Artist",
         "startDate": "2008-01-01",
         "endDate": "2011-12-31",
+        "description": "Designed, developed, and published 20+ Flash games and tutorials on Newgrounds across multiple genres. Handled all aspects of game creation from design to release.",
         "icon": "/assets/icons/Icon_NG.png",
         "type": "GAME",
         "responsibilities": [
@@ -346,6 +386,7 @@
         "role": "Lead Designer & Artist",
         "startDate": "2012-01-01",
         "endDate": "2012-12-31",
+        "description": "A zombie shooter built around a bouncing bullet mechanic. Classic Flash era game with massive web reach.",
         "icon": "/assets/icons/Icon_Bounzy.jpg",
         "type": "GAME",
         "responsibilities": [
@@ -364,6 +405,7 @@
         "role": "Lead Designer & Artist",
         "startDate": "2013-01-01",
         "endDate": "2013-09-30",
+        "description": "A Match-3 marble breaking game with innovative hybrid mechanics. Second installment of the Marble Frenzy series.",
         "icon": "/assets/icons/Icon_MF.png",
         "type": "GAME",
         "responsibilities": [

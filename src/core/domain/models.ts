@@ -5,6 +5,7 @@ export interface IProject {
   // ISO date "YYYY-MM-DD" | "Present" for current roles. Displayed as quarter (Q1–Q4 YYYY) in UI.
   startDate: string;
   endDate: string;
+  description?: string;
   icon?: string;
   type: 'GAME' | 'SOFTWARE';
   responsibilities: string[];
