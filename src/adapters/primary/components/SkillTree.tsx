@@ -472,7 +472,7 @@ export function SkillTree() {
       </div>
 
       {/* Right column — detail panel */}
-      <div className="hidden lg:flex w-[320px] flex-shrink-0 py-4 pr-6 md:pr-8">
+      <div className="hidden lg:flex w-[640px] flex-shrink-0 py-4 pr-6 md:pr-8">
         <DetailPanel skill={activeSkill} />
       </div>
     </motion.section>
