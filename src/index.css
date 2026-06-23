@@ -80,7 +80,7 @@
 
   /* Shadows — all use the same --ui-depth */
   --shadow-raised: 0 var(--ui-depth) 0 0 var(--shadow-color);
-  --shadow-sunken: inset 0 var(--ui-depth) 0 0 var(--inset-color);
+  --shadow-sunken: inset 0 calc(var(--ui-depth) * 2) 0 0 var(--inset-color);
   --shadow-applet-sm: 0 var(--ui-depth) 0 0 var(--shadow-color);
   --shadow-applet-md: 0 var(--ui-depth) 0 0 var(--shadow-color);
   --shadow-applet-lg: 0 var(--ui-depth) 0 0 var(--shadow-color);
