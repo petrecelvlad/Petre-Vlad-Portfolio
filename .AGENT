@@ -22,9 +22,10 @@ It moves away from traditional web "page" flows towards a "Scene" or "Canvas" sy
 
 ## Essential Reading (Your Next Steps)
 To understand how to build specific pieces, read the following:
-- `/docs/Architecture/README.md` (The global index)
-- `/docs/Architecture/Project_Template.md` (Everything about `IProject` and Bento layouts—our most important template!)
-- `/docs/Architecture/Design_System.md` (Our exact visual language classes and styles)
-- `/docs/Architecture/Component_Architecture.md` (How our atoms, molecules, and organisms communicate)
+- `/docs/Architecture/OVERVIEW.md` (The global index — start here)
+- `/docs/Architecture/specs/Project_Template.md` (Everything about `IProject` and Bento layouts—our most important template!)
+- `/docs/Architecture/design-system/Design_System.md` (Our exact visual language classes and styles)
+- `/docs/Architecture/design-system/Token_Contract.md` and `/docs/Architecture/design-system/Skin_System.md` (The parametric token contract and skin-swap mechanism — read before touching any visual value)
+- `/docs/Architecture/specs/Component_Architecture.md` (How our atoms, molecules, and organisms communicate)
 
 **You now have your bearings. Review the Architecture docs when modifying their respective systems.**
