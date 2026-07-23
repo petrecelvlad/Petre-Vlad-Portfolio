@@ -3,6 +3,8 @@ import React from 'react';
 export interface BadgeProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode;
   color?: 'mint' | 'coral' | 'butter' | 'sky' | 'periwinkle' | 'base';
+  /** CSS var name (e.g. '--role-header-accent') to drive the background instead of `color`. Lets a skin retarget this instance's accent independently of the shared palette. */
+  accentToken?: string;
   size?: 'sm' | 'md' | 'lg';
   mono?: boolean;
   className?: string;
@@ -27,21 +29,23 @@ const sizeMap = {
 export const Badge = ({
   children,
   color = 'mint',
+  accentToken,
   size = 'md',
   mono = false,
   className = '',
   ...props
 }: BadgeProps) => {
   return (
-    <div 
+    <div
       className={`
-        inline-flex items-center justify-center 
-        border-2 border-ink-base rounded-[12px] shadow-raised
-        ${colorMap[color]} 
+        inline-flex items-center justify-center
+        border-[length:var(--border-width-sm)] border-ink-base rounded-[12px] shadow-raised
+        ${accentToken ? 'text-ink-base' : colorMap[color]}
         ${sizeMap[size]}
         ${mono ? "font-mono font-bold" : "font-body font-bold tracking-tight"}
         ${className}
       `}
+      style={accentToken ? { backgroundColor: `var(${accentToken})` } : undefined}
       {...props}
     >
       {children}

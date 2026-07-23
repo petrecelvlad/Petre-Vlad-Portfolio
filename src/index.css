@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400..700&family=Outfit:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400..700&family=Outfit:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&family=Kalam:wght@400;700&display=swap');
 @import "tailwindcss";
 
 @theme {
@@ -7,30 +7,30 @@
   --color-surface-elevated: #EFEBDF;
   --color-surface-inverse: #1C1A22;
   --color-surface-soft: #FAF8F2;
-  
+
   --color-ink-base: #191919;
   --color-ink-subtle: #4D4D4D;
   --color-ink-whisper: #8C8C8C;
-  
+
   /* Brand/Interaction */
   --color-theme-accent: #FF9EBB;
   --color-theme-accent-hover: #E386A2;
   --color-theme-primary: #FF9EBB;
-  
+
   /* Keeping backward compatibility aliases for current components */
   --surface-base: var(--color-surface-base);
   --surface-elevated: var(--color-surface-elevated);
   --surface-inverse: var(--color-surface-inverse);
   --surface-soft: var(--color-surface-soft);
-  
+
   --ink-base: var(--color-ink-base);
   --ink-subtle: var(--color-ink-subtle);
   --ink-whisper: var(--color-ink-whisper);
-  
+
   --theme-accent: var(--color-theme-accent);
   --theme-accent-hover: var(--color-theme-accent-hover);
   --theme-primary: var(--color-theme-primary);
-  
+
   /* Secondary Palette for Data / Specific usages */
   --color-coral: #FF9EBB;
   --color-coral-deep: #E386A2;
@@ -45,30 +45,85 @@
   --color-periwinkle: #C8B2F8;
   --color-periwinkle-deep: #AC96DB;
   --color-lilac: #DCCDF9;
-  
+
+  /*
+   * Component identity tokens — indirection between the raw palette and
+   * which project-card component uses which color. A mockup skin
+   * retargets one of these without touching the shared palette (which
+   * other, unrelated components may also consume) or any component file.
+   *
+   * IMPORTANT — CSS custom-property aliasing gotcha, confirmed by
+   * computed-style testing (2026-07-21), not assumed: a var()-aliased
+   * custom property's value is substituted once, where the alias itself
+   * is declared (here, effectively :root) — NOT re-resolved per element
+   * using whatever that element locally overrides the aliased-to
+   * variable to. Overriding --color-coral inside a [data-skin="..."]
+   * block does NOT retarget --role-header-accent on that subtree unless
+   * --role-header-accent is ALSO explicitly redeclared inside that same
+   * block. Every skin that wants a role token to track its palette must
+   * restate it — see the "heritage" skin below for the pattern. (An
+   * earlier version of this comment, and of Skin_System.md, claimed the
+   * opposite by analogy to the --surface-base-style aliases further
+   * below in this file — that claim was never actually verified and is
+   * wrong for the same reason; those aliases have the identical bug,
+   * currently latent only because nothing consumes them under an active
+   * non-default skin scope. Todo, not fixed here: `Primitives.tsx` reads
+   * `--ink-base`/`--surface-base` directly, but is dead code — imported
+   * in `Timeline.tsx`, never rendered — so this is inert today, not a
+   * live regression.)
+   */
+  --role-header-accent: var(--color-coral);
+  --role-responsibilities-accent: var(--color-periwinkle);
+  --role-skills-accent: var(--color-sky);
+  --role-achievement-accent: var(--color-butter);
+
   /* State */
   --color-success: var(--color-mint);
   --color-warning: #FFB84D;
   --color-error: #E8554A;
 
   /* Rules */
-  --color-rule: var(--color-ink);
+  --color-rule: var(--color-ink-base);
   --color-rule-soft: #E0D9C6;
-  
+
+  /* Focus */
+  --color-focus: var(--color-sky);
+
+  /*
+   * Tier 2 — Structural/Variant tokens (Skin_System.md), defined here inside
+   * @theme deliberately. Moving these outside @theme corrupts Tailwind's
+   * build entirely: @theme values that reference a var() defined OUTSIDE
+   * @theme break Tailwind's internal CSS generation (confirmed by bisection,
+   * not guessed — 2026-07-21). Tailwind's own border-* namespace matching
+   * also silently drops --border-presence's OWN declared value from its
+   * computed-style output even while it stays inside @theme — harmless here
+   * because every consumer below uses a `, 1` fallback, so the mechanism is
+   * correct regardless of whether that value is visible via devtools.
+   */
+  --border-presence: 1;
+  --motif-dot-texture: 1;
+  --depth-style: hard-offset;
+  --motif-slot-machine: on;
+
   /* Geometry */
   --radius-xs: 4px;
   --radius-sm: 6px;
   --radius-md: 8px;
   --radius-lg: 12px;
   --radius-pill: 9999px;
-  
+
+  /* Border widths — gated by --border-presence via a fallback, see Tier 2 note above */
+  --border-width-sm: calc(2px * var(--border-presence, 1));
+  --border-width-md: calc(3px * var(--border-presence, 1));
+  --border-width-lg: calc(4px * var(--border-presence, 1));
+
   /* Spacing */
   --spacing-xs: 4px;
   --spacing-sm: 8px;
   --spacing-md: 16px;
   --spacing-lg: 24px;
   --spacing-xl: 32px;
-  
+
   /* Physics / Interaction */
   --transition-defaults: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   --hover-transform: translateY(-2px);
@@ -90,10 +145,15 @@
   --font-display: 'Space Grotesk', sans-serif;
   --font-body: 'Outfit', sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
+  /* Handwriting register — only ever consumed by heritage's clipboard paper text (DR-019).
+     Defaults to --font-body so any skin that doesn't override it is unaffected. */
+  --font-hand: var(--font-body);
 
   /* Font sizes — named label tiers */
   --text-label: 11px;
   --text-label-sm: 10px;
+  --font-size-body: 17px;
+  --font-size-body-sm: 15px;
 
   /* Slot machine motif — the tactile hardware aesthetic */
   --color-slot-casing: #E2D4C1;
@@ -111,7 +171,22 @@
   --chrome-navbar-height: 64px;
   --chrome-titlebar-height: 40px;
   --chrome-traffic-light-border: 1.5px;
+  --chrome-traffic-light-size: 12px;
   --chrome-icon-slot-size: 90px;
+  --chrome-icon-size: 36px;
+
+  /*
+   * Device shell chrome — the "black mobile frame" around the project
+   * screenshot/video. Intentionally hardcoded literals, NOT var()
+   * references to --color-ink-base/--shadow-raised: a var() reference
+   * would still re-resolve against whatever skin is active at the point
+   * of use (same mechanism that makes --surface-base's alias above skin-
+   * aware), which is exactly what this must NOT do. This frame stays
+   * pixel-identical across every skin, including future mockups — see
+   * Skin_System.md's Locked Constraints.
+   */
+  --chrome-device-shell: #191919;
+  --chrome-device-shadow: 0 4px 0 0 #000000;
 
   /* Background texture */
   --texture-dot-size: 1px;
@@ -119,6 +194,91 @@
   --texture-overlay-opacity: 0.96;
   --texture-stripe-width: 2px;
   --texture-stripe-period: 8px;
+}
+
+/*
+ * "Heritage" skin — redirected 2026-07-21 (DR-019) from its original
+ * Castellum/Crown-of-Thrones-derived parchment identity (DR-014/016/017) to
+ * a desk/clipboard concept: structure AND visual language borrowed from a
+ * reference mood-board (image.png), reworked with original hex values and a
+ * handwriting register for the clipboard's own paper text — not a literal
+ * copy of that board's specific brand. See DR-019 for the full reasoning,
+ * including the named ANTI_PATTERNS.md guardrail this stays clear of.
+ *
+ * --role-*-accent ARE explicitly restated below even though most values are
+ * identical to the default alias — required, not decorative: see the CSS
+ * aliasing gotcha documented at §Component Identity Tokens above. Overriding
+ * --color-coral etc. alone does NOT retarget the role tokens.
+ */
+[data-skin="heritage"] {
+  /* Tier 1 — warm cream paper/desk surfaces, warm near-black ink */
+  --color-surface-base: #F6EEDC;
+  --color-surface-elevated: #EDE0BE;
+  --color-surface-soft: #FBF7EC;
+  --color-surface-inverse: #241C12;
+  --color-ink-base: #2B2016;
+  --color-ink-subtle: #5C4A34;
+  --color-ink-whisper: #8C7A5C;
+  --color-rule-soft: #DCCB9E;
+
+  /* Palette — original hues in the same warm-paper/burnt-orange/navy family
+     the reference evokes, not color-matched to it */
+  --color-coral: #D9622F;        /* burnt orange → --role-header-accent (unused visually, header is a no-op — see DR-019) */
+  --color-coral-deep: #B14A20;
+  --color-mint: #6C8F3E;
+  --color-mint-deep: #506B2C;
+  --color-sky: #3E7C8C;          /* dusty teal-blue → --role-skills-accent */
+  --color-sky-deep: #2C5C68;
+  --color-butter: #F0B429;       /* richer premium gold → --role-achievement-accent (was a muddier mustard) */
+  --color-butter-deep: #C98F1A;
+  --color-periwinkle: #33415C;   /* deep navy-slate → --role-responsibilities-accent, the clipboard's own accent */
+  --color-periwinkle-deep: #232D40;
+  --color-lilac: #DCCB9E;
+
+  /* Component identity tokens — must be restated, not inherited from the
+     palette override above (see the aliasing gotcha at their definition) */
+  --role-header-accent: var(--color-coral);
+  --role-responsibilities-accent: var(--color-periwinkle);
+  --role-skills-accent: var(--color-sky);
+  --role-achievement-accent: var(--color-butter);
+
+  /* Slot motif — dark navy-slate inset, matching the clipboard's own accent */
+  --color-slot-casing: #33415C;
+  --color-slot-surface: #24304A;
+  --color-slot-text: #F6EEDC;
+  --radius-slot: 12px;
+
+  /* Tier 2 */
+  --border-presence: 1;
+  --motif-dot-texture: 0;
+  --depth-style: embossed;
+  --motif-slot-machine: on;
+
+  /* --depth-style: embossed (DR-017) — layered box-shadow bevel + soft ambient
+     shadow instead of Bauhaus's flat hard-offset. Note the mechanism gap
+     DR-017's correction documents: this only actually renders where a
+     consumer references --shadow-raised/--shadow-sunken directly via
+     Tailwind's arbitrary-value bracket syntax (shadow-[var(--shadow-raised)]),
+     not the .shadow-raised/.shadow-sunken utility classes. The clipboard
+     (BentoResponsibilities) is the first consumer to apply that fix. */
+  --shadow-raised:
+    inset 0 1.5px 0 0 rgba(255, 246, 219, 0.5),
+    inset 0 -3px 0 0 rgba(36, 26, 16, 0.3),
+    0 var(--ui-depth) calc(var(--ui-depth) * 3) rgba(20, 14, 8, 0.4);
+  --shadow-sunken:
+    inset 0 3px 6px rgba(20, 14, 8, 0.5),
+    inset 0 -1px 0 0 rgba(255, 246, 219, 0.15);
+
+  /* Chunkier rounding + thicker outlines than Bauhaus */
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --border-width-sm: calc(3px * var(--border-presence, 1));
+  --border-width-md: calc(4px * var(--border-presence, 1));
+  --border-width-lg: calc(5px * var(--border-presence, 1));
+
+  /* Handwriting register — the clipboard's paper reads as Vlad's own notes,
+     not a borrowed brand typeface. Scoped to heritage only. */
+  --font-hand: 'Kalam', cursive;
 }
 
 * { box-sizing: border-box; }
@@ -139,14 +299,14 @@ html, body {
   background: var(--surface-base);
   color: var(--ink-base);
   font-family: var(--font-body);
-  font-size: 17px;
+  font-size: var(--font-size-body);
   line-height: 1.6;
   font-feature-settings: 'ss01', 'cv11';
   -webkit-font-smoothing: antialiased;
 }
 
 body {
-  background-image: radial-gradient(var(--color-ink-base) var(--texture-dot-size), transparent calc(var(--texture-dot-size) + 0.5px));
+  background-image: radial-gradient(color-mix(in srgb, var(--color-ink-base) calc(var(--motif-dot-texture, 1) * 100%), transparent) var(--texture-dot-size), transparent calc(var(--texture-dot-size) + 0.5px));
   background-size: var(--texture-dot-gap) var(--texture-dot-gap);
   background-position: 0 0;
   background-attachment: fixed;
@@ -174,6 +334,6 @@ body::before {
 
 /* Focus */
 :focus-visible {
-  outline: 3px solid var(--color-sky);
+  outline: 3px solid var(--color-focus);
   outline-offset: 3px;
 }

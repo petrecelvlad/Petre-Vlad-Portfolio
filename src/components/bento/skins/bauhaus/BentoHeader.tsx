@@ -5,21 +5,15 @@ import { Stack } from '@/src/components/atoms/Stack';
 import { Badge } from '@/src/components/atoms/Badge';
 import { AppIcon } from '@/src/components/atoms/AppIcon';
 import { formatDateToQuarter } from '@/src/core/domain/formatDate';
+import { HeaderSlotProps } from '../../ports';
 
-interface BentoHeaderProps {
-  title: string;
-  icon?: string;
-  startDate: string;
-  endDate: string;
-}
-
-export function BentoHeader({ title, icon, startDate, endDate }: BentoHeaderProps) {
+export function BentoHeader({ title, icon, startDate, endDate }: HeaderSlotProps) {
   return (
-    <Row align="center" gap="lg" className="w-full">
+    <Row align="center" gap="lg" className="w-full flex-shrink-0">
       <AppIcon src={icon ?? ''} alt={title} />
 
       <Stack gap="md" justify="center" className="flex-grow w-full min-w-0">
-        <Badge size="lg" color="coral" mono={false} className="w-full text-xl md:text-2xl pt-3 pb-3 truncate">
+        <Badge size="lg" accentToken="--role-header-accent" mono={false} className="w-full text-xl md:text-2xl pt-3 pb-3 truncate">
           {title}
         </Badge>
 

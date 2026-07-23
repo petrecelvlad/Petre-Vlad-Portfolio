@@ -11,7 +11,7 @@ This is the **contract layer** of the design system. It defines every CSS custom
 
 **The Skin is not the system.** The Bauhaus/Applet aesthetic is one possible resolution of these token slots. The tokens are the contract. The Bauhaus values are one answer to that contract.
 
-**Scope note:** this document covers the **value tier** only — concrete colors, sizes, and timings. Structural/variant choices (does a border render at all, hard-offset vs. blurred shadows, motif on/off) are a separate tier, defined in `Skin_System.md`. Read that document before creating a second skin — the "change values, nothing else changes" claim below only holds within this tier.
+**Scope note:** this document covers the **value tier** only — concrete colors, sizes, and timings. Structural/variant choices (does a border render at all, hard-offset vs. blurred shadows, motif on/off) are Tier 2, defined in `Skin_System.md`. A third tier — full component swap per project-card region, for a skin that needs a genuinely different shape, not just different values — is Tier 3, added 2026-07-21 (DR-015), also in `Skin_System.md`. Read that document before creating a second skin — the "change values, nothing else changes" claim below only holds for a skin that stays within Tier 1/2.
 
 ---
 
@@ -70,6 +70,20 @@ This is the **contract layer** of the design system. It defines every CSS custom
 
 ---
 
+### 03.5 — Component Identity Tokens (added 2026-07-21)
+*A thin indirection layer, not a new value tier: each token below is just `var(--color-*)` pointing at one of the raw palette colors above. Exists so a mockup skin can retarget one project-card component's accent without touching the shared palette (which other, unrelated consumers of e.g. `--color-periwinkle` also read) or any component file. See `Skin_System.md` §Sequencing Plan step 3.5.*
+
+| Token | Semantic Purpose | Bauhaus Skin Value | Status |
+|---|---|---|---|
+| `--role-header-accent` | `BentoHeader`'s title pill background | `→ --color-coral` | DEFINED — consumed via `Badge`'s `accentToken` prop |
+| `--role-responsibilities-accent` | `BentoResponsibilities`' titlebar background | `→ --color-periwinkle` | DEFINED — consumed via `WindowCard`'s `accentToken` prop |
+| `--role-skills-accent` | `BentoSkills`' titlebar background | `→ --color-sky` | DEFINED — consumed via `WindowCard`'s `accentToken` prop |
+| `--role-achievement-accent` | `BentoAchievement`'s fill background | `→ --color-butter` | DEFINED — consumed directly as `bg-[var(--role-achievement-accent)]` (not a `WindowCard`, no shared component to route through) |
+
+> `WindowCard`/`Badge`'s original `color` enum prop (`periwinkle`/`sky`/`coral`/etc.) is untouched and still used by every other consumer (`SkillTree`, `Hero`, ...) — `accentToken` is additive, not a replacement.
+
+---
+
 ### 04 — Semantic/State Colors
 *System communication — not decorative.*
 
@@ -80,9 +94,9 @@ This is the **contract layer** of the design system. It defines every CSS custom
 | `--color-success` | Positive state | `→ --color-mint` | DEFINED |
 | `--color-warning` | Caution state | `#FFB84D` | DEFINED |
 | `--color-error` | Destructive/failure state | `#E8554A` | DEFINED |
-| `--color-rule` | Divider/separator lines | `→ --color-ink-base` | **BROKEN** — `index.css` defines it as `var(--color-ink)`, which does not exist (should be `var(--color-ink-base)`). Currently resolves to nothing. |
+| `--color-rule` | Divider/separator lines | `→ --color-ink-base` | DEFINED — fixed 2026-07-20, was referencing the undefined `var(--color-ink)` |
 | `--color-rule-soft` | Subtle dividers | `#E0D9C6` | DEFINED |
-| `--color-focus` | Focus ring color | `→ --color-sky` | GAP — `:focus-visible` in `index.css` hardcodes `var(--color-sky)` directly instead of through a semantic `--color-focus` indirection |
+| `--color-focus` | Focus ring color | `→ --color-sky` | DEFINED — `:focus-visible` in `index.css` now references `var(--color-focus)` |
 
 ---
 
@@ -107,6 +121,7 @@ This is the **contract layer** of the design system. It defines every CSS custom
 | `--font-display` | Headings, UI labels, buttons | `'Space Grotesk', sans-serif` | DEFINED |
 | `--font-body` | Prose, descriptions, running text | `'Outfit', sans-serif` | DEFINED |
 | `--font-mono` | Technical labels, dates, tags, code | `'JetBrains Mono', monospace` | DEFINED |
+| `--font-hand` | Handwriting register — added 2026-07-21 (DR-019), only ever consumed by heritage's clipboard paper text | `var(--font-body)` (default; heritage overrides to `'Kalam', cursive'`) | DEFINED and wired (`skins/heritage/BentoResponsibilities.tsx`) — must be consumed via inline `style={{ fontFamily: 'var(--font-hand)' }}`, not a Tailwind arbitrary class; see `Skin_System.md`'s note on the `Text` atom's default `font-body` class winning the specificity race |
 
 ---
 
@@ -115,12 +130,12 @@ This is the **contract layer** of the design system. It defines every CSS custom
 
 | Token | Semantic Purpose | Bauhaus Skin Value | Status |
 |---|---|---|---|
-| `--text-label` | Standard mono label (applet titlebar, badges) | `11px` | DEFINED — note: actual token name is `--text-label`, not `--font-size-label` as this doc previously implied. Naming convention drift — reconcile the next time this category is touched. |
-| `--text-label-sm` | Compact mono label (slot text, skill names) | `10px` | DEFINED — same naming note as above |
-| `--font-size-body-sm` | Small body text | `15px` | HARDCODED — `text-[15px]` in Button.tsx |
-| `--font-size-body` | Base body size | `17px` | HARDCODED — literal `font-size: 17px` on html/body in index.css |
+| `--text-label` | Standard mono label (applet titlebar, badges) | `11px` | DEFINED and wired (`BentoSkills`, `Navbar`, and other mono-label call sites) — actual token name is `--text-label`, not `--font-size-label`; naming convention drift from `--font-size-*` noted but not worth a rename churn on its own |
+| `--text-label-sm` | Compact mono label (slot text, skill names) | `10px` | DEFINED and wired (`BentoSkills`, `Navbar`) |
+| `--font-size-body-sm` | Small body text | `15px` | DEFINED — wired into `Button.tsx`'s `md` size |
+| `--font-size-body` | Base body size | `17px` | DEFINED — wired into `html, body` in `index.css` |
 
-> The Tailwind `text-sm` / `text-base` scale is insufficient for this system's precision. Define explicit tokens for the two still-hardcoded rows, and reconcile naming (`--text-*` vs `--font-size-*`) across all four.
+> The Tailwind `text-sm` / `text-base` scale is insufficient for this system's precision. All four rows now closed as of 2026-07-20.
 
 ---
 
@@ -154,10 +169,13 @@ This is the **contract layer** of the design system. It defines every CSS custom
 
 | Token | Semantic Purpose | Bauhaus Skin Value | Status |
 |---|---|---|---|
-| `--border-width-sm` | Standard component border | `2px` | HARDCODED — `border-2` across all components |
-| `--border-width-md` | Primary/featured component border | `3px` | HARDCODED — `border-[3px]` in WindowCard primary |
+| `--border-width-sm` | Standard component border | `2px` | DEFINED — wired into every consumer (`WindowCard`, `Button`, `Card`, `Badge`, `Avatar`, `AppIcon`, `BentoAchievement`, `BentoVideoFrame`, `Navbar`, `SkillTree`, `BacklogView`) |
+| `--border-width-md` | Primary/featured component border | `3px` | DEFINED — `WindowCard` primary variant, `TimelineMarker` mobile state |
+| `--border-width-lg` | Heavy border — footer, TimelineMarker desktop state | `4px` | DEFINED — reintroduced 2026-07-20, sourced from real usage (`App.tsx` footer, `TimelineMarker` desktop breakpoint), not from the deleted `bauhaus.ts` |
 
-> `bauhaus.ts` (previously the source of a proposed `--border-width-lg` / `4px` variant) has since been deleted from the codebase — see Dead File Audit below, now resolved. A Minimal Skin would use `1px` for `--border-width-sm`; a different variant could reintroduce a heavier border weight as a new row here if a skin actually needs one. Also see `Skin_System.md`'s `--border-presence` token — a skin can now turn borders off entirely, not just resize them.
+> A Minimal Skin would use `1px` for `--border-width-sm`. `BentoVideoFrame`'s 8px device-bezel border is a deliberate outlier (a device-frame effect, not a UI-card border) and was left off this scale rather than forced into it. Also see `Skin_System.md`'s `--border-presence` token — a skin can now turn borders off entirely, not just resize them.
+
+> **Tailwind v4 gotcha (found 2026-07-21, real regression, not hypothetical):** `border-[var(--border-width-sm)]` compiles to `border-color: var(--border-width-sm)`, silently dropping border-width and border-style entirely — Tailwind can't infer the intended CSS property from a bare `var()` reference and defaults ambiguous `border-[...]` arbitrary values to color. Every border on the site rendered invisible (0-effective-width) until this was caught. **The fix, required for every border-width arbitrary value in this codebase: use the type hint, `border-[length:var(--border-width-sm)]`** (same pattern already used correctly for font sizes: `text-[length:var(--font-size-body-sm)]`). Screenshots alone did not catch this the first time — the hard-offset `shadow-raised` box-shadow visually mimics a border at a glance. Verify border fixes with `getComputedStyle(el).borderWidth`, not just a screenshot.
 
 ---
 
@@ -199,10 +217,12 @@ This is the **contract layer** of the design system. It defines every CSS custom
 |---|---|---|---|
 | `--chrome-titlebar-height` | WindowCard titlebar height | `40px` | DEFINED |
 | `--chrome-navbar-height` | Fixed Navbar height (load-bearing for the scroll envelope) | `64px` | DEFINED, and confirmed in use — every `calc(100vh-...)` snap section (`App.tsx`, `Timeline.tsx`, `BacklogView.tsx`) already references `var(--chrome-navbar-height)`, not a literal. |
-| `--chrome-traffic-light-size` | MacOS-style traffic light button diameter | `12px` (0.75rem / w-3) | HARDCODED — `w-3 h-3` in WindowCard |
+| `--chrome-traffic-light-size` | MacOS-style traffic light button diameter | `12px` (0.75rem / w-3) | DEFINED — wired into `WindowCard`'s `TrafficLights` |
 | `--chrome-traffic-light-border` | Traffic light button border width | `1.5px` | DEFINED |
 | `--chrome-icon-slot-size` | Skill/icon slot square max-width in bento | `90px` | DEFINED |
-| `--chrome-icon-size` | Icon size inside skill slots | `36px` | HARDCODED — `size: 36` prop in BentoSkills |
+| `--chrome-icon-size` | Icon size inside skill slots | `36px` | DEFINED — `BentoSkills` now sizes cloned icons via `className` (`w-[var(--chrome-icon-size)] h-[var(--chrome-icon-size)]`) instead of Lucide's numeric `size` prop, so it participates in the token system |
+| `--chrome-device-shell` | `BentoVideoFrame`'s device shell/hardware-button/notch color | `#191919` (literal, not `→ --color-ink-base`) | DEFINED — deliberately a hardcoded literal, not an alias. See `Skin_System.md`'s Locked Constraints: an alias would still re-resolve against an active skin at its point of use, which defeats the point of locking this frame |
+| `--chrome-device-shadow` | `BentoVideoFrame`'s device shell shadow | `0 4px 0 0 #000000` (literal, not `→ --shadow-raised`) | DEFINED — same reasoning as above |
 
 > `--chrome-navbar-height` is especially critical — it is the root value of the `calc(100vh-64px)` envelope. Now defined in `@theme`; confirm `calc()` call sites reference the variable, not the literal.
 
@@ -232,18 +252,18 @@ This file was flagged as non-functional (referenced undefined `shadow-bau-*` and
 
 ## Gap Summary
 
-*Updated 2026-07-20. Most of the September gap list has closed since this contract was first written — several categories below were resolved by unrelated work (the `--ui-depth` unification, chrome dimensions moving into `@theme`) rather than by anyone working through this list directly. Re-verify against `index.css` before trusting old counts in the future; don't assume this doc stays accurate on its own.*
+*Updated 2026-07-20 (second pass, same day). All 8 gaps from the first pass closed — tokens defined in `@theme` and wired into their real call sites, not just declared. One new token added along the way (`--border-width-lg`, sourced from live usage in `App.tsx`'s footer and `TimelineMarker`'s desktop state) that wasn't previously tracked at all.*
 
-| Category | Tokens Missing | Impact |
-|---|---|---|
-| Border widths | 2 (`--border-width-sm`, `--border-width-md`) | Every component border is a hardcoded Tailwind class |
-| Font sizes | 2 (`--font-size-body-sm`, `--font-size-body`) + naming drift on the 2 that exist (`--text-label*` vs. the `--font-size-label*` names this doc originally proposed) | Label sizes mostly tokenized; body sizes and naming consistency remain |
-| Chrome dimensions | 2 (`--chrome-traffic-light-size`, `--chrome-icon-size`) | Minor — both are small, low-risk literals |
-| Broken reference | 1 (`--color-rule`) | Resolves to nothing; divider styling relying on it currently falls through to inherited/browser default, not the intended ink color |
-| Focus color indirection | 1 (`--color-focus`) | Cosmetic — swapping skins won't re-theme the focus ring without this |
-| **Total remaining gaps** | **8** | Down from 23 at last audit |
+| Category | Status |
+|---|---|
+| Border widths | Closed — `--border-width-sm/md/lg` defined and wired into every real consumer, including several (`BacklogView`, `App.tsx` footer, `Navbar`'s `border-b`) not on the original hardcode list |
+| Font sizes | Closed — `--font-size-body`/`--font-size-body-sm` defined and wired; `--text-label`/`--text-label-sm` were already defined but two consumers (`Navbar`, `BentoSkills`) were found still using raw arbitrary values instead of the token — now wired |
+| Chrome dimensions | Closed — `--chrome-traffic-light-size` and `--chrome-icon-size` defined and wired (the latter required switching `BentoSkills`' icon sizing from Lucide's numeric `size` prop to a token-driven `className`) |
+| Broken reference | Fixed — `--color-rule` now correctly points at `--color-ink-base` |
+| Focus color indirection | Closed — `:focus-visible` now references `--color-focus` |
+| **Total remaining gaps** | **0** |
 
-~~Slot machine colors~~, ~~interaction physics~~, and ~~background texture~~ are fully resolved — removed from this table.
+One deliberate exception, not a gap: `BentoVideoFrame`'s `border-[8px]` device-bezel is a distinct visual concept (a device frame, not a UI-card border) and was left off the border-width scale intentionally rather than forced into it.
 
 ---
 
@@ -255,11 +275,11 @@ Everything above this line is the **value-tier contract** — the what. The Bauh
 2. Copy `Skin_System.md`'s Tier 2 structural/variant table
 3. Change values in both
 
-For skins that only differ in color/size/timing, components genuinely don't change — only this document's values change. For skins that differ structurally (no borders, blurred shadows, no slot motif), the components still don't change, but the Tier 2 tokens do — see `Skin_System.md` for the full model, the runtime swap mechanism (`[data-skin="..."]`), and the sequencing plan for building a second skin without risking the first.
+For skins that only differ in color/size/timing, components genuinely don't change — only this document's values change. For skins that differ structurally (no borders, blurred shadows, no slot motif), the components still don't change, but the Tier 2 tokens do. For skins that need a different DOM shape entirely — not just different values or on/off structural treatment — a component's `Bento*` implementation itself can be swapped per project-card region via Tier 3's slot registry, without any of the other regions or skins changing. See `Skin_System.md` for the full model, the runtime swap mechanism (`[data-skin="..."]`), the Tier 3 slot registry, and the sequencing plan for building a second skin without risking the first.
 
 A second Skin (`Skin_Dark.md`, `Skin_Minimal.md`) would specify alternate values for every Tier 1 token in this table plus every Tier 2 token in `Skin_System.md`.
 
 ---
 
-*Token Contract v1.1 · Experience Engine · 2026-07-20*
-*Next: close the 8 remaining gaps in the Gap Summary above, then wire Tier 2 structural tokens per `Skin_System.md`'s sequencing plan.*
+*Token Contract v1.4 · Experience Engine · 2026-07-21*
+*Next: `heritage` was redirected to a desk/clipboard concept (DR-019) — `header` is now a deliberate no-op absorbed into the `responsibilities` clipboard, `responsibilities`/`skills` have real Tier 3 adapters, `achievement` still inherits Bauhaus's shape. Live threads: mapping `skills`/`achievement` onto the desk concept, and true audience-lens tab content (blocked on data authoring, not mechanism — see DECISIONS.md's Open section).*

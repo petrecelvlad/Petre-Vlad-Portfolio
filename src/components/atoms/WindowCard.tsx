@@ -6,6 +6,8 @@ export interface WindowCardProps extends React.HTMLAttributes<HTMLDivElement> {
   title?: React.ReactNode;
   titlebarState?: 'normal' | 'compact' | 'tall' | 'striped';
   color?: 'periwinkle' | 'butter' | 'coral' | 'mint' | 'sky' | 'base' | 'ink';
+  /** CSS var name (e.g. '--role-skills-accent') to drive the titlebar background instead of `color`. Lets a skin retarget this instance's accent independently of the shared palette. */
+  accentToken?: string;
   noPad?: boolean;
   titleRight?: React.ReactNode;
   titleCenter?: boolean;
@@ -26,9 +28,9 @@ const colorMap = {
 
 const TrafficLights = () => (
   <div className="flex gap-[6px] items-center shrink-0">
-    <div className="w-3 h-3 rounded-full border border-ink-base bg-error" />
-    <div className="w-3 h-3 rounded-full border border-ink-base bg-warning" />
-    <div className="w-3 h-3 rounded-full border border-ink-base bg-mint" />
+    <div className="w-[var(--chrome-traffic-light-size)] h-[var(--chrome-traffic-light-size)] rounded-full border border-ink-base bg-error" />
+    <div className="w-[var(--chrome-traffic-light-size)] h-[var(--chrome-traffic-light-size)] rounded-full border border-ink-base bg-warning" />
+    <div className="w-[var(--chrome-traffic-light-size)] h-[var(--chrome-traffic-light-size)] rounded-full border border-ink-base bg-mint" />
   </div>
 );
 
@@ -38,6 +40,7 @@ export const WindowCard = ({
   title,
   titlebarState = 'normal',
   color = 'periwinkle',
+  accentToken,
   noPad = false,
   titleRight,
   titleCenter,
@@ -45,7 +48,7 @@ export const WindowCard = ({
   className = '',
   ...props
 }: WindowCardProps) => {
-  const borderWidth = primary ? 'border-[3px]' : 'border-2';
+  const borderWidth = primary ? 'border-[length:var(--border-width-md)]' : 'border-[length:var(--border-width-sm)]';
   const shadow = 'shadow-raised';
 
   return (
@@ -54,12 +57,15 @@ export const WindowCard = ({
       {...props}
     >
       {title && (
-        <div className={`
-          border-b-2 px-3 flex items-center gap-3 relative
-          font-display font-medium
-          h-[var(--chrome-titlebar-height)] text-sm
-          ${colorMap[color]}
-        `}>
+        <div
+          className={`
+            border-b-[length:var(--border-width-sm)] px-3 flex items-center gap-3 relative
+            font-display font-medium
+            h-[var(--chrome-titlebar-height)] text-sm
+            ${accentToken ? 'text-ink-base border-ink-base' : colorMap[color]}
+          `}
+          style={accentToken ? { backgroundColor: `var(${accentToken})` } : undefined}
+        >
           {titlebarState === 'striped' && (
             <div className="absolute inset-0 opacity-40 mix-blend-multiply" 
               style={{

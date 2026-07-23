@@ -9,20 +9,20 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
 }
 
 const variantMap = {
-  primary: 'bg-ink-base text-surface-base shadow-raised border-2 border-ink-base active:shadow-none active:translate-y-[var(--press-depth)]',
-  secondary: 'bg-surface-base text-ink-base shadow-raised border-2 border-ink-base active:shadow-none active:translate-y-[var(--press-depth)]',
-  accent: 'bg-theme-accent text-white shadow-[inset_0_calc(var(--ui-depth)*-1)_0_var(--color-theme-accent-hover),0_var(--ui-depth)_0_0_var(--shadow-color)] border-2 border-ink-base active:shadow-[inset_0_calc(var(--ui-depth)*-1)_0_var(--color-theme-accent-hover)] active:translate-y-[var(--press-depth)]',
-  outline: 'bg-transparent text-ink-base shadow-raised border-2 border-ink-base active:shadow-none active:translate-y-[var(--press-depth)]',
+  primary: 'bg-ink-base text-surface-base shadow-raised border-[length:var(--border-width-sm)] border-ink-base active:shadow-none active:translate-y-[var(--press-depth)]',
+  secondary: 'bg-surface-base text-ink-base shadow-raised border-[length:var(--border-width-sm)] border-ink-base active:shadow-none active:translate-y-[var(--press-depth)]',
+  accent: 'bg-theme-accent text-white shadow-[inset_0_calc(var(--ui-depth)*-1)_0_var(--color-theme-accent-hover),0_var(--ui-depth)_0_0_var(--shadow-color)] border-[length:var(--border-width-sm)] border-ink-base active:shadow-[inset_0_calc(var(--ui-depth)*-1)_0_var(--color-theme-accent-hover)] active:translate-y-[var(--press-depth)]',
+  outline: 'bg-transparent text-ink-base shadow-raised border-[length:var(--border-width-sm)] border-ink-base active:shadow-none active:translate-y-[var(--press-depth)]',
   ghost: 'bg-transparent border-none text-ink-base underline decoration-theme-accent-hover decoration-2 underline-offset-4 hover:decoration-3',
-  mint: 'bg-mint text-ink-base shadow-[inset_0_calc(var(--ui-depth)*-1)_0_var(--color-mint-deep),0_var(--ui-depth)_0_0_var(--shadow-color)] border-2 border-ink-base active:shadow-[inset_0_calc(var(--ui-depth)*-1)_0_var(--color-mint-deep)] active:translate-y-[var(--press-depth)]',
-  butter: 'bg-butter text-ink-base shadow-[inset_0_calc(var(--ui-depth)*-1)_0_var(--color-butter-deep),0_var(--ui-depth)_0_0_var(--shadow-color)] border-2 border-ink-base active:shadow-[inset_0_calc(var(--ui-depth)*-1)_0_var(--color-butter-deep)] active:translate-y-[var(--press-depth)]',
-  coral: 'bg-coral text-white shadow-[inset_0_calc(var(--ui-depth)*-1)_0_var(--color-coral-deep),0_var(--ui-depth)_0_0_var(--shadow-color)] border-2 border-ink-base active:shadow-[inset_0_calc(var(--ui-depth)*-1)_0_var(--color-coral-deep)] active:translate-y-[var(--press-depth)]',
-  sky: 'bg-sky text-ink-base shadow-[inset_0_calc(var(--ui-depth)*-1)_0_var(--color-sky-deep),0_var(--ui-depth)_0_0_var(--shadow-color)] border-2 border-ink-base active:shadow-[inset_0_calc(var(--ui-depth)*-1)_0_var(--color-sky-deep)] active:translate-y-[var(--press-depth)]',
+  mint: 'bg-mint text-ink-base shadow-[inset_0_calc(var(--ui-depth)*-1)_0_var(--color-mint-deep),0_var(--ui-depth)_0_0_var(--shadow-color)] border-[length:var(--border-width-sm)] border-ink-base active:shadow-[inset_0_calc(var(--ui-depth)*-1)_0_var(--color-mint-deep)] active:translate-y-[var(--press-depth)]',
+  butter: 'bg-butter text-ink-base shadow-[inset_0_calc(var(--ui-depth)*-1)_0_var(--color-butter-deep),0_var(--ui-depth)_0_0_var(--shadow-color)] border-[length:var(--border-width-sm)] border-ink-base active:shadow-[inset_0_calc(var(--ui-depth)*-1)_0_var(--color-butter-deep)] active:translate-y-[var(--press-depth)]',
+  coral: 'bg-coral text-white shadow-[inset_0_calc(var(--ui-depth)*-1)_0_var(--color-coral-deep),0_var(--ui-depth)_0_0_var(--shadow-color)] border-[length:var(--border-width-sm)] border-ink-base active:shadow-[inset_0_calc(var(--ui-depth)*-1)_0_var(--color-coral-deep)] active:translate-y-[var(--press-depth)]',
+  sky: 'bg-sky text-ink-base shadow-[inset_0_calc(var(--ui-depth)*-1)_0_var(--color-sky-deep),0_var(--ui-depth)_0_0_var(--shadow-color)] border-[length:var(--border-width-sm)] border-ink-base active:shadow-[inset_0_calc(var(--ui-depth)*-1)_0_var(--color-sky-deep)] active:translate-y-[var(--press-depth)]',
 };
 
 const sizeMap = {
   sm: 'text-sm py-2 px-3',
-  md: 'text-[15px] py-3 px-5',
+  md: 'text-[length:var(--font-size-body-sm)] py-3 px-5',
   lg: 'text-base py-4 px-6',
 };
 

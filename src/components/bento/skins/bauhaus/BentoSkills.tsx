@@ -12,8 +12,9 @@ import {
   Code2,
   Box
 } from 'lucide-react';
-import { WindowCard } from '../atoms/WindowCard';
-import { Text } from '../atoms/Text';
+import { WindowCard } from '../../../atoms/WindowCard';
+import { Text } from '../../../atoms/Text';
+import { SkillsSlotProps } from '../../ports';
 
 interface SkillSlotProps {
   label?: string;
@@ -28,13 +29,13 @@ function SkillSlot({ label, icon, active }: SkillSlotProps) {
       <div className="w-full aspect-square max-w-[var(--chrome-icon-slot-size)] rounded-slot bg-slot-surface shadow-sunken flex-shrink-0 flex items-center justify-center">
         {active && icon && (
           <div className="text-slot-text transition-transform duration-200 group-hover:-translate-y-0.5">
-            {React.cloneElement(icon as React.ReactElement, { size: 36, strokeWidth: 2 })}
+            {React.cloneElement(icon as React.ReactElement, { className: 'w-[var(--chrome-icon-size)] h-[var(--chrome-icon-size)]', strokeWidth: 2 })}
           </div>
         )}
       </div>
       <div className="min-h-[1rem] flex items-center justify-center">
         {active && label && (
-          <Text variant="mono" className="text-[10px] md:text-[11px] font-bold text-center leading-[1.2] text-slot-text tracking-tight px-0.5">
+          <Text variant="mono" className="text-[length:var(--text-label-sm)] md:text-[length:var(--text-label)] font-bold text-center leading-[1.2] text-slot-text tracking-tight px-0.5">
             {label}
           </Text>
         )}
@@ -43,11 +44,7 @@ function SkillSlot({ label, icon, active }: SkillSlotProps) {
   );
 }
 
-interface BentoSkillsProps {
-  skills: string[];
-}
-
-export function BentoSkills({ skills }: BentoSkillsProps) {
+export function BentoSkills({ skills }: SkillsSlotProps) {
   // Mapper for icons
   const getIcon = (skill: string) => {
     const s = skill.toLowerCase();
@@ -70,7 +67,7 @@ export function BentoSkills({ skills }: BentoSkillsProps) {
   return (
     <WindowCard 
       title={<Text variant="mono" className="text-sm font-black uppercase tracking-widest text-ink-base">Skills</Text>}
-      color="sky"
+      accentToken="--role-skills-accent"
       titleCenter={false}
       lights={true}
       noPad={true}

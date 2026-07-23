@@ -6,6 +6,8 @@ import { useTimelineOrchestrator } from '@/src/hooks/useTimelineOrchestrator';
 import { TimelineMarker } from '@/src/components/timeline/TimelineMarker';
 import { TimelineTrack } from '@/src/components/timeline/TimelineTrack';
 import { ProjectDetails } from '@/src/components/timeline/ProjectDetails';
+import { WoodBackground } from '@/src/components/bento/skins/heritage/WoodBackground';
+import { useSkin } from '@/src/context/SkinContext';
 
 import { Scene } from '@/src/components/layout/Scene';
 
@@ -26,7 +28,8 @@ interface TimelineItemProps {
 
 const TimelineItem = ({ project, index, activeIndex, scrollDirection, onRef, containerRef: scrollContainerRef }: TimelineItemProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
-  
+  const { skin } = useSkin();
+
   const { scrollYProgress } = useScroll({
     container: scrollContainerRef,
     target: containerRef,
@@ -43,8 +46,16 @@ const TimelineItem = ({ project, index, activeIndex, scrollDirection, onRef, con
         containerRef.current = el;
         onRef(el);
       }}
-      className="snap-start snap-always h-[calc(100vh-var(--chrome-navbar-height))] w-full flex relative"
+      className="relative z-0 snap-start snap-always h-[calc(100vh-var(--chrome-navbar-height))] w-full flex"
     >
+      {/* Shared canvas background — covers the timeline-marker rail AND the
+          content column together, since they're one visual surface (the
+          desk) even though the marker is laid out as its own flex column
+          with its own width. Rendered at this outer level, not inside
+          either column, specifically so it isn't scoped to just one of
+          them. */}
+      {skin === 'heritage' && <WoodBackground />}
+
       {/* Timeline Track Segment (Base + Active Fill) */}
       <div className="absolute left-[24px] md:left-[44px] inset-y-0 w-1 md:w-2 -translate-x-1/2 pointer-events-none z-20">
         <TimelineTrack 
@@ -68,7 +79,7 @@ const TimelineItem = ({ project, index, activeIndex, scrollDirection, onRef, con
       </div>
 
       {/* Right Column: Content */}
-      <div className="flex-grow h-full pt-[24px] md:pt-[24px] pb-3 md:pb-5 pr-2 md:pr-4 min-w-0 flex flex-col justify-start">
+      <div className="relative z-0 flex-grow h-full pt-[24px] md:pt-[24px] pb-3 md:pb-5 pr-2 md:pr-4 min-w-0 flex flex-col justify-start">
         <div className="w-full h-full mx-auto overflow-hidden flex items-start justify-center pointer-events-auto">
           <motion.div 
             initial={{ opacity: 0, y: 20 }}

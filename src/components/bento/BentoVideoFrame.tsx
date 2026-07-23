@@ -124,13 +124,13 @@ export function BentoVideoFrame({ screenshot, youtubeUrl, isActive }: BentoVideo
   return (
     <div className="relative w-full h-full min-h-0 flex items-center justify-center p-2">
       <div className="relative w-full max-h-full aspect-video flex-shrink-0">
-        {/* Hardware Buttons on top edge */}
-        <div className="absolute -top-[6px] left-[20%] md:left-[25%] w-12 md:w-16 h-[6px] bg-ink-base rounded-t-md z-0" />
-        <div className="absolute -top-[6px] left-[40%] md:left-[45%] w-16 md:w-20 h-[6px] bg-ink-base rounded-t-md z-0" />
+        {/* Hardware Buttons on top edge — locked chrome, never skin-driven, see index.css */}
+        <div className="absolute -top-[6px] left-[20%] md:left-[25%] w-12 md:w-16 h-[6px] bg-[var(--chrome-device-shell)] rounded-t-md z-0" />
+        <div className="absolute -top-[6px] left-[40%] md:left-[45%] w-16 md:w-20 h-[6px] bg-[var(--chrome-device-shell)] rounded-t-md z-0" />
 
-        <div className="relative group w-full h-full border-[8px] border-ink-base rounded-[40px] bg-ink-base overflow-hidden shadow-raised z-10">
+        <div className="relative group w-full h-full border-[8px] border-[var(--chrome-device-shell)] rounded-[40px] bg-[var(--chrome-device-shell)] overflow-hidden shadow-[var(--chrome-device-shadow)] z-10">
           {/* Device Notch */}
-          <div className="absolute left-0 top-1/2 -translate-y-1/2 w-4 h-20 bg-ink-base rounded-r-[12px] z-20" />
+          <div className="absolute left-0 top-1/2 -translate-y-1/2 w-4 h-20 bg-[var(--chrome-device-shell)] rounded-r-[12px] z-20" />
 
           {/* Content: Video or Screenshot */}
           {videoId ? (
@@ -146,7 +146,7 @@ export function BentoVideoFrame({ screenshot, youtubeUrl, isActive }: BentoVideo
               className="w-full h-full object-cover rounded-[32px]"
             />
           ) : (
-            <div className="w-full h-full flex items-center justify-center bg-surface-base border-2 border-dashed border-ink-base/20 rounded-[32px]">
+            <div className="w-full h-full flex items-center justify-center bg-surface-base border-[length:var(--border-width-sm)] border-dashed border-ink-base/20 rounded-[32px]">
               <span className="font-mono text-xs text-ink-base/25 uppercase tracking-widest text-center select-none">
                 No Preview<br/>Available
               </span>

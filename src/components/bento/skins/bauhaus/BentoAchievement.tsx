@@ -1,16 +1,13 @@
 
 import { Trophy } from 'lucide-react';
-import { Row } from '../atoms/Row';
-import { Text } from '../atoms/Text';
+import { Row } from '../../../atoms/Row';
+import { Text } from '../../../atoms/Text';
+import { AchievementSlotProps } from '../../ports';
 
-interface BentoAchievementProps {
-  achievement?: string;
-}
-
-export function BentoAchievement({ achievement }: BentoAchievementProps) {
+export function BentoAchievement({ achievement }: AchievementSlotProps) {
   const isEmpty = !achievement;
   return (
-    <div className={`border-2 border-ink-base px-4 py-3 rounded-xl shadow-raised ${isEmpty ? 'bg-surface-base border-dashed opacity-40' : 'bg-butter'}`}>
+    <div className={`border-[length:var(--border-width-sm)] border-ink-base px-4 py-3 rounded-xl shadow-[var(--shadow-raised)] ${isEmpty ? 'bg-surface-base border-dashed opacity-40' : 'bg-[var(--role-achievement-accent)]'}`}>
       <Row gap="sm" align="center">
         <div className="flex-shrink-0 flex items-center justify-center">
           <Trophy size={20} className="text-ink-base" />

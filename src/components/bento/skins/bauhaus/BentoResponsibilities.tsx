@@ -1,19 +1,15 @@
 
-import { WindowCard } from '../atoms/WindowCard';
-import { Text } from '../atoms/Text';
-import { Stack } from '../atoms/Stack';
-import { Row } from '../atoms/Row';
+import { WindowCard } from '../../../atoms/WindowCard';
+import { Text } from '../../../atoms/Text';
+import { Stack } from '../../../atoms/Stack';
+import { Row } from '../../../atoms/Row';
+import { ResponsibilitiesSlotProps } from '../../ports';
 
-interface BentoResponsibilitiesProps {
-  responsibilities: string[];
-  role: string;
-}
-
-export function BentoResponsibilities({ responsibilities, role }: BentoResponsibilitiesProps) {
+export function BentoResponsibilities({ responsibilities, role }: ResponsibilitiesSlotProps) {
   return (
     <WindowCard 
       title={<Text variant="mono" className="text-sm font-black uppercase tracking-widest text-ink-base">{role}</Text>}
-      color="periwinkle"
+      accentToken="--role-responsibilities-accent"
       lights={true}
       noPad={true}
       className="h-full flex flex-col"

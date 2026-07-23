@@ -76,7 +76,7 @@ export function TimelineMarker({ isActive, isConsumed, direction, progress }: Ti
           backgroundColor,
           borderColor,
         }}
-        className="w-5 h-5 md:w-7 md:h-7 rounded-full border-[3px] md:border-4 shadow-raised"
+        className="w-5 h-5 md:w-7 md:h-7 rounded-full border-[length:var(--border-width-md)] md:border-[length:var(--border-width-lg)] shadow-raised"
       />
     </div>
   );

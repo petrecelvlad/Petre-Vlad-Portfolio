@@ -19,4 +19,4 @@ First audience to land on the site: **recruiters, mostly non-technical**. For th
 ## What "done" looks like (working assumption, not confirmed)
 A portfolio that: (a) reads as professional/senior on first visual impression to a non-technical recruiter, (b) makes 20 years of experience legible at a glance via aggregate stats, (c) lets different audiences (producer-hirers vs designer-hirers) self-serve the relevant facet of each project, (d) has a visual identity that is demonstrably Vlad's own rather than an assembled genre.
 
-See [DECISIONS.md](./DECISIONS.md) for resolved/open decisions, [ANTI_PATTERNS.md](./ANTI_PATTERNS.md) for rejected visual directions, [LESSONS.md](./LESSONS.md) for working-method lessons.
+See [DECISIONS.md](./DECISIONS.md) for resolved/open decisions, [ANTI_PATTERNS.md](./ANTI_PATTERNS.md) for rejected visual directions, [LESSONS.md](./LESSONS.md) for working-method lessons, and [Philosophy/](./Philosophy/) for the standing site-wide pillars and per-section creative direction.

@@ -230,7 +230,7 @@ export function BacklogView({ experiences }: Props) {
     <div className="h-[calc(100vh-var(--chrome-navbar-height))] flex flex-col overflow-hidden bg-surface-base">
 
       {/* ── Stats bar ──────────────────────────────────────────────────────── */}
-      <div className="flex-shrink-0 bg-surface-inverse text-surface-base px-6 py-3 flex flex-wrap items-center gap-x-8 gap-y-1 border-b-2 border-ink-base">
+      <div className="flex-shrink-0 bg-surface-inverse text-surface-base px-6 py-3 flex flex-wrap items-center gap-x-8 gap-y-1 border-b-[length:var(--border-width-sm)] border-ink-base">
         <span className="font-mono text-[10px] uppercase tracking-[0.2em] font-bold text-coral">
           [DEBUG] PROJECT BACKLOG
         </span>
@@ -275,7 +275,7 @@ export function BacklogView({ experiences }: Props) {
               <TH>PERIOD</TH>
               <TH>ROLE</TH>
               {/* NG METADATA */}
-              <TH center accent="border-l-2 border-periwinkle/30">UPLOADED</TH>
+              <TH center accent="border-l-[length:var(--border-width-sm)] border-periwinkle/30">UPLOADED</TH>
               <TH center>VIEWS</TH>
               <TH center>VOTES</TH>
               <TH center>SCORE /5</TH>
@@ -284,7 +284,7 @@ export function BacklogView({ experiences }: Props) {
               <TH center>TAGS</TH>
               <TH center>DESC.</TH>
               {/* CONTENT CHECKLIST */}
-              <TH center accent="border-l-2 border-sky/30">ICON</TH>
+              <TH center accent="border-l-[length:var(--border-width-sm)] border-sky/30">ICON</TH>
               <TH center>LOGO</TH>
               <TH center>SHOTS</TH>
               <TH center>RESP.</TH>
@@ -320,7 +320,7 @@ export function BacklogView({ experiences }: Props) {
                 <TD><span className="font-mono text-[11px] text-ink-subtle">{row.role}</span></TD>
 
                 {/* NG METADATA — populated when project has a Newgrounds URL, N/A otherwise */}
-                <TD center className="border-l-2 border-periwinkle/20">
+                <TD center className="border-l-[length:var(--border-width-sm)] border-periwinkle/20">
                   {row.ng
                     ? <span className="font-mono text-[10px] text-ink-subtle whitespace-nowrap">{row.ng.upload_date_display || row.ng.upload_date_iso || '—'}</span>
                     : <span className="font-mono text-[10px] text-ink-base/20">N/A</span>}
@@ -356,7 +356,7 @@ export function BacklogView({ experiences }: Props) {
                 </TD>
 
                 {/* CONTENT CHECKLIST */}
-                <TD center className="border-l-2 border-sky/20"><Dot s={row.iconSt} /></TD>
+                <TD center className="border-l-[length:var(--border-width-sm)] border-sky/20"><Dot s={row.iconSt} /></TD>
                 <TD center><Dot s={row.logoSt} /></TD>
                 <TD center>
                   <div className="flex items-center justify-center gap-1.5">
@@ -417,7 +417,7 @@ export function BacklogView({ experiences }: Props) {
                   <TD><span className="font-mono text-[10px] text-ink-subtle">{row.role}</span></TD>
 
                   {/* NG METADATA */}
-                  <TD center className="border-l-2 border-periwinkle/20">
+                  <TD center className="border-l-[length:var(--border-width-sm)] border-periwinkle/20">
                     {scraperHasRun
                       ? <span className="font-mono text-[10px] text-ink-subtle whitespace-nowrap">{ng?.upload_date_display || ng?.upload_date_iso || '—'}</span>
                       : <span className="font-mono text-[9px] text-coral/60">pending</span>}
@@ -457,7 +457,7 @@ export function BacklogView({ experiences }: Props) {
                   </TD>
 
                   {/* CONTENT CHECKLIST */}
-                  <TD center className="border-l-2 border-sky/20"><Dot s="missing" /></TD>
+                  <TD center className="border-l-[length:var(--border-width-sm)] border-sky/20"><Dot s="missing" /></TD>
                   <TD center><Dot s="missing" /></TD>
                   <TD center><Dot s="missing" /></TD>
                   <TD center><span className="font-mono text-[10px] text-coral">—</span></TD>
@@ -476,7 +476,7 @@ export function BacklogView({ experiences }: Props) {
         </table>
 
         {/* ── Legend ───────────────────────────────────────────────────────── */}
-        <div className="px-6 py-3 bg-surface-inverse/5 border-t-2 border-ink-base/10 flex flex-wrap items-center gap-x-6 gap-y-2">
+        <div className="px-6 py-3 bg-surface-inverse/5 border-t-[length:var(--border-width-sm)] border-ink-base/10 flex flex-wrap items-center gap-x-6 gap-y-2">
           <span className="font-mono text-[10px] uppercase tracking-widest text-ink-whisper">Legend</span>
           <div className="flex items-center gap-1.5">
             <span className="inline-block w-2.5 h-2.5 rounded-full bg-mint" />

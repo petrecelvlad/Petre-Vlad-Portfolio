@@ -117,7 +117,7 @@ The Navbar and TimelineTrack both consume orchestrator state — they never main
 The design system is token-driven and skin-swappable. Full details in the design system docs:
 
 - [Token Contract](./design-system/Token_Contract.md) — the parametric contract, value tier (all CSS custom properties)
-- [Skin System](./design-system/Skin_System.md) — the structural/variant tier, runtime swap mechanism, and locked constraints (skill tree chrome, optional hero slot)
+- [Skin System](./design-system/Skin_System.md) — the structural/variant tier, the Tier 3 component-slot registry for full structural swaps, runtime swap mechanism, and locked constraints (skill tree chrome, optional hero slot)
 - [Skin: Bauhaus](./design-system/Skin_Bauhaus.md) — current resolved values
 - [Design System Rules](./design-system/Design_System.md) — aesthetic pillars and interaction guidelines
 

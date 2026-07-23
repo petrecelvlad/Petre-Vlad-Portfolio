@@ -44,7 +44,7 @@ export default function App() {
         </div>
         <Timeline experiences={experiences} containerRef={mainRef} />
         
-        <footer className="footer-snap snap-start snap-always bg-surface-inverse text-surface-base px-8 py-20 border-t-4 border-ink-base relative overflow-hidden h-[calc(100vh-var(--chrome-navbar-height))] flex flex-col justify-center">
+        <footer className="footer-snap snap-start snap-always bg-surface-inverse text-surface-base px-8 py-20 border-t-[length:var(--border-width-lg)] border-ink-base relative overflow-hidden h-[calc(100vh-var(--chrome-navbar-height))] flex flex-col justify-center">
           {/* Background Decorative Shape */}
           <div className="absolute bottom-0 right-0 w-96 h-96 bg-coral/10 rounded-full -mr-48 -mb-48" />
 
