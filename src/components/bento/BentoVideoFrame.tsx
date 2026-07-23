@@ -122,8 +122,29 @@ export function BentoVideoFrame({ screenshot, youtubeUrl, isActive }: BentoVideo
   };
 
   return (
-    <div className="relative w-full h-full min-h-0 flex items-center justify-center p-2">
-      <div className="relative w-full max-h-full aspect-video flex-shrink-0">
+    // container-type: size lets the frame below size its width from THIS
+    // element's actual height (via cqh), not just its width — needed so
+    // the 16:9 frame shrinks on both axes together instead of one axis
+    // (see the frame div's own comment for why).
+    <div
+      className="relative w-full h-full min-h-0 flex items-center justify-center p-2"
+      style={{ containerType: 'size' }}
+    >
+      {/* w-full + aspect-video + max-h-full (the old sizing here) fight each
+          other: aspect-ratio only fills in whichever dimension is left
+          unset, so with width pinned to 100% it always derives height from
+          that width first, then max-h-full just clamps the RESULT after the
+          fact — it never feeds back to shrink the width, so on a short/wide
+          panel the frame stayed full-width while only its height got cut,
+          distorting the 16:9 ratio instead of scaling both dimensions down
+          together. Sizing width as the smaller of "100% of available width"
+          or "available height scaled to a 16:9 width" (via the cqh unit,
+          which reads the container above) picks the largest 16:9 box that
+          actually fits both constraints, so it grows/shrinks uniformly. */}
+      <div
+        className="relative aspect-video flex-shrink-0"
+        style={{ width: 'min(100%, calc(100cqh * 16 / 9))' }}
+      >
         {/* Hardware Buttons on top edge — locked chrome, never skin-driven, see index.css */}
         <div className="absolute -top-[6px] left-[20%] md:left-[25%] w-12 md:w-16 h-[6px] bg-[var(--chrome-device-shell)] rounded-t-md z-0" />
         <div className="absolute -top-[6px] left-[40%] md:left-[45%] w-16 md:w-20 h-[6px] bg-[var(--chrome-device-shell)] rounded-t-md z-0" />
@@ -134,7 +155,15 @@ export function BentoVideoFrame({ screenshot, youtubeUrl, isActive }: BentoVideo
 
           {/* Content: Video or Screenshot */}
           {videoId ? (
-            <div className="absolute -top-[20%] -bottom-[20%] -left-[10%] -right-[10%] z-0">
+            // iframes don't support object-fit: cover, so the standard
+            // workaround is oversizing the embed and clipping the overflow
+            // via the parent's overflow-hidden. This frame is already 16:9
+            // (aspect-video) matching a standard YouTube embed, so only a
+            // small uniform buffer is needed — not the old -20%/-20%/-10%/
+            // -10%, which was asymmetric (4x more vertical overscan than
+            // horizontal) and cropped far more off the top/bottom than the
+            // matching aspect ratio ever required.
+            <div className="absolute -inset-[2%] z-0">
                <div id={`youtube-player-${videoId}`} className="w-full h-full pointer-events-none" />
                {/* Invisible shield blocks YouTube's own hover/click detection */}
                <div className="absolute inset-0 z-20 bg-transparent pointer-events-auto" />

@@ -245,7 +245,7 @@ export function BentoSkills({ skills }: SkillsSlotProps) {
   const displaySkills = skills.slice(0, 6);
 
   return (
-    <div className="flex flex-col items-center gap-2 md:gap-3 py-2">
+    <div className="flex flex-col items-center gap-2 md:gap-3">
       {/* SKILLS label — debossed into the desk (Vlad, 2026-07-23; see
           docs/Research/Handoff_CarvedSkillsText.md for the full history of
           what didn't work). Single flat fill color, no gradient, no stroke.
@@ -262,7 +262,7 @@ export function BentoSkills({ skills }: SkillsSlotProps) {
           color: '#6B3A1C',
           textShadow: '0 -2px 0 rgba(110, 42, 46, 0.55), 0 2px 0 rgba(243, 206, 134, 0.45)',
         }}
-        className="flex-shrink-0 rotate-[-2deg] text-[30px] md:text-[50px] font-bold uppercase px-1"
+        className="flex-shrink-0 rotate-[-2deg] text-[30px] md:text-[30px] leading-none font-bold uppercase px-1"
       >
         Skills
       </span>

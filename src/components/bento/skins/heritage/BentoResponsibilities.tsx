@@ -236,13 +236,36 @@ export function BentoResponsibilities({
                 </div>
               )}
 
-              <ul className="space-y-2.5">
+              {/* Bullet line-height locked to the paper's own rule spacing
+                  (27px transparent + 1px line = 28px, set on the front
+                  sheet's repeating-linear-gradient above) so every line of
+                  text — including wrapped lines and separate bullets —
+                  advances in the same 28px steps as the ruled lines instead
+                  of drifting further out of sync with each line (the old
+                  leading-snug on text-lg was ~24.75px, a mismatch that
+                  compounded line over line). space-y-2.5 is dropped for the
+                  same reason: an extra gap between bullets that wasn't a
+                  multiple of 28px would have broken the rhythm right back
+                  again between items. Matching intervals alone doesn't put
+                  the block ON the grid, only in step with it — the
+                  marginTop below is that starting-offset correction,
+                  measured directly (Range.getClientRects() on the rendered
+                  text vs. the rule positions), not calculated from font
+                  metrics, since line-height's leading isn't split evenly
+                  above/below in a way that's easy to predict analytically.
+                  It differs by page because the cover page's header block
+                  (photo + title + role, isCover only) isn't itself a
+                  multiple of 28px tall, so it leaves the ul at a different
+                  starting offset than pages with no header above it — both
+                  values are fixed constants (the header's own markup never
+                  varies per project), not something derived per render. */}
+              <ul style={{ marginTop: isCover ? '-8.2px' : '8.5px' }}>
                 {chunks[activePage]?.map((item, i) => (
                   <li key={i} className="flex gap-2 items-start">
-                    <span className="flex-shrink-0 w-1.5 h-1.5 rounded-full bg-ink-base mt-2" />
+                    <span className="flex-shrink-0 w-1.5 h-1.5 rounded-full bg-ink-base mt-[11px]" />
                     <p
-                      style={{ fontFamily: 'var(--font-hand)' }}
-                      className="m-0 text-lg leading-snug text-ink-base"
+                      style={{ fontFamily: 'var(--font-hand)', lineHeight: '28px' }}
+                      className="m-0 text-lg text-ink-base"
                     >
                       {item}
                     </p>
