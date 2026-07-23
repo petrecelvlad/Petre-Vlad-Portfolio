@@ -306,7 +306,14 @@ html, body {
 }
 
 body {
-  background-image: radial-gradient(color-mix(in srgb, var(--color-ink-base) calc(var(--motif-dot-texture, 1) * 100%), transparent) var(--texture-dot-size), transparent calc(var(--texture-dot-size) + 0.5px));
+  /* --motif-dot-texture toggles the dot grid by scaling its own radius to 0
+     instead of fading the dot color's alpha via color-mix() (only supported
+     from Chrome 111 onward, and dropped, whole-declaration, on older
+     browsers — see BentoSkills.tsx/BentoResponsibilities.tsx for the same
+     fix applied to the heritage skin's sticky notes and binder clip). A
+     plain calc() on a length works everywhere calc() does, which is
+     effectively every browser this site needs to support. */
+  background-image: radial-gradient(var(--color-ink-base) calc(var(--texture-dot-size) * var(--motif-dot-texture, 1)), transparent calc(var(--texture-dot-size) + 0.5px));
   background-size: var(--texture-dot-gap) var(--texture-dot-gap);
   background-position: 0 0;
   background-attachment: fixed;

@@ -53,34 +53,35 @@ const TAB_ACCENTS = [
   '--color-mint',
 ];
 
-// Standardized "glossy bump" treatment for this skin: a lighter tint of an
-// element's own base color at the top, a darker tint at the bottom, same
-// two percentages everywhere it's used — reads as a consistent light
-// source across every element that opts in, not per-element tuned values.
-// The board/front paper already get this via --shadow-raised's inset
-// highlight/shadow (a translucent white/black overlay, which works over
-// any base color without computing one) — see UNDERSHADOW/PAPER_UNDERSHADOW
-// above and BentoAchievement.tsx's matching shadow-[var(--shadow-raised)]
-// fix. SVG shapes like BinderClip can't take a box-shadow at all, so they
-// get the literal per-color computed version via color-mix() instead, at
-// the same two percentages — different mechanism, same standard.
+// Standardized "glossy bump" treatment for this skin — reserved for hard/
+// molded surfaces (this clip), never for paper (Vlad, 2026-07-23; see the
+// matching note in BentoSkills.tsx for why the sticky notes lost theirs).
+// A lighter tint of an element's own base color at the top, a darker tint
+// at the bottom, same two percentages everywhere it's used. The board/front
+// paper get their depth via --shadow-raised's inset highlight/shadow
+// instead (see UNDERSHADOW/PAPER_UNDERSHADOW above) — that's a shadow, not
+// gloss, which is exactly why paper doesn't get this treatment.
+//
+// Previously computed via CSS color-mix(var(--role-...-accent), white/black
+// N%) — color-mix() only shipped in Chrome 111 (Mar 2023), and since this
+// accent is a CSS custom property (its resolved color isn't known in JS,
+// only in the browser's cascade), it can't be precomputed with plain JS
+// math the way BentoSkills.tsx's fold-flap tone was. Fixed instead by
+// rendering the gloss as a SECOND, translucent copy of the same shape on
+// top of the flat-filled base: alpha-compositing a translucent white/black
+// layer over an opaque color is mathematically identical to color-mixing
+// toward white/black by the same percentage (both reduce to
+// base*(1-p) + tint*p), so this reproduces the exact same visual at every
+// percentage — over any accent color, without ever needing to resolve it —
+// using only gradient stop-opacity, which every SVG-capable browser supports.
 const GLOSS_LIGHTEN_PCT = 35;
 const GLOSS_DARKEN_PCT = 25;
-function glossyStops(colorVar: string) {
-  return {
-    top: `color-mix(in srgb, var(${colorVar}) 100%, white ${GLOSS_LIGHTEN_PCT}%)`,
-    base: `var(${colorVar})`,
-    bottom: `color-mix(in srgb, var(${colorVar}) 100%, black ${GLOSS_DARKEN_PCT}%)`,
-  };
-}
 
 // Bulldog-clip silhouette: a tapering trapezoid body with a crease line —
 // reads as "pinned paper" without a wire-loop handle (which read as a bag).
-// Uses the glossyStops() gradient (see above) instead of a flat fill, since
-// an SVG shape can't take the board's inset-shadow treatment.
 function BinderClip() {
-  const gradientId = useId();
-  const gloss = glossyStops('--role-responsibilities-accent');
+  const glossId = useId();
+  const clipPath = 'M6 2 H50 L38 27 Q28 33 18 27 Z';
   return (
     <svg
       viewBox="0 0 56 32"
@@ -88,19 +89,20 @@ function BinderClip() {
       aria-hidden
     >
       <defs>
-        <linearGradient id={gradientId} x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" style={{ stopColor: gloss.top }} />
-          <stop offset="45%" style={{ stopColor: gloss.base }} />
-          <stop offset="100%" style={{ stopColor: gloss.bottom }} />
+        <linearGradient id={glossId} x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="#fff" stopOpacity={GLOSS_LIGHTEN_PCT / 100} />
+          <stop offset="45%" stopColor="#fff" stopOpacity={0} />
+          <stop offset="100%" stopColor="#000" stopOpacity={GLOSS_DARKEN_PCT / 100} />
         </linearGradient>
       </defs>
       <path
-        d="M6 2 H50 L38 27 Q28 33 18 27 Z"
-        fill={`url(#${gradientId})`}
+        d={clipPath}
+        fill="var(--role-responsibilities-accent)"
         stroke="var(--color-ink-base)"
         strokeWidth="2.5"
         strokeLinejoin="round"
       />
+      <path d={clipPath} fill={`url(#${glossId})`} />
       <line x1="13" y1="12" x2="43" y2="12" stroke="var(--color-ink-base)" strokeWidth="2" opacity="0.35" />
     </svg>
   );

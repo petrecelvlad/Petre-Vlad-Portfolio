@@ -295,6 +295,67 @@ decided by this note.
 
 ---
 
+## DR-020 — Sticky notes lose their gloss (paper stays flat, gloss stays reserved for hardware); color-mix() retired site-wide
+**Status:** Accepted · **Date:** 2026-07-23
+
+**Context:** A friend Vlad sent the live link to reported the heritage skin's sticky notes not
+rendering at all on an older laptop's Chrome — everything else (clipboard, wood desk, binder clip)
+was fine. Root cause: `StickyNote`'s background came from a `linear-gradient()` built with CSS
+`color-mix()` calls, set as an inline style. `color-mix()` only shipped in Chrome 111 (Mar 2023);
+an older/un-updated Chrome doesn't degrade it gracefully — an unparseable value invalidates the
+*entire* declaration it's part of, so the note's whole background silently disappeared (icon and
+skill-name text, which don't depend on it, still rendered — which is exactly what made it look like
+"only the sticky notes" broke). The same `color-mix()` pattern turned out to be used in two more
+places (`BentoResponsibilities.tsx`'s binder-clip gloss, `index.css`'s body dot-texture toggle) —
+same latent risk, just less visually obvious than a note's entire face going blank.
+
+Separately, fixing the notes' gloss prompted the actual design question: Vlad wants a flatter,
+more "vector"/cartoony aesthetic going forward, gradients used deliberately rather than by default,
+with the existing glossy top-light/bottom-dark treatment (`GLOSS_LIGHTEN_PCT`/`GLOSS_DARKEN_PCT`,
+originally introduced as a reusable standard — see DR from the initial heritage pass) reserved for
+specific elements rather than applied wherever a "make it feel considered" opportunity came up.
+
+**Decision:**
+1. **Material is the line, not "which elements happen to have it already."** Hard/molded surfaces
+   (the clipboard's binder clip) keep the glossy treatment — a light source bouncing off a
+   manufactured object is the correct read. Paper (sticky notes, the clipboard's board/front/back
+   sheets) is matte and flat — a single solid color, no gradient. This aligns the sticky notes with
+   paper elements that were *already* flat (the clipboard's paper sheets get their depth from
+   `--shadow-raised`'s inset highlight, not gloss) — the notes were the one paper surface that had
+   drifted onto the hardware treatment, not a new rule invented from nothing.
+2. **`color-mix()` is retired from the codebase entirely, not just patched where it broke.** Three
+   different fixes, one per call site, because each had a different constraint:
+   - `BentoSkills.tsx`'s fold-flap darker tone (a real structural need — the "back of the folded
+     paper" has to read as a different shade — not decorative gloss, so it couldn't just be
+     deleted): replaced with a plain-JS `rgbMix()` helper. `color-mix(in srgb, hex 100%, toward W%)`
+     reduces to a plain weighted average when the percentages don't sum to 100% (CSS scales both
+     down proportionally to normalize them) — `rgbMix` does that arithmetic directly and emits a
+     static `rgb()` string, which every browser can parse.
+   - `BentoResponsibilities.tsx`'s binder clip: `rgbMix` doesn't apply here, because the base color
+     is a CSS custom property (`--role-responsibilities-accent`) resolved by the cascade, not a
+     value JS ever sees. Fixed by rendering the gloss as a second, fully translucent copy of the
+     same SVG path on top of the flat-filled base, using gradient stop-*opacity* (white → transparent
+     → black) instead of stop-*color*. Alpha-compositing a translucent layer over an opaque base is
+     mathematically identical to color-mixing toward that same tint by the same percentage (both
+     reduce to `base*(1-p) + tint*p`), so this reproduces the exact prior visual, over any accent
+     color, without ever needing to resolve it.
+   - `index.css`'s dot-texture toggle (`--motif-dot-texture`, Tier 2, `Skin_System.md`): was using
+     `color-mix()` to fade the dot color's alpha to 0. Replaced with `calc()` scaling the dot's own
+     *radius* to 0 instead of its alpha — same on/off result, pure `calc()` on a length, no color
+     function involved at all. Strictly safer than the mechanism it replaced, not just a same-risk
+     swap, and keeps Tier 2's existing "CSS-only, zero JS/component involvement" constraint intact.
+
+**Consequences:** Positive — the reported bug is fixed, the same latent risk is fully retired (not
+just patched at the one spot that got noticed), and there's now a stated material rule
+("hard/molded → gloss, paper → flat") for whoever builds the next skin, rather than gloss spreading
+by precedent-following alone. Negative/named directly: this is a narrower rule than "no gradients
+anywhere" — box-shadow-based depth (`--shadow-raised`/`--shadow-sunken`, the drop-shadows under
+folded/torn paper) is untouched and still very much a gradient-adjacent effect in spirit (a light-
+to-dark falloff), just implemented as a shadow rather than a fill; if the "vector/cartoony" direction
+is meant to extend to shadow treatment too, that's a separate, larger conversation not resolved here.
+
+---
+
 ## Open
 
 - **Is Pinterest taste the same as professional signal?** Not yet separated — worth explicitly checking new directions against both lenses rather than conflating them.

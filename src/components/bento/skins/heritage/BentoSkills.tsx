@@ -21,15 +21,34 @@ import { SkillsSlotProps } from '../../ports';
 const NOTE_COLORS = ['#F5E9A8', '#F0C9C9', '#BFDCE6', '#C9DFB2', '#F2CDA0', '#D8C7E3'];
 const NOTE_ROTATIONS = [-4, 3, -2, 4, -3, 2];
 
-// Same standardized "glossy bump" light-source treatment used on the
-// clipboard's binder clip and board (BentoResponsibilities.tsx's
-// glossyStops/GLOSS_*_PCT) — lighter tint at the top, darker at the bottom,
-// same two percentages — reused here per Vlad's direction that the effect
-// should carry over to future elements, not stay a one-off.
-const GLOSS_LIGHTEN_PCT = 35;
-const GLOSS_DARKEN_PCT = 20;
-function glossyBackground(hex: string) {
-  return `linear-gradient(to bottom, color-mix(in srgb, ${hex} 100%, white ${GLOSS_LIGHTEN_PCT}%) 0%, ${hex} 55%, color-mix(in srgb, ${hex} 100%, black ${GLOSS_DARKEN_PCT}%) 100%)`;
+// Flat, single-color fill — no gloss/gradient (Vlad, 2026-07-23): paper is
+// matte, and the glossy light-source treatment (still used on hard/molded
+// surfaces like the clipboard's binder clip) never belonged on it. This also
+// resolves the note-background-doesn't-render bug: the previous gradient
+// leaned on CSS color-mix(), which only shipped in Chrome 111 (Mar 2023) —
+// an older/un-updated Chrome silently drops the whole declaration it
+// appears in (invalid value invalidates the entire property), which is why
+// the notes rendered with no background at all on an older laptop.
+//
+// rgbMix below is kept for the fold flap's darker tone (BLACK toward) —
+// that's structural "back of the folded paper" shading, not decorative
+// gloss, and still needs a computed darker shade. It replicates
+// color-mix(in srgb, hex 100%, toward W%)'s exact math — CSS normalizes
+// percentages over 100% by scaling both down proportionally, which reduces
+// to a plain weighted average — as a static rgb() string every browser can
+// parse, so it carries none of color-mix()'s support risk.
+const BLACK: [number, number, number] = [0, 0, 0];
+function hexToRgb(hex: string): [number, number, number] {
+  const n = parseInt(hex.slice(1), 16);
+  return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
+}
+function rgbMix(hex: string, toward: [number, number, number], towardWeightPct: number): string {
+  const [r, g, b] = hexToRgb(hex);
+  const total = 100 + towardWeightPct;
+  const wBase = 100 / total;
+  const wToward = towardWeightPct / total;
+  const chan = (base: number, to: number) => Math.round(base * wBase + to * wToward);
+  return `rgb(${chan(r, toward[0])}, ${chan(g, toward[1])}, ${chan(b, toward[2])})`;
 }
 
 // image.png's reference sheet varies the embellishment per note (tape,
@@ -116,7 +135,7 @@ function FoldFlap({ color, corner }: { color: string; corner: FoldCorner }) {
       className="absolute inset-0"
       style={{
         clipPath: FOLD_CLIPS[corner].flap,
-        backgroundColor: `color-mix(in srgb, ${color} 100%, black 25%)`,
+        backgroundColor: rgbMix(color, BLACK, 25),
       }}
       aria-hidden
     />
@@ -170,15 +189,14 @@ interface StickyNoteProps {
   key?: React.Key;
   color: string;
   rotation: number;
-  skill?: string;
-  active: boolean;
+  skill: string;
   effect: NoteEffect;
   pinColor: string;
   foldCorner: FoldCorner;
 }
 
-function StickyNote({ color, rotation, skill, active, effect, pinColor, foldCorner }: StickyNoteProps) {
-  const isFold = active && effect === 'fold';
+function StickyNote({ color, rotation, skill, effect, pinColor, foldCorner }: StickyNoteProps) {
+  const isFold = effect === 'fold';
   return (
     <div
       className="relative w-[124px] h-[124px] md:w-[148px] md:h-[148px] flex-shrink-0"
@@ -187,38 +205,37 @@ function StickyNote({ color, rotation, skill, active, effect, pinColor, foldCorn
         // clip-path (the fold notch) clips away box-shadow along with it, so
         // the notched variant needs filter: drop-shadow() instead — same
         // incompatibility documented for the clipboard's torn photo frame.
-        filter: isFold ? 'drop-shadow(0 5px 6px rgba(43, 32, 22, 0.35))' : undefined,
+        // Near-zero blur, matching the hard-offset shadow language already
+        // used elsewhere (e.g. the phone's --chrome-device-shadow, a flat
+        // 0-blur offset) rather than a soft halo — a crisp solid duplicate
+        // of the note's own silhouette, offset behind it, reads as "resting
+        // on the desk" without any diffuse haze around the edges.
+        filter: isFold ? 'drop-shadow(3px 6px 1px rgba(30, 22, 14, 0.5))' : undefined,
       }}
     >
       {isFold && <FoldFlap color={color} corner={foldCorner} />}
 
       <div
-        className={`relative z-10 w-full h-full flex flex-col items-center justify-center gap-1 p-1.5 ${
-          active ? '' : 'border border-dashed border-ink-base/25'
-        }`}
+        className="relative z-10 w-full h-full flex flex-col items-center justify-center gap-1 p-1.5"
         style={{
-          background: active ? glossyBackground(color) : 'transparent',
+          background: color,
           clipPath: isFold ? FOLD_CLIPS[foldCorner].notch : undefined,
-          boxShadow: active && !isFold ? '0 6px 12px -2px rgba(43, 32, 22, 0.35)' : 'none',
+          boxShadow: !isFold ? '3px 6px 1px 0 rgba(30, 22, 14, 0.5)' : 'none',
         }}
       >
-        {active && skill && (
-          <>
-            <div className="text-ink-base flex-shrink-0">
-              {React.cloneElement(getIcon(skill) as React.ReactElement, { size: 18, strokeWidth: 2 })}
-            </div>
-            <span
-              style={{ fontFamily: 'var(--font-hand)' }}
-              className="text-[11px] leading-[1.05] text-ink-base text-center line-clamp-2"
-            >
-              {skill}
-            </span>
-          </>
-        )}
+        <div className="text-ink-base flex-shrink-0">
+          {React.cloneElement(getIcon(skill) as React.ReactElement, { size: 36, strokeWidth: 2 })}
+        </div>
+        <span
+          style={{ fontFamily: 'var(--font-hand)' }}
+          className="text-[17px] leading-[1.05] text-ink-base text-center line-clamp-2"
+        >
+          {skill}
+        </span>
 
-        {active && effect === 'tape' && <TapeCorner rotation={rotation >= 0 ? -6 : 6} />}
-        {active && effect === 'pin' && <PinTack color={pinColor} />}
-        {active && effect === 'clip' && <PaperClip />}
+        {effect === 'tape' && <TapeCorner rotation={rotation >= 0 ? -6 : 6} />}
+        {effect === 'pin' && <PinTack color={pinColor} />}
+        {effect === 'clip' && <PaperClip />}
       </div>
     </div>
   );
@@ -226,28 +243,41 @@ function StickyNote({ color, rotation, skill, active, effect, pinColor, foldCorn
 
 export function BentoSkills({ skills }: SkillsSlotProps) {
   const displaySkills = skills.slice(0, 6);
-  const slots = Array.from({ length: 6 }, (_, i) => displaySkills[i]);
 
   return (
     <div className="flex flex-col items-center gap-2 md:gap-3 py-2">
-      {/* SKILLS label — a handwritten tag planted above the row, not
-          wedged between two halves of it (that read as two separate
-          groups of three notes rather than one set of six). */}
+      {/* SKILLS label — debossed into the desk (Vlad, 2026-07-23; see
+          docs/Research/Handoff_CarvedSkillsText.md for the full history of
+          what didn't work). Single flat fill color, no gradient, no stroke.
+          Depth comes only from two zero-blur text-shadows: dark offset UP
+          (the groove's far wall, in shadow) and light offset DOWN (the
+          near wall, catching the same light-from-above already used on the
+          wood's own plank seams) — same two seam colors WoodBackground.tsx
+          uses for its board-joint seams (#6E2A2E dark line, #F3CE86 gold
+          highlight), same opacities, so the text's depth cue reads as the
+          same material logic as the desk itself, not an invented pair. */}
       <span
-        style={{ fontFamily: 'var(--font-hand)' }}
-        className="flex-shrink-0 rotate-[-2deg] text-xl md:text-2xl font-bold text-ink-base px-1"
+        style={{
+          fontFamily: 'var(--font-hand)',
+          color: '#6B3A1C',
+          textShadow: '0 -2px 0 rgba(110, 42, 46, 0.55), 0 2px 0 rgba(243, 206, 134, 0.45)',
+        }}
+        className="flex-shrink-0 rotate-[-2deg] text-[30px] md:text-[50px] font-bold uppercase px-1"
       >
         Skills
       </span>
 
-      <div className="grid grid-cols-6 w-full place-items-center gap-1 md:gap-2">
-        {slots.map((skill, i) => (
+      {/* No dashed placeholders for unused slots (Vlad, 2026-07-23) — only
+          the skills a project actually has get a note, spread evenly across
+          the same width regardless of count, rather than reserving all 6
+          positions and marking the rest empty. */}
+      <div className="flex justify-evenly w-full gap-2">
+        {displaySkills.map((skill, i) => (
           <StickyNote
             key={i}
             color={NOTE_COLORS[i]}
             rotation={NOTE_ROTATIONS[i]}
             skill={skill}
-            active={!!skill}
             effect={NOTE_EFFECTS[i]}
             pinColor={PIN_COLORS[i]}
             foldCorner={NOTE_FOLD_CORNERS[i]}

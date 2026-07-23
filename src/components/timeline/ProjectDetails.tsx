@@ -41,6 +41,9 @@ export function ProjectDetails({ project, isActive }: ProjectDetailsProps) {
 
         {/* Right Column */}
         <Stack gap="md" className="min-h-0">
+          <div className="flex-shrink-0">
+            <BentoAchievement achievement={project.achievements?.[0]} />
+          </div>
           <div className="flex-grow min-h-0 flex flex-col">
             <BentoVideoFrame
               screenshot={project.keyScreenshots[0]}
@@ -50,9 +53,6 @@ export function ProjectDetails({ project, isActive }: ProjectDetailsProps) {
           </div>
           <div className="flex-shrink-0">
             <BentoSkills skills={project.technologies} />
-          </div>
-          <div className="flex-shrink-0">
-            <BentoAchievement achievement={project.achievements?.[0]} />
           </div>
         </Stack>
 
