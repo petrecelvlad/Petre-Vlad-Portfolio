@@ -35,7 +35,23 @@ export default function App() {
       {showBacklog ? (
         <BacklogView experiences={experiences} />
       ) : (
-      <main ref={mainRef} className="flex-1 w-full relative overflow-y-auto scroll-smooth snap-y snap-mandatory select-none">
+      <main ref={mainRef} className="flex-1 w-full relative overflow-y-auto snap-y snap-mandatory select-none">
+        {/*
+          No scroll-smooth here on purpose. CSS scroll-behavior: smooth
+          forces every native wheel-triggered snap to animate — under
+          fast/rapid scrolling, a new wheel tick arrives before the
+          previous snap's animation resolves, and Chromium can lose track
+          of the in-progress scroll and land on an unintended section
+          entirely (reproduced: it can jump all the way back to
+          Hero/SkillTree, above the project list, which is exactly where
+          the timeline rail is correctly hidden — this is what read as
+          "the timeline disappears on some projects"). The two JS-driven
+          jumps (TimelineRail's onNavigate, Hero's "View My Work") each
+          pass behavior: 'smooth' directly to scrollIntoView/scrollTo, so
+          they animate regardless of this class; only native wheel-scroll
+          snapping is affected, and CSS scroll-snap already provides its
+          own settling animation without needing this on top.
+        */}
         <div className="snap-start snap-always h-[calc(100vh-var(--chrome-navbar-height))] w-full flex items-center justify-center">
           <Hero />
         </div>

@@ -12,13 +12,16 @@ import {
   Box,
 } from 'lucide-react';
 import { SkillsSlotProps } from '../../ports';
+import { HERITAGE_PALETTE } from './palette';
 
 // No panel — these sit loose on the wood, like real sticky notes. Six fixed
 // washed-out colors, one per slot position (not per skill), so the same
-// slot always reads the same color across projects. Rotations are fixed
-// per slot too, not randomized per render, so the layout doesn't jitter on
-// re-render/HMR.
-const NOTE_COLORS = ['#F5E9A8', '#F0C9C9', '#BFDCE6', '#C9DFB2', '#F2CDA0', '#D8C7E3'];
+// slot always reads the same color across projects — sourced from the
+// shared HERITAGE_PALETTE (palette.ts) so every heritage component drawing
+// from "the six sticky-note colors" stays in sync with this one list.
+// Rotations are fixed per slot too, not randomized per render, so the
+// layout doesn't jitter on re-render/HMR.
+const NOTE_COLORS = HERITAGE_PALETTE;
 const NOTE_ROTATIONS = [-4, 3, -2, 4, -3, 2];
 
 // Flat, single-color fill — no gloss/gradient (Vlad, 2026-07-23): paper is

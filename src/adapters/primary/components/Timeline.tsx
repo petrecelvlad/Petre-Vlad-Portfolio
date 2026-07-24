@@ -1,105 +1,32 @@
-import React, { useMemo, useRef, RefObject } from 'react';
-import { AppletWindow } from '@/src/components/applet/Primitives';
-import { IExperience, IProject } from '@/src/core/domain/models';
-import { motion, useScroll, useTransform } from 'motion/react';
+import { useMemo, RefObject } from 'react';
+import { IExperience } from '@/src/core/domain/models';
 import { useTimelineOrchestrator } from '@/src/hooks/useTimelineOrchestrator';
-import { TimelineMarker } from '@/src/components/timeline/TimelineMarker';
-import { TimelineTrack } from '@/src/components/timeline/TimelineTrack';
-import { ProjectDetails } from '@/src/components/timeline/ProjectDetails';
-import { WoodBackground } from '@/src/components/bento/skins/heritage/WoodBackground';
-import { useSkin } from '@/src/context/SkinContext';
-
-import { Scene } from '@/src/components/layout/Scene';
+import { TimelineRail } from '@/src/components/timeline/TimelineRail';
+import { ProjectStage } from '@/src/components/timeline/ProjectStage';
 
 interface TimelineProps {
   experiences: IExperience[];
   containerRef: RefObject<HTMLDivElement>;
 }
 
-interface TimelineItemProps {
-  key?: string;
-  project: IProject;
-  index: number;
-  activeIndex: number;
-  scrollDirection: 'up' | 'down';
-  onRef: (el: HTMLDivElement | null) => void;
-  containerRef: RefObject<HTMLDivElement>;
-}
-
-const TimelineItem = ({ project, index, activeIndex, scrollDirection, onRef, containerRef: scrollContainerRef }: TimelineItemProps) => {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const { skin } = useSkin();
-
-  const { scrollYProgress } = useScroll({
-    container: scrollContainerRef,
-    target: containerRef,
-    offset: ["start end", "end start"]
-  });
-
-  const isActive = activeIndex === index;
-  const isConsumed = index < activeIndex;
-
-  return (
-    <div 
-      ref={(el) => {
-        // @ts-ignore
-        containerRef.current = el;
-        onRef(el);
-      }}
-      className="relative z-0 snap-start snap-always h-[calc(100vh-var(--chrome-navbar-height))] w-full flex"
-    >
-      {/* Shared canvas background — covers the timeline-marker rail AND the
-          content column together, since they're one visual surface (the
-          desk) even though the marker is laid out as its own flex column
-          with its own width. Rendered at this outer level, not inside
-          either column, specifically so it isn't scoped to just one of
-          them. */}
-      {skin === 'heritage' && <WoodBackground />}
-
-      {/* Timeline Track Segment (Base + Active Fill) */}
-      <div className="absolute left-[24px] md:left-[44px] inset-y-0 w-1 md:w-2 -translate-x-1/2 pointer-events-none z-20">
-        <TimelineTrack 
-          isActive={isActive}
-          isConsumed={isConsumed}
-          direction={scrollDirection}
-          progress={scrollYProgress}
-        />
-      </div>
-
-      {/* Left Column: Timeline Marker */}
-      <div className="w-[48px] md:w-[88px] flex-shrink-0 relative pointer-events-none">
-        <div className="absolute left-[24px] md:left-[44px] top-[68px] md:top-[60px] -translate-x-1/2 z-30">
-           <TimelineMarker 
-             isActive={isActive}
-             isConsumed={isConsumed}
-             direction={scrollDirection}
-             progress={scrollYProgress}
-           />
-        </div>
-      </div>
-
-      {/* Right Column: Content */}
-      <div className="relative z-0 flex-grow h-full pt-[24px] md:pt-[24px] pb-3 md:pb-5 pr-2 md:pr-4 min-w-0 flex flex-col justify-start">
-        <div className="w-full h-full mx-auto overflow-hidden flex items-start justify-center pointer-events-auto">
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ 
-              opacity: isActive ? 1 : 0, 
-              y: isActive ? 0 : 20,
-              pointerEvents: isActive ? "auto" : "none"
-            }}
-            transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-            className="w-full h-full flex flex-col justify-start min-h-0"
-            style={{ transform: "translateZ(0)" }}
-          >
-            <ProjectDetails project={project} isActive={isActive} />
-          </motion.div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
+// Phase 1 of docs/Architecture/specs/Project_Viewer_Evolution.md: the
+// project region is one persistent shell (ProjectStage) whose content swaps
+// on scroll, not N independent scrollable cards. Two layers share the same
+// grid cell ([grid-area:1/1], both children — CSS Grid explicitly supports
+// overlapping children this way, unlike normal block flow):
+//   1. N bare "trigger" divs — same height/snap behavior projects always
+//      had, purely so useTimelineOrchestrator's IntersectionObserver and
+//      the scrollbar itself still have real, per-project scroll distance
+//      to work with. No visual content of their own anymore.
+//   2. ProjectStage, `position: sticky`, mounted ONCE — the actual chrome
+//      (background/clipboard/phone/notes/banner), reading projects[activeIndex].
+// The trigger layer sets the grid row's height (N x 100vh); ProjectStage's
+// own height is just one section tall, and `sticky` keeps it pinned to the
+// top of the viewport for as long as any part of that N x 100vh row is still
+// on screen, releasing naturally once the user scrolls past it — no manual
+// scroll-bounds bookkeeping needed. useTimelineOrchestrator and TimelineRail
+// are unchanged from before this change; they already treated activeIndex as
+// state, not as "which DOM node happens to be scrolled into view."
 export function Timeline({ experiences, containerRef }: TimelineProps) {
   const projects = useMemo(() => {
     return experiences.flatMap(exp => exp.projects);
@@ -107,23 +34,56 @@ export function Timeline({ experiences, containerRef }: TimelineProps) {
 
   const {
     activeIndex,
-    scrollDirection,
     itemRefs
   } = useTimelineOrchestrator({ itemCount: projects.length, containerRef });
 
   return (
-    <div className="relative w-full flex flex-col">
-      {projects.map((project, index) => (
-        <TimelineItem 
-          key={`${project.title}-${index}`}
-          project={project}
-          index={index}
-          activeIndex={activeIndex}
-          scrollDirection={scrollDirection}
-          onRef={el => { itemRefs.current[index] = el; }}
-          containerRef={containerRef}
-        />
-      ))}
+    <div className="relative w-full grid">
+      <TimelineRail
+        projects={projects}
+        activeIndex={activeIndex}
+        onNavigate={(index) => {
+          // 'smooth' was verified working pre-Phase-1 (distant rail-dot
+          // clicks animated correctly). Under the grid+sticky layout it's
+          // now completely broken — confirmed via instrumentation
+          // (Element.prototype.scrollIntoView spy): the call fires with the
+          // correct target every time, but produces zero scroll movement,
+          // even for an adjacent (1-section) jump, not just distant ones —
+          // so it isn't the scroll-snap/smooth-scroll distance interaction
+          // documented elsewhere in this codebase, it's something specific
+          // to this new overlapping-grid-cell + sticky-sibling structure.
+          // 'instant' was verified reliable in the same test. Root cause
+          // not chased further — ship a working instant jump now; revisit
+          // the animated version, if wanted, alongside Phase 2's content-
+          // transition work (docs/Architecture/specs/Project_Viewer_Evolution.md).
+          itemRefs.current[index]?.scrollIntoView({ behavior: 'instant', block: 'start' });
+        }}
+      />
+
+      {/* Scroll triggers — bare positional divs, no visual content. */}
+      <div className="[grid-area:1/1]">
+        {projects.map((project, index) => (
+          <div
+            key={project.id}
+            ref={el => { itemRefs.current[index] = el; }}
+            className="snap-start snap-always h-[calc(100vh-var(--chrome-navbar-height))] w-full"
+            aria-hidden
+          />
+        ))}
+      </div>
+
+      {/* The Project Viewer — mounted once, sticky, shows the active project.
+          top-0, not var(--chrome-navbar-height): the scroll container this
+          sticks within is <main> (App.tsx), whose own scrollport already
+          starts right below the navbar (Navbar is a normal flex sibling,
+          not position:fixed) — offsetting by the navbar height again here
+          double-counted it, leaving a visible gap above the shell where the
+          section behind it (SkillTree/whatever's above) showed through. */}
+      {activeIndex !== -1 && (
+        <div className="[grid-area:1/1] sticky top-0 h-[calc(100vh-var(--chrome-navbar-height))] w-full">
+          <ProjectStage project={projects[activeIndex]} />
+        </div>
+      )}
     </div>
   );
 }

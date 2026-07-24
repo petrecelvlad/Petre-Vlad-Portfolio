@@ -356,6 +356,17 @@ is meant to extend to shadow treatment too, that's a separate, larger conversati
 
 ---
 
+## DR-021 — Project region re-architected from N independent scrollable cards to one persistent shell with swapped content
+**Status:** Accepted (direction), Phase 1 not yet implemented · **Date:** 2026-07-24
+
+**Context:** Each project currently renders as its own full `TimelineItem` — a complete, independent copy of the wood background, clipboard, phone frame, sticky notes, and achievement banner, stacked N times and scrolled between via `scroll-snap-type: y mandatory`. `TimelineRail` (built earlier the same session) already doesn't work this way — it's mounted once, `position: fixed`, and just reads `activeIndex` — so the rail and the content region currently follow two different models for the same underlying state. Vlad's direction: once a user scrolls into the project region, they should be inside one singular Project Section whose layout regions (background, clipboard, phone, etc.) never move or re-mount — only the content inside them changes as they scroll. Today's pass is a deliberately simple validation of the concept (instant content swap, no animation); a richer animated version (text/media transitioning between projects, not just swapping) is an explicitly named future phase, not being built now.
+
+**Decision:** Full plan, phasing, CSS mechanism (`position: sticky`, not `fixed` — reasoning in the doc), component-level before/after, and the future animated phase are written up in [`Project_Viewer_Evolution.md`](../Architecture/specs/Project_Viewer_Evolution.md) rather than restated here. Summary: `TimelineItem` becomes a bare invisible scroll trigger (same `100vh`, same snap behavior, no content); a new `ProjectStage` component is mounted once as a sticky-positioned sibling, rendering `ProjectDetails(projects[activeIndex])` — the same mounted DOM tree receives new props on scroll instead of a new DOM tree scrolling into view. `useTimelineOrchestrator` and `TimelineRail` are unchanged; `resolveSlot`/`ports.ts`/every individual `Bento*` component's implementation are unchanged — this is a change to *where* content is mounted, not to the skin/token system or any component's own rendering.
+
+**Consequences:** Positive — resolves the model mismatch between the rail (already persistent-shell-shaped) and the content region (still N-independent-cards-shaped); the write-up explicitly designs Phase 1 so Phase 2 (animated transitions, reusing `BentoResponsibilities`' existing page-flip `AnimatePresence` mechanism rather than inventing a new one) doesn't require structural rework later. Negative, named directly in the spec and not resolved by it: only the active project's content will exist in the DOM at a time (today all N exist simultaneously, just opacity-hidden) — a real SEO/crawlability tradeoff worth a conscious call, not an accidental regression; mobile/narrow-viewport behavior of a persistent sticky shell is unverified; `Timeline_Animation_Spec.md` and `System_Design.md` are both flagged as stale against the current codebase by this entry but are not rewritten by it.
+
+---
+
 ## Open
 
 - **Is Pinterest taste the same as professional signal?** Not yet separated — worth explicitly checking new directions against both lenses rather than conflating them.

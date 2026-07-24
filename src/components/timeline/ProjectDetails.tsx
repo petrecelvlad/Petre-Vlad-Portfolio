@@ -1,3 +1,4 @@
+import type React from 'react';
 import { IProject } from '@/src/core/domain/models';
 import { resolveSlot } from '../bento/registry';
 import { BentoVideoFrame } from '../bento/BentoVideoFrame';
@@ -5,6 +6,7 @@ import { Stack } from '../atoms/Stack';
 import { useSkin } from '@/src/context/SkinContext';
 
 interface ProjectDetailsProps {
+  key?: React.Key;
   project: IProject;
   isActive: boolean;
 }

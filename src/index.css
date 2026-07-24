@@ -260,9 +260,21 @@
      consumer references --shadow-raised/--shadow-sunken directly via
      Tailwind's arbitrary-value bracket syntax (shadow-[var(--shadow-raised)]),
      not the .shadow-raised/.shadow-sunken utility classes. The clipboard
-     (BentoResponsibilities) is the first consumer to apply that fix. */
+     (BentoResponsibilities) is the first consumer to apply that fix.
+     The top (light) and bottom (dark) inset lines are deliberately the
+     same 3px thickness (2026-07-24, Vlad) — they started at 1.5px/3px,
+     which read as barely-there on top vs. clearly visible on the bottom.
+     This is the ONLY place this value is defined; every consumer (the
+     achievement bar, the clipboard board, the page tabs, all via
+     shadow-[var(--shadow-raised)] or an inline `boxShadow: 'var(--shadow-
+     raised)'`) inherits from here automatically. The one exception —
+     BinderClip's SVG, which can't consume a CSS custom property as an SVG
+     fill — mirrors these exact two rgba values as JS constants in
+     `src/components/bento/skins/heritage/palette.ts`
+     (EMBOSS_LIGHT/EMBOSS_DARK); keep both thicknesses equal in both
+     places if this ever changes again. */
   --shadow-raised:
-    inset 0 1.5px 0 0 rgba(255, 246, 219, 0.5),
+    inset 0 3px 0 0 rgba(255, 246, 219, 0.5),
     inset 0 -3px 0 0 rgba(36, 26, 16, 0.3),
     0 var(--ui-depth) calc(var(--ui-depth) * 3) rgba(20, 14, 8, 0.4);
   --shadow-sunken:

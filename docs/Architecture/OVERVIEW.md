@@ -152,6 +152,7 @@ docs/
 │   │   ├── Component_Architecture.md   ← Tier rules and data flow
 │   │   ├── System_Design.md            ← Managed Stage architecture
 │   │   ├── Timeline_Animation_Spec.md  ← Symmetric fill logic
+│   │   ├── Project_Viewer_Evolution.md ← Persistent shell + swapped content (replaces per-project cards)
 │   │   ├── Project_Template.md         ← Bento grid and IProject layout
 │   │   ├── Technical_Implementation.md ← SRP and modularity strategy
 │   │   └── Experience_Guidelines.md    ← Motion, typography, interaction
