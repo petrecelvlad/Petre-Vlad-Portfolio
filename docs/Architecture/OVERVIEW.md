@@ -25,7 +25,7 @@ src/
 ├── components/             ← Presentational component tiers (see Component Tiers below)
 ├── hooks/                  ← Orchestration (useTimelineOrchestrator)
 ├── context/                ← React contexts (VideoPrefsContext)
-└── styles/                 ← Style definitions (applet.ts)
+└── (no styles/ directory — all visual values are tokens in index.css, see Design System below)
 ```
 
 **The Leak Test:** If you can replace any external dependency by creating a new adapter file and updating `App.tsx` — without modifying any core file — the architecture is sound.
@@ -90,7 +90,7 @@ Atomic design with strict unidirectional data flow:
 
 | Tier | Location | Responsibility | Example |
 |---|---|---|---|
-| **Atoms** | `components/atoms/`, `components/applet/Primitives.tsx` | Layout-agnostic building blocks. No domain knowledge. | `WindowCard`, `Button`, `Badge`, `Avatar` |
+| **Atoms** | `components/atoms/` | Layout-agnostic building blocks. No domain knowledge. | `Button`, `Badge`, `Avatar`, `InstantPhoto` |
 | **Molecules** | `components/bento/` | Combine atoms for a specific UI slice. Take isolated props. | `BentoHeader`, `BentoSkills`, `BentoVideoFrame` |
 | **Organisms** | `components/timeline/` | Coordinate multiple molecules, manage meaningful state. | `ProjectDetails`, `TimelineTrack`, `TimelineMarker` |
 | **Stage** | `components/layout/Scene.tsx` | Scene wrapper for snap sections. | `Scene` |
@@ -118,10 +118,11 @@ The design system is token-driven and skin-swappable. Full details in the design
 
 - [Token Contract](./design-system/Token_Contract.md) — the parametric contract, value tier (all CSS custom properties)
 - [Skin System](./design-system/Skin_System.md) — the structural/variant tier, the Tier 3 component-slot registry for full structural swaps, runtime swap mechanism, and locked constraints (skill tree chrome, optional hero slot)
-- [Skin: Bauhaus](./design-system/Skin_Bauhaus.md) — current resolved values
-- [Design System Rules](./design-system/Design_System.md) — aesthetic pillars and interaction guidelines
+- [Skin: Gamified](./design-system/Skin_Gamified.md) — the runtime-default skin's heuristics (tactile RPG/retro-arcade)
+- [Skin: Heritage](./design-system/Skin_Heritage.md) — the second live skin's heuristics (desk/clipboard)
+- [DeskBoard Panel](./design-system/DeskBoard_Panel.md) — heritage's wood-plank panel chrome: construction, dimensions, colors, and one still-open decision (plank overextension)
 
-**The three pillars:** thick borders + hard shadows, high-contrast vivid palette, deliberate typography hierarchy (Space Grotesk / Outfit / JetBrains Mono).
+**The three pillars:** embossed depth + tactile material chrome, high-contrast vivid palette, deliberate typography hierarchy (Space Grotesk / Outfit / JetBrains Mono). (The Bauhaus/Applet skin — thick flat borders, hard offset shadows — was the site's original identity before it was retired in favor of Gamified; see `Skin_System.md`'s Sequencing Plan, step 8.)
 
 **The skin boundary:** Components reference tokens, never literal values. Swapping the skin means changing token values — nothing else.
 
@@ -130,7 +131,7 @@ The design system is token-driven and skin-swappable. Full details in the design
 ## Key Constraints
 
 1. **No mocked data.** All content comes from `portfolio.json`. Period.
-2. **No generic Tailwind.** Strict Bauhaus/Applet styles from `src/styles/applet.ts` and the token system.
+2. **No generic Tailwind.** Strict token-driven styles — see `Skin_Gamified.md`/`Skin_Heritage.md` for the current skins' aesthetic rules, `Token_Contract.md` for the token system itself.
 3. **The navbar height is load-bearing.** `--chrome-navbar-height` (64px) feeds into `calc()` expressions across every snap section. Changing it propagates everywhere — that's intentional.
 4. **Navbar and TimelineTrack must not maintain disconnected active-index states.** Both read from the orchestrator.
 5. **Log architectural changes** to `docs/Logs.md`.
@@ -146,8 +147,9 @@ docs/
 │   ├── design-system/                  ← Visual system
 │   │   ├── Token_Contract.md           ← CSS custom property schema (value tier)
 │   │   ├── Skin_System.md              ← Structural/variant tier, runtime swap mechanism, locked constraints
-│   │   ├── Skin_Bauhaus.md             ← Current skin values
-│   │   └── Design_System.md            ← Aesthetic rules and pillars
+│   │   ├── Skin_Gamified.md            ← Runtime-default skin's heuristics
+│   │   ├── Skin_Heritage.md            ← Second live skin's heuristics
+│   │   └── DeskBoard_Panel.md          ← Heritage wood-plank panel chrome spec
 │   ├── specs/                          ← Technical specifications
 │   │   ├── Component_Architecture.md   ← Tier rules and data flow
 │   │   ├── System_Design.md            ← Managed Stage architecture

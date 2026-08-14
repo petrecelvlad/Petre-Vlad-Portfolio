@@ -1,21 +1,27 @@
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400..700&family=Outfit:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&family=Kalam:wght@400;700&display=swap');
 @import "tailwindcss";
 
 @theme {
-  /* Surface & Ink (Backgrounds & Text) */
-  --color-surface-base: #F7F4EB;
-  --color-surface-elevated: #EFEBDF;
-  --color-surface-inverse: #1C1A22;
-  --color-surface-soft: #FAF8F2;
+  /* Surface & Ink (Backgrounds & Text) — warm cream paper/desk surfaces,
+     warm near-black ink. This is the site's real default resolution:
+     Gamified (the runtime default skin, see SkinContext.tsx) and Heritage
+     currently resolve identically here — see Skin_Gamified.md for the
+     honest state of that overlap. Formerly the retired Bauhaus skin's
+     pink-cream/near-black values; promoted from the old
+     [data-skin="heritage"], [data-skin="gamified"] override block to be the
+     actual sitewide default once Bauhaus was removed. */
+  --color-surface-base: #F6EEDC;
+  --color-surface-elevated: #EDE0BE;
+  --color-surface-inverse: #241C12;
+  --color-surface-soft: #FBF7EC;
 
-  --color-ink-base: #191919;
-  --color-ink-subtle: #4D4D4D;
-  --color-ink-whisper: #8C8C8C;
+  --color-ink-base: #2B2016;
+  --color-ink-subtle: #5C4A34;
+  --color-ink-whisper: #8C7A5C;
 
   /* Brand/Interaction */
-  --color-theme-accent: #FF9EBB;
-  --color-theme-accent-hover: #E386A2;
-  --color-theme-primary: #FF9EBB;
+  --color-theme-accent: #D9622F;
+  --color-theme-accent-hover: #B14A20;
+  --color-theme-primary: #D9622F;
 
   /* Keeping backward compatibility aliases for current components */
   --surface-base: var(--color-surface-base);
@@ -31,20 +37,21 @@
   --theme-accent-hover: var(--color-theme-accent-hover);
   --theme-primary: var(--color-theme-primary);
 
-  /* Secondary Palette for Data / Specific usages */
-  --color-coral: #FF9EBB;
-  --color-coral-deep: #E386A2;
-  --color-mint: #C6EE71;
-  --color-mint-deep: #AAD05C;
-  --color-sky: #9AE2D8;
-  --color-sky-deep: #7FC0B6;
-  --color-butter: #F9E56C;
-  --color-butter-deep: #DEC956;
-  --color-rose: #FF9EBB;
-  --color-rose-deep: #E386A2;
-  --color-periwinkle: #C8B2F8;
-  --color-periwinkle-deep: #AC96DB;
-  --color-lilac: #DCCDF9;
+  /* Secondary Palette for Data / Specific usages — burnt orange/olive/dusty
+     teal/gold/navy family (see the surface/ink note above) */
+  --color-coral: #D9622F;
+  --color-coral-deep: #B14A20;
+  --color-mint: #6C8F3E;
+  --color-mint-deep: #506B2C;
+  --color-sky: #3E7C8C;
+  --color-sky-deep: #2C5C68;
+  --color-butter: #F0B429;
+  --color-butter-deep: #C98F1A;
+  --color-rose: #D9622F;
+  --color-rose-deep: #B14A20;
+  --color-periwinkle: #33415C;
+  --color-periwinkle-deep: #232D40;
+  --color-lilac: #DCCB9E;
 
   /*
    * Component identity tokens — indirection between the raw palette and
@@ -61,7 +68,9 @@
    * block does NOT retarget --role-header-accent on that subtree unless
    * --role-header-accent is ALSO explicitly redeclared inside that same
    * block. Every skin that wants a role token to track its palette must
-   * restate it — see the "heritage" skin below for the pattern. (An
+   * restate it — relevant again the day a second skin's palette actually
+   * diverges from these defaults (heritage and gamified currently share
+   * this exact palette, so neither needs to restate anything below). (An
    * earlier version of this comment, and of Skin_System.md, claimed the
    * opposite by analogy to the --surface-base-style aliases further
    * below in this file — that claim was never actually verified and is
@@ -84,7 +93,7 @@
 
   /* Rules */
   --color-rule: var(--color-ink-base);
-  --color-rule-soft: #E0D9C6;
+  --color-rule-soft: #DCCB9E;
 
   /* Focus */
   --color-focus: var(--color-sky);
@@ -101,21 +110,21 @@
    * correct regardless of whether that value is visible via devtools.
    */
   --border-presence: 1;
-  --motif-dot-texture: 1;
-  --depth-style: hard-offset;
+  --motif-dot-texture: 0;
+  --depth-style: embossed;
   --motif-slot-machine: on;
 
-  /* Geometry */
+  /* Geometry — chunkier rounding than the retired Bauhaus scale */
   --radius-xs: 4px;
   --radius-sm: 6px;
-  --radius-md: 8px;
-  --radius-lg: 12px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
   --radius-pill: 9999px;
 
   /* Border widths — gated by --border-presence via a fallback, see Tier 2 note above */
-  --border-width-sm: calc(2px * var(--border-presence, 1));
-  --border-width-md: calc(3px * var(--border-presence, 1));
-  --border-width-lg: calc(4px * var(--border-presence, 1));
+  --border-width-sm: calc(3px * var(--border-presence, 1));
+  --border-width-md: calc(4px * var(--border-presence, 1));
+  --border-width-lg: calc(5px * var(--border-presence, 1));
 
   /* Spacing */
   --spacing-xs: 4px;
@@ -133,9 +142,35 @@
   --shadow-color: #000000;
   --inset-color: #E4DAC4;
 
-  /* Shadows — all use the same --ui-depth */
-  --shadow-raised: 0 var(--ui-depth) 0 0 var(--shadow-color);
-  --shadow-sunken: inset 0 calc(var(--ui-depth) * 2) 0 0 var(--inset-color);
+  /*
+   * Shadows — embossed (DR-017): a layered box-shadow bevel (light edge on
+   * top, dark edge on bottom) plus a soft ambient shadow, replacing the
+   * retired Bauhaus skin's flat hard-offset. This is the ONLY place this
+   * value is defined; every consumer (the achievement bar, the clipboard
+   * board, the page tabs — all via `shadow-[var(--shadow-raised)]` or an
+   * inline `boxShadow: 'var(--shadow-raised)'`, never the bare
+   * `.shadow-raised`/`.shadow-sunken` utility classes, which Tailwind v4
+   * inlines at build time and which therefore silently ignore this
+   * override — see Skin_System.md's DR-017 correction) inherits from here
+   * automatically. The top/bottom inset lines are deliberately the same
+   * 3px thickness (2026-07-24) — they started at 1.5px/3px, which read as
+   * barely-there on top vs. clearly visible on the bottom. The one
+   * exception is BinderClip's SVG, which can't consume a CSS custom
+   * property as a fill — it mirrors these exact rgba values as JS
+   * constants in `src/components/bento/skins/heritage/palette.ts`
+   * (EMBOSS_LIGHT/EMBOSS_DARK); keep both thicknesses equal in both places
+   * if this ever changes again.
+   */
+  --shadow-raised:
+    inset 0 3px 0 0 rgba(255, 246, 219, 0.5),
+    inset 0 -3px 0 0 rgba(36, 26, 16, 0.3),
+    0 var(--ui-depth) calc(var(--ui-depth) * 3) rgba(20, 14, 8, 0.4);
+  --shadow-sunken:
+    inset 0 3px 6px rgba(20, 14, 8, 0.5),
+    inset 0 -1px 0 0 rgba(255, 246, 219, 0.15);
+  /* Legacy tier names, kept only for call-site compatibility — degenerate,
+     all four resolve the same; not migrated to the embossed formula since
+     nothing in src/ still consumes them (confirmed by grep). */
   --shadow-applet-sm: 0 var(--ui-depth) 0 0 var(--shadow-color);
   --shadow-applet-md: 0 var(--ui-depth) 0 0 var(--shadow-color);
   --shadow-applet-lg: 0 var(--ui-depth) 0 0 var(--shadow-color);
@@ -145,6 +180,7 @@
   --font-display: 'Space Grotesk', sans-serif;
   --font-body: 'Outfit', sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
+  --font-arcade: 'Silkscreen', 'Press Start 2P', monospace;
   /* Handwriting register — only ever consumed by heritage's clipboard paper text (DR-019).
      Defaults to --font-body so any skin that doesn't override it is unaffected. */
   --font-hand: var(--font-body);
@@ -155,13 +191,13 @@
   --font-size-body: 17px;
   --font-size-body-sm: 15px;
 
-  /* Slot machine motif — the tactile hardware aesthetic */
-  --color-slot-casing: #E2D4C1;
-  --color-slot-surface: #F4ECE1;
-  --color-slot-text: #2D2A26;
+  /* Slot machine motif — dark navy-slate inset, matching the site's own accent */
+  --color-slot-casing: #33415C;
+  --color-slot-surface: #24304A;
+  --color-slot-text: #F6EEDC;
 
   /* Border radius additions */
-  --radius-slot: 22px;
+  --radius-slot: 12px;
 
   /* Interaction physics — press depth matches ui-depth */
   --press-depth: var(--ui-depth);
@@ -169,9 +205,6 @@
 
   /* Chrome dimensions */
   --chrome-navbar-height: 64px;
-  --chrome-titlebar-height: 40px;
-  --chrome-traffic-light-border: 1.5px;
-  --chrome-traffic-light-size: 12px;
   --chrome-icon-slot-size: 90px;
   --chrome-icon-size: 36px;
 
@@ -205,91 +238,19 @@
  * copy of that board's specific brand. See DR-019 for the full reasoning,
  * including the named ANTI_PATTERNS.md guardrail this stays clear of.
  *
- * --role-*-accent ARE explicitly restated below even though most values are
- * identical to the default alias — required, not decorative: see the CSS
- * aliasing gotcha documented at §Component Identity Tokens above. Overriding
- * --color-coral etc. alone does NOT retarget the role tokens.
+ * Heritage's full Tier 1/2 resolution used to live in this override block,
+ * duplicated across [data-skin="heritage"] AND [data-skin="gamified"] since
+ * both skins happened to share every value. Once Bauhaus was retired, that
+ * shared resolution was promoted to be the @theme block's own default
+ * (Gamified is the actual runtime-default skin — see SkinContext.tsx) —
+ * removing the duplication rather than keeping two skins' worth of
+ * identical overrides live. The only value genuinely specific to Heritage
+ * and not shared with Gamified is its handwriting register, below.
  */
 [data-skin="heritage"] {
-  /* Tier 1 — warm cream paper/desk surfaces, warm near-black ink */
-  --color-surface-base: #F6EEDC;
-  --color-surface-elevated: #EDE0BE;
-  --color-surface-soft: #FBF7EC;
-  --color-surface-inverse: #241C12;
-  --color-ink-base: #2B2016;
-  --color-ink-subtle: #5C4A34;
-  --color-ink-whisper: #8C7A5C;
-  --color-rule-soft: #DCCB9E;
-
-  /* Palette — original hues in the same warm-paper/burnt-orange/navy family
-     the reference evokes, not color-matched to it */
-  --color-coral: #D9622F;        /* burnt orange → --role-header-accent (unused visually, header is a no-op — see DR-019) */
-  --color-coral-deep: #B14A20;
-  --color-mint: #6C8F3E;
-  --color-mint-deep: #506B2C;
-  --color-sky: #3E7C8C;          /* dusty teal-blue → --role-skills-accent */
-  --color-sky-deep: #2C5C68;
-  --color-butter: #F0B429;       /* richer premium gold → --role-achievement-accent (was a muddier mustard) */
-  --color-butter-deep: #C98F1A;
-  --color-periwinkle: #33415C;   /* deep navy-slate → --role-responsibilities-accent, the clipboard's own accent */
-  --color-periwinkle-deep: #232D40;
-  --color-lilac: #DCCB9E;
-
-  /* Component identity tokens — must be restated, not inherited from the
-     palette override above (see the aliasing gotcha at their definition) */
-  --role-header-accent: var(--color-coral);
-  --role-responsibilities-accent: var(--color-periwinkle);
-  --role-skills-accent: var(--color-sky);
-  --role-achievement-accent: var(--color-butter);
-
-  /* Slot motif — dark navy-slate inset, matching the clipboard's own accent */
-  --color-slot-casing: #33415C;
-  --color-slot-surface: #24304A;
-  --color-slot-text: #F6EEDC;
-  --radius-slot: 12px;
-
-  /* Tier 2 */
-  --border-presence: 1;
-  --motif-dot-texture: 0;
-  --depth-style: embossed;
-  --motif-slot-machine: on;
-
-  /* --depth-style: embossed (DR-017) — layered box-shadow bevel + soft ambient
-     shadow instead of Bauhaus's flat hard-offset. Note the mechanism gap
-     DR-017's correction documents: this only actually renders where a
-     consumer references --shadow-raised/--shadow-sunken directly via
-     Tailwind's arbitrary-value bracket syntax (shadow-[var(--shadow-raised)]),
-     not the .shadow-raised/.shadow-sunken utility classes. The clipboard
-     (BentoResponsibilities) is the first consumer to apply that fix.
-     The top (light) and bottom (dark) inset lines are deliberately the
-     same 3px thickness (2026-07-24, Vlad) — they started at 1.5px/3px,
-     which read as barely-there on top vs. clearly visible on the bottom.
-     This is the ONLY place this value is defined; every consumer (the
-     achievement bar, the clipboard board, the page tabs, all via
-     shadow-[var(--shadow-raised)] or an inline `boxShadow: 'var(--shadow-
-     raised)'`) inherits from here automatically. The one exception —
-     BinderClip's SVG, which can't consume a CSS custom property as an SVG
-     fill — mirrors these exact two rgba values as JS constants in
-     `src/components/bento/skins/heritage/palette.ts`
-     (EMBOSS_LIGHT/EMBOSS_DARK); keep both thicknesses equal in both
-     places if this ever changes again. */
-  --shadow-raised:
-    inset 0 3px 0 0 rgba(255, 246, 219, 0.5),
-    inset 0 -3px 0 0 rgba(36, 26, 16, 0.3),
-    0 var(--ui-depth) calc(var(--ui-depth) * 3) rgba(20, 14, 8, 0.4);
-  --shadow-sunken:
-    inset 0 3px 6px rgba(20, 14, 8, 0.5),
-    inset 0 -1px 0 0 rgba(255, 246, 219, 0.15);
-
-  /* Chunkier rounding + thicker outlines than Bauhaus */
-  --radius-md: 10px;
-  --radius-lg: 16px;
-  --border-width-sm: calc(3px * var(--border-presence, 1));
-  --border-width-md: calc(4px * var(--border-presence, 1));
-  --border-width-lg: calc(5px * var(--border-presence, 1));
-
   /* Handwriting register — the clipboard's paper reads as Vlad's own notes,
-     not a borrowed brand typeface. Scoped to heritage only. */
+     not a borrowed brand typeface. Scoped to heritage only; gamified stays
+     on the default --font-body. */
   --font-hand: 'Kalam', cursive;
 }
 
@@ -356,3 +317,94 @@ body::before {
   outline: 3px solid var(--color-focus);
   outline-offset: 3px;
 }
+
+.font-arcade {
+  font-family: var(--font-arcade);
+}
+
+.font-pixelify {
+  font-family: 'Pixelify Sans', cursive;
+}
+
+.font-press-start {
+  font-family: 'Press Start 2P', monospace;
+}
+
+.font-jersey {
+  font-family: 'Jersey 15', monospace;
+}
+
+.font-jersey-10 {
+  font-family: 'Jersey 10', monospace;
+}
+
+.font-jersey-25 {
+  font-family: 'Jersey 25', monospace;
+}
+
+.font-jersey-10-charted {
+  font-family: 'Jersey 10 Charted', monospace;
+}
+
+.font-jersey-25-charted {
+  font-family: 'Jersey 25 Charted', monospace;
+}
+
+.font-tiny5 {
+  font-family: 'Tiny5', monospace;
+}
+
+.pixel-text-outline {
+  color: #FFFFFF;
+  text-shadow:
+    /* Tight 2.5px crisp dark outline all around */
+    -2px -2px 0 #1C1610,
+     2px -2px 0 #1C1610,
+    -2px  2px 0 #1C1610,
+     2px  2px 0 #1C1610,
+    -3px  0   0 #1C1610,
+     3px  0   0 #1C1610,
+     0   -3px 0 #1C1610,
+     0    3px 0 #1C1610,
+
+    /* Downward 3D block extrude / undershadow */
+     0    4px 0 #1C1610,
+     0    5px 0 #1C1610,
+     0    6px 0 #1C1610,
+     0    7px 0 #1C1610,
+     0    8px 0 #1C1610,
+    -1px  5px 0 #1C1610,
+     1px  5px 0 #1C1610,
+    -1px  6px 0 #1C1610,
+     1px  6px 0 #1C1610,
+    -2px  7px 0 #1C1610,
+     2px  7px 0 #1C1610,
+    -2px  8px 0 #000000,
+     0    8px 0 #000000,
+     2px  8px 0 #000000,
+
+    /* Soft ambient depth shadow */
+     0    12px 10px rgba(28, 22, 16, 0.45);
+}
+
+.pixel-text-outline-thick {
+  color: #FFFFFF;
+  -webkit-text-stroke: 2.5px #1C1610;
+  paint-order: stroke fill;
+  text-shadow:
+    -3px -3px 0 #1C1610,
+     3px -3px 0 #1C1610,
+    -3px  3px 0 #1C1610,
+     3px  3px 0 #1C1610,
+     0    5px 0 #000000;
+}
+
+@keyframes terminalCursorBlink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.animate-terminal-cursor {
+  animation: terminalCursorBlink 0.8s step-start infinite;
+}
+

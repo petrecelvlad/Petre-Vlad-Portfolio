@@ -6,7 +6,7 @@ The Timeline Animation is the core interactive element of the Experience Engine.
 ## 2. Visual Architecture
 
 ### 2.1 The Base Track
-- **Style:** `bg-periwinkle/15` (defined in `bauhaus.ts`).
+- **Style:** `bg-periwinkle/15` (`--color-periwinkle`, `Token_Contract.md` §03).
 - **Behavior:** Always present. It defines the vertical spine of the application.
 - **Construction:** A continuous line or a series of contiguous segments that span the entire height of the `Timeline` organism.
 
