@@ -22,7 +22,7 @@ The redesign replaces the badge grid with **four parallel branching trees**: one
 
 ## 2. Four Category Trees
 
-The tree is divided into **four independent branches**, each with its own root, children, and grandchildren. Categories map directly to the four existing Bauhaus palette colors.
+The tree is divided into **four independent branches**, each with its own root, children, and grandchildren. Categories map directly to the four existing palette accent colors (`Token_Contract.md` §03).
 
 | Category | Color | Root skill | What the branch covers |
 |---|---|---|---|
@@ -249,7 +249,7 @@ Category label appears at the top of each column as a colored Badge (coral/sky/b
 
 Each node is a compact **pill/badge style** element:
 - Compact rectangle: icon (16px) + name + proficiency dots
-- 2px border, `ink-base` color — consistent with Bauhaus thick-border aesthetic
+- 2px border, `ink-base` color — consistent with the site's thick-border tactile aesthetic
 - Root node: category color fill (`bg-coral`, `bg-sky`, etc.), slightly larger (`font-bold`, `text-sm`)
 - Depth 1–2 nodes: `bg-surface-base` with `border-ink-base`, smaller (`text-xs`)
 - **Active / selected** node: `bg-periwinkle text-surface-base border-ink-base`
@@ -274,7 +274,7 @@ Lines are drawn using the standard CSS nested-list tree pattern — `::before` a
 Line spec:
   width:  2px
   color:  var(--color-ink-base)
-  style:  solid  (not dashed — Bauhaus is direct)
+  style:  solid  (not dashed — direct, not decorative)
 ```
 
 The connecting line from root splits into two branches using a horizontal segment + two vertical drops. This is achievable in pure CSS with no SVG:

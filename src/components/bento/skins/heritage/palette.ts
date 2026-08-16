@@ -74,6 +74,24 @@ export function saturate(hex: string, deltaPct: number): string {
   return hslToHex(h, Math.min(100, Math.max(0, s + deltaPct)), l);
 }
 
+// Same knob as `saturate`, but for lightness — reduces a base color's own lightness by
+// `deltaPct` points without touching hue/saturation, so a "darker shade of this exact color"
+// (an elevation/shadow rectangle attached to an element, a pressed state, etc) derives from the
+// element's own fill instead of a hand-picked unrelated dark color.
+export function darken(hex: string, deltaPct: number): string {
+  const [h, s, l] = hexToHsl(hex);
+  return hslToHex(h, s, Math.min(100, Math.max(0, l - deltaPct)));
+}
+
+// Mirror of `darken` — raises lightness instead of lowering it. Same use case, opposite
+// direction: a "lighter shade of this exact color" (a highlight rectangle attached to an
+// element's near edge, mirroring an elevation/shadow rectangle on its far edge) derived from the
+// element's own fill instead of a hand-picked unrelated light color.
+export function lighten(hex: string, deltaPct: number): string {
+  const [h, s, l] = hexToHsl(hex);
+  return hslToHex(h, s, Math.min(100, Math.max(0, l + deltaPct)));
+}
+
 // ============================================================================
 // THE HERITAGE EMBOSS EFFECT — read this before styling any hard/molded
 // surface (a button, a tab, a clip — anything that isn't paper) in this
@@ -114,7 +132,7 @@ export function saturate(hex: string, deltaPct: number): string {
 // `docs/Architecture/design-system/Skin_System.md`, DR-017's correction).
 //
 // Current real consumers of this exact mechanism: BentoAchievement.tsx
-// (bauhaus, `shadow-[var(--shadow-raised)]`), BentoResponsibilities.tsx's
+// (shared/, `shadow-[var(--shadow-raised)]`), BentoResponsibilities.tsx's
 // clipboard board AND its page tabs. Any new hard-surface component joins
 // this list by consuming `var(--shadow-raised)` directly — it does not get
 // its own gloss/emboss constants, and it does not hardcode these rgba
@@ -135,3 +153,31 @@ export const EMBOSS_LIGHT = 'rgba(255, 246, 219, 0.5)';
 export const EMBOSS_DARK = 'rgba(36, 26, 16, 0.3)';
 export const EMBOSS_AMBIENT_SHADOW = 'drop-shadow(0 4px 12px rgba(20, 14, 8, 0.4))';
 // ============================================================================
+
+// The "board" — heritage's one hard-surface base color, and its paper-white
+// inset counterpart. Originally local to BentoResponsibilities.tsx's clipboard
+// (sampled from image.png's mockup: a saturated warm peach/kraft tan, distinctly
+// warmer than the near-white paper); promoted here 2026-07-27 once DeskBoard.tsx
+// became a second real consumer, same "extract on the second use" discipline as
+// HERITAGE_PALETTE above — every board in this skin (the clipboard, SkillTree's
+// two new desk panels) reads from one source instead of each inventing its own.
+export const BOARD_COLOR = '#E4B77E';
+export const PAPER_COLOR = '#FDF7E9';
+// DeskBoard.tsx's recessed interior panel tone. Sampled with an actual pixel scan of image.png
+// (not eyeballing a crop) at multiple clean points away from any icon: the interior is a FLAT
+// #C49A6C (L≈60%), only modestly darker than BOARD_COLOR's own L≈70% — a subtle contrast, not
+// the dramatic caramel-vs-tan split the previous value (#A97748, L≈47%) assumed. That previous
+// value overcorrected from the first attempt's "too light" mistake straight into "too dark" —
+// same axis, wrong direction, still not measured against the real pixels.
+export const BOARD_INSET_COLOR = '#C49A6C';
+// Bauhaus's own flat shadow (--shadow-raised on every other slot: the phone,
+// skills, achievement) is a fully OPAQUE straight-down offset —
+// `0 var(--ui-depth) 0 0 #000000` — which is what actually reads as a solid
+// grounding line under those elements, not just "a shadow." A translucent
+// rgba offset never matches that solid-line weight regardless of opacity
+// tuning — it has to be fully opaque. This mirrors that exact mechanism with
+// heritage's own ink color instead of literal black, layered in FRONT of the
+// embossed shadow (paired as `${BOARD_UNDERSHADOW}, var(--shadow-raised)}` —
+// box-shadow paints first-listed on top; listed behind, it gets masked by
+// the blur).
+export const BOARD_UNDERSHADOW = '0 var(--ui-depth) 0px var(--color-ink-base)';

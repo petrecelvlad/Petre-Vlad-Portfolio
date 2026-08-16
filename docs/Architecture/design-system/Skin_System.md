@@ -25,7 +25,7 @@ Enum-like or boolean choices that change *which visual mechanism* is in play, no
 |---|---|---|---|
 | `--border-presence` | `1` (on) \| `0` (off) | Whether components render a visible ink border at all | Real numeric switch. Multiplied directly into `--border-width-sm/md/lg`'s definitions in `index.css` (`calc(2px * var(--border-presence))`, etc.) |
 | `--motif-dot-texture` | `1` (on) \| `0` (off) | Whether the background dot-grid texture renders | Real numeric switch. Multiplied into the dot color's alpha via `color-mix(in srgb, var(--color-ink-base) calc(var(--motif-dot-texture) * 100%), transparent)` |
-| `--depth-style` | `hard-offset` \| `soft-blur` \| `embossed` \| `none` | Whether elevation reads as a flat offset shadow (Bauhaus), a conventional blurred shadow, a beveled/carved surface with ambient shadow (Heritage, added 2026-07-21, DR-017), or no elevation cue at all | Declarative label only. A skin realizes it by overriding `--shadow-raised`/`--shadow-sunken` directly (`Token_Contract.md` §11) — not by any component branching on this token |
+| `--depth-style` | `hard-offset` \| `soft-blur` \| `embossed` \| `none` | Whether elevation reads as a flat offset shadow (the retired Bauhaus skin's treatment), a conventional blurred shadow, a beveled/carved surface with ambient shadow (Heritage and Gamified's shared treatment, added 2026-07-21, DR-017), or no elevation cue at all | Declarative label only. A skin realizes it by overriding `--shadow-raised`/`--shadow-sunken` directly (`Token_Contract.md` §11) — not by any component branching on this token |
 | `--motif-slot-machine` | `on` \| `off` | Whether the slot-casing/slot-surface motif (`BentoHeader`, `BentoSkills`) renders its physical-hardware treatment or falls back to a plain container | Declarative label only. A skin realizes "off" by setting `--color-slot-casing`/`--color-slot-surface` to match its surface tokens, `--shadow-sunken: none`, and `--radius-slot` to match its standard card radius — not by any component branching on this token |
 
 **Why two different mechanisms, not four of the same kind:** `--border-presence` and `--motif-dot-texture` gate *whether something renders at all* — a real boolean, expressible as a 0/1 multiplier against a single existing value token (border-width) or a single color's alpha channel (dot color via `color-mix()`). `--depth-style` and `--motif-slot-machine` gate *which qualitative treatment* applies across *multiple* tokens at once (a shadow's whole formula; three colors plus a radius) — CSS has no conditional operator that can switch between qualitatively different value shapes from one variable, and forcing one would mean every consuming component branches on it in JS, which is exactly the scattering the Rule below forbids. Realizing these two through direct value-tier overrides isn't a shortcut — it turns out to be the actually-correct mechanism, because `--shadow-raised`/`--shadow-sunken` and `--color-slot-*`/`--shadow-sunken`/`--radius-slot` were already the single points of indirection Tier 1 exists to provide.
@@ -72,48 +72,76 @@ Tier 1 and Tier 2 both assume a fixed DOM shape and only vary what fills it — 
 
 **The mechanism:** the four non-locked project-card regions are named **slots**, matching the existing `--role-*` accent tokens (`Token_Contract.md` §03.5) 1:1:
 
-| Slot | Port (props contract) | Bauhaus adapter (default/fallback) | Heritage adapter |
+| Slot | Port (props contract) | Heritage adapter | Gamified adapter |
 |---|---|---|---|
-| `header` | title, icon, startDate, endDate | `skins/bauhaus/BentoHeader.tsx` | `skins/heritage/BentoHeader.tsx` — no-op, absorbed into `responsibilities` (DR-019) |
-| `responsibilities` | responsibilities[], role, +title/icon/startDate/endDate (optional, DR-019) | `skins/bauhaus/BentoResponsibilities.tsx` | `skins/heritage/BentoResponsibilities.tsx` — clipboard, DR-016/DR-019 |
-| `skills` | skills[] | `skins/bauhaus/BentoSkills.tsx` | `skins/heritage/BentoSkills.tsx` — DR-016 |
-| `achievement` | achievement? | `skins/bauhaus/BentoAchievement.tsx` | — (inherits Bauhaus) |
+| `header` | title, icon, startDate, endDate | `skins/heritage/BentoHeader.tsx` — no-op, absorbed into `responsibilities` (DR-019) | same as Heritage (reused, not bespoke) |
+| `responsibilities` | responsibilities[], role, +title/icon/startDate/endDate (optional, DR-019) | `skins/heritage/BentoResponsibilities.tsx` — clipboard, DR-016/DR-019 | same as Heritage (reused, not bespoke) |
+| `skills` | skills[] | `skins/heritage/BentoSkills.tsx` — DR-016 | same as Heritage (reused, not bespoke) |
+| `achievement` | achievement? | `bento/shared/BentoAchievement.tsx` — skin-neutral, shared by every skin | same shared component |
+
+**Honest current state, not aspirational:** Gamified has no bespoke adapter for any of the four slots yet — it reuses Heritage's `header`/`responsibilities`/`skills` wholesale and the shared `achievement` component. Its one real point of divergence from Heritage today is its `BoardContainer` (below). This is a live gap, not a permanent design decision — see `Skin_Gamified.md` for the honest accounting.
 
 **Slot absorption (added 2026-07-21, DR-019):** a skin's adapter for one slot is allowed to
 intentionally render nothing (return `null`) and fold that slot's content into a different slot's
 adapter instead — heritage's `header` is a no-op because the title/icon/dates it would have shown
 now render on the `responsibilities` clipboard's paper. This requires the receiving slot's port to
 widen with the absorbed fields as *additive optional* props (same discipline as `accentToken` in
-DR-013) so the donor skin's (Bauhaus's) adapter for the receiving slot is completely unaffected —
+DR-013) so the donor skin's adapter for the receiving slot is completely unaffected —
 it simply never reads the new optional fields. This is a real, documented option for any future
 skin whose object metaphor doesn't map 1:1 onto the four existing slots, not a one-off hack.
 
 (paths relative to `src/components/bento/`.) The port types themselves (`HeaderSlotProps`, `ResponsibilitiesSlotProps`, `SkillsSlotProps`, `AchievementSlotProps`) live in `src/components/bento/ports.ts`, imported by every adapter — this is what makes the port a real, TS-enforced contract rather than incidental duck-typing.
 
-Each slot's props are typed against `IProject` fields only — content stays domain-driven, chrome does not. This is the same port/adapter split the codebase already uses for data (`IExperienceRepository` → `JsonExperienceRepo`), applied one layer up to presentation. A skin registers an **adapter** — any component implementation satisfying the slot's port — in `src/components/bento/registry.ts`:
+Each slot's props are typed against `IProject` fields only — content stays domain-driven, chrome does not. This is the same port/adapter split the codebase already uses for data (`IExperienceRepository` → `JsonExperienceRepo`), applied one layer up to presentation. A skin registers an **adapter** — any component implementation satisfying the slot's port — as an `ISkinStrategy` object in `src/components/bento/SkinRegistry.ts`.
+
+**Mechanism correction (2026-08-01 refactor):** the design sketch originally documented here was a plain `REGISTRY` object plus a `resolveSlot()` function, with `Partial<Record<SlotName, ...>>` per skin so an unregistered slot silently fell back to Bauhaus's adapter. That was replaced by a real strategy-pattern class — the shape actually live in the codebase today:
 
 ```ts
-type SlotName = 'header' | 'responsibilities' | 'skills' | 'achievement';
+// src/core/domain/skinStrategy.ts
+export interface SlotRegistry {
+  header: ComponentType<HeaderSlotProps>;
+  responsibilities: ComponentType<ResponsibilitiesSlotProps>;
+  skills: ComponentType<SkillsSlotProps>;
+  achievement: ComponentType<AchievementSlotProps>;
+}
 
-const REGISTRY: Record<SkinId, Partial<Record<SlotName, React.ComponentType<any>>>> = {
-  bauhaus: { header: BauhausHeader, responsibilities: BauhausResponsibilities, skills: BauhausSkills, achievement: BauhausAchievement },
-  heritage: { responsibilities: HeritageResponsibilities, skills: HeritageSkills },
-};
+export interface ISkinStrategy {
+  id: SkinId;
+  name: string;
+  slots: SlotRegistry;       // every field required — no Partial<>
+  BoardContainer: ComponentType<BoardContainerProps>;
+}
 
-function resolveSlot(skin: SkinId, slot: SlotName) {
-  return REGISTRY[skin]?.[slot] ?? REGISTRY.bauhaus[slot];
+// src/components/bento/SkinRegistry.ts
+export class SkinRegistry {
+  private static strategies: Record<SkinId, ISkinStrategy> = {
+    heritage: HERITAGE_STRATEGY,
+    gamified: GAMIFIED_STRATEGY,
+  };
+
+  public static getStrategy(skinId: SkinId): ISkinStrategy {
+    return this.strategies[skinId] ?? GAMIFIED_STRATEGY;
+  }
+
+  public static resolveSlot<S extends SlotName>(skinId: SkinId, slot: S) {
+    return this.getStrategy(skinId).slots[slot];
+  }
 }
 ```
 
-`heritage`'s two adapters share an internal `HeritagePanel` (`skins/heritage/Panel.tsx`) — thick border, chunky radius, `shadow-raised` outer frame, title rendered as an inset `shadow-sunken` plaque instead of a full-width titlebar bar, no traffic lights at all. That plaque treatment deliberately reuses the sunken-socket motif `Style_Extraction.md` already confirmed as a cross-reference constant across both reference games (originally applied there only to item/icon slots) — not a newly invented motif for this pass. `Panel.tsx` is local to `skins/heritage/` only, not a shared cross-skin primitive — each skin's Tier 3 implementation is meant to stay independent (see DR-015's Consequences on why coupling skins to each other would undercut the point of this tier).
+`src/components/bento/registry.ts` still exports a `resolveSlot(skin, slot)` function — it's now a thin wrapper delegating to `SkinRegistry.resolveSlot()`, kept so `ProjectDetails.tsx` doesn't need to import `SkinRegistry` directly.
 
-`ProjectDetails.tsx` (already reads `useSkin()` for `data-skin` scoping) calls `resolveSlot(skin, 'header')` etc. instead of statically importing `BentoHeader` directly — the only call-site change this requires.
+**`BoardContainer` — a fifth piece per strategy, not a slot:** each `ISkinStrategy` also names a `BoardContainer` (`DeskBoard` for Heritage, `GamifiedBoard` for Gamified) — the outer frame the four slots render inside. It has no `--role-*` accent token and isn't part of `ports.ts`'s `SlotName` union; it's a whole-card wrapper, not a per-region adapter, and it's the one piece Gamified currently supplies for itself rather than borrowing from Heritage.
 
-**Fallback is per-slot, not all-or-nothing:** a skin that doesn't register a slot inherits Bauhaus's adapter for it. This means a new skin can start by overriding just `header` and ship immediately with the other three still Bauhaus-shaped, rather than needing all four rebuilt before it's viewable at all — same lean-now bias as DR-006, applied to the more expensive Tier 3 mechanism.
+Heritage's slot adapters and `DeskBoard` share visual primitives local to `skins/heritage/` only (`DeskBoardPlank.tsx`, `DeskBoardSVGAssets.tsx`, `palette.ts`) — not a shared cross-skin primitive; each skin's Tier 3 implementation is meant to stay independent (see DR-015's Consequences on why coupling skins to each other would undercut the point of this tier).
 
-**What Tier 3 does not replace:** Tier 1/Tier 2 remain the correct, cheaper mechanism for any skin that's happy with Bauhaus's shapes and only wants different values or on/off structural treatment — most skins should need this, not Tier 3. Tier 3 exists specifically for the case a skin needs a shape Bauhaus's adapters cannot express at all.
+`ProjectDetails.tsx` (already reads `useSkin()` for `data-skin` scoping) calls `resolveSlot(skin, 'header')` etc. instead of statically importing a slot component directly — the only call-site change the mechanism requires of a slot's consumer.
 
-**Locked, not reopened by this tier:** `BentoVideoFrame` is never a slot — it stays governed by DR-013's permanent `--chrome-device-*` lock. `WindowCard` is not deleted, moved, or deprecated by this change; it remains a general atom in `components/atoms/`. Bauhaus's own adapters keep using it, and a future skin's adapter may reuse it too if it genuinely wants windowed chrome — but no skin is routed through it by default anymore.
+**Fallback is now whole-strategy, not per-slot** (corrected from this section's original claim): `SlotRegistry`'s four fields are all required, so a strategy can no longer register just one slot and silently inherit another skin's adapter for the rest — TypeScript enforces completeness. A new skin can still *reuse* another skin's component for a slot it isn't ready to rebuild (exactly what Gamified does today), but that's a deliberate import in its own `ISkinStrategy` object, not an automatic fallback. The only remaining fallback is `SkinRegistry.getStrategy()` defaulting to `GAMIFIED_STRATEGY` for an unrecognized `SkinId`.
+
+**What Tier 3 does not replace:** Tier 1/Tier 2 remain the correct, cheaper mechanism for any skin that's happy with an existing skin's shapes and only wants different values or on/off structural treatment — most skins should need this, not Tier 3. Tier 3 exists specifically for the case a skin needs a shape no existing adapter can express at all.
+
+**Locked, not reopened by this tier:** `BentoVideoFrame` is never a slot — it stays governed by DR-013's permanent `--chrome-device-*` lock. `WindowCard` (the macOS-chrome titlebar-and-traffic-lights atom Bauhaus's adapters used) was deleted along with Bauhaus itself — see the Bauhaus-retirement entry in the Sequencing Plan below. Neither surviving skin used it or depended on its shape.
 
 **Verification requirement, distinct from Tier 1/2's `getComputedStyle` check:** a Tier 3 adapter can't be verified by inspecting computed style alone, since the thing being changed is DOM shape, not a CSS value — confirm via a rendered screenshot of the actual slot *and* a check that the port contract is genuinely satisfied (no prop silently ignored, no content field dropped) before calling a new adapter done.
 
@@ -129,7 +157,7 @@ function resolveSlot(skin: SkinId, slot: SlotName) {
 - A skin using Tier 4 supplies one background image at a fixed aspect ratio for the region it covers (likely the whole project-card area, not per-slot — the desk concept is one continuous scene, not four independent panels).
 - Each piece of real content (the video/screenshot, the responsibilities text, whatever `header`/`skills`/`achievement` resolve to) is positioned via coordinates tuned to that specific image — percentage-based, so *some* scaling survives, but fundamentally coupled to one fixed composition, not Tailwind's responsive breakpoint model.
 - This does not obviously reuse `ProjectDetails.tsx`'s current `grid-cols-[40%_1fr]` layout or the Tier 3 slot registry as-is — a Tier 4 skin most likely needs its own layout branch, resolved the same way Tier 3 adapters are (keyed off `useSkin()`), but the shape of that resolution isn't designed yet. Flagged as the first real engineering question to answer before building anything, not answered here.
-- A Tier 4 skin is not required to cover every region with illustrated chrome — per DR-006's lean-now bias, it could illustrate the desk/phone/clipboard and still fall back to a Tier 1–3 treatment (or a Bauhaus/heritage adapter) for whatever isn't painted into the scene yet.
+- A Tier 4 skin is not required to cover every region with illustrated chrome — per DR-006's lean-now bias, it could illustrate the desk/phone/clipboard and still fall back to a Tier 1–3 treatment (or a Heritage/Gamified adapter) for whatever isn't painted into the scene yet.
 
 **What this trades away, on purpose (see DR-018's Consequences for the full accounting):** responsive flexibility (fixed composition, no defined mobile fallback yet), and the fast-iteration/never-lose-a-direction property the whole rest of this system was built around — regenerating an illustration is a much coarser unit of change than editing a token. Both are named, conscious trades per DR-018, not oversights.
 
@@ -171,13 +199,13 @@ Per DR-007: the Hero region has a layout reservation for an optional bespoke cen
 }
 ```
 
-`<html data-skin="bauhaus">` is set at load and is never overridden by any CSS rule — Bauhaus is `@theme`'s implicit default, not an explicit override block, so nothing keys off `:root[data-skin="bauhaus"]`.
+`<html data-skin="gamified">` is set at load and is never overridden by any CSS rule — Gamified's resolved values are `@theme`'s implicit default, not an explicit override block, so nothing keys off `:root[data-skin="gamified"]`. (Until Bauhaus's retirement, this attribute read `data-skin="bauhaus"`; it existed purely as a semantic label even then — see the note below.)
 
-**Scoping (corrected 2026-07-21 — the note this replaced claimed this was already true when it wasn't):** the override selector is a plain attribute selector (`[data-skin="stress-test"]`), not `:root[data-skin="stress-test"]`. CSS custom properties inherit down the DOM tree, so whichever element actually carries `data-skin="stress-test"` becomes the override's scope root — everything under it picks up the new values, everything outside it (including siblings) keeps whatever it inherits from `<html>`. `SkinContext.tsx` holds the active skin in React state; `Navbar`'s `<select>` writes to it; `ProjectDetails.tsx`'s own root element reads it and renders `data-skin={skin}` directly — so today's actual scope is the project card, matching what step 3 of the Sequencing Plan below always intended. `<html>`'s `data-skin="bauhaus"` is unaffected by the switcher and never changes at runtime; it exists as a semantic default only. Swapping the card's skin is still live, no rebuild, no remount — same cheapness as before, just correctly confined.
+**Scoping (corrected 2026-07-21 — the note this replaced claimed this was already true when it wasn't):** the override selector is a plain attribute selector (`[data-skin="stress-test"]`), not `:root[data-skin="stress-test"]`. CSS custom properties inherit down the DOM tree, so whichever element actually carries `data-skin="stress-test"` becomes the override's scope root — everything under it picks up the new values, everything outside it (including siblings) keeps whatever it inherits from `<html>`. `SkinContext.tsx` holds the active skin in React state; `Navbar`'s `<select>` writes to it; `ProjectDetails.tsx`'s own root element reads it and renders `data-skin={skin}` directly — so today's actual scope is the project card, matching what step 3 of the Sequencing Plan below always intended. `<html>`'s `data-skin` attribute is unaffected by the switcher and never changes at runtime; it exists as a semantic default only. Swapping the card's skin is still live, no rebuild, no remount — same cheapness as before, just correctly confined.
 
 **Why not build-time bundles:** a separate compiled CSS file per skin would need its own build step and couldn't be toggled live for side-by-side comparison, which is the entire point of doing this now rather than hand-rolling one-off mockups (the exact pattern `ANTI_PATTERNS.md` documents as having already failed five times).
 
-**Tailwind v4 reconciliation:** Tailwind v4's `@theme` block in `src/index.css` currently *defines* token values directly (e.g. `--color-surface-base: #F7F4EB;` at `:root`-equivalent scope) — this is how Tailwind generates utility classes like `bg-surface-base`. For the skin system to work, `@theme` must declare tokens as *references* the runtime can override, not hardcoded values baked at build time. Practically: `@theme` keeps registering the token *names* so Tailwind's utility generation still works, but the actual color values move into the `[data-skin="..."]` blocks, with `@theme`'s own values acting only as the fallback/default (effectively the Bauhaus skin becomes `:root`'s implicit default, same as today, and every other skin is an explicit override block). This needs verification against Tailwind v4's exact `@theme` resolution order before the first non-default skin is wired — flagged as the riskiest assumption in this plan, to be verified against the stress-test skin, not assumed.
+**Tailwind v4 reconciliation:** Tailwind v4's `@theme` block in `src/index.css` currently *defines* token values directly (e.g. `--color-surface-base: #F7F4EB;` at `:root`-equivalent scope) — this is how Tailwind generates utility classes like `bg-surface-base`. For the skin system to work, `@theme` must declare tokens as *references* the runtime can override, not hardcoded values baked at build time. Practically: `@theme` keeps registering the token *names* so Tailwind's utility generation still works, but the actual color values move into the `[data-skin="..."]` blocks, with `@theme`'s own values acting only as the fallback/default (Gamified's resolved values are `:root`'s implicit default since Bauhaus's retirement, and Heritage is the one remaining explicit override block, restating only what genuinely differs). This assumption was verified against Tailwind v4's exact `@theme` resolution order via the (since-removed) stress-test skin, per step 3 below.
 
 ---
 
@@ -194,6 +222,8 @@ Per DR-006 (lean now, deepen later):
 4. ~~**Pull reference from Vlad's own shipped games.**~~ **First pass done 2026-07-21** (DR-014) — see `Style_Extraction.md` for the process and the "heritage" skin for the result. Explicitly a first pass, not a finished second-skin candidate: one reference set (3 screenshots, 2 games), no motion/interaction voice considered, one real gap (embossed/gradient depth) approximated rather than built. Next pass should widen the reference set before treating any single-reference-set finding as confirmed personal voice.
 5. ~~**Wire the Tier 3 slot registry.**~~ **Done 2026-07-21** (DR-015). Vlad reviewed "heritage" and rejected it — not the values, the fact that every region was still the same shape underneath. Triggered adding Tier 3 (see the section above) rather than iterating further on heritage's values, since more value iteration cannot fix a shape ceiling. Bauhaus's four `Bento*` components moved into `skins/bauhaus/` as-is; `registry.ts` and the per-slot props contracts (`ports.ts`) added; `ProjectDetails.tsx` rewired to resolve through it. Verified via `tsc --noEmit` and a live render — Bauhaus unchanged pixel-for-pixel, no console errors.
 6. ~~**Build a real Tier 3 adapter, prove the mechanism, retire `stress-test`.**~~ **Done 2026-07-21** (DR-016). `stress-test` deleted (its verification purpose is superseded by a real skin doing the same job). `heritage` gets real `responsibilities`/`skills` adapters — `HeritagePanel`, no titlebar bar, no traffic lights, sunken-plaque title treatment reusing the confirmed sunken-socket motif from `Style_Extraction.md`. `header`/`achievement` intentionally left on Bauhaus's fallback for this pass — see DR-016's Consequences for why that's an honest partial state, not a hidden gap.
+7. ~~**Refactor the registry mechanism into a real strategy pattern; add `gamified` as a second live (non-mockup) skin.**~~ **Done 2026-08-01** (see `REFACTORING_BACKLOG.md`). This section's original `REGISTRY`/`resolveSlot()` sketch was replaced by `SkinRegistry` (a class) + `ISkinStrategy` objects (`src/core/domain/skinStrategy.ts`, `src/components/bento/SkinRegistry.ts`) — see the corrected mechanism section above. `gamified` was added as a third strategy, reusing Heritage's `header`/`responsibilities`/`skills` and the shared achievement component, supplying only its own `BoardContainer` (`GamifiedBoard`).
+8. ~~**Retire Bauhaus entirely.**~~ **Done 2026-08-11.** `gamified` had already become `SkinContext`'s actual runtime default before Bauhaus's code was deleted. Removed: `skins/bauhaus/` (all four adapters), `WindowCard.tsx` (its only consumer outside the Bauhaus adapters — `SkillDetailsPanel.tsx`'s fallback branch — was deleted alongside it), `components/applet/`, `styles/applet.ts`, `core/constants/themeConstants.ts`, `BauhausBackgroundStrategy.tsx`. `BentoAchievement.tsx` was relocated, not deleted — it was already skin-neutral, just misfiled under `skins/bauhaus/` — to `bento/shared/`. `SkinRegistry.getStrategy()`'s fallback moved from `BAUHAUS_STRATEGY` to `GAMIFIED_STRATEGY`. `src/index.css`'s bare `@theme` defaults, which had been Bauhaus's own resolved values, were promoted to Gamified's actual resolved values (there was nothing left for the runtime default to fall back past); `[data-skin="heritage"]` now overrides only the one value genuinely specific to it, `--font-hand`. `Skin_Bauhaus.md` and `Design_System.md` were deleted from the docs tree; this document and `Token_Contract.md`, `Project_Template.md`, `Component_Architecture.md`, and `OVERVIEW.md` were corrected in the same pass. New: `Skin_Gamified.md`, documenting Gamified's own heuristics for the first time.
 
 Do not skip ahead of unfinished earlier steps. The stress-test skin (while it existed) is what made step 4 fast instead of another round of the five-attempts pattern; Tier 3 only exists to fix a ceiling steps 1–4 already ran into for real, not as a default starting point for a future skin that hasn't tried the cheaper tiers first.
 
@@ -220,5 +250,5 @@ UDS's Layer 5 materialization protocol includes two concrete, cheap checks this 
 
 ---
 
-*Skin System · Experience Engine · 2026-07-20*
-*Companion to `Token_Contract.md` (values) and `Skin_Bauhaus.md` (current resolution). See `docs/Research/DECISIONS.md` DR-006/007/008 for the decisions this document implements, DR-009 for the UDS reconciliation above.*
+*Skin System · Experience Engine · 2026-07-20, updated 2026-08-11 (Bauhaus retirement)*
+*Companion to `Token_Contract.md` (values) and `Skin_Gamified.md`/`Skin_Heritage.md` (current resolutions). See `docs/Research/DECISIONS.md` DR-006/007/008 for the decisions this document implements, DR-009 for the UDS reconciliation above.*

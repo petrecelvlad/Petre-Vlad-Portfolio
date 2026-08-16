@@ -163,7 +163,7 @@ A full-width snap section immediately after the last project card, before the fo
 - [ ] GitHub URL (if public)
 - [ ] Any other links (personal site, Behance, etc.)
 
-**Design direction:** One centered WindowCard with "Get in touch" heading, a brief CTA sentence, then icon-button links for each channel. Bauhaus style — bold, direct, no forms (keep it simple for MVP).
+**Design direction:** One centered card with "Get in touch" heading, a brief CTA sentence, then icon-button links for each channel. Bold, direct, no forms (keep it simple for MVP).
 
 **Tasks:**
 - [ ] Decide what contact links to include
@@ -228,7 +228,7 @@ A full-width snap section immediately after the last project card, before the fo
 
 A single toggle in the Navbar switches the entire portfolio between two identities:
 
-- **Game Designer mode** — current Bauhaus Skin, game design projects, warm paper aesthetic
+- **Game Designer mode** — current Gamified Skin, game design projects, tactile RPG aesthetic
 - **Full-stack Engineer mode** — new dark/terminal Skin, AI/vibe-coded software projects, completely different feel
 
 The toggle behaves like a dark/light mode switch but changes far more than colors: it swaps the Skin (all visual tokens) and the active content dataset simultaneously. The components, layouts, scroll behavior, and architecture are untouched — they are mode-agnostic. This is exactly what the Token Contract + Skin architecture was built to enable.
@@ -249,7 +249,7 @@ The parametric design system built in this iteration makes Phase 6 achievable wi
 
 **New Skin: Engineer**
 - [ ] Design the token values for the Engineer Skin — dark background, terminal/code aesthetic, monochrome base with one vivid accent (likely electric green or cyan)
-- [ ] Write `docs/Architecture/Skin_Engineer.md` following the same format as `Skin_Bauhaus.md`
+- [ ] Write `docs/Architecture/design-system/Skin_Engineer.md` following the same format as `Skin_Gamified.md`
 - [ ] Implement the skin as a CSS class override block in `index.css`:
   ```css
   html.mode-engineer {
@@ -282,7 +282,7 @@ The parametric design system built in this iteration makes Phase 6 achievable wi
 
 ### Design Decisions Needed Before Building
 
-- [ ] What is the Engineer Skin aesthetic? (suggestion: dark terminal, electric accent, heavy monospace presence — the inverse of Bauhaus warm paper)
+- [ ] What is the Engineer Skin aesthetic? (suggestion: dark terminal, electric accent, heavy monospace presence — the inverse of Gamified's/Heritage's warm paper)
 - [ ] What is the Engineer tagline / motto?
 - [ ] Does the Engineer mode have its own "logo shapes" in the Navbar, or do the Bauhaus shapes persist?
 - [ ] What is the toggle animation? (full-screen transition vs. instant vs. subtle crossfade)

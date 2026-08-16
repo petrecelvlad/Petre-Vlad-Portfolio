@@ -1,7 +1,6 @@
 import { IProject } from '@/src/core/domain/models';
 import { ProjectDetails } from '@/src/components/timeline/ProjectDetails';
-import { WoodBackground } from '@/src/components/bento/skins/heritage/WoodBackground';
-import { useSkin } from '@/src/context/SkinContext';
+import { GlobalBackground } from '@/src/components/backgrounds/GlobalBackground';
 
 interface ProjectStageProps {
   project: IProject;
@@ -27,11 +26,9 @@ interface ProjectStageProps {
 // animation" posture is exactly the right amount of continuity: the frame
 // stays, the content starts fresh.
 export function ProjectStage({ project }: ProjectStageProps) {
-  const { skin } = useSkin();
-
   return (
     <div className="relative z-0 h-full w-full flex">
-      {skin === 'heritage' && <WoodBackground />}
+      <GlobalBackground section="projects" />
 
       {/* Left column: spacer, keeps content clear of the fixed TimelineRail. */}
       <div className="w-[48px] md:w-[88px] flex-shrink-0 relative pointer-events-none" />

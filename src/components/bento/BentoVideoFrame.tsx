@@ -72,6 +72,12 @@ export function BentoVideoFrame({ screenshot, youtubeUrl, isActive }: BentoVideo
       initPlayer();
     } else {
       window.addEventListener('yt-ready', initPlayer);
+      if (!document.getElementById('youtube-iframe-api')) {
+        const script = document.createElement('script');
+        script.id = 'youtube-iframe-api';
+        script.src = 'https://www.youtube.com/iframe_api';
+        document.head.appendChild(script);
+      }
     }
 
     return () => {

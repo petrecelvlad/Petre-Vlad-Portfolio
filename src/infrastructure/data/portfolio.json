@@ -148,7 +148,9 @@
           "Designed all tower defense maps and level progression, balancing difficulty curves across dozens of stages",
           "Designed the full UX flow from first-time user experience through endgame loops",
           "Balanced all Enemy and Tower stats, tuning damage, HP, and cost curves to maintain strategic depth",
-          "Designed the monetization strategy including IAP structure, ad placements, and premium unlocks",
+          "Designed and calibrated the game's full in-game economy — currency generators and sinks, drop rates, and reward curves — to sustain a scalable, balanced flow of value",
+          "Defined the complete monetization strategy, including IAP pack pricing, discount structures, ad placements, and premium unlocks, balancing revenue against player experience",
+          "Reached 100K app installs within 3 months of release; used the resulting KPI data to redesign the core loop and meta progression loop for the game's first major post-launch update",
           "Created the game's story, lore, and visual branding from scratch",
           "Managed the game's Reddit community, responding to player feedback and incorporating it into design updates",
           "Produced YouTube content including gameplay videos, dev vlogs, and promotional trailers"
@@ -156,7 +158,7 @@
         "achievements": [
           "100K App Installs"
         ],
-        "technologies": ["Game Production", "Game Design", "Economy Design", "Level Design", "UX Design", "Community Management"],
+        "technologies": ["Game Production", "Game Design", "Economy Design", "Level Design", "UX Design", "Community Management", "Monetization", "KPI Tracking"],
         "keyScreenshots": [],
         "links": {
           "youtube": "https://www.youtube.com/watch?v=6OuN6ncCRNo"
@@ -337,7 +339,9 @@
         "type": "GAME",
         "responsibilities": [
           "Promoted to Level Designer on AlphaBetty Saga, a word-puzzle game that reached the Top 5 Word games worldwide",
-          "Designed in-game tutorials that onboarded new players into the game's unique letter-linking mechanics",
+          "Owned the FTUE and onboarding experience end-to-end — defining the high-level onboarding strategy, sequencing when new mechanics were introduced and how they were presented, and designing the tutorials that taught the game's letter-linking mechanics",
+          "Designed and ran A/B tests across multiple onboarding difficulty tracks, measuring the impact of each on retention and engagement metrics",
+          "Collaborated with the Data Science department to analyze player performance data on released levels, coordinating on data-driven changes to improve difficulty and pacing",
           "Trained 1 Junior Level Designer, mentoring them through the full production workflow",
           "Maintained and updated project documentation to keep design specs aligned with live content changes",
           "Delivered presentations across multiple King studios, sharing level design insights and best practices",
@@ -346,7 +350,7 @@
         "achievements": [
           "Shipped a live King title reaching millions of players"
         ],
-        "technologies": ["Level Design", "Puzzle Design", "Tutorial Design"],
+        "technologies": ["Level Design", "Puzzle Design", "FTUE & Onboarding", "A/B Testing", "KPI Tracking"],
         "keyScreenshots": ["/assets/screenshots/SS_Alphabetty.png"],
         "links": { "website": "https://king.com" }
       }
