@@ -23,7 +23,7 @@ export function SkillTree({ experiences }: { experiences: IExperience[] }) {
     return (
       <div key={cat} className="flex items-start">
         <div
-          className="w-[96px] h-[30px] flex-shrink-0 flex items-center justify-center font-display font-black text-[9.5px] uppercase tracking-wider text-ink-base rounded-xl border-[2.5px] border-ink-base select-none relative overflow-hidden"
+          className="w-[96px] h-[30px] flex-shrink-0 flex items-center justify-center font-display font-black text-[9.5px] uppercase tracking-wider text-ink-base rounded-xl border-[2.5px] border-ink-base select-none relative z-10 overflow-hidden"
           style={{ marginTop: LAYOUTS[cat].rootTop, ...badgeStyle }}
         >
           <span className="absolute top-[2px] right-[6px] w-[12px] h-[4px] rounded-full bg-white/50 pointer-events-none" />
@@ -51,14 +51,14 @@ export function SkillTree({ experiences }: { experiences: IExperience[] }) {
       <GlobalBackground section="skills" />
       {/* Left column — skill tree */}
       {skin === 'gamified' ? (
-        <div className="flex-1 min-w-0 relative my-8 md:my-10 ml-8 md:ml-12 mr-4 md:mr-6 flex flex-col pt-3">
+        <div className="flex-1 min-w-0 relative my-8 md:my-10 ml-8 md:ml-12 mr-4 md:mr-6 flex flex-col">
           <GamifiedBoard
             className="flex-1 min-w-0"
-            contentClassName="p-4 md:p-6"
+            contentClassName="p-1"
             fillHeight
             bannerTitle="GUILD SKILL TREE"
           >
-            <div className="flex-1 min-h-0 w-full h-full flex flex-col justify-start gap-6 overflow-hidden">
+            <div className="flex flex-col gap-6">
               {treeRows}
             </div>
           </GamifiedBoard>

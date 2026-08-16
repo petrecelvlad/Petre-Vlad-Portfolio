@@ -53,7 +53,7 @@ export function TreeCanvas({ category, activeSkill, onSelect }: TreeCanvasProps)
     <div className="relative flex-shrink-0" style={{ width: canvasWidth, height: canvasHeight }}>
       {/* SVG connector layer */}
       <svg
-        className="absolute inset-0 pointer-events-none overflow-visible"
+        className="absolute inset-0 pointer-events-none overflow-visible z-0"
         width={canvasWidth}
         height={canvasHeight}
       >
@@ -165,7 +165,7 @@ export function TreeCanvas({ category, activeSkill, onSelect }: TreeCanvasProps)
         return (
           <div
             key={node.skill.id}
-            className="absolute"
+            className="absolute z-10"
             style={{ left: node.screenLeft, top: node.screenTop }}
           >
             <SkillPill

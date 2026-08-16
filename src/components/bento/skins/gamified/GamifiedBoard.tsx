@@ -25,6 +25,9 @@ export function GamifiedBoard({
           GamifiedParchmentPanel's hanging bar (--shadow-raised: top highlight,
           bottom shade, soft ambient shadow), so the two boards read as the same
           material instead of one being flat brown next to a raised one. */}
+      {/* p-3 md:p-4 here is load-bearing: GamifiedSVGAssets.tsx's FRAME_PADDING
+          must match this md value exactly, or the corner-bracket rivets (and
+          on a big enough gap, the bracket itself) drift off the wood band. */}
       <div className={`relative flex-1 rounded-[var(--radius-lg)] border-[4px] border-[#1C1610] shadow-[var(--shadow-raised)] bg-[#673E19] p-3 md:p-4 overflow-hidden ${fillHeight ? 'flex flex-col' : ''}`}>
         <SteelCornerBrackets />
 
@@ -36,7 +39,7 @@ export function GamifiedBoard({
           <div className="absolute inset-0 pointer-events-none opacity-35 bg-[radial-gradient(#8C5828_1.5px,transparent_1.5px)] [background-size:20px_20px]" />
 
           {/* Children Content Layer */}
-          <div className={`relative z-10 p-4 md:p-6 ${fillHeight ? 'flex-1 min-h-0 flex flex-col justify-center' : ''} ${contentClassName}`}>
+          <div className={`relative z-10 ${fillHeight ? 'flex-1 min-h-0 flex flex-col justify-center items-center' : ''} ${contentClassName}`}>
             {children}
           </div>
         </div>
