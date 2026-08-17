@@ -17,10 +17,3 @@
 * [Memory](project/memory/) - Institutional knowledge — anti-patterns, lessons, playbook
 * [Roadmap](project/roadmap/) - Active work queue
 * [Archive](project/archive/) - ADRs, historical docs
-
-## Evolution
-
-* [Project Identity](evolution/PROJECT_IDENTITY.md) - Condensed pillars, philosophy, and fit criteria for evaluating external work
-* [Integration Candidates](evolution/INTEGRATION_CANDIDATES.md) - GitHub survey shortlist, pending fit-criteria deep dives
-* [Proposals](evolution/proposals/) - The numbered evolution-proposal log
-* [OKF](evolution/OKF/) - Open Knowledge Format migration and design docs

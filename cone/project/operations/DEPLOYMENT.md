@@ -13,57 +13,41 @@ agent_instructions: >
 
 # Deployment
 
-<!-- TEMPLATE: Fill this in for your project. Cover the path from local branch to production. -->
-
 ---
 
 ## Environments
 
-<!-- What environments exist and their purpose? -->
-
 | Environment | URL / Location | Purpose | Deploys from |
 |---|---|---|---|
-| *Local* | *localhost:3000* | *Development* | *Manual* |
-| *Staging* | *staging.example.com* | *Pre-production testing* | *`develop` branch* |
-| *Production* | *example.com* | *Live* | *`main` branch* |
+| Local | `localhost:3000` | Development (`npm run dev`) | Manual |
+| Production | GitHub Pages (repo's Pages URL) | Live site | `main` branch, automatic |
+
+No staging environment exists.
 
 ---
 
 ## Deployment Pipeline
 
-<!-- How does code get deployed? Manual steps, CI/CD, or both? -->
+### Automated (CI/CD) — the only deployment path
 
-### Automated (CI/CD)
-
-<!-- Describe the CI/CD pipeline if one exists. -->
+Defined in `.github/workflows/deploy.yml`:
 
 ```
-Push to main → [CI step 1] → [CI step 2] → [Deploy] → [Smoke test]
+Push to main → npm ci → npm run build → upload dist/ as Pages artifact → deploy to GitHub Pages
 ```
 
-### Manual
-
-<!-- Steps for manual deployment if needed. -->
-
-```bash
-# npm run build
-# npm run deploy
-```
+Runs on `ubuntu-latest`, Node 20. No manual deployment path exists or is needed — pushing to `main` is the deploy action.
 
 ---
 
 ## Pre-Deployment Checklist
 
-- [ ] All tests pass locally
-- [ ] No TypeScript errors (`npm run build`)
-- [ ] Environment variables configured for target environment
-- [ ] Database migrations applied (if any)
-- [ ] Smoke test plan identified
+- [ ] `npm run build` succeeds locally (this is the actual CI step — it's also the closest thing to a test suite this project has)
+- [ ] `npm run lint` (`tsc --noEmit`) is clean
+- [ ] No environment variables to configure — none are required (see `ENVIRONMENT.md`)
 
 ---
 
 ## Rollback
 
-<!-- How to undo a bad deployment. -->
-
-*Describe rollback procedure here.*
+No automated rollback. To undo a bad deploy: `git revert` the offending commit on `main` and push — the workflow redeploys automatically. There is no manual "previous version" toggle on GitHub Pages itself.

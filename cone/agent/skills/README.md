@@ -22,12 +22,9 @@ Skills are reusable procedural workflows — structured instructions for recurri
 
 | Skill | Purpose | Invoke when |
 |---|---|---|
-| [skill-creator](skill-creator/SKILL.md) | Create new skills or improve existing ones | "create a skill", "turn this into a skill", "improve this skill" |
-| [evolution](evolution/SKILL.md) | Audit the framework and propose improvements | "improve the framework", "audit the docs", "what's missing from cone", "evolve the documentation" |
 | [unify](unify/SKILL.md) | Consolidate structural duplication into a parametric form | "find duplication", "unify this", "can this be parametrized", "consolidate these", "DRY this up" |
 | [quality-audit](quality-audit/SKILL.md) | Line-by-line hygiene audit, ranked by impact | "audit code quality", "find code smells", "check style consistency", "clean code review" |
 | [bootstrap-architecture](bootstrap-architecture/SKILL.md) | Populate architecture docs from an existing codebase | "document this codebase", "set up cone architecture docs", "bootstrap the architecture docs", "fill in OVERVIEW.md" |
-| [project-identity](project-identity/SKILL.md) | Distill pillars, philosophy, and fit criteria into one reference doc | "describe this project", "create a project identity doc", "what are our core pillars", "prepare for scanning similar projects" |
 | [restructure](restructure/SKILL.md) | Reorganize a directory into subfolders by kind when it no longer fits flat | "reorganize this folder", "clean up this directory structure", "does this folder need subfolders" |
 | [board](board/SKILL.md) | Create, update, and render Kanban cards | "show me the board", "what's in progress", "create a card for this", "break this into tasks" |
 

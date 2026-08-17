@@ -72,15 +72,18 @@ The `cone/` directory is an OKF v0.1 conformant knowledge bundle. This means:
 - **Concept IDs** are derived from file paths (no explicit `id` field). `agent/personas/DEVELOPER` is the concept ID for `cone/agent/personas/DEVELOPER.md`.
 - **Extension fields** (`constraints`, `agent_instructions`, `always_active`, `scope`) are cone-specific additions that OKF explicitly permits.
 
-**Visualizer:** Run `python -m reference_agent visualize --bundle cone --out cone_viz.html --name "cone-lite"` (requires the `reference-agent` package from `GoogleCloudPlatform/knowledge-catalog`). Opens as a self-contained HTML graph in any browser.
-
-**Design docs:** `cone/evolution/OKF/` contains the spec extract, original concept, and accepted adaptation design.
+**Visualizer:** Run `python -m reference_agent visualize --bundle cone --out cone_viz.html --name "cone-lite"` (requires the `reference-agent` package from `GoogleCloudPlatform/knowledge-catalog`). Opens as a self-contained HTML graph in any browser. Not verified as installed/used in this project — treat as optional tooling, not a required step.
 
 ---
 
 ## Non-Obvious Pointers
 
-*Add project-specific navigation hints here as you discover them.*
+- **Token contract:** `cone/project/architecture/systems/TOKEN_CONTRACT.md` — every CSS custom property, its status (DEFINED/HARDCODED/DEAD/GAP). Read before touching any visual value.
+- **Skin-swap mechanism:** `src/context/SkinContext.tsx` implements the runtime swap; the mechanism itself is documented in `cone/project/architecture/systems/SKIN_SYSTEM.md`. The two live skins are `SKIN_GAMIFIED.md` (default) and `SKIN_HERITAGE.md`.
+- **Timeline/scroll state:** all owned by `useTimelineOrchestrator` (`src/hooks/useTimelineOrchestrator.ts`) — Navbar and TimelineTrack both read from it, never maintain their own active-index state.
+- **All content:** `src/infrastructure/data/portfolio.json`, typed via `IProject`/`IExperience` in `src/core/domain/models.ts`. Never mock data — edit the JSON.
+- **Domain glossary:** project-specific terms (Managed Stage, Global Chrome vs. Content Canvas, the Envelope Rule, the Leak Test, Bento grid) are in `cone/project/architecture/PROJECT_GLOSSARY.md` — `cone/project/architecture/CONTEXT.md` is cone-lite's *own* vocabulary, not this project's.
+- **Legacy docs migrated but not yet reformatted:** `cone/project/roadmap/LEGACY_ROADMAP.md`, `LEGACY_REFACTORING_BACKLOG.md`, `cone/project/archive/decisions/LEGACY_DECISIONS_LOG.md`, `cone/agent/sessions/LEGACY_LOGS.md` — single-file dumps of this project's pre-cone history, not yet split into individual cards/ADRs/sessions. Treat as historical reference, not live-format documents.
 
 ---
 
