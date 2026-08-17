@@ -82,6 +82,8 @@ Also produced, at the user's direction, several rounds of iteration on `cone/pro
 
 Session complete — no handoff needed. Full WebGL-to-SVG/CSS conversion of the galaxian segmented background landed end-to-end: the shader is gone, column 1 now runs the user's own hand-authored parallax cloud animation (correctly scaled/unskewed via real-aspect-ratio measurement), column 2/dividers carry the ported divider math, and the now-single-option variant selector is fully removed. `npx tsc --noEmit` and `npm run build` are clean as of every change in this session. The floating island's default position was also updated per explicit user instruction.
 
+**Memory distilled from this session** (per this project's own memory rules — see `cone/project/memory/ANTI_PATTERNS.md` and `LESSONS.md`, both previously empty): three anti-patterns (duplicate SVG ids across simultaneously-mounted sibling instances; matching a nested SVG's viewBox to the parent's abstract unit space instead of its real rendered pixel aspect ratio; an SVG element with no initial geometry causing a mount-order stagger against effect-free siblings) and one lesson (prefer CSS `@keyframes` over ref+rAF-driven geometry for any decorative motion that doesn't require a procedurally-computed shape).
+
 **For whoever picks up backgrounds/Hero work next:** `src/components/backgrounds/SegmentedGalaxianBackground.tsx`, `segmentedDivider.ts`, and `CloudColumnBackground.tsx` are the live implementation; `src/adapters/primary/components/Hero.tsx` owns layer ordering/z-index. If the divider curve or cloud scaling ever needs re-deriving, both were ported/derived carefully in this session's diff (and session 02's) rather than guessed — check there before re-deriving from scratch.
 
 ---
