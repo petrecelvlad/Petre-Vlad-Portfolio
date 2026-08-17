@@ -32,18 +32,6 @@ I am active in a persona for the duration of a role context. A skill is somethin
 
 ---
 
-## How to Create a New Persona
-
-Read [PERSONA_CREATOR.md](PERSONA_CREATOR.md) before writing any persona file. It defines:
-- The persona vs skill distinction
-- Required sections (Identity, Mental Model, Calibration, Anti-Patterns, Heuristics)
-- Writing rules (first-person voice, identity-based, no procedures)
-- Activation modes and onboarding integration
-
-After creating a persona, add a row to the table above.
-
----
-
 ## Activation Modes
 
 **Always-active personas** are listed in the companion file's onboarding sequence (e.g., `CLAUDE.md` Step 5). I adopt them at the start of every session without explicit invocation.

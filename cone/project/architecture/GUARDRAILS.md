@@ -29,13 +29,15 @@ Architectural rules scattered across multiple documents are invisible rules. The
 
 ## Constraint Table
 
-<!-- TEMPLATE: Add your project's constraints here. Start with C-001. -->
-
 | ID | Name | Applies To | Description |
 |---|---|---|---|
-| `C-001` | *e.g., Core Isolation* | *Core services* | *Core logic never imports infrastructure types or framework code* |
-| `C-002` | *e.g., Boundary Validation* | *All entry points* | *Every external input must be validated before entering the domain layer* |
-| `C-003` | *e.g., No any Types* | *All TypeScript* | *All parameters and return types must be explicitly typed. Use unknown with type guards* |
+| `C-001` | Core Isolation | `src/core/domain/` | Core never imports from `adapters/` or `infrastructure/`. The Leak Test: replacing any external dependency should only require a new adapter file + an `App.tsx` wiring change, never a core edit. |
+| `C-002` | No Mocked Data | All components | All content comes from `src/infrastructure/data/portfolio.json`. Add/edit data there — never inject mock/placeholder data directly into a component. |
+| `C-003` | Token-Only Styling | All visual code | No generic/arbitrary Tailwind values. Every visual value routes through the skin-token contract (`architecture/systems/TOKEN_CONTRACT.md`); swapping a skin means changing token values, nothing else. |
+| `C-004` | Navbar Height Is Load-Bearing | Snap-section layout | `--chrome-navbar-height` feeds `calc()` expressions across every snap section. Changing it propagates everywhere — that's intentional, not a bug to "fix" by hardcoding a section's height. |
+| `C-005` | Single Orchestrator | Navbar, TimelineTrack | Both must read active-index/scroll state from `useTimelineOrchestrator` — neither may maintain an independent, disconnected active-index state. |
+| `C-006` | Envelope Rule | Every snap section | Snap sections use `h-[calc(100vh-var(--chrome-navbar-height))]` explicitly, never `h-full` — `h-full` cascades fail through React fragments. Settled after 4 attempts (see `archive/decisions/LEGACY_DECISIONS_LOG.md`). |
+| `C-007` | Never Delete Setup Blindly | `package.json`, build config | Never remove or modify `package.json` or setup configuration unless explicitly requested and verified safe. |
 
 ---
 

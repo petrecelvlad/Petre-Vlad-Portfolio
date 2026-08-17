@@ -21,6 +21,8 @@ const alignMap = {
   right: 'text-right',
 };
 
+type HeadingTag = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
+
 export const Heading = ({ 
   children, 
   level = 2, 
@@ -29,7 +31,7 @@ export const Heading = ({
   className = '', 
   ...props 
 }: HeadingProps) => {
-  const Component = `h${level}` as any;
+  const Component = `h${level}` as HeadingTag;
   return (
     <Component 
       className={`m-0 text-ink-base ${variantMap[variant]} ${alignMap[align]} ${className}`} 

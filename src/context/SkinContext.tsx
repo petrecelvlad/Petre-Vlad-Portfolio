@@ -18,16 +18,6 @@ export const BACKGROUNDS = [
 
 export type BackgroundId = typeof BACKGROUNDS[number]['id'];
 
-export const SEGMENTED_VARIANTS = [
-  { id: 'arcade', label: 'Juicy Arcade Versus' },
-  { id: 'toyfactory', label: 'Cutesy Toy Factory' },
-  { id: 'lightning', label: 'Electric Lightning Split' },
-  { id: 'overworld', label: 'Overworld Stage Select' },
-  { id: 'galaxian', label: 'Galaxian Versus (Fork)' },
-] as const;
-
-export type SegmentedVariantId = typeof SEGMENTED_VARIANTS[number]['id'];
-
 interface SkinPrefs {
   skin: SkinId;
   setSkin: (v: SkinId) => void;
@@ -35,8 +25,6 @@ interface SkinPrefs {
   setPlankStyle: (v: PlankStyle) => void;
   background: BackgroundId;
   setBackground: (v: BackgroundId) => void;
-  segmentedVariant: SegmentedVariantId;
-  setSegmentedVariant: (v: SegmentedVariantId) => void;
 }
 
 const SkinContext = createContext<SkinPrefs>({
@@ -46,18 +34,15 @@ const SkinContext = createContext<SkinPrefs>({
   setPlankStyle: () => {},
   background: 'segmented3',
   setBackground: () => {},
-  segmentedVariant: 'arcade',
-  setSegmentedVariant: () => {},
 });
 
 export function SkinProvider({ children }: { children: ReactNode }) {
   const [skin, setSkin] = useState<SkinId>('gamified');
   const [plankStyle, setPlankStyle] = useState<PlankStyle>('jagged');
   const [background, setBackground] = useState<BackgroundId>('segmented3');
-  const [segmentedVariant, setSegmentedVariant] = useState<SegmentedVariantId>('arcade');
 
   return (
-    <SkinContext.Provider value={{ skin, setSkin, plankStyle, setPlankStyle, background, setBackground, segmentedVariant, setSegmentedVariant }}>
+    <SkinContext.Provider value={{ skin, setSkin, plankStyle, setPlankStyle, background, setBackground }}>
       {children}
     </SkinContext.Provider>
   );

@@ -8,13 +8,13 @@ constraints:
   - Defines the metadata standard for source code files (not markdown)
 agent_instructions: >
   This document defines the @propolis metadata standard for code files. Markdown files in the
-  cone/ bundle use OKF YAML frontmatter instead — see cone/evolution/OKF/OKF_ADAPTATION.md.
-  Use the simplified 3-field schema for code files — not the extended version.
+  cone/ bundle use OKF YAML frontmatter instead. Use the simplified 3-field schema for code
+  files — not the extended version.
 ---
 
 # Propolis: Code File Metadata Standard
 
-Propolis is the metadata standard for **source code files** — `.ts`, `.py`, `.rs`, `.html`, and any other code. It does not apply to markdown files in `cone/`, which use [OKF YAML frontmatter](../../evolution/OKF/OKF_ADAPTATION.md) instead.
+Propolis is the metadata standard for **source code files** — `.ts`, `.py`, `.rs`, `.html`, and any other code. It does not apply to markdown files in `cone/`, which use OKF YAML frontmatter instead (see `CLAUDE.md`'s OKF section for the field reference — this project's copy doesn't include cone-lite's own OKF design-history docs, only the resulting convention).
 
 ## Philosophy
 
@@ -108,8 +108,8 @@ Use these standard roles. Add project-specific roles as needed.
  * @propolis
  * {
  *   "role": "ADAPTER",
- *   "constraints": ["Implements StoragePort interface", "All SQL queries live here"],
- *   "agent_instructions": "PostgreSQL implementation of StoragePort. When adding new queries, follow the existing pattern of parameterized prepared statements. Never expose raw SQL outside this file."
+ *   "constraints": ["Implements IExperienceRepository", "C-001: never imported by core/"],
+ *   "agent_instructions": "JSON implementation of IExperienceRepository — reads src/infrastructure/data/portfolio.json. This project has no database and no REPOSITORY/MIGRATION/SCHEMA roles apply; every 'storage' concern in this codebase is this one static-file adapter."
  * }
  */
 ```
@@ -120,8 +120,8 @@ Use these standard roles. Add project-specific roles as needed.
  * @propolis
  * {
  *   "role": "UI_COMPONENT",
- *   "constraints": ["Presentational only", "No direct API calls"],
- *   "agent_instructions": "Message bubble component. Receives message data as props. All data fetching happens in the parent container. Supports markdown rendering via the shared MarkdownRenderer."
+ *   "constraints": ["C-003: token-only styling, no arbitrary Tailwind values"],
+ *   "agent_instructions": "Primary adapter for the skill-tree section. Reads active skin from SkinContext; layout geometry comes from core/domain/skillTreeGeometry.ts. Never hardcode colors — route through the token contract."
  * }
  */
 ```

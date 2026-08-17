@@ -14,48 +14,35 @@ agent_instructions: >
 
 # Environment & Configuration
 
-<!-- TEMPLATE: Fill this in for your project. Document the shape of your configuration, not the actual values. -->
-
 ---
 
 ## Environment Variables
 
-<!-- List all environment variables the project uses. Group by purpose. -->
-
 ### Required
 
-| Variable | Purpose | Example |
-|---|---|---|
-| *`DATABASE_URL`* | *Database connection string* | *`postgresql://user:pass@localhost:5432/mydb`* |
-| *`API_KEY`* | *Third-party API authentication* | *`sk-...`* |
+None. The app is a static build with no backend — `npm run dev` and `npm run build` both work with zero environment configuration.
 
-### Optional
+### Present in `.env.example` but not actually used
 
-| Variable | Purpose | Default |
+| Variable | Purpose (as documented in `.env.example`) | Actual status |
 |---|---|---|
-| *`LOG_LEVEL`* | *Logging verbosity* | *`info`* |
-| *`PORT`* | *Server port* | *`3000`* |
+| `GEMINI_API_KEY` | Described as auto-injected by an "AI Studio" runtime | Not referenced by any file under `src/` — appears to be inert leftover from an AI-Studio starter template |
+| `APP_URL` | Described as the Cloud Run service URL for self-referential links/OAuth | Not referenced anywhere — this project doesn't run on Cloud Run, it deploys to static GitHub Pages |
+
+Do not treat these as real configuration. Tracked for removal: `cone/project/roadmap/board/T-013-remove-unused-ai-studio-scaffolding.md`.
 
 ---
 
 ## Secrets Management
 
-<!-- How are secrets stored and accessed? -->
-
-- **Local development:** `.env` file (never committed — listed in `.gitignore`)
-- **CI/CD:** *e.g., GitHub Actions secrets*
-- **Production:** *e.g., Platform secret store, Vault, etc.*
+- **Local development:** none needed.
+- **CI/CD:** `.github/workflows/deploy.yml` uses only the ambient `GITHUB_TOKEN` (via `actions/deploy-pages`) — no repo secrets configured.
+- **Production:** N/A — static files served by GitHub Pages, no runtime secrets.
 
 ---
 
 ## Platform Quirks
 
-<!-- Runtime or platform-specific behaviors that affect development. Things that would surprise an agent that doesn't know about them. -->
+- GitHub Pages serves whatever `dist/` was uploaded on the last successful `main` push — there is no environment promotion step and no way to preview a build before it's live short of running `npm run preview` locally.
 
-<!-- Examples: -->
-<!-- - "Cloudflare Workers have a 10ms CPU limit per request" -->
-<!-- - "Vercel serverless functions cold-start after 5 minutes of inactivity" -->
-<!-- - "SQLite on D1 doesn't support ALTER COLUMN" -->
-<!-- - "Windows fails to release port 8787 after stopping wrangler — kill the process manually" -->
-
-*Document platform-specific gotchas here. Move recurring ones to [PLAYBOOK.md](../memory/PLAYBOOK.md).*
+*Move recurring gotchas to [PLAYBOOK.md](../memory/PLAYBOOK.md).*

@@ -2,7 +2,7 @@ import { useMemo, useEffect, useRef } from 'react';
 import { motion } from 'motion/react';
 import { useSkin } from '@/src/context/SkinContext';
 import { GlobalBackground } from '@/src/components/backgrounds/GlobalBackground';
-import { Segmented3ShaderBackground } from '@/src/components/backgrounds/Segmented3ShaderBackground';
+import { SegmentedGalaxianBackground } from '@/src/components/backgrounds/SegmentedGalaxianBackground';
 import { AchievementShaderCanvas, ShaderType } from '@/src/components/backgrounds/AchievementShaderCanvas';
 import { FloatingIslandBackdrop } from '@/src/components/backgrounds/FloatingIslandBackdrop';
 import { GalaxianBackground } from '@/src/components/backgrounds/GalaxianBackground';
@@ -27,7 +27,7 @@ interface AchievementData {
 }
 
 export function Hero() {
-  const { skin, background, segmentedVariant } = useSkin();
+  const { skin, background } = useSkin();
   const videoRef = useRef<HTMLVideoElement>(null);
   const { ref: heroRef, isVisible } = useIsVisible<HTMLDivElement>();
   const { config: islandPosition } = useIslandPosition();
@@ -79,7 +79,7 @@ export function Hero() {
   return (
     <div ref={heroRef} className="relative w-full h-full flex items-center justify-center p-3 sm:p-4 md:p-6 lg:px-8 lg:py-6 overflow-hidden select-none">
       {/* ── Layer -1: Galaxian variant fill — sits BEHIND both shader passes. The shader itself (VARIANT 4) makes column 3's fill transparent along the exact same jagged edge2 line the divider stroke uses, so this just needs to fully cover that area; a straight edge here is safe because the opaque shader content in front hides it everywhere except the transparent hole ── */}
-      {canvasesReady && background === 'segmented3' && segmentedVariant === 'galaxian' && (
+      {canvasesReady && background === 'segmented3' && (
         <div className="absolute z-[-1] left-[64%] right-0 top-0 bottom-0 pointer-events-none">
           <GalaxianBackground className="w-full h-full" />
         </div>
@@ -104,7 +104,7 @@ export function Hero() {
 
       {/* ── Layer 2: Overlay Pass for 3-Segmented Stage (Column 2 & 3 + Black Dividers, z-[5]) ── */}
       {canvasesReady && background === 'segmented3' && (
-        <Segmented3ShaderBackground pass="overlay" className="z-[5]" isVisible={isVisible} />
+        <SegmentedGalaxianBackground pass="overlay" className="z-[5]" isVisible={isVisible} />
       )}
 
       {/* ── Layer 3: Foreground UI Content ── */}

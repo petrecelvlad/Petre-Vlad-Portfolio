@@ -1,7 +1,7 @@
 import { Sliders } from 'lucide-react';
 import { Row } from '@/src/components/atoms/Row';
 import { Heading } from '@/src/components/atoms/Heading';
-import { SKINS, SkinId, BACKGROUNDS, BackgroundId, PlankStyle, SEGMENTED_VARIANTS, SegmentedVariantId, useSkin } from '@/src/context/SkinContext';
+import { SKINS, SkinId, BACKGROUNDS, BackgroundId, PlankStyle, useSkin } from '@/src/context/SkinContext';
 import { useIslandPosition } from '@/src/context/IslandPositionContext';
 import { BOARD_COLOR } from '@/src/components/bento/skins/heritage/palette';
 import {
@@ -16,7 +16,7 @@ interface NavbarProps {
 }
 
 export function Navbar({ onToggleBacklog, isBacklog }: NavbarProps) {
-  const { skin, setSkin, plankStyle, setPlankStyle, background, setBackground, segmentedVariant, setSegmentedVariant } = useSkin();
+  const { skin, setSkin, plankStyle, setPlankStyle, background, setBackground } = useSkin();
   const { toggleEditor, isEditorOpen } = useIslandPosition();
 
   return (
@@ -64,18 +64,6 @@ export function Navbar({ onToggleBacklog, isBacklog }: NavbarProps) {
             ))}
           </select>
 
-          {background === 'segmented3' && (
-            <select
-              value={segmentedVariant}
-              onChange={(e) => setSegmentedVariant(e.target.value as SegmentedVariantId)}
-              aria-label="3-Segmented Theme Variant"
-              className="font-mono text-[length:var(--text-label-sm)] uppercase tracking-[0.15em] px-3 py-1.5 border-[length:var(--border-width-sm)] border-ink-base rounded-md bg-[#FDE047] text-ink-base font-bold shadow-[0_var(--ui-depth)_0_0_var(--shadow-color)] cursor-pointer animate-pulse"
-            >
-              {SEGMENTED_VARIANTS.map((v) => (
-                <option key={v.id} value={v.id}>{v.label.toUpperCase()}</option>
-              ))}
-            </select>
-          )}
           <select
             value={skin}
             onChange={(e) => setSkin(e.target.value as SkinId)}

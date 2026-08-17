@@ -51,7 +51,7 @@ In OKF's model, every non-reserved markdown file in `cone/` is a "concept" — i
 
 ## Proposal
 
-Ambiguous by design across two different meanings — check which kind before reading or writing one. A **project proposal** ([specs/proposals/TEMPLATE.md](../specs/proposals/TEMPLATE.md)) proposes a feature or design change to the *project being built*. An **evolution proposal** ([evolution/proposals/PROPOSAL_TEMPLATE.md](../../evolution/proposals/PROPOSAL_TEMPLATE.md)) proposes a change to *the cone-lite framework itself* — new personas, skills, structural improvements. They live in different directories (`cone/project/specs/proposals/` vs. `cone/evolution/proposals/`) and are never interchangeable.
+Ambiguous by design across two different meanings — check which kind before reading or writing one. A **project proposal** ([specs/proposals/TEMPLATE.md](../specs/proposals/TEMPLATE.md)) proposes a feature or design change to the *project being built* — this is the only kind that exists in this project's copy of the framework. An **evolution proposal** proposes a change to *cone-lite itself* (new personas, skills, structural improvements) and lives in `cone/evolution/proposals/` in the upstream framework — this project's copy omits `cone/evolution/` entirely, since it's a consumer of the framework, not a contributor to it.
 
 ## Canon — not cone-lite vocabulary
 

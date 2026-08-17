@@ -8,8 +8,9 @@ constraints:
   - Template — copy for each new project proposal
 agent_instructions: >
   Feature/design proposal template. These are proposals for the PROJECT (new features, design
-  changes, integrations) — not for the framework itself. Framework improvement proposals go
-  in cone/evolution/ via the evolution skill.
+  changes, integrations) — not for the pinecone/cone-lite framework itself. This project's copy
+  doesn't include cone-lite's framework-evolution tooling (cone/evolution/), since it's a
+  consumer of the framework, not a contributor to it.
 ---
 
 # Proposal: [Title]

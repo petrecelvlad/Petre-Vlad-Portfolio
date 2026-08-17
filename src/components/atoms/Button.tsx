@@ -43,11 +43,11 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(({
   const interactClasses = variant === 'ghost' ? '' : 'transition-all duration-100 ease-out hover:brightness-95';
   
   return (
-    <Component 
-      ref={ref as any}
+    <Component
+      ref={ref as React.Ref<HTMLElement>}
       className={`inline-flex items-center gap-2 font-display font-medium rounded-md select-none focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-sky ${sizeClasses} ${variantMap[variant]} ${interactClasses} ${className}`}
       href={href}
-      onClick={onClick as any}
+      onClick={onClick as React.MouseEventHandler<HTMLElement> | undefined}
       {...props}
     >
       {children}

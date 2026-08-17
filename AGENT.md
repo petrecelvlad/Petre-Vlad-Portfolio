@@ -79,25 +79,27 @@ I recognize that `AGENT.md` contains provider-agnostic rules only. I look for on
 
 ## 1. ARCHITECTURAL GUARDRAILS
 
-> **Template placeholder.** When cone-lite is adopted by a project, replace this section with the project's non-negotiable architectural constraints.
+The full, canonical constraint registry lives in `cone/project/architecture/GUARDRAILS.md` (stable `C-NNN` IDs, referenced from `@propolis` blocks). This section is a summary pointer, not a second independent list — the five most load-bearing:
 
-<!-- CUSTOMIZE: Replace with your project's specific constraints. Examples: -->
-<!-- - Package isolation rules (which packages can import which) -->
-<!-- - Performance constraints (CPU budgets, memory limits, latency targets) -->
-<!-- - Platform constraints (serverless, edge, mobile) -->
-<!-- - Build order requirements -->
+- **No mocked data.** All content comes from `src/infrastructure/data/portfolio.json`. Add/edit data there, never inject mock data into a component.
+- **Tokens only, no generic Tailwind.** Every visual value goes through the skin-token contract (`cone/project/architecture/systems/TOKEN_CONTRACT.md`) — see `SKIN_GAMIFIED.md`/`SKIN_HERITAGE.md` for the current skins' rules.
+- **The navbar height is load-bearing.** `--chrome-navbar-height` feeds `calc()` expressions across every snap section — changing it propagates everywhere, intentionally.
+- **Navbar and TimelineTrack never maintain disconnected active-index state.** Both read from `useTimelineOrchestrator`, the single source of truth.
+- **`core/` never imports from `adapters/` or `infrastructure/`.** The Leak Test in §6 below is how I verify this holds.
 
 ---
 
 ## 2. TECH STACK
 
-> **Template placeholder.** When cone-lite is adopted by a project, replace this section with the project's actual technology choices.
+- **Language:** TypeScript 5.8 (`tsc --noEmit` as the lint/typecheck step, no separate linter)
+- **Framework:** React 19 + Vite 6 (`@vitejs/plugin-react`), dev server on port 3000
+- **Styling:** Tailwind CSS V4 (`@tailwindcss/vite`) — token-driven only, see §1
+- **Animation:** Motion (`motion/react`)
+- **Icons:** `lucide-react`
+- **Data source:** Static JSON (`portfolio.json`) — no database, no API, no backend
+- **Deployment:** Static build (`vite build` → `dist/`) to GitHub Pages via `.github/workflows/deploy.yml`, triggered on push to `main`
 
-<!-- CUSTOMIZE: Replace with your project's actual tech stack. Example format: -->
-<!-- - **Language:** TypeScript 5.x (Strict Mode) -->
-<!-- - **Framework:** [Your framework] -->
-<!-- - **Database:** [Your database] -->
-<!-- - **Hosting:** [Your platform] -->
+**Not part of the real stack, despite appearing in `package.json`:** `@google/genai`, `express`, `dotenv`, and the `GEMINI_API_KEY`/`APP_URL` vars in `.env.example` are unused leftover scaffolding from an AI-Studio starter template — the deploy pipeline never sets them and no source file imports them. Tracked for cleanup: `cone/project/roadmap/board/T-013-remove-unused-ai-studio-scaffolding.md`. Don't treat them as load-bearing config.
 
 ---
 
@@ -120,12 +122,12 @@ I treat this codebase as a living system. **Code files** begin with a `@propolis
 
 ## 4. NAMING CONVENTIONS
 
-<!-- CUSTOMIZE: Define your project's naming standards. Recommended defaults: -->
-- **Interfaces:** PascalCase with a `Port` suffix (e.g., `StoragePort`)
-- **Classes/Services:** PascalCase (e.g., `ChatService`)
-- **Files:** camelCase (e.g., `chatService.ts`)
-- **Folders:** kebab-case (e.g., `model-registry`)
-- **Commits:** Conventional Commits (`feat:`, `fix:`, `refactor:`, `docs:`)
+- **Domain/port interfaces:** PascalCase with an `I` prefix (e.g., `IProject`, `IExperience`, `ISkinStrategy` in `core/domain/`). Plain data-shape interfaces (layout/geometry types like `LayoutNode`, `CategoryConfig`) skip the prefix — `I` marks a contract, not any interface.
+- **Components:** PascalCase files, one component per file (e.g., `Hero.tsx`, `SkillTree.tsx`, `Navbar.tsx`), matching the component tiers in `cone/project/architecture/systems/COMPONENT_ARCHITECTURE.md`.
+- **Hooks:** camelCase, `use` prefix, `.ts` not `.tsx` (e.g., `useTimelineOrchestrator.ts`, `useSkillTreeState.ts`).
+- **Adapters:** camelCase, no `Port`/`Service` suffix convention (e.g., `experienceRepo.ts`, not `ExperienceRepoPort.ts`).
+- **Folders:** lowercase, no hyphenation needed at current scale (`atoms`, `bento`, `timeline`, `skilltree`).
+- **Commits:** Conventional Commits (`feat:`, `fix:`, `refactor:`, `docs:`).
 
 ---
 
@@ -138,12 +140,13 @@ My onboarding into this project:
 
 ---
 
-## 6. HEXAGONAL ARCHITECTURE (Recommended)
+## 6. HEXAGONAL ARCHITECTURE
 
-I follow Hexagonal Architecture (Ports and Adapters) as my default for non-trivial projects. See `cone/project/architecture/HEXAGONAL.md` for the full reference.
+This project genuinely follows Hexagonal Architecture (Ports and Adapters) — not a recommended default, the actual `src/` layout. See `cone/project/architecture/HEXAGONAL.md` for the general reference and `cone/project/architecture/OVERVIEW.md`'s "Package / Module Structure" for the real module map.
 
-- **Core:** Pure business logic. Defines Ports (interfaces). Imports nothing from infrastructure.
-- **Adapters:** Concrete implementations for external systems. Translates between external resources and Port interfaces.
-- **Composition Root:** The entry point that wires Adapters to the Core via dependency injection.
+- **Core:** `src/core/domain/` — pure domain models (`IExperience`, `IProject`). Imports nothing from infrastructure.
+- **Ports:** `src/ports/` — interfaces (`IExperienceRepository`).
+- **Adapters:** `src/adapters/primary/components/` (UI adapters — Hero, Navbar, SkillTree, Timeline) and `src/adapters/secondary/` (data adapters — `JsonExperienceRepo` reading `portfolio.json`).
+- **Composition Root:** `App.tsx` — instantiates `JsonExperienceRepo`, fetches experiences, distributes them to primary adapters.
 
-**The Leak Test:** If I can replace any external dependency by creating a new adapter file and updating the composition root — without modifying any core file — the architecture is sound.
+**The Leak Test:** If I can replace any external dependency by creating a new adapter file and updating `App.tsx` — without modifying any core file — the architecture is sound.

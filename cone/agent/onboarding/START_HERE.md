@@ -109,9 +109,6 @@ These documents are consulted during work, not during onboarding:
 | Check anti-patterns | [ANTI_PATTERNS.md](../../project/memory/ANTI_PATTERNS.md) |
 | Check confirmed practices | [LESSONS.md](../../project/memory/LESSONS.md) |
 | Make an architectural decision | [decisions/TEMPLATE.md](../../project/archive/decisions/TEMPLATE.md) |
-| Create a new persona | [PERSONA_CREATOR.md](../personas/PERSONA_CREATOR.md) |
-| Create a new skill | [skill-creator/SKILL.md](../skills/skill-creator/SKILL.md) |
-| Propose framework improvements | [evolution/SKILL.md](../skills/evolution/SKILL.md) |
 
 ---
 

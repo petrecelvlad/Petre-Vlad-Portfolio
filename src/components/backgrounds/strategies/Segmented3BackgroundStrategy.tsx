@@ -1,7 +1,7 @@
 import React from 'react';
 import { IBackgroundStrategy, BackgroundStrategyProps } from './IBackgroundStrategy';
 import { SkinId, BackgroundId } from '@/src/context/SkinContext';
-import { Segmented3ShaderBackground } from '@/src/components/backgrounds/Segmented3ShaderBackground';
+import { SegmentedGalaxianBackground } from '@/src/components/backgrounds/SegmentedGalaxianBackground';
 
 export class Segmented3BackgroundStrategy implements IBackgroundStrategy {
   id = 'segmented3';
@@ -11,6 +11,6 @@ export class Segmented3BackgroundStrategy implements IBackgroundStrategy {
   }
 
   render(props: BackgroundStrategyProps): React.ReactNode {
-    return <Segmented3ShaderBackground isVisible={props.isVisible} />;
+    return <SegmentedGalaxianBackground pass="full" isVisible={props.isVisible} />;
   }
 }
