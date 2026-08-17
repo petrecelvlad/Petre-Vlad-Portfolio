@@ -8,10 +8,35 @@ interface BentoVideoFrameProps {
   isActive?: boolean;
 }
 
+interface YTPlayerEvent {
+  target: YTPlayer;
+  data: number;
+}
+
+interface YTPlayer {
+  playVideo(): void;
+  pauseVideo(): void;
+  mute(): void;
+  unMute(): void;
+  destroy(): void;
+}
+
+interface YTPlayerOptions {
+  videoId: string;
+  playerVars?: Record<string, number | string>;
+  events?: {
+    onReady?: (event: YTPlayerEvent) => void;
+    onStateChange?: (event: YTPlayerEvent) => void;
+  };
+}
+
 declare global {
   interface Window {
     onYouTubeIframeAPIReady: () => void;
-    YT: any;
+    YT: {
+      Player: new (elementId: string, options: YTPlayerOptions) => YTPlayer;
+      PlayerState: { PLAYING: number; PAUSED: number };
+    };
   }
 }
 
@@ -27,7 +52,7 @@ export function BentoVideoFrame({ screenshot, youtubeUrl, isActive }: BentoVideo
   const [isPlaying, setIsPlaying] = useState(false);
   const [isPlayerReady, setIsPlayerReady] = useState(false);
   const [showCurtain, setShowCurtain] = useState(true);
-  const playerRef = useRef<any>(null);
+  const playerRef = useRef<YTPlayer | null>(null);
   const thumbnailUrl = videoId ? `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg` : null;
 
   // Initialize YouTube player once per videoId
@@ -53,11 +78,11 @@ export function BentoVideoFrame({ screenshot, youtubeUrl, isActive }: BentoVideo
           disablekb: 1,
         },
         events: {
-          onReady: (event: any) => {
+          onReady: (event: YTPlayerEvent) => {
             event.target.playVideo();
             setIsPlayerReady(true);
           },
-          onStateChange: (event: any) => {
+          onStateChange: (event: YTPlayerEvent) => {
             if (event.data === window.YT.PlayerState.PLAYING) {
               setIsPlaying(true);
               setShowCurtain(false);

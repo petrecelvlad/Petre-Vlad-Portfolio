@@ -1,7 +1,7 @@
 export interface DomainEvent {
   type: string;
   timestamp: number;
-  payload?: any;
+  payload?: unknown;
 }
 
 export interface NodeSelectedEvent extends DomainEvent {
@@ -36,7 +36,12 @@ export type AppDomainEvent =
 type EventHandler<T extends DomainEvent = DomainEvent> = (event: T) => void;
 
 class EventBus {
-  private listeners: Map<string, Set<EventHandler<any>>> = new Map();
+  // Keyed by event type, so each Set only ever actually holds handlers for
+  // that one event's payload shape — the stored type has to be widened to the
+  // common base here since a Map can't express "value type depends on key,"
+  // but subscribe/publish below are fully typed at the public boundary, so
+  // callers never see this erasure.
+  private listeners: Map<string, Set<EventHandler<AppDomainEvent>>> = new Map();
 
   /**
    * Subscribe to a specific domain event type.
@@ -46,10 +51,10 @@ class EventBus {
       this.listeners.set(eventType, new Set());
     }
     const handlers = this.listeners.get(eventType)!;
-    handlers.add(handler);
+    handlers.add(handler as EventHandler<AppDomainEvent>);
 
     return () => {
-      handlers.delete(handler);
+      handlers.delete(handler as EventHandler<AppDomainEvent>);
       if (handlers.size === 0) {
         this.listeners.delete(eventType);
       }

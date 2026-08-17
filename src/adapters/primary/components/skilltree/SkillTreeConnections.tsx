@@ -49,6 +49,14 @@ export function TreeCanvas({ category, activeSkill, onSelect }: TreeCanvasProps)
     return segments;
   }, [activeSkill, links]);
 
+  // Precomputed once per link — PASS 1-4 below all draw the same elbow-routing
+  // path, they just differ in stroke/animation, so the `d` string shouldn't be
+  // recomputed identically in each pass.
+  const linksWithPath = useMemo(
+    () => links.map(link => ({ ...link, d: `M${link.sx},${link.sy} H${link.midX} V${link.ty} H${link.tx}` })),
+    [links]
+  );
+
   return (
     <div className="relative flex-shrink-0" style={{ width: canvasWidth, height: canvasHeight }}>
       {/* SVG connector layer */}
@@ -59,13 +67,11 @@ export function TreeCanvas({ category, activeSkill, onSelect }: TreeCanvasProps)
       >
         {/* PASS 1: Base Dark Outer Pipe Casing */}
         <g id={`pass-casing-${category}`}>
-          {links.map((link, i) => {
-            const midX = link.midX;
-            const d = `M${link.sx},${link.sy} H${midX} V${link.ty} H${link.tx}`;
+          {linksWithPath.map((link, i) => {
             return (
               <path
                 key={`casing-${link.sourceId}-${link.targetId}-${i}`}
-                d={d}
+                d={link.d}
                 fill="none"
                 stroke="var(--color-ink-base)"
                 strokeWidth={10}
@@ -79,13 +85,11 @@ export function TreeCanvas({ category, activeSkill, onSelect }: TreeCanvasProps)
 
         {/* PASS 2: Muted Dashed Inner Channel */}
         <g id={`pass-channel-${category}`}>
-          {links.map((link, i) => {
-            const midX = link.midX;
-            const d = `M${link.sx},${link.sy} H${midX} V${link.ty} H${link.tx}`;
+          {linksWithPath.map((link, i) => {
             return (
               <path
                 key={`channel-${link.sourceId}-${link.targetId}-${i}`}
-                d={d}
+                d={link.d}
                 fill="none"
                 stroke="var(--color-ink-base)"
                 strokeWidth={4}
@@ -100,16 +104,14 @@ export function TreeCanvas({ category, activeSkill, onSelect }: TreeCanvasProps)
 
         {/* PASS 3: Active Neon Branch Fills */}
         <g id={`pass-active-stroke-${category}`}>
-          {links.map((link) => {
+          {linksWithPath.map((link) => {
             const segment = activeSegments.get(link.targetId);
             if (!segment) return null;
 
-            const midX = link.midX;
-            const d = `M${link.sx},${link.sy} H${midX} V${link.ty} H${link.tx}`;
             return (
               <motion.path
                 key={`active-stroke-${link.sourceId}-${link.targetId}-${activeSkill?.id}`}
-                d={d}
+                d={link.d}
                 fill="none"
                 stroke={catConfig.stroke}
                 strokeWidth={6}
@@ -129,16 +131,14 @@ export function TreeCanvas({ category, activeSkill, onSelect }: TreeCanvasProps)
 
         {/* PASS 4: Glossy White Core Highlights */}
         <g id={`pass-active-core-${category}`}>
-          {links.map((link) => {
+          {linksWithPath.map((link) => {
             const segment = activeSegments.get(link.targetId);
             if (!segment) return null;
 
-            const midX = link.midX;
-            const d = `M${link.sx},${link.sy} H${midX} V${link.ty} H${link.tx}`;
             return (
               <motion.path
                 key={`active-core-${link.sourceId}-${link.targetId}-${activeSkill?.id}`}
-                d={d}
+                d={link.d}
                 fill="none"
                 stroke="#FFFFFF"
                 strokeWidth={2}
