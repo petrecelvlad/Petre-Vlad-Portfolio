@@ -8,8 +8,8 @@ export interface IslandPositionConfig {
 
 export const DEFAULT_ISLAND_POSITION: IslandPositionConfig = {
   offsetX: -18,
-  offsetY: 200,
-  scale: 1.3,
+  offsetY: 190,
+  scale: 1.1,
 };
 
 interface IslandPositionContextType {
