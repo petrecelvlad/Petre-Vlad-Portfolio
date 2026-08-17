@@ -14,3 +14,4 @@ Individual Kanban cards — see [BOARD.md](../BOARD.md) for the protocol (states
   * [T-009](T-009-agent-os.md) - buildermethods/agent-os *(backlog)*
   * [T-010](T-010-microsoft-skills.md) - microsoft/skills *(backlog)*
   * [T-011](T-011-self-learning-skills.md) - Kulaxyz/self-learning-skills *(backlog)*
+* [T-014](T-014-bake-achievement-shaders-to-video.md) - Bake the 4 Hero achievement-card shaders to looping video/sprite *(backlog)*
