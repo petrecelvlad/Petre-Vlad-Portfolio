@@ -2,6 +2,7 @@ import { Sliders } from 'lucide-react';
 import { Row } from '@/src/components/atoms/Row';
 import { Heading } from '@/src/components/atoms/Heading';
 import { SKINS, SkinId, BACKGROUNDS, BackgroundId, PlankStyle, useSkin } from '@/src/context/SkinContext';
+import { ANIMATION_PATHS, AnimationPathId, useAnimationPath } from '@/src/context/AnimationPathContext';
 import { useIslandPosition } from '@/src/context/IslandPositionContext';
 import { BOARD_COLOR } from '@/src/components/bento/skins/heritage/palette';
 import {
@@ -17,6 +18,7 @@ interface NavbarProps {
 
 export function Navbar({ onToggleBacklog, isBacklog }: NavbarProps) {
   const { skin, setSkin, plankStyle, setPlankStyle, background, setBackground } = useSkin();
+  const { animationPath, setAnimationPath } = useAnimationPath();
   const { toggleEditor, isEditorOpen } = useIslandPosition();
 
   return (
@@ -72,6 +74,16 @@ export function Navbar({ onToggleBacklog, isBacklog }: NavbarProps) {
           >
             {SKINS.map((s) => (
               <option key={s.id} value={s.id}>{s.label.toUpperCase()}</option>
+            ))}
+          </select>
+          <select
+            value={animationPath}
+            onChange={(e) => setAnimationPath(e.target.value as AnimationPathId)}
+            aria-label="Achievement Animation Path"
+            className="font-mono text-[length:var(--text-label-sm)] uppercase tracking-[0.15em] px-3 py-1.5 border-[length:var(--border-width-sm)] border-ink-base rounded-md bg-transparent text-ink-base shadow-[0_var(--ui-depth)_0_0_var(--shadow-color)] cursor-pointer"
+          >
+            {ANIMATION_PATHS.map((p) => (
+              <option key={p.id} value={p.id}>{p.label.toUpperCase()}</option>
             ))}
           </select>
           <button
