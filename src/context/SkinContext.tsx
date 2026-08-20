@@ -10,6 +10,8 @@ export type SkinId = typeof SKINS[number]['id'];
 export type PlankStyle = 'clean' | 'jagged' | 'laboratory';
 
 export const BACKGROUNDS = [
+  { id: 'segmented3-loop', label: '3-Segmented (Looped Test)' },
+  { id: 'segmented3-lite', label: '3-Segmented (Lite Test)' },
   { id: 'segmented3', label: '3-Segmented Stage' },
   { id: 'wood', label: 'Wooden Planks' },
   { id: 'corridor', label: 'Dungeon Corridor' },
@@ -32,14 +34,14 @@ const SkinContext = createContext<SkinPrefs>({
   setSkin: () => {},
   plankStyle: 'jagged',
   setPlankStyle: () => {},
-  background: 'segmented3',
+  background: 'segmented3-lite',
   setBackground: () => {},
 });
 
 export function SkinProvider({ children }: { children: ReactNode }) {
   const [skin, setSkin] = useState<SkinId>('gamified');
   const [plankStyle, setPlankStyle] = useState<PlankStyle>('jagged');
-  const [background, setBackground] = useState<BackgroundId>('segmented3');
+  const [background, setBackground] = useState<BackgroundId>('segmented3-lite');
 
   return (
     <SkinContext.Provider value={{ skin, setSkin, plankStyle, setPlankStyle, background, setBackground }}>

@@ -3,6 +3,8 @@ import { motion } from 'motion/react';
 import { useSkin } from '@/src/context/SkinContext';
 import { GlobalBackground } from '@/src/components/backgrounds/GlobalBackground';
 import { SegmentedGalaxianBackground } from '@/src/components/backgrounds/SegmentedGalaxianBackground';
+import { SegmentedGalaxianBackgroundLite } from '@/src/components/backgrounds/SegmentedGalaxianBackgroundLite';
+import { SegmentedGalaxianBackgroundLooped } from '@/src/components/backgrounds/SegmentedGalaxianBackgroundLooped';
 import { AchievementShaderCanvas, ShaderType } from '@/src/components/backgrounds/AchievementShaderCanvas';
 import { FloatingIslandBackdrop } from '@/src/components/backgrounds/FloatingIslandBackdrop';
 import { GalaxianBackground } from '@/src/components/backgrounds/GalaxianBackground';
@@ -28,6 +30,7 @@ interface AchievementData {
 
 export function Hero() {
   const { skin, background } = useSkin();
+  const isSegmented = background === 'segmented3' || background === 'segmented3-lite' || background === 'segmented3-loop';
   const videoRef = useRef<HTMLVideoElement>(null);
   const { ref: heroRef, isVisible } = useIsVisible<HTMLDivElement>();
   const { config: islandPosition } = useIslandPosition();
@@ -77,9 +80,9 @@ export function Hero() {
   ];
 
   return (
-    <div ref={heroRef} className="relative w-full h-full flex items-center justify-center p-3 sm:p-4 md:p-6 lg:px-8 lg:py-6 overflow-hidden select-none">
+    <div ref={heroRef} className="relative w-full h-full flex items-center justify-center py-3 sm:py-4 md:py-6 lg:py-6 overflow-hidden select-none">
       {/* ── Layer -1: Galaxian variant fill — sits BEHIND both shader passes. The shader itself (VARIANT 4) makes column 3's fill transparent along the exact same jagged edge2 line the divider stroke uses, so this just needs to fully cover that area; a straight edge here is safe because the opaque shader content in front hides it everywhere except the transparent hole ── */}
-      {canvasesReady && background === 'segmented3' && (
+      {canvasesReady && isSegmented && (
         <div className="absolute z-[-1] left-[64%] right-0 top-0 bottom-0 pointer-events-none">
           <GalaxianBackground className="w-full h-full" />
         </div>
@@ -103,8 +106,14 @@ export function Hero() {
       </div>
 
       {/* ── Layer 2: Overlay Pass for 3-Segmented Stage (Column 2 & 3 + Black Dividers, z-[5]) ── */}
-      {canvasesReady && background === 'segmented3' && (
-        <SegmentedGalaxianBackground pass="overlay" className="z-[5]" isVisible={isVisible} />
+      {canvasesReady && isSegmented && (
+        background === 'segmented3-lite' ? (
+          <SegmentedGalaxianBackgroundLite pass="overlay" className="z-[5]" isVisible={isVisible} />
+        ) : background === 'segmented3-loop' ? (
+          <SegmentedGalaxianBackgroundLooped pass="overlay" className="z-[5]" isVisible={isVisible} />
+        ) : (
+          <SegmentedGalaxianBackground pass="overlay" className="z-[5]" isVisible={isVisible} />
+        )
       )}
 
       {/* ── Layer 3: Foreground UI Content ── */}
@@ -131,7 +140,7 @@ export function Hero() {
         <div className="w-full lg:w-[40%] flex-shrink-0 flex flex-col items-center justify-between text-center px-2 lg:px-6">
           <div className="relative flex-1 py-1 px-2 sm:px-4 flex flex-col justify-between items-center text-center w-full">
 
-            {/* Upper Content: Name, Title & Bio */}
+            {/* Upper Content: Name & Title */}
             <div className="flex flex-col items-center text-center gap-2 sm:gap-3 w-full pt-1 sm:pt-2">
               <div className="w-full text-center flex flex-col items-center">
                 <h1 className="font-jersey font-bold text-5xl sm:text-6xl lg:text-7xl xl:text-8xl uppercase tracking-wider leading-none text-center pixel-text-outline flex flex-wrap justify-center items-center select-none py-1">
@@ -156,9 +165,12 @@ export function Hero() {
 
                 <AnimatedRoleTitle />
               </div>
+            </div>
 
+            {/* Centered Content: Bio Note \u2014 vertically centered in the space between the title and the EXPLORE button */}
+            <div className="flex-1 flex items-center justify-center w-full">
               <TornPaperPanel
-                className="w-full max-w-[540px] mx-auto mt-2 sm:mt-3 mb-1"
+                className="w-full max-w-[540px] mx-auto"
                 paperColor="#FFFDF7"
                 strokeColor="#1C1610"
                 strokeWidth={3}
@@ -199,26 +211,34 @@ export function Hero() {
           </div>
         </div>
 
-        {/* ── RIGHT COLUMN (30% width, Right Anchored): 4 Aggregated Achievement Rows ── */}
-        <div className="w-full lg:w-[30%] flex-shrink-0 flex flex-col items-end justify-between gap-2.5 sm:gap-3 lg:gap-4 pl-2 lg:pl-4">
+        {/* ── RIGHT COLUMN (30% width, Center Anchored): 4 Aggregated Achievement Rows ── */}
+        <div className="@container lg:[container-type:size] w-full lg:w-[30%] flex-shrink-0 flex flex-col items-center justify-between gap-2.5 sm:gap-3 lg:gap-4 px-3 sm:px-4 md:px-5 lg:px-5 xl:px-8">
           {achievements.map((item) => (
             <div
               key={item.id}
-              className="w-full max-w-[380px] sm:max-w-[410px] lg:max-w-[430px] xl:max-w-[450px] flex-1 min-h-[75px] sm:min-h-[85px] lg:min-h-[95px] flex items-stretch justify-end gap-2 sm:gap-3 hover:translate-y-[-2px] transition-transform"
+              className="w-full lg:w-[min(100%,calc(69cqh-33px))] flex items-center justify-center gap-2 sm:gap-3 hover:translate-y-[-2px] transition-transform"
             >
-              {/* Left Box: Shader Animation Card */}
-              <div className="flex-1 min-w-0 rounded-2xl border-3 border-[#1C1610] shadow-[0_4px_0_0_#1C1610] bg-[#0d0d14] overflow-hidden relative">
-                {canvasesReady && <AchievementShaderCanvas type={item.shaderType} isVisible={isVisible} />}
+              {/* Left Box: Shader Animation Card — 16 parts of the row's width, height auto-derives via aspect-video. Border/shadow live on a non-clipped overlay sibling so they carry zero box-model weight on the sizing box itself — the 16:9 split must stay exact. */}
+              <div className="flex-[16] min-w-0 aspect-video relative">
+                <div className="absolute inset-0 rounded-2xl bg-[#0d0d14] overflow-hidden">
+                  {canvasesReady && <AchievementShaderCanvas type={item.shaderType} isVisible={isVisible} />}
+                </div>
+                <div className="absolute inset-0 rounded-2xl border-3 border-[#1C1610] shadow-[0_4px_0_0_#1C1610] pointer-events-none" />
               </div>
 
-              {/* Right Box: White Text Card (Centered text restored) */}
-              <div className="w-[110px] sm:w-[125px] lg:w-[145px] xl:w-[165px] flex-shrink-0 bg-[#FFFDF7] rounded-2xl border-3 border-[#1C1610] shadow-[0_4px_0_0_#1C1610] p-2 sm:p-3 flex flex-col justify-center items-center text-center overflow-hidden">
-                <div className="font-display font-black text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl text-[#1C1610] leading-none tracking-tight text-center w-full">
-                  {item.value}
+              {/* Right Box: White Text Card — 9 parts of the row's width, height auto-derives via aspect-square. Same overlay split as the shader card, so 16:9 (== the shader card's own ratio) lands on an exact height match, not an approximation. */}
+              <div className="@container flex-[9] min-w-0 aspect-square relative">
+                <div className="absolute inset-0 rounded-2xl bg-[#FFFDF7] overflow-hidden">
+                  <div className="absolute inset-0 p-1.5 sm:p-2 flex flex-col justify-center items-center text-center">
+                    <div className="font-display font-black text-[clamp(1.1rem,26cqw,3.5rem)] text-[#1C1610] leading-none tracking-tight text-center w-full">
+                      {item.value}
+                    </div>
+                    <div className="font-arcade text-[clamp(0.4375rem,9.5cqw,0.75rem)] font-bold text-[#1C1610] uppercase tracking-wide leading-[1.15] mt-1 break-words w-full text-center">
+                      {item.label}
+                    </div>
+                  </div>
                 </div>
-                <div className="font-arcade text-[8px] sm:text-[9px] md:text-[10px] lg:text-[11px] xl:text-[12px] font-bold text-[#1C1610] uppercase tracking-wide leading-tight mt-1 break-words w-full text-center">
-                  {item.label}
-                </div>
+                <div className="absolute inset-0 rounded-2xl border-3 border-[#1C1610] shadow-[0_4px_0_0_#1C1610] pointer-events-none" />
               </div>
             </div>
           ))}

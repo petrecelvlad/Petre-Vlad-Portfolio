@@ -11,10 +11,10 @@ export function GlobalBackground({ section = 'hero', isVisible = true }: GlobalB
   const { skin, background } = useSkin();
 
   // The 3-segmented stage ("triple background") is strictly attached to the hero section.
-  // Skills and Projects sections display the static wood boards background when segmented3 is selected.
-  const effectiveBackground = (section !== 'hero' && background === 'segmented3')
-    ? 'wood'
-    : background;
+  // Skills and Projects sections display the static wood boards background when any segmented3
+  // variant is selected (segmented3-lite/-loop are performance-test forks, same hero-only scoping).
+  const isSegmentedVariant = background === 'segmented3' || background === 'segmented3-lite' || background === 'segmented3-loop';
+  const effectiveBackground = (section !== 'hero' && isSegmentedVariant) ? 'wood' : background;
 
   const strategy = BackgroundStrategyRegistry.getStrategy(skin, effectiveBackground);
 
