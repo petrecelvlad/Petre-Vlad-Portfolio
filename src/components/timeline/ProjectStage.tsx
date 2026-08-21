@@ -1,6 +1,6 @@
 import { IProject } from '@/src/core/domain/models';
 import { ProjectDetails } from '@/src/components/timeline/ProjectDetails';
-import { GlobalBackground } from '@/src/components/backgrounds/GlobalBackground';
+import { WoodBackground } from '@/src/components/bento/skins/heritage/WoodBackground';
 
 interface ProjectStageProps {
   project: IProject;
@@ -28,7 +28,9 @@ interface ProjectStageProps {
 export function ProjectStage({ project }: ProjectStageProps) {
   return (
     <div className="relative z-0 h-full w-full flex">
-      <GlobalBackground section="projects" />
+      <div className="absolute inset-0 w-full h-full pointer-events-none overflow-hidden z-0">
+        <WoodBackground />
+      </div>
 
       {/* Left column: spacer, keeps content clear of the fixed TimelineRail. */}
       <div className="w-[48px] md:w-[88px] flex-shrink-0 relative pointer-events-none" />

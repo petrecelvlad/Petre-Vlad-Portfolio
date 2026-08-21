@@ -1,0 +1,220 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" width="800" height="450">
+  <!--
+    Hand-authored SVG/CSS recreation of TeamsLeadShaderCanvas
+    (src/components/backgrounds/AchievementLiveShaders.tsx). Node positions, badge/path colors and
+    the walk timing are derived directly from that WebGL shader's NODE1..4/tLoop math; the organic
+    island coastlines and water caustics are hand-drawn approximations of the shader's FBM noise
+    (a vector recreation can't reproduce true procedural noise, so this substitutes a fixed irregular
+    blob shape reused per island rather than attempting pixel-identical coastlines). See
+    cone/project/specs/SVG_Recreation_Prompts.md Prompt 3 for the plain-language brief.
+  -->
+  <defs>
+    <path id="islandBlob" d="
+      M 68.48,-18.75
+      Q 72,0 68.91,19
+      Q 65.82,38 52.91,53.64
+      Q 40,69.28 20,71.64
+      Q 0,74 -16.5,65.58
+      Q -33,57.16 -42.48,43.58
+      Q -51.96,30 -54.98,15
+      Q -58,0 -55.85,-15.5
+      Q -53.69,-31 -43.85,-44.95
+      Q -34,-58.89 -17,-66.45
+      Q 0,-74 19.5,-70.78
+      Q 39,-67.55 51.98,-52.53
+      Q 64.95,-37.5 68.48,-18.75
+      Z"/>
+
+    <radialGradient id="tlVignette" cx="50%" cy="50%" r="75%">
+      <stop offset="0%"  stop-color="#000000" stop-opacity="0"/>
+      <stop offset="68%" stop-color="#000000" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0.42"/>
+    </radialGradient>
+
+    <filter id="tlBlur" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur stdDeviation="10"/>
+    </filter>
+  </defs>
+
+  <style>
+    /* ============================================================
+       No single master loop here (unlike Level-Up): the shader itself
+       drives the hero's 3-leg walk off its own 20s cycle while every
+       other element (pulses, dashes, badge breathing, notification bob,
+       water shimmer) runs on its own independent period -- same
+       structure reproduced here rather than forcing everything onto one
+       shared timeline.
+       ============================================================ */
+
+    /* ---------- Water: base + slow shimmer breathing (stand-in for FBM caustics) ---------- */
+    .shimmer { fill: #38BDF8; opacity: 0; animation: shimmerPulse 5.5s ease-in-out infinite; }
+    @keyframes shimmerPulse { 0%,100% { opacity: 0.10; } 50% { opacity: 0.30; } }
+
+    .glint { stroke: #FFFFFF; stroke-width: 2; stroke-linecap: round; opacity: 0; animation: glintFade 3.6s ease-in-out infinite; }
+    @keyframes glintFade { 0%, 82% { opacity: 0; } 90% { opacity: 0.5; } 100% { opacity: 0; } }
+
+    /* ---------- Navigation path: dashes flow continuously along the route ---------- */
+    .nav-path {
+      fill: none;
+      stroke: #FFFFFF;
+      stroke-width: 8;
+      stroke-linecap: round;
+      stroke-dasharray: 20 20;
+      opacity: 0.85;
+      animation: dashFlow 1.1s linear infinite;
+    }
+    @keyframes dashFlow { from { stroke-dashoffset: 40; } to { stroke-dashoffset: 0; } }
+
+    /* ---------- Hero token: 3-leg walk (node1->2->3->4, instant reset to node1) ---------- */
+    .hero-walk {
+      animation: heroWalk 20s linear infinite;
+    }
+    @keyframes heroWalk {
+      0%     { transform: translate(139px, 324px); }
+      33.333%{ transform: translate(310px, 135px); }
+      66.667%{ transform: translate(490px, 315px); }
+      100%   { transform: translate(661px, 126px); }
+    }
+    .hero-bob { animation: heroBob 0.6s ease-in-out infinite; }
+    @keyframes heroBob { 0%,100% { transform: translateY(0px); } 50% { transform: translateY(-3px); } }
+    .hero-core { animation: heroCorePulse 0.85s ease-in-out infinite; }
+    @keyframes heroCorePulse { 0%,100% { opacity: 0.85; } 50% { opacity: 1; } }
+
+    .beacon { fill: none; stroke-width: 2.5; transform-box: fill-box; transform-origin: center; }
+    .beacon-gold { stroke: #FACC15; animation: beaconPulse 0.556s linear infinite; }
+    .beacon-white { stroke: #FFFFFF; animation: beaconPulse 0.556s linear infinite; animation-delay: -0.278s; }
+    @keyframes beaconPulse {
+      0%   { transform: scale(0.35); opacity: 0.8; }
+      100% { transform: scale(1.5);  opacity: 0; }
+    }
+
+    /* ---------- Current-stage (island 3) badge: slow breathing pulse ---------- */
+    .badge-pulse { animation: badgePulse 1.05s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+    @keyframes badgePulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.08); } }
+
+    .callout { animation: calloutBob 1.57s ease-in-out infinite; }
+    @keyframes calloutBob { 0%,100% { transform: translateY(0px); } 50% { transform: translateY(-6px); } }
+  </style>
+
+  <!-- Water canvas -->
+  <rect width="800" height="450" fill="#0284C7"/>
+  <g filter="url(#tlBlur)">
+    <ellipse class="shimmer" cx="150" cy="90"  rx="130" ry="70" style="animation-delay:-0.4s"/>
+    <ellipse class="shimmer" cx="560" cy="330" rx="150" ry="80" style="animation-delay:-2.1s"/>
+    <ellipse class="shimmer" cx="700" cy="80"  rx="110" ry="60" style="animation-delay:-3.5s"/>
+    <ellipse class="shimmer" cx="90"  cy="380" rx="120" ry="65" style="animation-delay:-1.2s"/>
+  </g>
+  <g>
+    <line class="glint" x1="220" y1="60"  x2="270" y2="40"  style="animation-delay:-0.5s"/>
+    <line class="glint" x1="620" y1="250" x2="670" y2="230" style="animation-delay:-1.8s"/>
+    <line class="glint" x1="60"  y1="220" x2="105" y2="205" style="animation-delay:-2.7s"/>
+  </g>
+
+  <!-- Decorative mini islets/rocks -->
+  <g stroke="#FFFFFF" stroke-width="3">
+    <circle cx="107.5" cy="112.5" r="11" fill="#F59E0B"/>
+    <circle cx="242.5" cy="396"   r="13" fill="#F59E0B"/>
+    <circle cx="409"   cy="54"    r="12" fill="#F59E0B"/>
+    <circle cx="679"   cy="369"   r="11" fill="#F59E0B"/>
+    <circle cx="391"   cy="247.5" r="9"  fill="#F59E0B"/>
+  </g>
+
+  <!-- The 4 main stage islands. Each island's per-instance rotate/scale (for silhouette variety)
+       is scoped to its own inner group so it never touches the shadow's translate(5,14) offset;
+       that offset is applied in the outer, unrotated frame so every island's "cliff" shadow reads
+       consistently down-right, matching the other islands' 2.5D perspective. -->
+  <g transform="translate(139,324)">
+    <g transform="translate(5,14) rotate(15) scale(1.0)"><use href="#islandBlob" fill="#B45309"/></g>
+    <g transform="rotate(15) scale(1.0)">
+      <use href="#islandBlob" fill="#F59E0B" stroke="#FFFFFF" stroke-width="5"/>
+      <use href="#islandBlob" transform="scale(0.66)" fill="#22C55E"/>
+    </g>
+    <circle cx="-14" cy="8"  r="4" fill="#15803D"/>
+    <circle cx="16"  cy="-6" r="3.5" fill="#15803D"/>
+  </g>
+
+  <g transform="translate(310,135)">
+    <g transform="translate(5,14) rotate(-20) scale(0.88)"><use href="#islandBlob" fill="#B45309"/></g>
+    <g transform="rotate(-20) scale(0.88)">
+      <use href="#islandBlob" fill="#F59E0B" stroke="#FFFFFF" stroke-width="5"/>
+      <use href="#islandBlob" transform="scale(0.66)" fill="#22C55E"/>
+    </g>
+  </g>
+
+  <g transform="translate(490,315)">
+    <g transform="translate(5,14) rotate(8) scale(1.18)"><use href="#islandBlob" fill="#B45309"/></g>
+    <g transform="rotate(8) scale(1.18)">
+      <use href="#islandBlob" fill="#F59E0B" stroke="#FFFFFF" stroke-width="5"/>
+      <use href="#islandBlob" transform="scale(0.66)" fill="#22C55E"/>
+    </g>
+    <circle cx="-18" cy="-6" r="4" fill="#15803D"/>
+    <circle cx="10"  cy="14" r="3.5" fill="#15803D"/>
+  </g>
+
+  <g transform="translate(661,126)">
+    <g transform="translate(5,14) rotate(200) scale(0.92)"><use href="#islandBlob" fill="#B45309"/></g>
+    <g transform="rotate(200) scale(0.92)">
+      <use href="#islandBlob" fill="#F59E0B" stroke="#FFFFFF" stroke-width="5"/>
+      <use href="#islandBlob" transform="scale(0.66)" fill="#22C55E"/>
+    </g>
+  </g>
+
+  <!-- Navigation path: drawn after the islands so it reads on top of their terrain, but before the
+       badges/hero so those still sit above it. -->
+  <path class="nav-path" d="M 139,324 L 310,135 L 490,315 L 661,126"/>
+
+  <!-- Stage badges (kept unrotated for a clean circular read) -->
+  <!-- Badge 1 - completed (gold) -->
+  <g transform="translate(139,324)">
+    <circle cx="4" cy="6" r="30" fill="#0D2A33" opacity="0.5"/>
+    <circle r="30" fill="#14141A"/>
+    <circle r="25" fill="#FFFFFF"/>
+    <circle r="19" fill="#FACC15"/>
+    <circle r="6" fill="#FFFFFF"/>
+  </g>
+  <!-- Badge 2 - completed (gold) -->
+  <g transform="translate(310,135)">
+    <circle cx="4" cy="6" r="30" fill="#0D2A33" opacity="0.5"/>
+    <circle r="30" fill="#14141A"/>
+    <circle r="25" fill="#FFFFFF"/>
+    <circle r="19" fill="#FACC15"/>
+    <circle r="6" fill="#FFFFFF"/>
+  </g>
+  <!-- Badge 3 - current (pulsing red) + notification callout -->
+  <g transform="translate(490,315)">
+    <circle cx="4" cy="6" r="30" fill="#0D2A33" opacity="0.5"/>
+    <circle r="30" fill="#14141A"/>
+    <circle r="25" fill="#FFFFFF"/>
+    <circle class="badge-pulse" r="19" fill="#EF4444"/>
+    <circle r="6" fill="#FFFFFF"/>
+  </g>
+  <g class="callout" transform="translate(510,288)">
+    <circle r="16" fill="#14141A"/>
+    <circle r="12" fill="#FACC15"/>
+    <rect x="-2" y="-7" width="4" height="9" rx="1.5" fill="#14141A"/>
+    <circle cx="0" cy="6" r="2" fill="#14141A"/>
+  </g>
+  <!-- Badge 4 - upcoming (stone gray) -->
+  <g transform="translate(661,126)">
+    <circle cx="4" cy="6" r="30" fill="#0D2A33" opacity="0.5"/>
+    <circle r="30" fill="#14141A"/>
+    <circle r="25" fill="#FFFFFF"/>
+    <circle r="19" fill="#64748B"/>
+    <circle r="6" fill="#FFFFFF"/>
+  </g>
+
+  <!-- Hero token: walks node1 -> node2 -> node3 -> node4, then instantly resets to node1 -->
+  <g class="hero-walk">
+    <circle class="beacon beacon-gold" r="14"/>
+    <circle class="beacon beacon-white" r="14"/>
+    <g class="hero-bob">
+      <circle cx="2.5" cy="4" r="15" fill="#0D0F17" opacity="0.4"/>
+      <circle r="15" fill="#3A3D4A"/>
+      <circle r="13" fill="#FACC15"/>
+      <circle class="hero-core" r="9" fill="#EF4444"/>
+      <circle r="4" fill="#FFFFFF"/>
+    </g>
+  </g>
+
+  <rect width="800" height="450" fill="url(#tlVignette)"/>
+</svg>

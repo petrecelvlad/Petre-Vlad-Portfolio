@@ -1,5 +1,5 @@
 import { motion } from 'motion/react';
-import { GlobalBackground } from '@/src/components/backgrounds/GlobalBackground';
+import { WoodBackground } from '@/src/components/bento/skins/heritage/WoodBackground';
 import { DeskBoard } from '@/src/components/bento/skins/heritage/DeskBoard';
 import { GamifiedBoard } from '@/src/components/bento/skins/gamified/GamifiedBoard';
 import { useSkin } from '@/src/context/SkinContext';
@@ -48,7 +48,9 @@ export function SkillTree({ experiences }: { experiences: IExperience[] }) {
       viewport={{ once: true, margin: '-100px' }}
       transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
     >
-      <GlobalBackground section="skills" />
+      <div className="absolute inset-0 w-full h-full pointer-events-none overflow-hidden z-0">
+        <WoodBackground />
+      </div>
       {/* Left column — skill tree */}
       {skin === 'gamified' ? (
         <div className="flex-1 min-w-0 relative my-8 md:my-10 ml-8 md:ml-12 mr-4 md:mr-6 flex flex-col">
