@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
 
 /**
@@ -43,6 +43,7 @@ export function ThreeNatureFieldBackground({ className = '', isVisible = true }:
   const containerRef = useRef<HTMLDivElement>(null);
   const isVisibleRef = useRef(isVisible);
   isVisibleRef.current = isVisible;
+  const [webglUnavailable, setWebglUnavailable] = useState(false);
 
   useEffect(() => {
     const container = containerRef.current;
@@ -55,7 +56,18 @@ export function ThreeNatureFieldBackground({ className = '', isVisible = true }:
     camera.position.set(0, CAMERA_HEIGHT, CAMERA_RADIUS);
     camera.lookAt(CAMERA_TARGET);
 
-    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    // THREE.WebGLRenderer's constructor throws (not returns null) when it can't acquire a
+    // WebGL context — happens on old/blocklisted GPU drivers, common on older laptops. Left
+    // uncaught, this crashed the entire page (no Error Boundary caught it, so React unmounted
+    // the whole tree). Fall back to a plain gradient instead.
+    let renderer: THREE.WebGLRenderer;
+    try {
+      renderer = new THREE.WebGLRenderer({ antialias: true });
+    } catch (err) {
+      console.warn('ThreeNatureFieldBackground: WebGL unavailable, falling back to a static background.', err);
+      setWebglUnavailable(true);
+      return;
+    }
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.toneMappingExposure = 1.2;
@@ -612,6 +624,12 @@ export function ThreeNatureFieldBackground({ className = '', isVisible = true }:
     <div
       ref={containerRef}
       className={`absolute inset-0 w-full h-full pointer-events-none overflow-hidden z-0 ${className}`}
-    />
+    >
+      {webglUnavailable && (
+        // Same sky-dome colors the WebGL scene uses (topColor/bottomColor above), so the
+        // fallback reads as "the same background, just static" rather than a visibly broken page.
+        <div className="absolute inset-0 bg-gradient-to-b from-[#0288d1] to-[#b3e5fc]" />
+      )}
+    </div>
   );
 }

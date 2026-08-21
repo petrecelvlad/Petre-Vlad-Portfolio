@@ -9,6 +9,7 @@ import { IExperience } from '@/src/core/domain/models';
 import { JsonExperienceRepository } from '@/src/adapters/secondary/JsonExperienceRepo';
 import { Navbar } from '@/src/adapters/primary/components/Navbar';
 import { Hero } from '@/src/adapters/primary/components/Hero';
+import { ErrorBoundary } from '@/src/components/ErrorBoundary';
 import { GamifiedShowcase } from '@/src/adapters/primary/components/GamifiedShowcase';
 import { BacklogView } from '@/src/adapters/primary/components/BacklogView';
 import { useSkin } from '@/src/context/SkinContext';
@@ -52,7 +53,9 @@ export default function App() {
         ) : (
         <main ref={mainRef} className="flex-1 w-full relative overflow-y-auto snap-y snap-mandatory select-none">
           <div className="snap-start snap-always h-[calc(100vh-var(--chrome-navbar-height))] w-full flex items-center justify-center relative z-0">
-            <Hero />
+            <ErrorBoundary>
+              <Hero />
+            </ErrorBoundary>
           </div>
           <Suspense fallback={null}>
             <div className="snap-start snap-always h-[calc(100vh-var(--chrome-navbar-height))] w-full relative z-0">
