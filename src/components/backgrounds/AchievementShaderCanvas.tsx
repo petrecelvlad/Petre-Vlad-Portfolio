@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState, lazy, Suspense } from 'react';
 import { useAnimationPath } from '@/src/context/AnimationPathContext';
-import { AchievementSvgPlaceholder, AchievementFactorySvg } from './AchievementSvgPlaceholders';
+import { AchievementFactorySvg, AchievementLevelUpSvg, AchievementTeamsLeadSvg, AchievementCartridgeSvg } from './AchievementSvgPlaceholders';
 import type { LiveShaderType } from './AchievementLiveShaders';
 
 const LiveAchievementShader = lazy(() => import('./AchievementLiveShaders'));
@@ -434,7 +434,13 @@ export function AchievementShaderCanvas({ type, className = '', isVisible = true
       if (type === 'factory') {
         return <AchievementFactorySvg className={className} isVisible={isVisible} />;
       }
-      return <AchievementSvgPlaceholder type={type} className={className} isVisible={isVisible} />;
+      if (type === 'levelup') {
+        return <AchievementLevelUpSvg className={className} isVisible={isVisible} />;
+      }
+      if (type === 'teamslead') {
+        return <AchievementTeamsLeadSvg className={className} isVisible={isVisible} />;
+      }
+      return <AchievementCartridgeSvg className={className} isVisible={isVisible} />;
     }
 
     if (animationPath === 'shader') {

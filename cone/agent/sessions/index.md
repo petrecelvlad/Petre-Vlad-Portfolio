@@ -5,3 +5,4 @@
 * [08_August/Week_3/2026-08-16](08_August/Week_3/2026-08-16/) - Session 02: Framework Adoption, Code Quality Pass, Segmented-BG SVG Handoff (HANDOFF ✋)
 * [08_August/Week_3/2026-08-16](08_August/Week_3/2026-08-16/) - Session 03: Galaxian Background WebGL-to-SVG/CSS Conversion (COMPLETE ✅)
 * [08_August/Week_3/2026-08-19](08_August/Week_3/2026-08-19/) - Session 04: Shader Bake — Loop Period Audit, Retune, Capture, and Live Swap (COMPLETE ✅)
+* [08_August/Week_3/2026-08-20](08_August/Week_3/2026-08-20/) - Session 05: Cursor-Driven Gaze — Broken, Handoff (HANDOFF ✋)

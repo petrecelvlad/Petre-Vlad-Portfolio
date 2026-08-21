@@ -1,13 +1,8 @@
 import { useMemo, useEffect, useRef } from 'react';
 import { motion } from 'motion/react';
-import { useSkin } from '@/src/context/SkinContext';
-import { GlobalBackground } from '@/src/components/backgrounds/GlobalBackground';
-import { SegmentedGalaxianBackground } from '@/src/components/backgrounds/SegmentedGalaxianBackground';
-import { SegmentedGalaxianBackgroundLite } from '@/src/components/backgrounds/SegmentedGalaxianBackgroundLite';
-import { SegmentedGalaxianBackgroundLooped } from '@/src/components/backgrounds/SegmentedGalaxianBackgroundLooped';
+import { ThreeNatureFieldBackground } from '@/src/components/backgrounds/ThreeNatureFieldBackground';
 import { AchievementShaderCanvas, ShaderType } from '@/src/components/backgrounds/AchievementShaderCanvas';
 import { FloatingIslandBackdrop } from '@/src/components/backgrounds/FloatingIslandBackdrop';
-import { GalaxianBackground } from '@/src/components/backgrounds/GalaxianBackground';
 import { AnimatedRoleTitle } from './AnimatedRoleTitle';
 import { TornPaperPanel } from '@/src/components/atoms/TornPaperPanel';
 import { useIsVisible } from '@/src/hooks/useIsVisible';
@@ -29,8 +24,6 @@ interface AchievementData {
 }
 
 export function Hero() {
-  const { skin, background } = useSkin();
-  const isSegmented = background === 'segmented3' || background === 'segmented3-lite' || background === 'segmented3-loop';
   const videoRef = useRef<HTMLVideoElement>(null);
   const { ref: heroRef, isVisible } = useIsVisible<HTMLDivElement>();
   const { config: islandPosition } = useIslandPosition();
@@ -81,15 +74,8 @@ export function Hero() {
 
   return (
     <div ref={heroRef} className="relative w-full h-full flex items-center justify-center py-3 sm:py-4 md:py-6 lg:py-6 overflow-hidden select-none">
-      {/* ── Layer -1: Galaxian variant fill — sits BEHIND both shader passes. The shader itself (VARIANT 4) makes column 3's fill transparent along the exact same jagged edge2 line the divider stroke uses, so this just needs to fully cover that area; a straight edge here is safe because the opaque shader content in front hides it everywhere except the transparent hole ── */}
-      {canvasesReady && isSegmented && (
-        <div className="absolute z-[-1] left-[64%] right-0 top-0 bottom-0 pointer-events-none">
-          <GalaxianBackground className="w-full h-full" />
-        </div>
-      )}
-
       {/* ── Layer 0: Base Background ── */}
-      {canvasesReady && <GlobalBackground section="hero" isVisible={isVisible} />}
+      {canvasesReady && <ThreeNatureFieldBackground isVisible={isVisible} />}
 
       {/* ── Layer 1: Floating Island Pedestal Backdrop (Root level z-[2], anchored to the bottom of the character video so it tracks the video's feet rather than stretching the full column height) ── */}
       <div
@@ -104,17 +90,6 @@ export function Hero() {
       >
         <FloatingIslandBackdrop className="w-full h-full" />
       </div>
-
-      {/* ── Layer 2: Overlay Pass for 3-Segmented Stage (Column 2 & 3 + Black Dividers, z-[5]) ── */}
-      {canvasesReady && isSegmented && (
-        background === 'segmented3-lite' ? (
-          <SegmentedGalaxianBackgroundLite pass="overlay" className="z-[5]" isVisible={isVisible} />
-        ) : background === 'segmented3-loop' ? (
-          <SegmentedGalaxianBackgroundLooped pass="overlay" className="z-[5]" isVisible={isVisible} />
-        ) : (
-          <SegmentedGalaxianBackground pass="overlay" className="z-[5]" isVisible={isVisible} />
-        )
-      )}
 
       {/* ── Layer 3: Foreground UI Content ── */}
       <div className="relative z-10 w-full h-full max-h-[820px] flex flex-col lg:flex-row justify-between items-stretch">

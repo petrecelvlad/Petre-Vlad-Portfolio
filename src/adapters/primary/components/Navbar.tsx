@@ -1,7 +1,7 @@
 import { Sliders } from 'lucide-react';
 import { Row } from '@/src/components/atoms/Row';
 import { Heading } from '@/src/components/atoms/Heading';
-import { SKINS, SkinId, BACKGROUNDS, BackgroundId, PlankStyle, useSkin } from '@/src/context/SkinContext';
+import { SKINS, SkinId, PlankStyle, useSkin } from '@/src/context/SkinContext';
 import { ANIMATION_PATHS, AnimationPathId, useAnimationPath } from '@/src/context/AnimationPathContext';
 import { useIslandPosition } from '@/src/context/IslandPositionContext';
 import { BOARD_COLOR } from '@/src/components/bento/skins/heritage/palette';
@@ -17,7 +17,7 @@ interface NavbarProps {
 }
 
 export function Navbar({ onToggleBacklog, isBacklog }: NavbarProps) {
-  const { skin, setSkin, plankStyle, setPlankStyle, background, setBackground } = useSkin();
+  const { skin, setSkin, plankStyle, setPlankStyle } = useSkin();
   const { animationPath, setAnimationPath } = useAnimationPath();
   const { toggleEditor, isEditorOpen } = useIslandPosition();
 
@@ -55,17 +55,6 @@ export function Navbar({ onToggleBacklog, isBacklog }: NavbarProps) {
             <option value="jagged">JAGGED PLANKS</option>
             <option value="laboratory">LABORATORY</option>
           </select>
-          <select
-            value={background}
-            onChange={(e) => setBackground(e.target.value as BackgroundId)}
-            aria-label="Background"
-            className="font-mono text-[length:var(--text-label-sm)] uppercase tracking-[0.15em] px-3 py-1.5 border-[length:var(--border-width-sm)] border-ink-base rounded-md bg-transparent text-ink-base shadow-[0_var(--ui-depth)_0_0_var(--shadow-color)] cursor-pointer"
-          >
-            {BACKGROUNDS.map((bg) => (
-              <option key={bg.id} value={bg.id}>{bg.label.toUpperCase()}</option>
-            ))}
-          </select>
-
           <select
             value={skin}
             onChange={(e) => setSkin(e.target.value as SkinId)}

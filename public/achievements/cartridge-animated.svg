@@ -1,0 +1,184 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" width="800" height="450">
+  <!--
+    Hand-authored SVG/CSS recreation of CartridgeShaderCanvas
+    (src/components/backgrounds/AchievementLiveShaders.tsx). That shader raymarches a real 3D signed-
+    distance-field box with a continuous 360 rotation, which is not reproducible in CSS/SVG with correct
+    perspective and face-occlusion. Per an explicit product decision (see cone/project/roadmap/board/
+    T-026), this recreation does NOT attempt a full spin: it stays front-facing on the alien sticker
+    face and fakes depth with a gentle scaleX "turn and return" wobble, a phase-matched edge-shading
+    sliver, embossed top/bottom bevel highlights, and a diagonal glare sweep. Body geometry (box +
+    2 top notches), the sticker panel bounds, and the 8x8 alien bitmap are all read directly off
+    mapCartridge()/getAlienPixel() in the shader, not off cone/project/specs/SVG_Recreation_Prompts.md
+    Prompt 4 (that prompt describes the abandoned full-rotation approach).
+  -->
+  <defs>
+    <pattern id="crtGrid" width="24" height="24" patternUnits="userSpaceOnUse">
+      <path d="M 24 0 L 0 0 0 24" fill="none" stroke="#FFFFFF" stroke-width="1"/>
+    </pattern>
+
+    <radialGradient id="crtVignette" cx="50%" cy="50%" r="72%">
+      <stop offset="0%"  stop-color="#000000" stop-opacity="0"/>
+      <stop offset="65%" stop-color="#000000" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0.4"/>
+    </radialGradient>
+
+    <filter id="crtGlow" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur stdDeviation="9"/>
+    </filter>
+
+    <!-- Cartridge body silhouette: sharp-edged box with two notches cut into the top edge, traced
+         directly from mapCartridge()'s sdBox/notch coordinates (scaled x300, y-flipped to SVG-down). -->
+    <path id="cartBody" d="
+      M -165,-126 L -150,-126 L -150,-84 L -102,-84 L -102,-126
+      L 102,-126 L 102,-84 L 150,-84 L 150,-126 L 165,-126
+      L 165,126 L -165,126 Z"/>
+  </defs>
+
+  <style>
+    /* No spin -- the cartridge stays front-facing and fakes depth with a shared "wobble" timeline:
+       body scaleX/rotate, the two edge-shading slivers, and nothing else needs to remain in sync,
+       so everything else below runs on its own independent period, same structure as the other 3
+       conversions. */
+
+    .grid-overlay { fill: url(#crtGrid); opacity: 0.10; }
+
+    .particle { fill: #FFFFFF; opacity: 0; animation: particleDrift 6s linear infinite; }
+    @keyframes particleDrift {
+      0%   { transform: translate(-40px,-40px); opacity: 0; }
+      6%   { opacity: 0.55; }
+      94%  { opacity: 0.55; }
+      100% { transform: translate(840px, 490px); opacity: 0; }
+    }
+
+    .wave-line {
+      fill: none;
+      stroke: #FFFFFF;
+      stroke-width: 2.5;
+      stroke-linecap: round;
+      stroke-dasharray: 14 14;
+      opacity: 0.35;
+      animation: waveDash 2.4s linear infinite;
+    }
+    @keyframes waveDash { from { stroke-dashoffset: 56; } to { stroke-dashoffset: 0; } }
+
+    /* ---------- The wobble: shared 4.2s "turn toward one side and back, then the other" cycle ---------- */
+    .cart-wobble { animation: cartWobble 4.2s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+    @keyframes cartWobble {
+      0%   { transform-origin: 50% 50%; transform: scaleX(1)    rotate(0deg); }
+      25%  { transform-origin: 0% 50%;  transform: scaleX(0.88) rotate(-3deg); }
+      50%  { transform-origin: 50% 50%; transform: scaleX(1)    rotate(0deg); }
+      75%  { transform-origin: 100% 50%; transform: scaleX(0.88) rotate(3deg); }
+      100% { transform-origin: 50% 50%; transform: scaleX(1)    rotate(0deg); }
+    }
+    .cart-bob { animation: cartBob 2.6s ease-in-out infinite; }
+    @keyframes cartBob { 0%,100% { transform: translateY(0px); } 50% { transform: translateY(-9px); } }
+
+    /* Edge-shading slivers: fade in on whichever side is receding. At 25% the body pivots from its
+       LEFT edge (scaleX shrinks toward the left, so the RIGHT edge pulls inward and recedes) -- the
+       right sliver reveals there, and vice versa at 75%. These live outside .cart-wobble (see markup)
+       so they stay at the body's true outer edge instead of shrinking along with it. */
+    .edge-sliver { fill: #B45309; }
+    .edge-left  { animation: edgeLeft 4.2s ease-in-out infinite; }
+    .edge-right { animation: edgeRight 4.2s ease-in-out infinite; }
+    @keyframes edgeLeft {
+      0%, 50%, 100% { opacity: 0; }
+      75%           { opacity: 0.9; }
+    }
+    @keyframes edgeRight {
+      0%, 50%, 100% { opacity: 0; }
+      25%           { opacity: 0.9; }
+    }
+
+    .glow-silhouette { fill: #FFFFFF; opacity: 0.16; animation: glowBreathe 2.6s ease-in-out infinite; }
+    @keyframes glowBreathe { 0%,100% { opacity: 0.12; } 50% { opacity: 0.22; } }
+
+    .glare {
+      fill: #FFFFFF;
+      opacity: 0;
+      animation: glareSweep 3.4s ease-in infinite;
+    }
+    @keyframes glareSweep {
+      0%, 55%   { transform: translateX(-160px); opacity: 0; }
+      62%       { opacity: 0.5; }
+      74%       { transform: translateX(160px); opacity: 0; }
+      100%      { transform: translateX(160px); opacity: 0; }
+    }
+  </style>
+
+  <!-- Background -->
+  <rect width="800" height="450" fill="#0284C7"/>
+  <rect width="800" height="450" class="grid-overlay"/>
+
+  <path class="wave-line" d="M 0,370 Q 100,340 200,370 T 400,370 T 600,370 T 800,370"/>
+
+  <g>
+    <rect class="particle" x="0" y="0" width="6" height="6" style="animation-delay:-0.5s"/>
+    <rect class="particle" x="0" y="0" width="5" height="5" style="animation-delay:-1.8s"/>
+    <rect class="particle" x="0" y="0" width="7" height="7" style="animation-delay:-3.1s"/>
+    <rect class="particle" x="0" y="0" width="5" height="5" style="animation-delay:-4.4s"/>
+    <rect class="particle" x="0" y="0" width="6" height="6" style="animation-delay:-2.5s"/>
+    <rect class="particle" x="0" y="0" width="5" height="5" style="animation-delay:-0.9s"/>
+  </g>
+
+  <!-- The cartridge: front-facing, wobble fakes the depth -->
+  <g transform="translate(400,225)">
+    <g class="cart-bob">
+      <!-- Edge-shading slivers: siblings of .cart-wobble (not children) so scaleX on the body
+           doesn't shrink them too; they need to stay put at the body's true outer edge while
+           the body itself pulls back from it, which is what actually reveals them. -->
+      <rect class="edge-sliver edge-left"  x="-172" y="-84" width="14" height="210"/>
+      <rect class="edge-sliver edge-right" x="158"  y="-84" width="14" height="210"/>
+
+      <g class="cart-wobble">
+        <use href="#cartBody" class="glow-silhouette" filter="url(#crtGlow)" transform="scale(1.08)"/>
+
+        <!-- Drop shadow -->
+        <use href="#cartBody" fill="#02243A" opacity="0.35" transform="translate(6,10)"/>
+
+        <!-- Main gold body -->
+        <use href="#cartBody" fill="#F59E0B"/>
+
+        <!-- Embossed bevel: light strip along the top inner edge, shadow strip along the bottom -->
+        <rect x="-155" y="-122" width="310" height="10" fill="#FCD34D" opacity="0.8"/>
+        <rect x="-165" y="112" width="330" height="14" fill="#B45309" opacity="0.55"/>
+        <rect x="-165" y="-126" width="10" height="252" fill="#FCD34D" opacity="0.35"/>
+        <rect x="155" y="-126" width="10" height="252" fill="#B45309" opacity="0.4"/>
+
+        <!-- Front sticker bezel + inset panel -->
+        <rect x="-126" y="-84" width="252" height="150" rx="4" fill="#191F2E"/>
+        <rect x="-114" y="-72" width="228" height="126" rx="3" fill="#121620"/>
+
+        <!-- 8x8 alien sprite (cyan body, red eyes), bitmap read from getAlienPixel() -->
+        <g fill="#38BDF8">
+          <rect x="-13" y="-61" width="26" height="13"/>
+          <rect x="-26" y="-48" width="52" height="13"/>
+          <rect x="-39" y="-35" width="78" height="13"/>
+          <rect x="-52" y="-22" width="26" height="13"/>
+          <rect x="-13" y="-22" width="26" height="13"/>
+          <rect x="26"  y="-22" width="26" height="13"/>
+          <rect x="-52" y="-9"  width="104" height="13"/>
+          <rect x="-39" y="4"   width="13" height="13"/>
+          <rect x="-13" y="4"   width="26" height="13"/>
+          <rect x="26"  y="4"   width="13" height="13"/>
+          <rect x="-52" y="17"  width="13" height="13"/>
+          <rect x="-26" y="17"  width="13" height="13"/>
+          <rect x="13"  y="17"  width="13" height="13"/>
+          <rect x="39"  y="17"  width="13" height="13"/>
+          <rect x="-39" y="30"  width="13" height="13"/>
+          <rect x="26"  y="30"  width="13" height="13"/>
+        </g>
+        <g fill="#EF4444">
+          <rect x="-26" y="-22" width="13" height="13"/>
+          <rect x="13"  y="-22" width="13" height="13"/>
+        </g>
+
+        <!-- Diagonal glare sweep across the sticker -->
+        <g style="clip-path:polygon(-126px -84px, 126px -84px, 126px 66px, -126px 66px)">
+          <polygon class="glare" points="-160,-90 -130,-90 -80,72 -110,72"/>
+        </g>
+      </g>
+    </g>
+  </g>
+
+  <rect width="800" height="450" fill="url(#crtVignette)"/>
+</svg>
