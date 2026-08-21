@@ -10,6 +10,7 @@ import {
   Layers,
   Code2,
   Box,
+  LucideProps,
 } from 'lucide-react';
 import { SkillsSlotProps } from '../../ports';
 import { HERITAGE_PALETTE } from './palette';
@@ -78,7 +79,7 @@ const NOTE_FOLD_CORNERS: FoldCorner[] = [
   'bottom-left',
 ];
 
-function getIcon(skill: string) {
+function getIcon(skill: string): React.ReactElement<LucideProps> {
   const s = skill.toLowerCase();
   if (s.includes('game design')) return <Gamepad2 />;
   if (s.includes('economy')) return <Palette />;
@@ -227,7 +228,7 @@ function StickyNote({ color, rotation, skill, effect, pinColor, foldCorner }: St
         }}
       >
         <div className="text-ink-base flex-shrink-0">
-          {React.cloneElement(getIcon(skill) as React.ReactElement, { size: 36, strokeWidth: 2 })}
+          {React.cloneElement(getIcon(skill), { size: 36, strokeWidth: 2 })}
         </div>
         <span
           style={{ fontFamily: 'var(--font-hand)' }}

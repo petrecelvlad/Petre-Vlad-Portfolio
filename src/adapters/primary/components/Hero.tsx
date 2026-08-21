@@ -1,6 +1,5 @@
-import { useMemo, useEffect, useRef } from 'react';
+import { useMemo, useEffect, useRef, lazy, Suspense } from 'react';
 import { motion } from 'motion/react';
-import { ThreeNatureFieldBackground } from '@/src/components/backgrounds/ThreeNatureFieldBackground';
 import { AchievementShaderCanvas, ShaderType } from '@/src/components/backgrounds/AchievementShaderCanvas';
 import { FloatingIslandBackdrop } from '@/src/components/backgrounds/FloatingIslandBackdrop';
 import { AnimatedRoleTitle } from './AnimatedRoleTitle';
@@ -8,6 +7,14 @@ import { TornPaperPanel } from '@/src/components/atoms/TornPaperPanel';
 import { useIsVisible } from '@/src/hooks/useIsVisible';
 import { useDeferredMount } from '@/src/hooks/useDeferredMount';
 import { useIslandPosition } from '@/src/context/IslandPositionContext';
+
+// Code-split: three.js is large, and this background can fail to even initialize on
+// GPUs/drivers without usable WebGL (see ThreeNatureFieldBackground's own try/catch fallback).
+// Splitting it out means the ~1MB main bundle doesn't ship three.js to every visitor whether or
+// not their hardware can render it — same pattern as SkillTree/Timeline in App.tsx.
+const ThreeNatureFieldBackground = lazy(() =>
+  import('@/src/components/backgrounds/ThreeNatureFieldBackground').then((m) => ({ default: m.ThreeNatureFieldBackground }))
+);
 
 function scrollNextSection() {
   const main = document.querySelector('main') as HTMLElement | null;
@@ -75,7 +82,11 @@ export function Hero() {
   return (
     <div ref={heroRef} className="relative w-full h-full flex items-center justify-center py-3 sm:py-4 md:py-6 lg:py-6 overflow-hidden select-none">
       {/* ── Layer 0: Base Background ── */}
-      {canvasesReady && <ThreeNatureFieldBackground isVisible={isVisible} />}
+      {canvasesReady && (
+        <Suspense fallback={null}>
+          <ThreeNatureFieldBackground isVisible={isVisible} />
+        </Suspense>
+      )}
 
       {/* ── Layer 1: Floating Island Pedestal Backdrop (Root level z-[2], anchored to the bottom of the character video so it tracks the video's feet rather than stretching the full column height) ── */}
       <div
