@@ -1,8 +1,8 @@
 import { useId, useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
-import { Text } from '../../../atoms/Text';
-import { InstantPhoto } from '../../../atoms/InstantPhoto';
-import { ResponsibilitiesSlotProps } from '../../ports';
+import { Text } from '@/src/components/atoms/Text';
+import { InstantPhoto } from '@/src/components/atoms/InstantPhoto';
+import { ResponsibilitiesSlotProps } from '@/src/components/bento/ports';
 import { formatDateToQuarter } from '@/src/core/domain/formatDate';
 import {
   HERITAGE_PALETTE, saturate, EMBOSS_LIGHT, EMBOSS_DARK, EMBOSS_AMBIENT_SHADOW,

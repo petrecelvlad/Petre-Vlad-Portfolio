@@ -44,6 +44,21 @@ export interface TreeLayout {
 
 const ANCHOR_PREFIX = '__root__';
 
+/** Depth of every skill in `skills` — column index from its nearest null-parent ancestor. */
+function buildDepthMap(skills: Skill[]): Map<string, number> {
+  const byId = new Map(skills.map(s => [s.id, s]));
+  const depthOf = new Map<string, number>();
+  function getDepth(skill: Skill): number {
+    const cached = depthOf.get(skill.id);
+    if (cached !== undefined) return cached;
+    const d = skill.parent === null ? 0 : getDepth(byId.get(skill.parent)!) + 1;
+    depthOf.set(skill.id, d);
+    return d;
+  }
+  skills.forEach(getDepth);
+  return depthOf;
+}
+
 /**
  * Compact column-packed layout (see docs/Design/SkillTree_Compact_Routing_Proposal.md).
  * Column = depth from the nearest null-parent ancestor, unchanged from before.
@@ -84,17 +99,7 @@ function packColumn(idealRows: number[], ceiling: number): number[] {
 
 export function computeLayout(category: SkillCategory): TreeLayout {
   const skills = SKILLS.filter(s => s.category === category);
-  const byId = new Map(skills.map(s => [s.id, s]));
-
-  const depthOf = new Map<string, number>();
-  function getDepth(skill: Skill): number {
-    const cached = depthOf.get(skill.id);
-    if (cached !== undefined) return cached;
-    const d = skill.parent === null ? 0 : getDepth(byId.get(skill.parent)!) + 1;
-    depthOf.set(skill.id, d);
-    return d;
-  }
-  skills.forEach(getDepth);
+  const depthOf = buildDepthMap(skills);
 
   const maxDepth = Math.max(...skills.map(s => depthOf.get(s.id)!));
 
@@ -254,4 +259,154 @@ export function getActivePathOrder(activeSkill: Skill | null): Map<string, numbe
   chain.reverse(); // root ... selected
   chain.forEach((s, i) => order.set(s.id, i));
   return order;
+}
+
+function linkPixelLength(link: LayoutLink): number {
+  return Math.abs(link.tx - link.sx) + Math.abs(link.ty - link.sy);
+}
+
+/** Only depth 0 (the root skills) is shown by default; every deeper layer collapses until its branch is selected. */
+export function isDefaultVisibleDepth(depth: number): boolean {
+  return depth < 1;
+}
+
+function buildChildrenMap(skills: Skill[]): Map<string, Skill[]> {
+  const childrenOf = new Map<string, Skill[]>();
+  skills.forEach(s => {
+    if (s.parent === null) return;
+    const arr = childrenOf.get(s.parent) ?? [];
+    arr.push(s);
+    childrenOf.set(s.parent, arr);
+  });
+  return childrenOf;
+}
+
+/**
+ * Which skill pills are currently mounted for this category: the always-visible
+ * depth-0/1 baseline, plus — for every skill in `expandedSkillIds` that is
+ * ITSELF currently visible — that skill's DIRECT children only (one layer at
+ * a time, not its whole subtree; a grandchild only appears once its own
+ * parent has separately been added to `expandedSkillIds`). Computed as a
+ * top-down BFS from the baseline so an entry that becomes unreachable (its
+ * own parent got removed from the set) naturally stops contributing, with no
+ * explicit pruning needed — see getNextExpandedSkillIds for how the set
+ * itself accumulates or resets on each selection.
+ */
+export function getVisibleSkillIds(category: SkillCategory, expandedSkillIds: Set<string>): Set<string> {
+  const skills = SKILLS.filter(s => s.category === category);
+  const depthOf = buildDepthMap(skills);
+  const childrenOf = buildChildrenMap(skills);
+
+  const visible = new Set<string>();
+  const queue: Skill[] = [];
+  skills.forEach(s => {
+    if (isDefaultVisibleDepth(depthOf.get(s.id)!)) {
+      visible.add(s.id);
+      queue.push(s);
+    }
+  });
+
+  while (queue.length) {
+    const node = queue.shift()!;
+    if (!expandedSkillIds.has(node.id)) continue;
+    for (const child of childrenOf.get(node.id) ?? []) {
+      if (!visible.has(child.id)) {
+        visible.add(child.id);
+        queue.push(child);
+      }
+    }
+  }
+
+  return visible;
+}
+
+function isDescendantOrSelf(skill: Skill, ancestorId: string, byId: Map<string, Skill>): boolean {
+  let current: Skill | undefined = skill;
+  while (current) {
+    if (current.id === ancestorId) return true;
+    current = current.parent ? byId.get(current.parent) : undefined;
+  }
+  return false;
+}
+
+/**
+ * Next `expandedSkillIds` after clicking `skill`:
+ * - Already expanded (toggle-off) → remove just it. Anything only reachable
+ *   THROUGH it collapses too, automatically, via getVisibleSkillIds' own
+ *   reachability walk — no explicit cascade/cleanup needed here.
+ * - Not expanded, and it's a descendant of (or equal to) the currently open
+ *   branch's root → add it. Siblings and everything else already open stay
+ *   open — this is what lets clicking a second child under the same parent
+ *   reveal its own children without collapsing the first child's.
+ * - Not expanded, and outside the currently open branch (or nothing is
+ *   currently expanded) → reset: the whole set becomes just this one skill,
+ *   opening a fresh branch. "Outside" is checked against the branch ROOT
+ *   specifically (the shallowest currently-expanded skill), not against any
+ *   arbitrary member — checking against a deeper member would wrongly treat
+ *   a sibling as "outside" its own branch.
+ */
+export function getNextExpandedSkillIds(expandedSkillIds: Set<string>, skill: Skill): Set<string> {
+  if (expandedSkillIds.has(skill.id)) {
+    const next = new Set(expandedSkillIds);
+    next.delete(skill.id);
+    return next;
+  }
+
+  const byId = new Map(SKILLS.map(s => [s.id, s]));
+  const depthOf = buildDepthMap(SKILLS.filter(s => s.category === skill.category));
+  let root: Skill | undefined;
+  let rootDepth = Infinity;
+  for (const id of expandedSkillIds) {
+    const candidate = byId.get(id);
+    if (!candidate || candidate.category !== skill.category) continue;
+    const d = depthOf.get(id) ?? Infinity;
+    if (d < rootDepth) {
+      root = candidate;
+      rootDepth = d;
+    }
+  }
+
+  if (root && isDescendantOrSelf(skill, root.id, byId)) {
+    return new Set(expandedSkillIds).add(skill.id);
+  }
+
+  return new Set([skill.id]);
+}
+
+/**
+ * Per-link duration + cumulative delay for a "branch growing outward" reveal
+ * animation, BFS'd outward from the category's anchor so every currently
+ * visible link (not just the single active-path highlight `getActivePathOrder`
+ * covers) gets a delay equal to how long it takes the line to actually grow
+ * out to it — segment N starts exactly when its parent segment finishes.
+ * Consumed by `SkillTreeConnections.tsx` to sequence both the connector
+ * draw-in/retract and the pill it leads to appearing/disappearing right as
+ * the line reaches/leaves it. Pass only the currently-VISIBLE link set (not
+ * the full static layout) so delays are relative to what's actually newly
+ * appearing right now, not the whole tree's shape.
+ */
+export function getLinkRevealTiming(
+  category: SkillCategory,
+  links: LayoutLink[],
+): Map<string, { duration: number; delay: number }> {
+  const timing = new Map<string, { duration: number; delay: number }>();
+  const childrenOfSource = new Map<string, LayoutLink[]>();
+  links.forEach(l => {
+    const arr = childrenOfSource.get(l.sourceId) ?? [];
+    arr.push(l);
+    childrenOfSource.set(l.sourceId, arr);
+  });
+
+  const anchorId = `${ANCHOR_PREFIX}${category}`;
+  const queue: { sourceId: string; delay: number }[] = [{ sourceId: anchorId, delay: 0 }];
+  while (queue.length) {
+    const { sourceId, delay } = queue.shift()!;
+    for (const link of childrenOfSource.get(sourceId) ?? []) {
+      const duration = segmentDuration(linkPixelLength(link));
+      timing.set(link.targetId, { duration, delay });
+      queue.push({ sourceId: link.targetId, delay: delay + duration });
+    }
+  }
+
+  return timing;
 }

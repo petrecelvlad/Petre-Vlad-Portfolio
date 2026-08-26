@@ -181,9 +181,12 @@
   --font-body: 'Outfit', sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
   --font-arcade: 'Silkscreen', 'Press Start 2P', monospace;
-  /* Handwriting register — only ever consumed by heritage's clipboard paper text (DR-019).
-     Defaults to --font-body so any skin that doesn't override it is unaffected. */
-  --font-hand: var(--font-body);
+  /* Handwriting register — consumed by the project section's clipboard paper text
+     (BentoResponsibilities.tsx/BentoSkills.tsx, DR-019). Unconditional across both skins
+     (2026-08-26) — was heritage-only via a [data-skin="heritage"] override below, which meant
+     the identical shared component silently rendered in --font-body under gamified instead.
+     One token, one value, no skin fork to diverge on. */
+  --font-hand: 'Kalam', cursive;
 
   /* Font sizes — named label tiers */
   --text-label: 11px;
@@ -244,15 +247,11 @@
  * shared resolution was promoted to be the @theme block's own default
  * (Gamified is the actual runtime-default skin — see SkinContext.tsx) —
  * removing the duplication rather than keeping two skins' worth of
- * identical overrides live. The only value genuinely specific to Heritage
- * and not shared with Gamified is its handwriting register, below.
+ * identical overrides live. Its handwriting register (--font-hand) is now
+ * unconditional too (2026-08-26, see the @theme declaration above) — no
+ * [data-skin="heritage"] override block remains; there is currently no
+ * skin-conditional CSS anywhere in this file.
  */
-[data-skin="heritage"] {
-  /* Handwriting register — the clipboard's paper reads as Vlad's own notes,
-     not a borrowed brand typeface. Scoped to heritage only; gamified stays
-     on the default --font-body. */
-  --font-hand: 'Kalam', cursive;
-}
 
 * { box-sizing: border-box; }
 

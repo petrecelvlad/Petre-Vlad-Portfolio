@@ -38,17 +38,17 @@ export function GamifiedParchmentPanel({
         <div className="relative w-full flex items-center justify-between border-b-[2px] border-dashed border-[#B89C6C] pb-3 mb-3">
           <div className="flex items-center gap-2">
             {categoryLabel && (
-              <span className="px-2 py-0.5 rounded bg-[#D97706] text-white font-sans font-bold text-[9px] tracking-wider uppercase shadow-sm">
+              <span className="px-2 py-0.5 rounded bg-[#D97706] text-white font-mono font-bold text-[9px] tracking-wider uppercase shadow-sm">
                 {categoryLabel}
               </span>
             )}
-            <span className="font-serif font-black text-[11px] uppercase tracking-widest text-[#451A03]">
+            <span className="font-mono font-black text-[11px] uppercase tracking-widest text-[#451A03]">
               {headerTitle}
             </span>
           </div>
 
           <div className="flex items-center gap-2 mr-16 md:mr-20">
-            <span className="px-2 py-0.5 rounded bg-[#1C1610] text-[#FFD700] font-sans font-bold text-[9px] tracking-wider uppercase">
+            <span className="px-2 py-0.5 rounded bg-[#1C1610] text-[#FFD700] font-mono font-bold text-[9px] tracking-wider uppercase">
               {rankLabel}
             </span>
           </div>

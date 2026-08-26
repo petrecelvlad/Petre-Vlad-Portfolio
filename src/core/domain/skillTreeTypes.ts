@@ -24,6 +24,8 @@ export interface Skill {
 
 export interface CategoryConfig {
   label: string;
+  /** Shown in SkillDetailsPanel when the category badge itself is selected, not a specific skill within it — see SkillTree.tsx's handleSelectCategory. */
+  description: string;
   /**
    * Drives `Badge`'s `color` prop in `SkillDetailsPanel.tsx` — Badge's colorMap
    * pulls from the SITE's shared --color-* tokens, a separate palette from this
@@ -53,6 +55,7 @@ export interface CategoryConfig {
 export const CATEGORIES: Record<SkillCategory, CategoryConfig> = {
   design: {
     label: 'DESIGN',
+    description: 'Shaping how a game plays, feels, and earns — from core systems and level craft to onboarding, economy, and interface, all grounded in research rather than guesswork.',
     color: 'butter',
     stroke: '#FACC15',
     bgBase: '#FACC15',
@@ -61,6 +64,7 @@ export const CATEGORIES: Record<SkillCategory, CategoryConfig> = {
   },
   production: {
     label: 'PRODUCTION',
+    description: 'Running the machinery that turns a design into a shipped, live product — planning, pipelines, and documentation, plus the player-facing operations that keep a title healthy after launch.',
     color: 'sky',
     stroke: '#38BDF8',
     bgBase: '#38BDF8',
@@ -69,6 +73,7 @@ export const CATEGORIES: Record<SkillCategory, CategoryConfig> = {
   },
   leadership: {
     label: 'LEADERSHIP',
+    description: 'Directing people and priorities across concurrent teams — setting strategy and roadmaps, coordinating dependencies, and translating between creative vision and business reality.',
     color: 'periwinkle',
     stroke: '#C084FC',
     bgBase: '#C084FC',

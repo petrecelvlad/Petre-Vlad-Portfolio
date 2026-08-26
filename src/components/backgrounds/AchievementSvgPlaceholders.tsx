@@ -55,18 +55,24 @@ export function AchievementTeamsLeadSvg({ className }: { className?: string; isV
   );
 }
 
-// Cartridge's real hand-authored animation. The shader raymarches a true 3D rotating box, which
-// isn't reproducible in CSS/SVG with correct perspective/occlusion — per an explicit product
-// decision (cone/project/roadmap/board/T-026), this stays front-facing on the alien sticker face
-// and fakes depth with a scaleX "turn and return" wobble instead of a full spin. Body geometry and
-// the 8x8 alien bitmap are read directly off mapCartridge()/getAlienPixel() in
-// AchievementLiveShaders.tsx. Same self-contained, JS-free, <img>-rendered pattern as the others above.
+// Cartridge's animation: a hand-authored 800x600 (4:3) side-scrolling platformer scene, swapped in
+// as a demo asset in place of the earlier alien-cartridge recreation. Its aspect ratio doesn't match
+// the card's 16:9 slot the way the other 3 assets' native 800x450 canvases do, so it can't use
+// object-cover like them — cover would scale the whole scene down to fit, and at typical card sizes
+// that non-integer downscale blurs this SVG's fine pixel-art grid (1-2px mortar lines, HUD text)
+// while also cropping the vertical overflow. Using object-fit: none instead renders the scene at its
+// true native size and lets the card's overflow-hidden box act as a window onto it — no scaling, so
+// no blur, at the cost of only showing a crop of the full scene at typical (smaller-than-800x600)
+// card sizes. object-position is biased down from center (50% -> 60%) so that window favors the
+// running hero + ground level (his vertical range centers around y~380 of the 600-tall canvas) over
+// the sky/HUD band at the very top.
 export function AchievementCartridgeSvg({ className }: { className?: string; isVisible?: boolean }) {
   return (
     <img
       src={`${import.meta.env.BASE_URL}achievements/cartridge-animated.svg`}
       alt=""
-      className={`w-full h-full block object-cover ${className ?? ''}`}
+      className={`w-full h-full block ${className ?? ''}`}
+      style={{ objectFit: 'none', objectPosition: '50% 60%' }}
     />
   );
 }

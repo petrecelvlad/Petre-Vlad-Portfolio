@@ -10,9 +10,7 @@ import { JsonExperienceRepository } from '@/src/adapters/secondary/JsonExperienc
 import { Navbar } from '@/src/adapters/primary/components/Navbar';
 import { Hero } from '@/src/adapters/primary/components/Hero';
 import { ErrorBoundary } from '@/src/components/ErrorBoundary';
-import { GamifiedShowcase } from '@/src/adapters/primary/components/GamifiedShowcase';
 import { BacklogView } from '@/src/adapters/primary/components/BacklogView';
-import { useSkin } from '@/src/context/SkinContext';
 import { IslandPositionProvider } from '@/src/context/IslandPositionContext';
 import { IslandPositionPanel } from '@/src/components/IslandPositionPanel';
 import { Circle, Square, Triangle } from 'lucide-react';
@@ -26,7 +24,6 @@ const Timeline = lazy(() => import('@/src/adapters/primary/components/Timeline')
 export default function App() {
   const [experiences, setExperiences] = useState<IExperience[]>([]);
   const [showBacklog, setShowBacklog] = useState(false);
-  const { plankStyle } = useSkin();
   const repo = new JsonExperienceRepository();
   const mainRef = useRef<HTMLDivElement>(null);
 
@@ -46,10 +43,6 @@ export default function App() {
 
         {showBacklog ? (
           <BacklogView experiences={experiences} />
-        ) : plankStyle === 'laboratory' ? (
-          <div className="flex-1 w-full bg-[#170E08] overflow-y-auto p-2 md:p-4 flex items-center justify-center">
-            <GamifiedShowcase />
-          </div>
         ) : (
         <main ref={mainRef} className="flex-1 w-full relative overflow-y-auto snap-y snap-mandatory select-none">
           <div className="snap-start snap-always h-[calc(100vh-var(--chrome-navbar-height))] w-full flex items-center justify-center relative z-0">

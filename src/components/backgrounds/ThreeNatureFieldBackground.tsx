@@ -26,7 +26,7 @@ interface ThreeNatureFieldBackgroundProps {
   isVisible?: boolean;
 }
 
-const GRASS_COUNT = 12000;
+const GRASS_COUNT = 8000; // was 12000 — reduced for perf; indistinguishable at this scale, less per-frame wind-sway math
 const TREE_COUNT = 12;
 const CAMERA_TARGET = new THREE.Vector3(0, 2.5, 0);
 const CAMERA_RADIUS = Math.hypot(0, 12); // initial (0, 2.5, 12) offset from target in the XZ plane — pulled back from the original (0, 2.0, 10) for a wider view
@@ -262,25 +262,24 @@ export function ThreeNatureFieldBackground({ className = '', isVisible = true }:
     treePositions.forEach((pos) => {
       const treeGroup = new THREE.Group();
 
+      // castShadow disabled on all 4 parts (perf): shadow mapping is disproportionately
+      // expensive on integrated GPUs, and 12 trees x 4 parts each was a big chunk of that cost
+      // for shadows that aren't really visible on this low-poly foliage anyway.
       const trunk = new THREE.Mesh(trunkGeo, trunkMat);
       trunk.position.y = 2.5;
-      trunk.castShadow = true;
       trunk.receiveShadow = true;
       treeGroup.add(trunk);
 
       const canopy1 = new THREE.Mesh(canopyGeo1, canopyMat);
       canopy1.position.y = 5.0;
-      canopy1.castShadow = true;
       treeGroup.add(canopy1);
 
       const canopy2 = new THREE.Mesh(canopyGeo2, canopyMat);
       canopy2.position.y = 7.5;
-      canopy2.castShadow = true;
       treeGroup.add(canopy2);
 
       const canopy3 = new THREE.Mesh(canopyGeo3, canopyMat);
       canopy3.position.y = 9.5;
-      canopy3.castShadow = true;
       treeGroup.add(canopy3);
 
       treeGroup.position.set(pos.x, 0, pos.z);

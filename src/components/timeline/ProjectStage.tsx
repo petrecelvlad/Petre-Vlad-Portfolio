@@ -1,6 +1,6 @@
 import { IProject } from '@/src/core/domain/models';
 import { ProjectDetails } from '@/src/components/timeline/ProjectDetails';
-import { WoodBackground } from '@/src/components/bento/skins/heritage/WoodBackground';
+import { WoodBackground } from '@/src/components/bento/shared/WoodBackground';
 
 interface ProjectStageProps {
   project: IProject;
