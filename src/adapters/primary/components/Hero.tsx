@@ -5,6 +5,7 @@ import { FloatingIslandBackdrop } from '@/src/components/backgrounds/FloatingIsl
 import { AnimatedRoleTitle } from './AnimatedRoleTitle';
 import { TornPaperPanel } from '@/src/components/atoms/TornPaperPanel';
 import { useIsVisible } from '@/src/hooks/useIsVisible';
+import { useIsScrolling } from '@/src/hooks/useIsScrolling';
 import { useDeferredMount } from '@/src/hooks/useDeferredMount';
 import { useIslandPosition } from '@/src/context/IslandPositionContext';
 
@@ -33,6 +34,13 @@ interface AchievementData {
 export function Hero() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const { ref: heroRef, isVisible } = useIsVisible<HTMLDivElement>();
+  // Pauses the Three.js background's render loop (shadows, wind shaders, grass instancing,
+  // camera orbit) for the whole scroll gesture, not just once Hero's visibility ratio crosses
+  // a threshold — the threshold-based approach still let a full-cost frame render for however
+  // long it took to scroll past 50%. Scroll detection now owns that job, so isVisible itself
+  // is back to the default 0 (only "fully offscreen" stops it) for its other consumers (the
+  // <video> below, the achievement canvases), which don't need scroll-gesture precision.
+  const isScrolling = useIsScrolling();
   const { config: islandPosition } = useIslandPosition();
   // Text/layout renders immediately; WebGL shader canvases mount a beat
   // later so they never delay first paint.
@@ -84,7 +92,7 @@ export function Hero() {
       {/* ── Layer 0: Base Background ── */}
       {canvasesReady && (
         <Suspense fallback={null}>
-          <ThreeNatureFieldBackground isVisible={isVisible} />
+          <ThreeNatureFieldBackground isVisible={isVisible && !isScrolling} />
         </Suspense>
       )}
 

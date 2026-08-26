@@ -66,7 +66,6 @@ export function GamifiedBannerPlaque({ title = "HERO SKILL TREE" }: GamifiedBann
           x="165"
           y="28"
           textAnchor="middle"
-          fontFamily="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
           fontSize="14"
           fontWeight="900"
           fill="#FFE875"
@@ -74,7 +73,7 @@ export function GamifiedBannerPlaque({ title = "HERO SKILL TREE" }: GamifiedBann
           stroke={CONTOUR}
           strokeWidth="0.8"
           paintOrder="stroke fill"
-          style={{ filter: 'drop-shadow(1px 1px 0px #000)' }}
+          style={{ fontFamily: 'var(--font-arcade)', filter: 'drop-shadow(1px 1px 0px #000)' }}
         >
           {title}
         </text>

@@ -1,15 +1,14 @@
 import { Sliders } from 'lucide-react';
 import { Row } from '@/src/components/atoms/Row';
 import { Heading } from '@/src/components/atoms/Heading';
-import { SKINS, SkinId, PlankStyle, useSkin } from '@/src/context/SkinContext';
 import { ANIMATION_PATHS, AnimationPathId, useAnimationPath } from '@/src/context/AnimationPathContext';
 import { useIslandPosition } from '@/src/context/IslandPositionContext';
-import { BOARD_COLOR } from '@/src/components/bento/skins/heritage/palette';
+import { BOARD_COLOR } from '@/src/components/bento/shared/palette';
 import {
   OUTLINE_COLOR, OUTLINE_WIDTH, BOARD_HIGHLIGHT_COLOR, BOARD_ELEVATION_COLOR,
   HIGHLIGHT_HEIGHT_PX, ELEVATION_HEIGHT_PX,
-} from '@/src/components/bento/skins/heritage/DeskBoardConstants';
-import { PlankGrain } from '@/src/components/bento/skins/heritage/DeskBoardSVGAssets';
+} from '@/src/components/bento/shared/WoodPlankConstants';
+import { PlankGrain } from '@/src/components/bento/shared/PlankGrain';
 
 interface NavbarProps {
   onToggleBacklog: () => void;
@@ -17,7 +16,6 @@ interface NavbarProps {
 }
 
 export function Navbar({ onToggleBacklog, isBacklog }: NavbarProps) {
-  const { skin, setSkin, plankStyle, setPlankStyle } = useSkin();
   const { animationPath, setAnimationPath } = useAnimationPath();
   const { toggleEditor, isEditorOpen } = useIslandPosition();
 
@@ -45,26 +43,6 @@ export function Navbar({ onToggleBacklog, isBacklog }: NavbarProps) {
             <span>EDIT ISLAND 🏝️</span>
           </button>
 
-          <select
-            value={plankStyle}
-            onChange={(e) => setPlankStyle(e.target.value as PlankStyle)}
-            aria-label="Plank Style"
-            className="font-mono text-[length:var(--text-label-sm)] uppercase tracking-[0.15em] px-3 py-1.5 border-[length:var(--border-width-sm)] border-ink-base rounded-md bg-transparent text-ink-base shadow-[0_var(--ui-depth)_0_0_var(--shadow-color)] cursor-pointer"
-          >
-            <option value="clean">CLEAN PLANKS</option>
-            <option value="jagged">JAGGED PLANKS</option>
-            <option value="laboratory">LABORATORY</option>
-          </select>
-          <select
-            value={skin}
-            onChange={(e) => setSkin(e.target.value as SkinId)}
-            aria-label="Skin"
-            className="font-mono text-[length:var(--text-label-sm)] uppercase tracking-[0.15em] px-3 py-1.5 border-[length:var(--border-width-sm)] border-ink-base rounded-md bg-transparent text-ink-base shadow-[0_var(--ui-depth)_0_0_var(--shadow-color)] cursor-pointer"
-          >
-            {SKINS.map((s) => (
-              <option key={s.id} value={s.id}>{s.label.toUpperCase()}</option>
-            ))}
-          </select>
           <select
             value={animationPath}
             onChange={(e) => setAnimationPath(e.target.value as AnimationPathId)}

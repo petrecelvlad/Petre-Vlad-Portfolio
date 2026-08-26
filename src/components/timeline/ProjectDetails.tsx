@@ -1,9 +1,11 @@
 import type React from 'react';
 import { IProject } from '@/src/core/domain/models';
-import { resolveSlot } from '../bento/registry';
+import { BentoHeader } from '../bento/shared/BentoHeader';
+import { BentoResponsibilities } from '../bento/shared/BentoResponsibilities';
+import { BentoSkills } from '../bento/shared/BentoSkills';
+import { BentoAchievement } from '../bento/shared/BentoAchievement';
 import { BentoVideoFrame } from '../bento/BentoVideoFrame';
 import { Stack } from '../atoms/Stack';
-import { useSkin } from '@/src/context/SkinContext';
 
 interface ProjectDetailsProps {
   key?: React.Key;
@@ -12,13 +14,8 @@ interface ProjectDetailsProps {
 }
 
 export function ProjectDetails({ project, isActive }: ProjectDetailsProps) {
-  const { skin } = useSkin();
-  const BentoHeader = resolveSlot(skin, 'header');
-  const BentoResponsibilities = resolveSlot(skin, 'responsibilities');
-  const BentoSkills = resolveSlot(skin, 'skills');
-  const BentoAchievement = resolveSlot(skin, 'achievement');
   return (
-    <Stack data-skin={skin} gap="md" className="w-full h-full min-h-0 overflow-y-auto overflow-x-hidden px-1 py-7">
+    <Stack gap="md" className="w-full h-full min-h-0 overflow-y-auto overflow-x-hidden px-1 py-7">
       <div className="grid grid-cols-1 lg:grid-cols-[40%_1fr] flex-grow gap-4 md:gap-6 items-stretch min-h-0">
         
         {/* Left Column */}

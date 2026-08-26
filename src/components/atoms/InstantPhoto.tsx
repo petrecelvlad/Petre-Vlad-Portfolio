@@ -11,7 +11,7 @@ export interface InstantPhotoProps {
 
 // The one shared "instant photo" recipe — white frame with a deeper bottom margin (the
 // polaroid tell), a scotch-tape strip pinned at the top only. Used by both the clipboard's
-// project icon (skins/heritage/BentoResponsibilities.tsx) and SkillTree's project photos —
+// project icon (bento/shared/BentoResponsibilities.tsx) and SkillTree's project photos —
 // same shape and tape everywhere, callers only vary size/position/rotation via props.
 //
 // No border anywhere in this component (2026-07-27, per reference: a real instant-photo print

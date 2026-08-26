@@ -12,7 +12,7 @@ import {
   Box,
   LucideProps,
 } from 'lucide-react';
-import { SkillsSlotProps } from '../../ports';
+import { SkillsSlotProps } from '@/src/components/bento/ports';
 import { HERITAGE_PALETTE } from './palette';
 
 // No panel — these sit loose on the wood, like real sticky notes. Six fixed
