@@ -22,14 +22,8 @@ agent_instructions: >
 
 None. The app is a static build with no backend — `npm run dev` and `npm run build` both work with zero environment configuration.
 
-### Present in `.env.example` but not actually used
-
-| Variable | Purpose (as documented in `.env.example`) | Actual status |
-|---|---|---|
-| `GEMINI_API_KEY` | Described as auto-injected by an "AI Studio" runtime | Not referenced by any file under `src/` — appears to be inert leftover from an AI-Studio starter template |
-| `APP_URL` | Described as the Cloud Run service URL for self-referential links/OAuth | Not referenced anywhere — this project doesn't run on Cloud Run, it deploys to static GitHub Pages |
-
-Do not treat these as real configuration. Tracked for removal: `cone/project/roadmap/board/T-013-remove-unused-ai-studio-scaffolding.md`.
+`GEMINI_API_KEY`/`APP_URL` (AI-Studio-starter leftovers) and the `@google/genai`/`express`/`dotenv`
+dependencies that referenced them were removed in T-013 — `.env.example` is now empty.
 
 ---
 

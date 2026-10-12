@@ -15,7 +15,7 @@ Individual Kanban cards — see [BOARD.md](../BOARD.md) for the protocol (states
   * [T-010](T-010-microsoft-skills.md) - microsoft/skills *(backlog)*
   * [T-011](T-011-self-learning-skills.md) - Kulaxyz/self-learning-skills *(backlog)*
 * [T-012](T-012-sticky-note-fold-corner.md) - Fix sticky-note 'fold' corner effect in heritage skin *(backlog)*
-* [T-013](T-013-remove-unused-ai-studio-scaffolding.md) - Remove unused AI-Studio scaffolding from package.json/.env.example *(backlog)*
+* [T-013](T-013-remove-unused-ai-studio-scaffolding.md) - Remove unused AI-Studio scaffolding from package.json/.env.example *(done)*
 * [T-014](T-014-bake-achievement-shaders-to-video.md) - Bake the 4 Hero achievement-card shaders to looping video/sprite *(done)*
 * [T-021](T-021-animation-path-switcher.md) - Runtime-switchable animation path (shader/baked/svg) for the 4 achievement cards *(done)*
 * [T-022](T-022-segmented-lite-perf-test.md) - Segmented3 "Lite" background fork — removes per-frame SVG path rebuild, new default, awaiting felt-experience verdict *(done)*
