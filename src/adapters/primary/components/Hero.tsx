@@ -2,7 +2,8 @@ import { useMemo, useEffect, useRef, lazy, Suspense } from 'react';
 import { motion } from 'motion/react';
 import { AchievementShaderCanvas, ShaderType } from '@/src/components/backgrounds/AchievementShaderCanvas';
 import { FloatingIslandBackdrop } from '@/src/components/backgrounds/FloatingIslandBackdrop';
-import { AnimatedRoleTitle } from './AnimatedRoleTitle';
+import { RibbonBanner } from '@/src/components/atoms/RibbonBanner';
+import { RibbonPaperSeam } from '@/src/components/atoms/RibbonPaperSeam';
 import { TornPaperPanel } from '@/src/components/atoms/TornPaperPanel';
 import { useIsVisible } from '@/src/hooks/useIsVisible';
 import { useIsScrolling } from '@/src/hooks/useIsScrolling';
@@ -156,39 +157,47 @@ export function Hero() {
                     </motion.span>
                   ))}
                 </h1>
-
-                <AnimatedRoleTitle />
               </div>
             </div>
 
-            {/* Centered Content: Bio Note \u2014 vertically centered in the space between the title and the EXPLORE button */}
+            {/* Centered Content: Role Ribbon + Bio Note, fused into one object \u2014 vertically centered in the space between the title and the EXPLORE button */}
             <div className="flex-1 flex items-center justify-center w-full">
-              <TornPaperPanel
-                className="w-full max-w-[540px] mx-auto"
-                paperColor="#FFFDF7"
-                strokeColor="#1C1610"
-                strokeWidth={3}
-                shadowOffset={4}
-                shadowColor="#1C1610"
-                toothWidth={36}
-                toothHeight={13}
-                cornerRadius={8}
-                punchHoleY={16}
-                paddingTop={56}
-                paddingBottom={56}
-                ruleInsetX={16}
-                showRuledLines={true}
-                lineSpacing={28}
-                lineColor="rgba(203, 213, 225, 0.65)"
-                rotateDeg={-0.6}
-              >
-                <p
-                  style={{ lineHeight: '28px' }}
-                  className="font-mono text-xs sm:text-sm lg:text-base text-[#1C1610] text-center font-medium select-text px-1 m-0"
-                >
-                  Game Producer & Senior Designer with 19+ years creating engaging games, leading cross-functional teams, and crafting memorable player experiences across mobile and casual platforms.
-                </p>
-              </TornPaperPanel>
+              <div className="relative w-full max-w-[540px] mx-auto" style={{ transform: 'rotate(-0.6deg)' }}>
+                <RibbonBanner className="relative z-10 -mb-6 sm:-mb-7 w-[114%] -mx-[7%]">
+                  <h2 className="font-arcade font-black text-lg sm:text-xl lg:text-2xl text-white uppercase tracking-wider leading-none drop-shadow-[0_2px_0_rgba(0,0,0,0.6)]">
+                    GAME PRODUCER
+                  </h2>
+                </RibbonBanner>
+                <div className="relative w-full">
+                  <RibbonPaperSeam paperColor="#FFFDF7" outlineColor="#1C1610" className="absolute -top-2 left-0 right-0 z-[5]" />
+                  <TornPaperPanel
+                    className="w-full"
+                    paperColor="#FFFDF7"
+                    strokeColor="#1C1610"
+                    strokeWidth={3}
+                    shadowOffset={4}
+                    shadowColor="#1C1610"
+                    toothWidth={36}
+                    toothHeight={13}
+                    cornerRadius={8}
+                    punchHoleY={16}
+                    paddingTop={56}
+                    paddingBottom={56}
+                    ruleInsetX={16}
+                    showRuledLines={true}
+                    lineSpacing={28}
+                    lineColor="rgba(203, 213, 225, 0.65)"
+                    rotateDeg={0}
+                  >
+                    <p
+                      style={{ lineHeight: '28px' }}
+                      className="font-mono text-xs sm:text-sm lg:text-base text-[#1C1610] text-center font-medium select-text px-1 m-0"
+                    >
+                      Game Producer & Senior Designer with 19+ years creating engaging games, leading cross-functional teams, and crafting memorable player experiences across mobile and casual platforms.
+                    </p>
+                  </TornPaperPanel>
+                </div>
+              </div>
             </div>
 
             {/* Bottom Content: EXPLORE Button */}

@@ -2,7 +2,7 @@
 type: Task
 title: "T-032: Redesign Hero's middle column (unify role + description)"
 description: "Merge the role title and the bio note into one unified visual element instead of two visually separate pieces"
-status: backlog
+status: done
 priority: medium
 parent: T-030
 tags: [roadmap, task, hero, visual-design]
@@ -22,8 +22,8 @@ piece.
 
 ## Acceptance Criteria
 
-- [ ] Role label and bio description read as one unified visual element, not two disconnected ones
-- [ ] Final direction confirmed with the user before implementation
+- [x] Role label and bio description read as one unified visual element, not two disconnected ones
+- [x] Final direction confirmed with the user before implementation
 
 ---
 
@@ -35,5 +35,12 @@ piece.
 
 ## Notes
 
-No concrete visual direction chosen yet — needs a design conversation before implementation
-starts.
+Landed 2026-08-26/27: `AnimatedRoleTitle`/`GamePlaque` badge removed. New atoms
+`src/components/atoms/RibbonBanner.tsx` (a swallow-tailed ribbon reading "GAME PRODUCER",
+styled after a model-generated reference) and `src/components/atoms/RibbonPaperSeam.tsx` (a
+joinery accent bridging the seam, modeled on `BentoResponsibilities.tsx`'s `BinderClip`) now fuse
+onto the existing `TornPaperPanel` bio card in `Hero.tsx`. Went through several corrective rounds
+with the user (initial layout too small/offset, then a full outline/shadow rework after the
+ribbon read as "three shapes taped together" instead of one molded object — fixed by merging the
+tails+body into one stroked/shadowed silhouette, matching `GamePlaque`'s documented
+one-continuous-outline principle in `GAME_PLAQUE.md` §7).

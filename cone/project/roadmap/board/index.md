@@ -34,7 +34,7 @@ Individual Kanban cards — see [BOARD.md](../BOARD.md) for the protocol (states
   * [T-029](T-029-navbar-mvp-cleanup.md) - Navbar cleanup: remove debug controls, add real nav, clickable logo *(backlog)*
   * [T-030](T-030-hero-section-polish.md) - Hero section polish *(backlog)*
     * [T-031](T-031-hero-perf-verification.md) - Verify Hero performance on older laptops *(backlog)*
-    * [T-032](T-032-hero-column-2-redesign.md) - Redesign Hero's middle column (unify role + description) *(backlog)*
+    * [T-032](T-032-hero-column-2-redesign.md) - Redesign Hero's middle column (unify role + description) *(done)*
   * [T-033](T-033-skilltree-section-redesign.md) - SkillTree section redesign *(backlog)*
     * [T-034](T-034-skilltree-simplify-detail-panel.md) - Simplify SkillDetailsPanel content *(backlog)*
     * [T-035](T-035-skilltree-photos-own-section.md) - Move SkillTree project photos into their own section *(backlog)*
