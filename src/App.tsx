@@ -13,7 +13,7 @@ import { ErrorBoundary } from '@/src/components/ErrorBoundary';
 import { BacklogView } from '@/src/adapters/primary/components/BacklogView';
 import { IslandPositionProvider } from '@/src/context/IslandPositionContext';
 import { IslandPositionPanel } from '@/src/components/IslandPositionPanel';
-import { Circle, Square, Triangle } from 'lucide-react';
+import { Circle, Square, Triangle, Linkedin } from 'lucide-react';
 
 // Below-the-fold sections — kept out of the initial bundle so Hero can
 // paint before their JS (and the libraries they pull in, e.g. d3-hierarchy)
@@ -74,6 +74,16 @@ export default function App() {
                   Making <span className="text-periwinkle">APPS</span> that make you H<span className="text-periwinkle">APP</span>Y!
                 </div>
               </div>
+
+              <a
+                href="https://www.linkedin.com/in/vladpetrebiz/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 font-mono text-xs font-bold uppercase tracking-[0.3em] text-surface-base/50 hover:text-periwinkle transition-colors"
+              >
+                <Linkedin className="w-5 h-5" />
+                LinkedIn
+              </a>
 
               <div className="font-mono pt-20 border-t border-surface-base/10 w-full text-center text-xs font-bold uppercase tracking-[0.5em] text-surface-base/30">
                 &copy; {new Date().getFullYear()} Vlad Petre &bull; Game Designer &amp; Producer
