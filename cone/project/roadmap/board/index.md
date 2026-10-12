@@ -21,7 +21,7 @@ Individual Kanban cards — see [BOARD.md](../BOARD.md) for the protocol (states
 * [T-022](T-022-segmented-lite-perf-test.md) - Segmented3 "Lite" background fork — removes per-frame SVG path rebuild, new default, awaiting felt-experience verdict *(done)*
 * [T-023](T-023-segmented-loop-perf-test.md) - Segmented3 "Looped" background fork — precomputed SMIL animation, motion with zero per-frame JS, new default *(done)*
 * [T-024](T-024-segmented-banded-perf-test.md) - Segmented3 "Banded" background fork — transform-only sway *(done, REVERTED — looked bad, user asked to stop iterating on this direction)*
-* [T-025](T-025-cursor-gaze-broken-handoff.md) - Cursor-driven gaze on Hero's 3D Nature Field — broken, needs an agent with real browser access *(blocked)*
+* [T-025](T-025-cursor-gaze-broken-handoff.md) - Cursor-driven gaze on Hero's 3D Nature Field — root cause found and fixed *(done)*
 * [T-026](T-026-shader-to-svg-conversions.md) - Hand-author real SVG/CSS recreations for the remaining achievement-card shaders (Level-Up, Teams Lead, Cartridge — all done) *(done)*
 * [T-027](T-027-skilltree-collapse-expand.md) - Progressive-disclosure collapse/expand for the SkillTree's deep layers, one branch open at a time *(done)*
   * [T-015](T-015-shader-loop-period-audit.md) - Loop-period audit for the 4 achievement shaders *(done)*
