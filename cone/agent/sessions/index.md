@@ -6,3 +6,5 @@
 * [08_August/Week_3/2026-08-16](08_August/Week_3/2026-08-16/) - Session 03: Galaxian Background WebGL-to-SVG/CSS Conversion (COMPLETE ✅)
 * [08_August/Week_3/2026-08-19](08_August/Week_3/2026-08-19/) - Session 04: Shader Bake — Loop Period Audit, Retune, Capture, and Live Swap (COMPLETE ✅)
 * [08_August/Week_3/2026-08-20](08_August/Week_3/2026-08-20/) - Session 05: Cursor-Driven Gaze — Broken, Handoff (HANDOFF ✋)
+* [10_October/Week_2/2026-10-11](10_October/Week_2/2026-10-11/) - Session 07: Git Object Repair + Timeline Rail Drawer (HANDOFF ✋: Overview tab not shipped)
+* [10_October/Week_2/2026-10-12](10_October/Week_2/2026-10-12/) - Session 08: Overview Tab Placeholders (HANDOFF ✋: copy unconfirmed, 1366 overflow)

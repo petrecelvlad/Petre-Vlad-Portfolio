@@ -15,7 +15,7 @@ export function BentoAchievement({ achievement }: AchievementSlotProps) {
         <Row gap="sm" align="baseline" wrap>
           <Text variant="mono" size="sm" className="text-xs font-black uppercase tracking-tighter text-ink-base">Achievement:</Text>
           <Text variant="body" size="sm" className="font-bold text-ink-base">
-            {isEmpty ? '—' : achievement}
+            {isEmpty ? '' : achievement}
           </Text>
         </Row>
       </Row>

@@ -46,7 +46,9 @@ Individual Kanban cards — see [BOARD.md](../BOARD.md) for the protocol (states
     * [T-041](T-041-project-timeline-color-fix.md) - Fix project timeline color *(done)*
     * [T-042](T-042-project-scroll-animations.md) - Scroll-triggered layout animations for the project section *(backlog)*
     * [T-043](T-043-project-cards-polish.md) - Polish the 4 existing project cards *(backlog)*
-    * [T-044](T-044-project-tabs-standardization.md) - Standardize project tabs (2 tabs, defined content) *(backlog)*
+    * [T-044](T-044-project-tabs-standardization.md) - Semantic project tabs (Overview / Details / optional Gallery), top edge *(in-progress — Overview/Details/Gallery live, unconfirmed copy in red)*
     * [T-045](T-045-add-more-projects.md) - Add more projects (recent jobs) *(backlog)*
-    * [T-046](T-046-rewrite-project-copy.md) - Rewrite project copy toward Game Producer framing *(backlog)*
+    * [T-046](T-046-rewrite-project-copy.md) - Rewrite project copy toward Game Producer framing *(in-progress — Overview copy live, awaiting user answers on red items)*
+    * [T-048](T-048-project-tab2-discovery-cues.md) - Make the Details tab discoverable *(backlog)*
+    * [T-049](T-049-project-gallery-tab.md) - Optional Gallery tab *(done)*
   * [T-047](T-047-footer-mvp-additions.md) - Footer MVP additions *(backlog)*

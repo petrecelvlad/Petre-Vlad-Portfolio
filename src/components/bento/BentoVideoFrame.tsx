@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { Volume2, VolumeX, Play, Pause } from 'lucide-react';
 import { useVideoPrefs } from '@/src/context/VideoPrefsContext';
+import { getYoutubeId } from '@/src/core/domain/projectMedia';
 
 interface BentoVideoFrameProps {
   screenshot?: string;
@@ -38,12 +39,6 @@ declare global {
       PlayerState: { PLAYING: number; PAUSED: number };
     };
   }
-}
-
-function getYoutubeId(url: string) {
-  const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
-  const match = url.match(regExp);
-  return (match && match[2].length === 11) ? match[2] : null;
 }
 
 export function BentoVideoFrame({ screenshot, youtubeUrl, isActive }: BentoVideoFrameProps) {

@@ -1,3 +1,10 @@
+// Recruiter summary shown as the clipboard's first page. Any "[? …]" span inside these
+// strings is copy the owner hasn't confirmed yet (see unconfirmedCopy.ts).
+export interface IProjectOverview {
+  facts: string[];
+  summary: string;
+}
+
 export interface IProject {
   id: string;
   title: string;
@@ -8,6 +15,7 @@ export interface IProject {
   description?: string;
   icon?: string;
   type: 'GAME' | 'SOFTWARE';
+  overview: IProjectOverview;
   responsibilities: string[];
   achievements: string[];
   technologies: string[];

@@ -16,9 +16,13 @@
         "description": "One of the world's top-grossing merge games. Contracted to design levels for live events and core game progression.",
         "icon": "/assets/icons/Icon_MM.png",
         "type": "GAME",
+        "overview": {
+          "facts": ["Metacore", "Team [?]", "Mobile", "Live ops", "6 months (contract)"],
+          "summary": "Merge game."
+        },
         "responsibilities": [
-          "Designed and balanced levels for live events and core game progression, working within established design frameworks and pipelines",
-          "Contributed to Game Design and Game Balance across active content updates for a top-grossing mobile title"
+          "Designed and balanced levels for live events and core game progression",
+          "Contributed to Game Design and Game Balance on a top-grossing mobile title"
         ],
         "achievements": [
           "Contributed to one of the world's top-grossing merge games"
@@ -48,10 +52,14 @@
         "description": "Senior Game Design across DECA's live portfolio of acquired titles, managing live operations and feature design for Realm of the Mad God.",
         "icon": "/assets/icons/Icon_ROTMG.png",
         "type": "GAME",
+        "overview": {
+          "facts": ["DECA Games", "Team [?]", "[? PC]", "Live ops", "6 months"],
+          "summary": "MMO."
+        },
         "responsibilities": [
-          "Provided Senior Game Design across DECA's live portfolio of acquired titles, shaping feature direction and content strategy",
-          "Managed live operations and feature design for Realm of the Mad God, a long-running MMO with a dedicated player base",
-          "Optimized live ops event structures to improve player engagement and retention across update cycles"
+          "Provided Senior Game Design across DECA's portfolio of acquired titles",
+          "Managed live ops and feature design for Realm of the Mad God, a long-running MMO",
+          "Optimized live ops event structures to improve engagement and retention"
         ],
         "achievements": [
           "Optimized live ops events for higher player engagement"
@@ -81,15 +89,19 @@
         "description": "Coordinated 6 teams to produce and deliver levels for multiple King puzzle games. Responsible for King's partnership and day-to-day project coordination, planning, and delivery for level content.",
         "icon": "/assets/icons/Icon_Amber.png",
         "type": "GAME",
+        "overview": {
+          "facts": ["Amber Studio for King", "6 teams, 15 designers", "[? Mobile]", "[? Live content]", "3 years 8 months"],
+          "summary": "[? Which King titles]"
+        },
         "responsibilities": [
-          "Led 6 concurrent level design teams across multiple King puzzle titles, coordinating daily delivery schedules and cross-team dependencies",
-          "Owned the King partnership end-to-end, acted as the primary point of contact between Amber and King's studio leads",
-          "Managed a cumulative headcount of 15 designers, running standups, reviews, and milestone planning across all active projects",
-          "Trained 9 Junior Level Designers from onboarding to production-ready, building a structured training pipeline that scaled with team growth",
-          "Personally produced over 2,500+ levels while guiding teams to a combined output exceeding 10,000 levels across all projects",
-          "Standardized Level Design procedures and centralized shared resources into a unified knowledge base used across all teams",
-          "Completed internal Leadership Training programs focused on people management, conflict resolution, and cross-functional coordination",
-          "Mentored 1 university student through a Game Design internship, guiding them from academic theory to hands-on production work"
+          "Led 6 concurrent level design teams across multiple King puzzle titles",
+          "Owned the King partnership as main contact for King's studio leads",
+          "Managed 15 designers: standups, reviews, and milestone planning",
+          "Trained 9 Junior Level Designers through a structured training pipeline",
+          "Personally built 2,500+ levels; teams delivered 10,000+ in total",
+          "Standardized Level Design procedures into a shared knowledge base",
+          "Completed Leadership Training in people management and team coordination",
+          "Mentored a university student through a Game Design internship"
         ],
         "achievements": [
           "Managed 6 concurrent teams while maintaining delivery quality and production velocity"
@@ -107,12 +119,16 @@
         "description": "Developed by Animoca Brands, the game integrates with the broader REVV token ecosystem and features Cars and Drivers as NFTs, enabling players to manage their own Formula E teams.",
         "icon": "/assets/icons/Icon_FEHV.png",
         "type": "GAME",
+        "overview": {
+          "facts": ["Amber Studio for Animoca Brands", "Team [?]", "Platform [?]", "Stage [?]", "6 months"],
+          "summary": "Formula E team-management game with NFT cars and drivers."
+        },
         "responsibilities": [
-          "Oversaw the design of all core gameplay features, ensuring each system aligned with the blockchain integration and REVV token economy",
-          "Designed the game's major systems from scratch: Game Modes, Team Management, AI Manager Personas, Attack Zone and Energy Regen mechanics, and Circuit Track research",
-          "Created the full game screen flow diagram and collaborated closely with UX and UI teams to shape an intuitive player experience",
-          "Worked alongside the Game Economy Designer to validate, stress-test, and balance all proposed game values before implementation",
-          "Researched the real Formula E sport in depth to ensure gameplay mechanics maintained high fidelity to the actual racing format"
+          "Oversaw all core gameplay design, aligned with the REVV token economy",
+          "Designed core systems from scratch: Game Modes, Team Management, AI Personas",
+          "Created the full screen flow diagram and worked with the UX and UI teams",
+          "Validated and balanced all game values with the Game Economy Designer",
+          "Researched Formula E in depth to keep gameplay true to the real sport"
         ],
         "achievements": [
           "Integrated NFT Cars and Drivers as playable team management assets"
@@ -141,19 +157,18 @@
         "description": "Tap TD combines an addictive idle gameplay with the complexity of tower defense. Produced independently in partnership with 3 former King employees.",
         "icon": "/assets/icons/Icon_TapTD.png",
         "type": "GAME",
+        "overview": {
+          "facts": ["[? Self-published]", "Team of 4", "Mobile [? Android / iOS]", "Concept → launch → live updates", "10 months"],
+          "summary": "Idle tower-defense game."
+        },
         "responsibilities": [
-          "Produced the full game independently in partnership with 3 former King employees, owning every aspect of the project from concept to launch",
-          "Led project planning, team coordination, and backlog management across the entire development cycle",
-          "Created all Game Design documentation including systems specs, balancing sheets, and feature proposals",
-          "Designed all tower defense maps and level progression, balancing difficulty curves across dozens of stages",
+          "Produced the game with 3 former King employees, leading planning to launch",
+          "Designed all tower defense maps and level progression",
           "Designed the full UX flow from first-time user experience through endgame loops",
-          "Balanced all Enemy and Tower stats, tuning damage, HP, and cost curves to maintain strategic depth",
-          "Designed and calibrated the game's full in-game economy — currency generators and sinks, drop rates, and reward curves — to sustain a scalable, balanced flow of value",
-          "Defined the complete monetization strategy, including IAP pack pricing, discount structures, ad placements, and premium unlocks, balancing revenue against player experience",
-          "Reached 100K app installs within 3 months of release; used the resulting KPI data to redesign the core loop and meta progression loop for the game's first major post-launch update",
-          "Created the game's story, lore, and visual branding from scratch",
-          "Managed the game's Reddit community, responding to player feedback and incorporating it into design updates",
-          "Produced YouTube content including gameplay videos, dev vlogs, and promotional trailers"
+          "Balanced Enemy and Tower stats and the economy: sinks, drop rates, rewards",
+          "Defined monetization strategy: IAP pricing, discounts, ads, premium unlocks",
+          "Used KPI data to redesign core and meta loops",
+          "Ran the Reddit community and YouTube channel: gameplay, dev vlogs, trailers"
         ],
         "achievements": [
           "100K App Installs"
@@ -182,12 +197,16 @@
         "description": "Newton Slots has a unique take on Slot games, introducing the option to interact with elements on the screen. A Slots + Match-3 hybrid.",
         "icon": "/assets/icons/Icon_Slots.jpg",
         "type": "GAME",
+        "overview": {
+          "facts": ["Newton Slots", "Team [?]", "Mobile [?]", "Stage [?]", "7 months"],
+          "summary": "Slots game where players interact with elements on the screen."
+        },
         "responsibilities": [
-          "Re-designed a Slots game by introducing Match-3 mechanics, creating a first-of-its-kind hybrid interaction model",
-          "Researched and documented the Swapping mechanic, defining its rules, edge cases, and interaction patterns",
-          "Designed new Bonus Games mechanics that added variety and replayability to the core slot loop",
-          "Coordinated the implementation of all design features with the development team, ensuring spec fidelity",
-          "Balanced the games payout reward formula, tuning win rates and prize distribution to meet retention targets",
+          "Redesigned a Slots game with Match-3 mechanics, a first-of-its-kind hybrid",
+          "Researched and documented the Swapping mechanic's rules and edge cases",
+          "Designed new Bonus Games mechanics for more variety and replayability",
+          "Coordinated implementation of all design features with the dev team",
+          "Balanced the payout formula, tuning win rates against retention targets",
           "Designed the Loot Box system including drop tables, rarity tiers, and reward progression"
         ],
         "achievements": [
@@ -215,10 +234,14 @@
         "description": "An indie game produced and launched on the Google Play Store in just 2 months, coordinated fully online.",
         "icon": "/assets/icons/Icon_COT.jpg",
         "type": "GAME",
+        "overview": {
+          "facts": ["[? Self-published]", "Team of 3", "Android", "Concept → launch", "3 months"],
+          "summary": "[? What the game is: genre and core hook]"
+        },
         "responsibilities": [
-          "Produced and launched an indie mobile game on the Google Play Store within a 2-month timeline from concept to release",
-          "Coordinated a remote team of 3 people across different time zones, managing tasks and deliverables fully online",
-          "Designed all game graphics and the in-game economy, handling both the visual identity and the progression balance"
+          "Launched an indie mobile game on Google Play, from concept in 2 months",
+          "Coordinated a remote team of 3 across time zones, fully online",
+          "Designed all game graphics and the in-game economy"
         ],
         "achievements": [
           "Game released in 2 months"
@@ -247,13 +270,17 @@
         "description": "FitKin is a gamified app designed to encourage users to live a healthy lifestyle. Users advance the story's progress by tracking their steps in the real world.",
         "icon": "/assets/icons/Icon_Fitkin.png",
         "type": "GAME",
+        "overview": {
+          "facts": ["Intense Life", "Team of 8", "[? Mobile]", "Stage [?]", "1 year"],
+          "summary": "Gamified app that encourages a healthy lifestyle."
+        },
         "responsibilities": [
-          "Collaborated with a team of 8 people across design, development, and QA to deliver a gamified health app",
-          "Wrote all Game Design documentation including feature specs, system rules, and progression design",
-          "Designed game scenes and narrative progression that tied physical activity to in-game story advancement",
-          "Prototyped new features in rapid iteration cycles, testing mechanics before committing to full implementation",
-          "Classified users into behavioral Personas based on research, tailoring the experience to different motivation profiles",
-          "Conducted User Behavior research to understand how players engaged with fitness-driven game mechanics",
+          "Worked in a team of 8 across design, development, and QA",
+          "Wrote all Game Design docs: feature specs, system rules, progression",
+          "Designed scenes and a story that advances with real-world activity",
+          "Prototyped features in fast iterations before full implementation",
+          "Built behavioral Personas from research to tailor the experience",
+          "Ran User Behavior research on how players engaged with fitness mechanics",
           "Organized and ran User Testing events to validate design assumptions with real players"
         ],
         "achievements": [
@@ -281,12 +308,16 @@
         "description": "Contracted to design and produce an idle brawler game for a client. Managed the full production cycle including client communication.",
         "icon": "/assets/icons/Icon_Castellum.png",
         "type": "GAME",
+        "overview": {
+          "facts": ["Freelance client", "Team of 4", "Platform [?]", "Brief → delivery", "8 months"],
+          "summary": "Idle brawler game."
+        },
         "responsibilities": [
-          "Contracted to design and produce a complete idle brawler game, owning the project from initial brief through delivery",
-          "Managed a team of 4 people, assigning tasks and tracking progress across design, art, and development",
-          "Gathered client feedback through regular update calls, iterating on the design based on evolving requirements",
-          "Authored the full Game Design Document covering mechanics, progression, economy, and content structure",
-          "Handled UX and UI Design, creating wireframes and screen flows for the complete player journey",
+          "Designed and produced a complete idle brawler game, from brief to delivery",
+          "Managed a team of 4 across design, art, and development",
+          "Ran regular client update calls and iterated on the design from feedback",
+          "Authored the full Game Design Document: mechanics, progression, economy",
+          "Handled UX and UI Design: wireframes and screen flows for the full journey",
           "Produced promotional videos for the client to use in marketing and investor presentations"
         ],
         "achievements": [
@@ -316,10 +347,14 @@
         "description": "One of King's founding hits. Started as Jr. Level Designer learning core Level Design principles.",
         "icon": "/assets/icons/Icon_BWS1.png",
         "type": "GAME",
+        "overview": {
+          "facts": ["King", "Team [?]", "Mobile [? + Facebook]", "Live ops", "6 months"],
+          "summary": "[? What the game is: genre and core hook]"
+        },
         "responsibilities": [
-          "Joined King as a Jr. Level Designer on Bubble Witch Saga, one of the studio's founding mobile hits",
-          "Designed and balanced levels for the live game, learning King's proprietary level design tools and quality standards",
-          "Built a foundation in core Level Design principles including difficulty curves, player psychology, and puzzle pacing"
+          "Joined King as Jr. Level Designer on Bubble Witch Saga, a founding hit",
+          "Designed and balanced live levels with King's proprietary tools and standards",
+          "Learned core Level Design: difficulty curves, player psychology, pacing"
         ],
         "achievements": [
           "Contributed to one of King's founding hits"
@@ -337,15 +372,19 @@
         "description": "AlphaBetty Saga is a unique match-3 puzzle game that replaces colored candies with letters. Link letters to create Words & Blasters! Ranked as the Top 5th Word game in the world.",
         "icon": "/assets/icons/Icon_Alphabetty.png",
         "type": "GAME",
+        "overview": {
+          "facts": ["King", "Team [?]", "[? Mobile]", "Live ops", "1 year 7 months"],
+          "summary": "Match-3 word game where letters replace candies."
+        },
         "responsibilities": [
-          "Promoted to Level Designer on AlphaBetty Saga, a word-puzzle game that reached the Top 5 Word games worldwide",
-          "Owned the FTUE and onboarding experience end-to-end — defining the high-level onboarding strategy, sequencing when new mechanics were introduced and how they were presented, and designing the tutorials that taught the game's letter-linking mechanics",
-          "Designed and ran A/B tests across multiple onboarding difficulty tracks, measuring the impact of each on retention and engagement metrics",
-          "Collaborated with the Data Science department to analyze player performance data on released levels, coordinating on data-driven changes to improve difficulty and pacing",
+          "Promoted to Level Designer on AlphaBetty Saga, a Top 5 Word game worldwide",
+          "Owned the FTUE and onboarding: strategy, mechanic pacing, and tutorials",
+          "Ran A/B tests on onboarding difficulty tracks against retention metrics",
+          "Worked with Data Science to tune level difficulty and pacing using player data",
           "Trained 1 Junior Level Designer, mentoring them through the full production workflow",
-          "Maintained and updated project documentation to keep design specs aligned with live content changes",
-          "Delivered presentations across multiple King studios, sharing level design insights and best practices",
-          "Participated in King's internal growth programs focused on design leadership and cross-studio collaboration"
+          "Kept design docs aligned with live content changes",
+          "Presented Level Design insights and best practices across King studios",
+          "Took part in King's internal design leadership programs"
         ],
         "achievements": [
           "Shipped a live King title reaching millions of players"
@@ -372,10 +411,14 @@
         "description": "Designed, developed, and published 20+ Flash games and tutorials on Newgrounds across multiple genres. Handled all aspects of game creation from design to release.",
         "icon": "/assets/icons/Icon_NG.png",
         "type": "GAME",
+        "overview": {
+          "facts": ["Independent", "Solo", "Web (Flash)", "Shipped", "4 years"],
+          "summary": "[? What the games are: genres and highlights]"
+        },
         "responsibilities": [
-          "Designed, developed, and published 20+ Flash games and tutorials on Newgrounds, spanning shooters, puzzles, platformers, and experimental genres",
-          "Handled every aspect of game creation solo: game design, pixel art, animation, ActionScript programming, testing, and release",
-          "Built a public portfolio of shipped titles during formative years, developing the full-stack game development instincts that informed all later career work"
+          "Published 20+ Flash games and tutorials on Newgrounds across many genres",
+          "Made every game solo: game design, pixel art, animation, ActionScript, release",
+          "Built a public portfolio of shipped games that shaped all later career work"
         ],
         "achievements": [
           "Built a portfolio of 20+ published Flash games across multiple genres"
@@ -393,9 +436,13 @@
         "description": "A zombie shooter built around a bouncing bullet mechanic. Classic Flash era game with massive web reach.",
         "icon": "/assets/icons/Icon_Bounzy.jpg",
         "type": "GAME",
+        "overview": {
+          "facts": ["Independent", "Team [?]", "Web (Flash)", "Shipped", "1 year"],
+          "summary": "Zombie shooter."
+        },
         "responsibilities": [
-          "Designed the core bouncing bullet mechanic for a zombie shooter, creating a physics-driven combat loop that rewarded trick shots",
-          "Created all game art, animations, and visual effects, defining the game's visual identity from scratch"
+          "Designed the core bouncing bullet mechanic, a physics loop rewarding trick shots",
+          "Created all game art, animation, and effects, defining the visual identity"
         ],
         "achievements": [
           "Classic Flash era game with massive web reach"
@@ -413,9 +460,13 @@
         "description": "A Match-3 marble breaking game with innovative hybrid mechanics. Second installment of the Marble Frenzy series.",
         "icon": "/assets/icons/Icon_MF.png",
         "type": "GAME",
+        "overview": {
+          "facts": ["Independent", "Team [?]", "Web (Flash)", "Shipped", "9 months"],
+          "summary": "Marble-breaking game, the sequel to Marble Frenzy."
+        },
         "responsibilities": [
-          "Designed the core Match-3 marble breaking mechanics, evolving the formula from the first Marble Frenzy with new chain reactions and power-ups",
-          "Created all visual assets and tuned the game feel, ensuring the puzzle interactions felt satisfying and readable at speed"
+          "Designed the Match-3 marble mechanics, adding chain reactions and power-ups",
+          "Created all visual assets and tuned the game feel for fast, readable play"
         ],
         "achievements": [
           "Innovative Match-3 hybrid mechanics"

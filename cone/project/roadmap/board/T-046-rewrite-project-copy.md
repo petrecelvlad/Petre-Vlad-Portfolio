@@ -2,7 +2,7 @@
 type: Task
 title: "T-046: Rewrite project copy toward Game Producer framing"
 description: "Rewrite all project descriptions to lean toward the Game Producer role where it fits naturally, without forcing it"
-status: backlog
+status: in-progress
 priority: high
 parent: T-040
 tags: [roadmap, task, projects, content, copywriting]
@@ -27,6 +27,10 @@ not be forced into every entry.
       shipping, player experience) where it genuinely fits — not forced where a project doesn't
       naturally support it
 - [ ] User has reviewed/approved the rewritten copy
+- [x] Tab 1 (Overview) first draft for all 14 projects — [PROJECT_TAB1_OVERVIEW_COPY.md](../../specs/PROJECT_TAB1_OVERVIEW_COPY.md)
+- [x] Overview copy live in `portfolio.json` (facts + summary line); unconfirmed parts render red
+- [ ] User answers every red `[? …]` item (list in the spec)
+- [ ] Tab 2 (Details) edit pass: cut filler bullets, group long lists, no word-for-word repeats of the achievement card
 
 ---
 
@@ -37,6 +41,8 @@ not be forced into every entry.
 ---
 
 ## Notes
+
+2026-10-11: moved to in-progress. Scope now split across the two tabs decided in [T-044](T-044-project-tabs-standardization.md): Overview copy (recruiter-facing, drafted) and a Details edit pass.
 
 Consider doing this alongside [T-045](T-045-add-more-projects.md) (new projects should be
 authored directly in this voice) and [T-043](T-043-project-cards-polish.md) if their scopes end
