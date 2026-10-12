@@ -52,7 +52,7 @@ This is the **contract layer** of the design system. It defines every CSS custom
 ---
 
 ### 03 — Palette Colors
-*Burnt-orange/olive/dusty-teal/gold/navy mid-tones used for titlebar backgrounds, badges, and semantic highlights. Formerly the Bauhaus skin's pink/mint/sky/butter/periwinkle identity — same token names, repointed to Gamified/Heritage's shared palette when Bauhaus was retired (see `Skin_System.md`'s Sequencing Plan, step 8).*
+*Burnt-orange/olive/dusty-teal/gold mid-tones used for titlebar backgrounds, badges, and semantic highlights. Formerly the Bauhaus skin's pink/mint/sky/butter identity — same token names, repointed to Gamified/Heritage's shared palette when Bauhaus was retired (see `Skin_System.md`'s Sequencing Plan, step 8). `--color-periwinkle`/`--color-periwinkle-deep`/`--color-lilac` were briefly folded into that same repoint (turned navy/tan) — restored 2026-08-27 after that silently broke every other periwinkle/lilac consumer (`TimelineRail`, the footer's "APPS"/"HAPPY" text, `Badge`/`Avatar`'s `periwinkle` option); `--color-navy` below is the dedicated token that replaced periwinkle for the one consumer that actually wanted navy.*
 
 | Token | Semantic Purpose | Current Value (Gamified) | Status |
 |---|---|---|---|
@@ -64,9 +64,11 @@ This is the **contract layer** of the design system. It defines every CSS custom
 | `--color-sky-deep` | Sky pressed/shadow state | `#2C5C68` | DEFINED |
 | `--color-butter` | Gold — warmth, highlight | `#F0B429` | DEFINED |
 | `--color-butter-deep` | Butter pressed/shadow state | `#C98F1A` | DEFINED |
-| `--color-periwinkle` | Navy — primary action | `#33415C` | DEFINED |
-| `--color-periwinkle-deep` | Periwinkle pressed/shadow | `#232D40` | DEFINED |
-| `--color-lilac` | Soft accent | `#DCCB9E` | DEFINED |
+| `--color-periwinkle` | Purple accent — footer wordplay text, Badge/Avatar's `periwinkle` option, TimelineRail's passed-dot fill + idle-dot border; skill tree leadership pill face + active connector stroke (`CATEGORIES.leadership`) | `#C084FC` | DEFINED |
+| `--color-periwinkle-deep` | TimelineRail's filled/passed rail line + passed-dot border, idle-dot emboss shadow line | `#9333EA` | DEFINED |
+| `--color-periwinkle-darkest` | TimelineRail's passed-dot emboss shadow line; skill tree leadership pill bottom bevel line | `#7E22CE` | DEFINED |
+| `--color-lilac` | Soft purple accent — TimelineRail's base rail line + idle-dot fill, passed-dot emboss highlight; skill tree leadership pill on-path outline | `#D8B4FE` | DEFINED |
+| `--color-navy` | `BentoResponsibilities`' `BinderClip` accent only | `#33415C` | DEFINED |
 
 ---
 
@@ -76,7 +78,7 @@ This is the **contract layer** of the design system. It defines every CSS custom
 | Token | Semantic Purpose | Current Value (Gamified) | Status |
 |---|---|---|---|
 | `--role-header-accent` | `BentoHeader`'s title pill background | `→ --color-coral` | DEFINED — consumed via `Badge`'s `accentToken` prop |
-| `--role-responsibilities-accent` | `BentoResponsibilities`' titlebar background | `→ --color-periwinkle` | DEFINED — consumed via `WindowCard`'s `accentToken` prop |
+| `--role-responsibilities-accent` | `BentoResponsibilities`' titlebar background | `→ --color-navy` | DEFINED — consumed via `WindowCard`'s `accentToken` prop |
 | `--role-skills-accent` | `BentoSkills`' titlebar background | `→ --color-sky` | DEFINED — consumed via `WindowCard`'s `accentToken` prop |
 | `--role-achievement-accent` | `BentoAchievement`'s fill background | `→ --color-butter` | DEFINED — consumed directly as `bg-[var(--role-achievement-accent)]` (not a `WindowCard`, no shared component to route through) |
 

@@ -34,7 +34,8 @@ export function Timeline({ experiences, containerRef }: TimelineProps) {
 
   const {
     activeIndex,
-    itemRefs
+    itemRefs,
+    isTimelineInFullView
   } = useTimelineOrchestrator({ itemCount: projects.length, containerRef });
 
   return (
@@ -42,6 +43,7 @@ export function Timeline({ experiences, containerRef }: TimelineProps) {
       <TimelineRail
         projects={projects}
         activeIndex={activeIndex}
+        isInFullView={isTimelineInFullView}
         onNavigate={(index) => {
           // 'smooth' was verified working pre-Phase-1 (distant rail-dot
           // clicks animated correctly). Under the grid+sticky layout it's

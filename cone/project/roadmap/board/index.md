@@ -43,7 +43,7 @@ Individual Kanban cards — see [BOARD.md](../BOARD.md) for the protocol (states
     * [T-038](T-038-skilltree-banner-chrome-redesign.md) - Redesign SkillTree banner + board chrome *(backlog)*
     * [T-039](T-039-skilltree-content-pass.md) - SkillTree content pass (post user research) *(backlog)*
   * [T-040](T-040-project-section-overhaul.md) - Project section overhaul *(backlog)*
-    * [T-041](T-041-project-timeline-color-fix.md) - Fix project timeline color *(backlog)*
+    * [T-041](T-041-project-timeline-color-fix.md) - Fix project timeline color *(done)*
     * [T-042](T-042-project-scroll-animations.md) - Scroll-triggered layout animations for the project section *(backlog)*
     * [T-043](T-043-project-cards-polish.md) - Polish the 4 existing project cards *(backlog)*
     * [T-044](T-044-project-tabs-standardization.md) - Standardize project tabs (2 tabs, defined content) *(backlog)*

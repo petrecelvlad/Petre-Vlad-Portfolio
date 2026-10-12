@@ -29,10 +29,8 @@ export interface CategoryConfig {
   /**
    * Drives `Badge`'s `color` prop in `SkillDetailsPanel.tsx` — Badge's colorMap
    * pulls from the SITE's shared --color-* tokens, a separate palette from this
-   * category's own bgBase/bgTop/bgBottom/stroke/glow arcade hex below. Badge has
-   * no purple option, so `leadership` (arcade purple) can't get a matching badge
-   * tone — picked `periwinkle` (the site's other "cool/distinct" token) as the
-   * closest available choice, not a real match. Flagged, not silently wrong.
+   * category's own bgBase/bgTop/bgBottom/stroke/glow arcade hex below. For
+   * `leadership` that's an exact match: its colors ARE the site's purple tokens.
    */
   color: 'coral' | 'sky' | 'butter' | 'mint' | 'periwinkle';
   stroke: string;
@@ -50,12 +48,13 @@ export interface CategoryConfig {
  * skilltree/arcadeStyle.ts's getArcadeBevelStyle (same single-element, single-border,
  * all-inset-shadow construction as bento/shared/BentoAchievement.tsx's --shadow-raised),
  * bgTop = lighter tint for the on-path outline, stroke = connector accent. No separate
- * glow color — the site avoids blur/glow effects.
+ * glow color — the site avoids blur/glow effects. `leadership` reads the site's
+ * purple tokens instead of literal hex, so it can't drift from the rest of the UI.
  */
 export const CATEGORIES: Record<SkillCategory, CategoryConfig> = {
   design: {
     label: 'DESIGN',
-    description: 'Shaping how a game plays, feels, and earns — from core systems and level craft to onboarding, economy, and interface, all grounded in research rather than guesswork.',
+    description: 'Shaping how a game plays, feels, and earns, from core systems and level craft to onboarding, economy, and interface, all grounded in research rather than guesswork.',
     color: 'butter',
     stroke: '#FACC15',
     bgBase: '#FACC15',
@@ -64,7 +63,7 @@ export const CATEGORIES: Record<SkillCategory, CategoryConfig> = {
   },
   production: {
     label: 'PRODUCTION',
-    description: 'Running the machinery that turns a design into a shipped, live product — planning, pipelines, and documentation, plus the player-facing operations that keep a title healthy after launch.',
+    description: 'Running the machinery that turns a design into a shipped, live product: planning, pipelines, and documentation, plus the player-facing operations that keep a title healthy after launch.',
     color: 'sky',
     stroke: '#38BDF8',
     bgBase: '#38BDF8',
@@ -73,12 +72,12 @@ export const CATEGORIES: Record<SkillCategory, CategoryConfig> = {
   },
   leadership: {
     label: 'LEADERSHIP',
-    description: 'Directing people and priorities across concurrent teams — setting strategy and roadmaps, coordinating dependencies, and translating between creative vision and business reality.',
+    description: 'Directing people and priorities across concurrent teams: setting strategy and roadmaps, coordinating dependencies, and translating between creative vision and business reality.',
     color: 'periwinkle',
-    stroke: '#C084FC',
-    bgBase: '#C084FC',
-    bgTop: '#D8B4FE',
-    bgBottom: '#7E22CE',
+    stroke: 'var(--color-periwinkle)',
+    bgBase: 'var(--color-periwinkle)',
+    bgTop: 'var(--color-lilac)',
+    bgBottom: 'var(--color-periwinkle-darkest)',
   },
 };
 
@@ -87,7 +86,7 @@ export const SKILLS: Skill[] = [
   {
     id: 'system-design', name: 'System Design', category: 'design', parent: null,
     icon: Cpu, proficiency: 5, years: 19,
-    description: 'Architecting end-to-end systems that are internally consistent, predictable, and scalable — from feature sets to full product experiences.',
+    description: 'Architecting end-to-end systems that are internally consistent, predictable, and scalable, from feature sets to full product experiences.',
     projects: ['proj-fe-high-voltage', 'proj-lead-level-designer'],
   },
   {
@@ -99,7 +98,7 @@ export const SKILLS: Skill[] = [
   {
     id: 'level-design', name: 'Level Design', category: 'design', parent: 'game-design',
     icon: Layers, proficiency: 5, years: 12,
-    description: 'Crafting and producing levels at scale — from handcrafted puzzles to pipelines delivering thousands.',
+    description: 'Crafting and producing levels at scale, from handcrafted puzzles to pipelines delivering thousands.',
     projects: ['proj-lead-level-designer', 'proj-idle-td', 'proj-merge-mansion', 'proj-bubble-witch-saga', 'proj-alphabetty-saga'],
   },
   {
@@ -117,7 +116,7 @@ export const SKILLS: Skill[] = [
   {
     id: 'monetization', name: 'Monetization', category: 'design', parent: 'economy-design',
     icon: TrendingUp, proficiency: 4, years: 9,
-    description: 'Designing monetization systems — IAP pack pricing and discount structures, loot boxes, payout formulas, and progression gates.',
+    description: 'Designing monetization systems: IAP pack pricing and discount structures, loot boxes, payout formulas, and progression gates.',
     projects: ['proj-newton-slots', 'proj-idle-td'],
   },
   {
@@ -135,7 +134,7 @@ export const SKILLS: Skill[] = [
   {
     id: 'meta-core-loops', name: 'Meta Core Loops', category: 'design', parent: 'game-design',
     icon: Repeat, proficiency: 4, years: 9,
-    description: 'Designing the session-to-session meta loop — long-term goals, unlocks, and progression systems that pull players back — and iterating on it post-launch using live performance data.',
+    description: 'Designing the session-to-session meta loop (long-term goals, unlocks, and progression systems that pull players back) and iterating on it post-launch using live performance data.',
     projects: ['proj-idle-td', 'proj-fe-high-voltage', 'proj-newton-slots'],
   },
   {
@@ -147,7 +146,7 @@ export const SKILLS: Skill[] = [
   {
     id: 'ui-design', name: 'UI Design', category: 'design', parent: 'web-design',
     icon: Palette, proficiency: 4, years: 7,
-    description: 'Crafting visual interfaces with strong aesthetic direction — typography, color, component hierarchy, and screen composition guided by the user flow.',
+    description: 'Crafting visual interfaces with strong aesthetic direction: typography, color, component hierarchy, and screen composition guided by the user flow.',
     projects: ['proj-fe-high-voltage', 'proj-castellum'],
   },
   {
@@ -159,13 +158,13 @@ export const SKILLS: Skill[] = [
   {
     id: 'ftue-onboarding', name: 'FTUE & Onboarding', category: 'design', parent: 'ux-design',
     icon: Footprints, proficiency: 5, years: 7,
-    description: 'Owning the end-to-end first-time user experience — onboarding strategy, tutorial sequencing, and the cadence of introducing new mechanics to new players.',
+    description: 'Owning the end-to-end first-time user experience: onboarding strategy, tutorial sequencing, and the cadence of introducing new mechanics to new players.',
     projects: ['proj-idle-td', 'proj-alphabetty-saga'],
   },
   {
     id: 'design-systems', name: 'Design Systems', category: 'design', parent: 'web-design',
     icon: Component, proficiency: 3, years: 4,
-    description: 'Designing the complete design system for a digital product or game — token architecture, component libraries, and visual/interaction consistency end-to-end.',
+    description: 'Designing the complete design system for a digital product or game: token architecture, component libraries, and visual/interaction consistency end-to-end.',
     projects: ['proj-fe-high-voltage'],
   },
   {
@@ -209,19 +208,19 @@ export const SKILLS: Skill[] = [
   {
     id: 'pipeline-design', name: 'Pipeline Design', category: 'production', parent: 'project-mgmt',
     icon: Workflow, proficiency: 4, years: 8,
-    description: 'Designing the production pipeline itself — the shared workflow, framework, and sprint methodology a team operates under.',
+    description: 'Designing the production pipeline itself: the shared workflow, framework, and sprint methodology a team operates under.',
     projects: ['proj-lead-level-designer', 'proj-idle-td'],
   },
   {
     id: 'player-ops', name: 'Player Ops', category: 'production', parent: null,
     icon: Radar, proficiency: 4, years: 10,
-    description: 'Owning the player-facing side of a live game — community, marketing, live operations, and the data that measures whether it’s all working.',
+    description: 'Owning the player-facing side of a live game: community, marketing, live operations, and the data that measures whether it’s all working.',
     projects: ['proj-idle-td', 'proj-deca-rotmg', 'proj-alphabetty-saga'],
   },
   {
     id: 'live-ops', name: 'Live Ops', category: 'production', parent: 'player-ops',
     icon: Radio, proficiency: 3, years: 3,
-    description: 'Running the live-service content cadence for continuously operated titles — event scheduling, live balancing, and retention-driven updates post-launch.',
+    description: 'Running the live-service content cadence for continuously operated titles: event scheduling, live balancing, and retention-driven updates post-launch.',
     projects: ['proj-deca-rotmg', 'proj-merge-mansion'],
   },
   {
@@ -233,19 +232,19 @@ export const SKILLS: Skill[] = [
   {
     id: 'community-mgmt', name: 'Community Mgmt', category: 'production', parent: 'player-ops',
     icon: MessageCircle, proficiency: 3, years: 6,
-    description: 'Listening to and engaging an existing player base directly — moderating community channels, responding to feedback, and folding it back into design decisions.',
+    description: 'Listening to and engaging an existing player base directly: moderating community channels, responding to feedback, and folding it back into design decisions.',
     projects: ['proj-idle-td'],
   },
   {
     id: 'kpi-tracking', name: 'KPI Tracking', category: 'production', parent: 'player-ops',
     icon: Gauge, proficiency: 3, years: 5,
-    description: 'Defining the metrics that measure a live game’s success and using the resulting data to drive design decisions — from onboarding tuning to core and meta loop redesigns.',
+    description: 'Defining the metrics that measure a live game’s success and using the resulting data to drive design decisions, from onboarding tuning to core and meta loop redesigns.',
     projects: ['proj-alphabetty-saga', 'proj-idle-td'],
   },
   {
     id: 'ab-testing', name: 'A/B Testing', category: 'production', parent: 'kpi-tracking',
     icon: SplitSquareHorizontal, proficiency: 3, years: 3,
-    description: 'Running controlled experiments — like parallel onboarding difficulty tracks — to measure impact on retention and engagement before committing to a single design.',
+    description: 'Running controlled experiments, like parallel onboarding difficulty tracks, to measure impact on retention and engagement before committing to a single design.',
     projects: ['proj-alphabetty-saga'],
   },
 
@@ -253,19 +252,19 @@ export const SKILLS: Skill[] = [
   {
     id: 'team-leadership', name: 'Team Leadership', category: 'leadership', parent: null,
     icon: Users, proficiency: 5, years: 8,
-    description: 'Managing up to 15 people across 6 concurrent teams — setting direction, unblocking, and maintaining quality.',
+    description: 'Managing up to 15 people across 6 concurrent teams: setting direction, unblocking, and maintaining quality.',
     projects: ['proj-lead-level-designer', 'proj-fe-high-voltage', 'proj-castellum', 'proj-clash-of-towers'],
   },
   {
     id: 'strategy', name: 'Strategy', category: 'leadership', parent: 'team-leadership',
     icon: Target, proficiency: 4, years: 9,
-    description: 'Defining the holistic strategy for a game as a product — core pillars and design direction, economy, live events, monetization, release cadence, and the KPIs used to track it all end-to-end.',
+    description: 'Defining the holistic strategy for a game as a product: core pillars and design direction, economy, live events, monetization, release cadence, and the KPIs used to track it all end-to-end.',
     projects: ['proj-idle-td', 'proj-fe-high-voltage'],
   },
   {
     id: 'coaching', name: 'Coaching', category: 'leadership', parent: 'cross-team-coord',
     icon: GraduationCap, proficiency: 5, years: 7,
-    description: 'Training junior designers from scratch — 9 Junior Level Designers brought from onboarding to production-ready.',
+    description: 'Training junior designers from scratch: 9 Junior Level Designers brought from onboarding to production-ready.',
     projects: ['proj-lead-level-designer', 'proj-alphabetty-saga'],
   },
   {

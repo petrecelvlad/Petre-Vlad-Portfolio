@@ -1,6 +1,9 @@
 import { useState, useEffect, useRef, RefObject } from 'react';
 import { useMotionValue, useScroll, useSpring, MotionValue } from 'motion/react';
 
+// Snap can settle on a fractional pixel under browser zoom / non-integer DPR.
+const FULL_VIEW_TOLERANCE_PX = 1;
+
 interface UseTimelineOrchestratorProps {
   itemCount: number;
   containerRef?: RefObject<HTMLDivElement>;
@@ -15,7 +18,8 @@ export function useTimelineOrchestrator({
   const [activeIndex, setActiveIndex] = useState<number>(-1);
   const [consumedNodes, setConsumedNodes] = useState<boolean[]>(new Array(itemCount).fill(false));
   const [scrollDirection, setScrollDirection] = useState<'down' | 'up'>('down');
-  
+  const [isTimelineInFullView, setIsTimelineInFullView] = useState(false);
+
   const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
   const lastScrollY = useRef(0);
   const activeIndexRef = useRef(activeIndex);
@@ -34,6 +38,28 @@ export function useTimelineOrchestrator({
       lastScrollY.current = latest;
     });
   }, [scrollY]);
+
+  // Stricter than activeIndex !== -1, which flips on as soon as 1px of the
+  // first project enters — right for the in-flow ProjectStage, wrong for
+  // viewport-fixed chrome, which would overlap the Skill Tree mid-snap.
+  // Measures the whole trigger stack, not one section, so it stays true
+  // while snapping between two projects.
+  useEffect(() => {
+    const measureFullView = () => {
+      const firstTrigger = itemRefs.current[0];
+      const lastTrigger = itemRefs.current[itemCount - 1];
+      if (!firstTrigger || !lastTrigger) return;
+
+      const root = containerRef?.current?.getBoundingClientRect() ?? { top: 0, bottom: window.innerHeight };
+      setIsTimelineInFullView(
+        firstTrigger.getBoundingClientRect().top <= root.top + FULL_VIEW_TOLERANCE_PX &&
+        lastTrigger.getBoundingClientRect().bottom >= root.bottom - FULL_VIEW_TOLERANCE_PX
+      );
+    };
+
+    measureFullView();
+    return scrollY.on('change', measureFullView);
+  }, [scrollY, itemCount, containerRef]);
 
   useEffect(() => {
     const observerOptions = {
@@ -134,6 +160,7 @@ export function useTimelineOrchestrator({
     consumedNodes,
     itemRefs,
     setActiveIndex,
-    scrollDirection
+    scrollDirection,
+    isTimelineInFullView
   };
 }

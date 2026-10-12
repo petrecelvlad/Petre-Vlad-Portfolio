@@ -49,9 +49,19 @@
   --color-butter-deep: #C98F1A;
   --color-rose: #D9622F;
   --color-rose-deep: #B14A20;
-  --color-periwinkle: #33415C;
-  --color-periwinkle-deep: #232D40;
-  --color-lilac: #DCCB9E;
+  /* Also the skill tree's leadership pill ramp — CATEGORIES.leadership in
+     core/domain/skillTreeTypes.ts reads these directly. */
+  --color-periwinkle: #C084FC;
+  --color-periwinkle-deep: #9333EA;
+  --color-periwinkle-darkest: #7E22CE;
+  --color-lilac: #D8B4FE;
+  /* Dedicated navy for BentoResponsibilities' BinderClip accent (see
+     --role-responsibilities-accent below) — this used to borrow
+     --color-periwinkle's value, which silently turned every other periwinkle
+     consumer (TimelineRail, the footer's "APPS"/"HAPPY" text, Badge/Avatar's
+     periwinkle option) navy along with it. Split out so retargeting one
+     component's accent never again reaches into the shared palette. */
+  --color-navy: #33415C;
 
   /*
    * Component identity tokens — indirection between the raw palette and
@@ -82,7 +92,7 @@
    * live regression.)
    */
   --role-header-accent: var(--color-coral);
-  --role-responsibilities-accent: var(--color-periwinkle);
+  --role-responsibilities-accent: var(--color-navy);
   --role-skills-accent: var(--color-sky);
   --role-achievement-accent: var(--color-butter);
 
