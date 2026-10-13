@@ -3,14 +3,14 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { useEffect, useState, useRef, lazy, Suspense } from 'react';
+import { useEffect, useState, useRef, useMemo, lazy, Suspense } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { IExperience } from '@/src/core/domain/models';
 import { JsonExperienceRepository } from '@/src/adapters/secondary/JsonExperienceRepo';
 import { Navbar } from '@/src/adapters/primary/components/Navbar';
+import type { PageSection, PageSectionRefs } from '@/src/hooks/useTimelineOrchestrator';
 import { Hero } from '@/src/adapters/primary/components/Hero';
 import { ErrorBoundary } from '@/src/components/ErrorBoundary';
-import { BacklogView } from '@/src/adapters/primary/components/BacklogView';
 import { IslandPositionProvider } from '@/src/context/IslandPositionContext';
 import { IslandPositionPanel } from '@/src/components/IslandPositionPanel';
 import { Circle, Square, Triangle, Linkedin } from 'lucide-react';
@@ -23,13 +23,23 @@ const Timeline = lazy(() => import('@/src/adapters/primary/components/Timeline')
 
 export default function App() {
   const [experiences, setExperiences] = useState<IExperience[]>([]);
-  const [showBacklog, setShowBacklog] = useState(false);
   const repo = new JsonExperienceRepository();
   const mainRef = useRef<HTMLDivElement>(null);
+  const skillsRef = useRef<HTMLDivElement>(null);
+  const projectsRef = useRef<HTMLDivElement>(null);
+  const contactRef = useRef<HTMLElement>(null);
+  const sectionRefs = useMemo<PageSectionRefs>(() => ({ skills: skillsRef, projects: projectsRef, contact: contactRef }), []);
+  // Mirrors the Timeline orchestrator's activeSection (fed by onActiveSectionChange); never set anywhere else.
+  const [activeSection, setActiveSection] = useState<PageSection>('hero');
 
   useEffect(() => {
     repo.getAllExperiences().then(setExperiences);
   }, []);
+
+  const navigateTo = (section: PageSection) => {
+    const top = section === 'hero' ? 0 : sectionRefs[section].current?.offsetTop ?? 0;
+    mainRef.current?.scrollTo({ top, behavior: 'instant' });
+  };
 
   return (
     <IslandPositionProvider>
@@ -38,12 +48,9 @@ export default function App() {
           <title>Vlad Petre | Senior Game Designer Portfolio</title>
         </Helmet>
 
-        <Navbar onToggleBacklog={() => setShowBacklog(b => !b)} isBacklog={showBacklog} />
+        <Navbar activeSection={activeSection} onNavigate={navigateTo} />
         <IslandPositionPanel />
 
-        {showBacklog ? (
-          <BacklogView experiences={experiences} />
-        ) : (
         <main ref={mainRef} className="flex-1 w-full relative overflow-y-auto snap-y snap-mandatory select-none">
           <div className="snap-start snap-always h-[calc(100vh-var(--chrome-navbar-height))] w-full flex items-center justify-center relative z-0">
             <ErrorBoundary>
@@ -51,13 +58,19 @@ export default function App() {
             </ErrorBoundary>
           </div>
           <Suspense fallback={null}>
-            <div className="snap-start snap-always h-[calc(100vh-var(--chrome-navbar-height))] w-full relative z-0">
+            <div ref={skillsRef} className="snap-start snap-always h-[calc(100vh-var(--chrome-navbar-height))] w-full relative z-0">
               <SkillTree experiences={experiences} />
             </div>
-            <Timeline experiences={experiences} containerRef={mainRef} />
+            <Timeline
+              ref={projectsRef}
+              experiences={experiences}
+              containerRef={mainRef}
+              sectionRefs={sectionRefs}
+              onActiveSectionChange={setActiveSection}
+            />
           </Suspense>
           
-          <footer className="footer-snap snap-start snap-always bg-surface-inverse text-surface-base px-8 py-20 border-t-[length:var(--border-width-lg)] border-ink-base relative overflow-hidden h-[calc(100vh-var(--chrome-navbar-height))] flex flex-col justify-center">
+          <footer ref={contactRef} className="footer-snap snap-start snap-always bg-surface-inverse text-surface-base px-8 py-20 border-t-[length:var(--border-width-lg)] border-ink-base relative overflow-hidden h-[calc(100vh-var(--chrome-navbar-height))] flex flex-col justify-center">
             {/* Background Decorative Shape */}
             <div className="absolute bottom-0 right-0 w-96 h-96 bg-coral/10 rounded-full -mr-48 -mb-48" />
 
@@ -91,7 +104,6 @@ export default function App() {
             </div>
           </footer>
         </main>
-        )}
       </div>
     </IslandPositionProvider>
   );

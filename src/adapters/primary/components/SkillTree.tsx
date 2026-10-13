@@ -6,7 +6,8 @@ import { SkillCategory, CATEGORIES } from '@/src/core/domain/skillTreeTypes';
 import { LAYOUTS } from '@/src/core/domain/skillTreeGeometry';
 import { TreeCanvas } from './skilltree/SkillTreeConnections';
 import { SkillDetailsPanel } from './skilltree/SkillDetailsPanel';
-import { getArcadeBevelStyle } from './skilltree/arcadeStyle';
+import { getArcadeButtonColor, getArcadeHighlight, getArcadeOutlineStyle } from './skilltree/arcadeStyle';
+import { Button } from '@/src/components/atoms/Button';
 import { useSkillTreeState } from '@/src/hooks/useSkillTreeState';
 
 export function SkillTree({ experiences }: { experiences: IExperience[] }) {
@@ -15,18 +16,22 @@ export function SkillTree({ experiences }: { experiences: IExperience[] }) {
   const treeRows = (Object.keys(CATEGORIES) as SkillCategory[]).map(cat => {
     const isCategoryOnPath = activeSkill !== null && activeSkill.category === cat;
     const isCategorySelected = activeCategory === cat;
-    const badgeStyle = getArcadeBevelStyle(CATEGORIES[cat], isCategorySelected ? 'active' : isCategoryOnPath ? 'onPath' : 'default');
+    const badgeState = isCategorySelected ? 'active' : isCategoryOnPath ? 'onPath' : 'default';
 
     return (
       <div key={cat} className="flex items-start">
-        <button
+        <Button
           onClick={() => handleSelectCategory(cat)}
-          className="w-[96px] h-[30px] flex-shrink-0 flex items-center justify-center font-display font-black text-[9.5px] uppercase tracking-wider text-ink-base rounded-xl border-[2.5px] border-ink-base select-none relative z-10 overflow-hidden cursor-pointer transition-transform duration-100 active:translate-y-[1px] hover:scale-[1.02]"
-          style={{ marginTop: LAYOUTS[cat].rootTop, ...badgeStyle }}
+          color={getArcadeButtonColor(CATEGORIES[cat])}
+          shape="chip"
+          size="sm"
+          highlight={getArcadeHighlight(badgeState)}
+          className="w-[96px] h-[30px] flex-shrink-0 flex items-center justify-center font-display font-black text-[9.5px] uppercase tracking-wider text-ink-base select-none relative z-10 overflow-hidden"
+          style={{ marginTop: LAYOUTS[cat].rootTop, ...getArcadeOutlineStyle(CATEGORIES[cat], badgeState) }}
         >
           <span className="absolute top-[2px] right-[6px] w-[12px] h-[4px] rounded-full bg-white/50 pointer-events-none" />
           <span className="-mt-[1px]">{CATEGORIES[cat].label}</span>
-        </button>
+        </Button>
 
         <TreeCanvas
           category={cat}

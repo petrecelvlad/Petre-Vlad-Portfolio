@@ -1,6 +1,7 @@
 import React from 'react';
 import { Skill, CATEGORIES } from '@/src/core/domain/skillTreeTypes';
-import { getArcadeBevelStyle } from './arcadeStyle';
+import { getArcadeButtonColor, getArcadeHighlight, getArcadeOutlineStyle } from './arcadeStyle';
+import { Button } from '@/src/components/atoms/Button';
 
 export function Dots({ level, large }: { level: number; large?: boolean }) {
   return (
@@ -31,24 +32,21 @@ export function SkillPill({
 }: SkillPillProps) {
   const Icon = skill.icon;
   const catConfig = CATEGORIES[skill.category];
-  const style = getArcadeBevelStyle(catConfig, active ? 'active' : isOnPath ? 'onPath' : 'default');
+  const state = active ? 'active' : isOnPath ? 'onPath' : 'default';
 
   return (
-    <button
+    <Button
       onClick={() => onSelect(skill)}
+      color={getArcadeButtonColor(catConfig)}
+      shape="chip"
+      size="sm"
+      highlight={getArcadeHighlight(state)}
       className={`
         w-[160px] h-[32px] flex-shrink-0 flex items-center gap-2 px-3
-        rounded-xl border-[2.5px] border-ink-base cursor-pointer text-left relative overflow-hidden select-none
-        transition-transform duration-100 active:translate-y-[1px]
-        ${
-          active
-            ? 'z-10 scale-[1.04]'
-            : isOnPath
-            ? 'z-1 scale-[1.02]'
-            : 'hover:scale-[1.02]'
-        }
+        text-left relative overflow-hidden select-none
+        ${active ? 'z-10 scale-[1.04]' : isOnPath ? 'z-1 scale-[1.02]' : ''}
       `}
-      style={style}
+      style={getArcadeOutlineStyle(catConfig, state)}
     >
       <span className="absolute top-[3px] right-[8px] w-[14px] h-[5px] rounded-full bg-white/50 pointer-events-none" />
 
@@ -65,6 +63,6 @@ export function SkillPill({
       {isOnPath && !active && (
         <span className="w-2 h-2 rounded-full flex-shrink-0 bg-white animate-pulse -mt-[1px]" />
       )}
-    </button>
+    </Button>
   );
 }

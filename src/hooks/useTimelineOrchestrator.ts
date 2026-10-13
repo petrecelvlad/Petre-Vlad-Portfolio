@@ -4,14 +4,21 @@ import { useMotionValue, useScroll, useSpring, MotionValue } from 'motion/react'
 // Snap can settle on a fractional pixel under browser zoom / non-integer DPR.
 const FULL_VIEW_TOLERANCE_PX = 1;
 
+export type PageSection = 'hero' | 'skills' | 'projects' | 'contact';
+export type PageSectionRefs = Record<Exclude<PageSection, 'hero'>, RefObject<HTMLElement | null>>;
+
+const SECTIONS_IN_PAGE_ORDER: Exclude<PageSection, 'hero'>[] = ['skills', 'projects', 'contact'];
+
 interface UseTimelineOrchestratorProps {
   itemCount: number;
   containerRef?: RefObject<HTMLDivElement>;
+  sectionRefs?: PageSectionRefs;
 }
 
 export function useTimelineOrchestrator({ 
   itemCount,
-  containerRef
+  containerRef,
+  sectionRefs
 }: UseTimelineOrchestratorProps) {
   // 1. All hooks at the top, stable order
   const { scrollY } = useScroll({ container: containerRef });
@@ -19,6 +26,7 @@ export function useTimelineOrchestrator({
   const [consumedNodes, setConsumedNodes] = useState<boolean[]>(new Array(itemCount).fill(false));
   const [scrollDirection, setScrollDirection] = useState<'down' | 'up'>('down');
   const [isTimelineInFullView, setIsTimelineInFullView] = useState(false);
+  const [activeSection, setActiveSection] = useState<PageSection>('hero');
 
   const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
   const lastScrollY = useRef(0);
@@ -60,6 +68,25 @@ export function useTimelineOrchestrator({
     measureFullView();
     return scrollY.on('change', measureFullView);
   }, [scrollY, itemCount, containerRef]);
+
+  // The section under the middle of the scrollport — the last one whose top has passed it.
+  useEffect(() => {
+    const measureActiveSection = () => {
+      const container = containerRef?.current;
+      if (!container || !sectionRefs) return;
+
+      const probe = container.scrollTop + container.clientHeight / 2;
+      let current: PageSection = 'hero';
+      for (const section of SECTIONS_IN_PAGE_ORDER) {
+        const element = sectionRefs[section].current;
+        if (element && element.offsetTop <= probe) current = section;
+      }
+      setActiveSection(current);
+    };
+
+    measureActiveSection();
+    return scrollY.on('change', measureActiveSection);
+  }, [scrollY, containerRef, sectionRefs]);
 
   useEffect(() => {
     const observerOptions = {
@@ -161,6 +188,7 @@ export function useTimelineOrchestrator({
     itemRefs,
     setActiveIndex,
     scrollDirection,
-    isTimelineInFullView
+    isTimelineInFullView,
+    activeSection
   };
 }

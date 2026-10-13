@@ -69,6 +69,10 @@ This is the **contract layer** of the design system. It defines every CSS custom
 | `--color-periwinkle-darkest` | TimelineRail's passed-dot emboss shadow line; skill tree leadership pill bottom bevel line | `#7E22CE` | DEFINED |
 | `--color-lilac` | Soft purple accent — TimelineRail's base rail line + idle-dot fill, passed-dot emboss highlight; skill tree leadership pill on-path outline | `#D8B4FE` | DEFINED |
 | `--color-navy` | `BentoResponsibilities`' `BinderClip` accent only | `#33415C` | DEFINED |
+| `--color-linkedin` | Navbar LinkedIn link fill (LinkedIn brand blue) | `#0A66C2` | DEFINED |
+| `--color-linkedin-deep` | Navbar LinkedIn link bottom bevel line (LinkedIn brand dark blue) | `#004182` | DEFINED |
+| `--color-button-white` | White button fill (navbar Astrocade link) | `#FFFFFF` | DEFINED |
+| `--color-button-white-deep` | White button's bottom bevel line | `#CFCFCF` | DEFINED |
 
 ---
 
@@ -171,6 +175,7 @@ This is the **contract layer** of the design system. It defines every CSS custom
 
 | Token | Semantic Purpose | Current Value (Gamified) | Status |
 |---|---|---|---|
+| `--border-width-xs` | Thin border for small controls | `2px` | DEFINED — Navbar's LinkedIn link |
 | `--border-width-sm` | Standard component border | `3px` | DEFINED — wired into every consumer (`Button`, `Card`, `Badge`, `Avatar`, `AppIcon`, `BentoAchievement`, `BentoVideoFrame`, `Navbar`, `SkillTree`, `BacklogView`) |
 | `--border-width-md` | Primary/featured component border | `4px` | DEFINED — `TimelineMarker` mobile state |
 | `--border-width-lg` | Heavy border — footer, TimelineMarker desktop state | `5px` | DEFINED — sourced from real usage (`App.tsx` footer, `TimelineMarker` desktop breakpoint) |

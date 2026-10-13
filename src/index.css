@@ -62,6 +62,12 @@
      periwinkle option) navy along with it. Split out so retargeting one
      component's accent never again reaches into the shared palette. */
   --color-navy: #33415C;
+  /* LinkedIn's brand blues — the navbar's LinkedIn link only. */
+  --color-linkedin: #0A66C2;
+  --color-linkedin-deep: #004182;
+  /* Plain white button fill and its bevel's bottom line — the navbar's Astrocade link. */
+  --color-button-white: #FFFFFF;
+  --color-button-white-deep: #CFCFCF;
 
   /*
    * Component identity tokens — indirection between the raw palette and
@@ -132,6 +138,7 @@
   --radius-pill: 9999px;
 
   /* Border widths — gated by --border-presence via a fallback, see Tier 2 note above */
+  --border-width-xs: calc(2px * var(--border-presence, 1));
   --border-width-sm: calc(3px * var(--border-presence, 1));
   --border-width-md: calc(4px * var(--border-presence, 1));
   --border-width-lg: calc(5px * var(--border-presence, 1));
@@ -363,37 +370,97 @@ body::before {
   font-family: 'Tiny5', monospace;
 }
 
+/* The one raised-button behaviour (components/atoms/Button.tsx sets the parameters). Bevel = light
+   top line + dark bottom line; the undershadow is a hard offset of --btn-depth. Hover/press slides the
+   face down by exactly --btn-depth and drops the undershadow, so the button's lowest edge never moves. */
+.raised-button {
+  border-style: solid;
+  border-color: var(--color-ink-base);
+  border-width: var(--btn-border);
+  background-color: var(--btn-fill);
+  box-shadow:
+    inset 0 var(--btn-bevel) 0 0 rgba(255, 246, 219, var(--btn-highlight, 0.5)),
+    inset 0 calc(var(--btn-bevel) * -1) 0 0 var(--btn-deep),
+    0 var(--btn-depth) 0 0 var(--shadow-color);
+  transition: transform 100ms ease-out, box-shadow 100ms ease-out;
+  cursor: pointer;
+}
+
+.raised-button:hover,
+.raised-button:active {
+  transform: translateY(var(--btn-depth));
+  box-shadow:
+    inset 0 var(--btn-bevel) 0 0 rgba(255, 246, 219, var(--btn-highlight, 0.5)),
+    inset 0 calc(var(--btn-bevel) * -1) 0 0 var(--btn-deep);
+}
+
+.carved-text {
+  font-family: var(--font-hand);
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #6B3A1C;
+  text-shadow: 0 -2px 0 rgba(110, 42, 46, 0.55), 0 2px 0 rgba(243, 206, 134, 0.45);
+}
+
+.carved-text-selected {
+  /* Flat fill (no carve bevel) with a 2px white ring: whole-pixel offsets on a disc, so the ring
+     rasterizes identically on every side instead of thinning where half-pixels round away. */
+  text-shadow:
+    -1px -2px 0 #FFFFFF,
+    0 -2px 0 #FFFFFF,
+    1px -2px 0 #FFFFFF,
+    -2px -1px 0 #FFFFFF,
+    -1px -1px 0 #FFFFFF,
+    0 -1px 0 #FFFFFF,
+    1px -1px 0 #FFFFFF,
+    2px -1px 0 #FFFFFF,
+    -2px 0 0 #FFFFFF,
+    -1px 0 0 #FFFFFF,
+    1px 0 0 #FFFFFF,
+    2px 0 0 #FFFFFF,
+    -2px 1px 0 #FFFFFF,
+    -1px 1px 0 #FFFFFF,
+    0 1px 0 #FFFFFF,
+    1px 1px 0 #FFFFFF,
+    2px 1px 0 #FFFFFF,
+    -1px 2px 0 #FFFFFF,
+    0 2px 0 #FFFFFF,
+    1px 2px 0 #FFFFFF;
+}
+
 .pixel-text-outline {
+  /* Every offset scales with --pixel-outline-unit so a smaller copy keeps the same proportions. */
+  --u: var(--pixel-outline-unit, 1px);
   color: #FFFFFF;
   text-shadow:
     /* Tight 2.5px crisp dark outline all around */
-    -2px -2px 0 #1C1610,
-     2px -2px 0 #1C1610,
-    -2px  2px 0 #1C1610,
-     2px  2px 0 #1C1610,
-    -3px  0   0 #1C1610,
-     3px  0   0 #1C1610,
-     0   -3px 0 #1C1610,
-     0    3px 0 #1C1610,
+    calc(var(--u) * -2) calc(var(--u) * -2) 0 #1C1610,
+     calc(var(--u) * 2) calc(var(--u) * -2) 0 #1C1610,
+    calc(var(--u) * -2) calc(var(--u) * 2) 0 #1C1610,
+     calc(var(--u) * 2) calc(var(--u) * 2) 0 #1C1610,
+    calc(var(--u) * -3) 0 0 #1C1610,
+     calc(var(--u) * 3) 0 0 #1C1610,
+     0 calc(var(--u) * -3) 0 #1C1610,
+     0 calc(var(--u) * 3) 0 #1C1610,
 
     /* Downward 3D block extrude / undershadow */
-     0    4px 0 #1C1610,
-     0    5px 0 #1C1610,
-     0    6px 0 #1C1610,
-     0    7px 0 #1C1610,
-     0    8px 0 #1C1610,
-    -1px  5px 0 #1C1610,
-     1px  5px 0 #1C1610,
-    -1px  6px 0 #1C1610,
-     1px  6px 0 #1C1610,
-    -2px  7px 0 #1C1610,
-     2px  7px 0 #1C1610,
-    -2px  8px 0 #000000,
-     0    8px 0 #000000,
-     2px  8px 0 #000000,
+     0 calc(var(--u) * 4) 0 #1C1610,
+     0 calc(var(--u) * 5) 0 #1C1610,
+     0 calc(var(--u) * 6) 0 #1C1610,
+     0 calc(var(--u) * 7) 0 #1C1610,
+     0 calc(var(--u) * 8) 0 #1C1610,
+    calc(var(--u) * -1) calc(var(--u) * 5) 0 #1C1610,
+     calc(var(--u) * 1) calc(var(--u) * 5) 0 #1C1610,
+    calc(var(--u) * -1) calc(var(--u) * 6) 0 #1C1610,
+     calc(var(--u) * 1) calc(var(--u) * 6) 0 #1C1610,
+    calc(var(--u) * -2) calc(var(--u) * 7) 0 #1C1610,
+     calc(var(--u) * 2) calc(var(--u) * 7) 0 #1C1610,
+    calc(var(--u) * -2) calc(var(--u) * 8) 0 #000000,
+     0 calc(var(--u) * 8) 0 #000000,
+     calc(var(--u) * 2) calc(var(--u) * 8) 0 #000000,
 
     /* Soft ambient depth shadow */
-     0    12px 10px rgba(28, 22, 16, 0.45);
+     0 calc(var(--u) * 12) calc(var(--u) * 10) rgba(28, 22, 16, 0.45);
 }
 
 .pixel-text-outline-thick {

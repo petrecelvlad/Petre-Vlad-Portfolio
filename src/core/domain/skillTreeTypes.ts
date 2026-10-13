@@ -44,9 +44,8 @@ export interface CategoryConfig {
  * in the Gamified skin (Hero's AchievementShaderCanvas.tsx/FloatingIslandBackdrop.tsx,
  * widgets/EmergencyButton.tsx, widgets/ToggleSwitch.tsx) per Ketchapp_Casual_Style.md's
  * documented face/base pairs, rather than the tree's own previously-invented hex.
- * bgBase = fill color, bgBottom = the category-tinted bottom inset line in
- * skilltree/arcadeStyle.ts's getArcadeBevelStyle (same single-element, single-border,
- * all-inset-shadow construction as bento/shared/BentoAchievement.tsx's --shadow-raised),
+ * bgBase = fill color, bgBottom = the bevel's dark bottom line (pills and category badges
+ * are the standard raised Button, colored via skilltree/arcadeStyle.ts's getArcadeButtonColor),
  * bgTop = lighter tint for the on-path outline, stroke = connector accent. No separate
  * glow color — the site avoids blur/glow effects. `leadership` reads the site's
  * purple tokens instead of literal hex, so it can't drift from the rest of the UI.
