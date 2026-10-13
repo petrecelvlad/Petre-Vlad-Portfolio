@@ -383,7 +383,8 @@ export function BentoResponsibilities(props: ResponsibilitiesSlotProps) {
                         src={icon}
                         alt={title ?? role}
                         rotation={3}
-                        className="absolute left-0 top-0 w-[126px] h-[126px] md:w-[144px] md:h-[144px]"
+                        photoAspect={1}
+                        className="absolute left-0 top-0 w-[126px] md:w-[144px]"
                       />
                     )}
                     {/* left matches icon width (126/144) + the old gap-3
