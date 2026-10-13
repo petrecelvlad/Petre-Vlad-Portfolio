@@ -7,15 +7,16 @@ You are a Claude agent working on this project. Read this immediately after `AGE
 Read in this order. Each step gives you a specific capability:
 
 1. `AGENT.md` (already read) — Constitution: phases, guardrails, standing rules.
-2. `cone/PHILOSOPHY.md` — Framework philosophy: what this system is and why it exists.
-3. `cone/agent/onboarding/START_HERE.md` — Framework orientation: what to read next and why.
-4. `cone/agent/onboarding/CODING_COMPANION.md` — Coding standards: naming, functions, errors, types.
-5. `cone/project/architecture/OVERVIEW.md` — System architecture: what was built and why.
-6. `cone/agent/personas/COMMUNICATOR.md` — Always-active communication persona. Adopt immediately.
-7. `cone/agent/personas/PLANNER.md` — Always-active planning persona. Adopt immediately. Governs when work gets a board card (`cone/project/roadmap/board/`) and how it's broken down.
+2. `cone/agent/onboarding/Retard.md` — Mandatory lessons from past agent mistakes. Never repeat them. Local only (gitignored); skip if absent.
+3. `cone/PHILOSOPHY.md` — Framework philosophy: what this system is and why it exists.
+4. `cone/agent/onboarding/START_HERE.md` — Framework orientation: what to read next and why.
+5. `cone/agent/onboarding/CODING_COMPANION.md` — Coding standards: naming, functions, errors, types.
+6. `cone/project/architecture/OVERVIEW.md` — System architecture: what was built and why.
+7. `cone/agent/personas/COMMUNICATOR.md` — Always-active communication persona. Adopt immediately.
+8. `cone/agent/personas/PLANNER.md` — Always-active planning persona. Adopt immediately. Governs when work gets a board card (`cone/project/roadmap/board/`) and how it's broken down.
 
 If you are about to write or modify code, also read:
-8. `cone/agent/personas/DEVELOPER.md` — Developer persona. Adopt for all coding sessions.
+9. `cone/agent/personas/DEVELOPER.md` — Developer persona. Adopt for all coding sessions.
 
 ---
 

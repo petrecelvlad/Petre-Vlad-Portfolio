@@ -2,7 +2,7 @@
 type: Task
 title: "T-036: Larger shape + icon for the 3 root category skills"
 description: "DESIGN/PRODUCTION/LEADERSHIP category badges should get a larger shape and a larger icon on top of them"
-status: backlog
+status: done
 priority: medium
 parent: T-033
 tags: [roadmap, task, skilltree, visual-design]
@@ -21,10 +21,10 @@ icon. User wants each to get a bigger shape and an icon placed on top of it.
 
 ## Acceptance Criteria
 
-- [ ] Each of the 3 root category badges has a visibly larger shape
-- [ ] Each has an icon rendered above/on it (icon choice TBD — likely one per discipline:
+- [x] Each of the 3 root category badges has a visibly larger shape
+- [x] Each has an icon rendered above/on it (icon choice TBD — likely one per discipline:
       design/production/leadership)
-- [ ] Selected/on-path/default bevel states (`getArcadeBevelStyle`) still work at the new size
+- [x] Selected/on-path/default bevel states (`getArcadeBevelStyle`) still work at the new size
 
 ---
 
@@ -36,4 +36,4 @@ icon. User wants each to get a bigger shape and an icon placed on top of it.
 
 ## Notes
 
-Icon choice not decided yet.
+Icons chosen 2026-10-13 (user): PenTool / Factory / Crown, on 96×72 tiles with the icon above the label.

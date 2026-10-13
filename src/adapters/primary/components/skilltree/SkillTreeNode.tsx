@@ -1,6 +1,8 @@
 import React from 'react';
 import { Skill, CATEGORIES } from '@/src/core/domain/skillTreeTypes';
-import { getArcadeBevelStyle } from './arcadeStyle';
+import { getArcadeButtonColor, getArcadeHighlight, getArcadeOutlineStyle } from './arcadeStyle';
+import { Button } from '@/src/components/atoms/Button';
+import { PILL_W, PILL_H } from '@/src/core/domain/skillTreeGeometry';
 
 export function Dots({ level, large }: { level: number; large?: boolean }) {
   return (
@@ -31,40 +33,36 @@ export function SkillPill({
 }: SkillPillProps) {
   const Icon = skill.icon;
   const catConfig = CATEGORIES[skill.category];
-  const style = getArcadeBevelStyle(catConfig, active ? 'active' : isOnPath ? 'onPath' : 'default');
+  const state = active ? 'active' : isOnPath ? 'onPath' : 'default';
 
   return (
-    <button
+    <Button
       onClick={() => onSelect(skill)}
+      aria-pressed={active}
+      color={getArcadeButtonColor(catConfig, state)}
+      shape="chip"
+      size="sm"
+      highlight={getArcadeHighlight(state)}
       className={`
-        w-[160px] h-[32px] flex-shrink-0 flex items-center gap-2 px-3
-        rounded-xl border-[2.5px] border-ink-base cursor-pointer text-left relative overflow-hidden select-none
-        transition-transform duration-100 active:translate-y-[1px]
-        ${
-          active
-            ? 'z-10 scale-[1.04]'
-            : isOnPath
-            ? 'z-1 scale-[1.02]'
-            : 'hover:scale-[1.02]'
-        }
+        flex-shrink-0 flex items-center gap-2 px-2.5
+        text-left relative overflow-hidden select-none
+        ${active ? 'z-10' : isOnPath ? 'z-1 scale-[1.02]' : ''}
       `}
-      style={style}
+      style={{ width: PILL_W, height: PILL_H, ...getArcadeOutlineStyle(catConfig, state) }}
     >
-      <span className="absolute top-[3px] right-[8px] w-[14px] h-[5px] rounded-full bg-white/50 pointer-events-none" />
-
       <Icon
-        size={15}
+        size={16}
         strokeWidth={2.5}
         className="flex-shrink-0 text-ink-base -mt-[1px]"
       />
 
-      <span className="font-display font-black text-[10.5px] uppercase tracking-tight leading-none flex-1 min-w-0 truncate text-ink-base -mt-[1px]">
+      <span className="font-jersey text-[16px] uppercase leading-none flex-1 min-w-0 truncate text-ink-base -mt-[1px]">
         {skill.name}
       </span>
 
       {isOnPath && !active && (
         <span className="w-2 h-2 rounded-full flex-shrink-0 bg-white animate-pulse -mt-[1px]" />
       )}
-    </button>
+    </Button>
   );
 }

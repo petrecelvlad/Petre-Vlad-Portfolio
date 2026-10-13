@@ -1,21 +1,33 @@
 import { useState, useEffect, useRef, RefObject } from 'react';
 import { useMotionValue, useScroll, useSpring, MotionValue } from 'motion/react';
 
+// Snap can settle on a fractional pixel under browser zoom / non-integer DPR.
+const FULL_VIEW_TOLERANCE_PX = 1;
+
+export type PageSection = 'hero' | 'skills' | 'projects' | 'contact';
+export type PageSectionRefs = Record<Exclude<PageSection, 'hero'>, RefObject<HTMLElement | null>>;
+
+const SECTIONS_IN_PAGE_ORDER: Exclude<PageSection, 'hero'>[] = ['skills', 'projects', 'contact'];
+
 interface UseTimelineOrchestratorProps {
   itemCount: number;
   containerRef?: RefObject<HTMLDivElement>;
+  sectionRefs?: PageSectionRefs;
 }
 
 export function useTimelineOrchestrator({ 
   itemCount,
-  containerRef
+  containerRef,
+  sectionRefs
 }: UseTimelineOrchestratorProps) {
   // 1. All hooks at the top, stable order
   const { scrollY } = useScroll({ container: containerRef });
   const [activeIndex, setActiveIndex] = useState<number>(-1);
   const [consumedNodes, setConsumedNodes] = useState<boolean[]>(new Array(itemCount).fill(false));
   const [scrollDirection, setScrollDirection] = useState<'down' | 'up'>('down');
-  
+  const [isTimelineInFullView, setIsTimelineInFullView] = useState(false);
+  const [activeSection, setActiveSection] = useState<PageSection>('hero');
+
   const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
   const lastScrollY = useRef(0);
   const activeIndexRef = useRef(activeIndex);
@@ -34,6 +46,47 @@ export function useTimelineOrchestrator({
       lastScrollY.current = latest;
     });
   }, [scrollY]);
+
+  // Stricter than activeIndex !== -1, which flips on as soon as 1px of the
+  // first project enters — right for the in-flow ProjectStage, wrong for
+  // viewport-fixed chrome, which would overlap the Skill Tree mid-snap.
+  // Measures the whole trigger stack, not one section, so it stays true
+  // while snapping between two projects.
+  useEffect(() => {
+    const measureFullView = () => {
+      const firstTrigger = itemRefs.current[0];
+      const lastTrigger = itemRefs.current[itemCount - 1];
+      if (!firstTrigger || !lastTrigger) return;
+
+      const root = containerRef?.current?.getBoundingClientRect() ?? { top: 0, bottom: window.innerHeight };
+      setIsTimelineInFullView(
+        firstTrigger.getBoundingClientRect().top <= root.top + FULL_VIEW_TOLERANCE_PX &&
+        lastTrigger.getBoundingClientRect().bottom >= root.bottom - FULL_VIEW_TOLERANCE_PX
+      );
+    };
+
+    measureFullView();
+    return scrollY.on('change', measureFullView);
+  }, [scrollY, itemCount, containerRef]);
+
+  // The section under the middle of the scrollport — the last one whose top has passed it.
+  useEffect(() => {
+    const measureActiveSection = () => {
+      const container = containerRef?.current;
+      if (!container || !sectionRefs) return;
+
+      const probe = container.scrollTop + container.clientHeight / 2;
+      let current: PageSection = 'hero';
+      for (const section of SECTIONS_IN_PAGE_ORDER) {
+        const element = sectionRefs[section].current;
+        if (element && element.offsetTop <= probe) current = section;
+      }
+      setActiveSection(current);
+    };
+
+    measureActiveSection();
+    return scrollY.on('change', measureActiveSection);
+  }, [scrollY, containerRef, sectionRefs]);
 
   useEffect(() => {
     const observerOptions = {
@@ -134,6 +187,8 @@ export function useTimelineOrchestrator({
     consumedNodes,
     itemRefs,
     setActiveIndex,
-    scrollDirection
+    scrollDirection,
+    isTimelineInFullView,
+    activeSection
   };
 }

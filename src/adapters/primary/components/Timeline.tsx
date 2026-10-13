@@ -1,12 +1,15 @@
-import { useMemo, RefObject } from 'react';
+import { useEffect, useMemo, Ref, RefObject } from 'react';
 import { IExperience } from '@/src/core/domain/models';
-import { useTimelineOrchestrator } from '@/src/hooks/useTimelineOrchestrator';
+import { useTimelineOrchestrator, PageSection, PageSectionRefs } from '@/src/hooks/useTimelineOrchestrator';
 import { TimelineRail } from '@/src/components/timeline/TimelineRail';
 import { ProjectStage } from '@/src/components/timeline/ProjectStage';
 
 interface TimelineProps {
   experiences: IExperience[];
   containerRef: RefObject<HTMLDivElement>;
+  sectionRefs: PageSectionRefs;
+  onActiveSectionChange: (section: PageSection) => void;
+  ref?: Ref<HTMLDivElement>;
 }
 
 // Phase 1 of docs/Architecture/specs/Project_Viewer_Evolution.md: the
@@ -27,21 +30,28 @@ interface TimelineProps {
 // scroll-bounds bookkeeping needed. useTimelineOrchestrator and TimelineRail
 // are unchanged from before this change; they already treated activeIndex as
 // state, not as "which DOM node happens to be scrolled into view."
-export function Timeline({ experiences, containerRef }: TimelineProps) {
+export function Timeline({ experiences, containerRef, sectionRefs, onActiveSectionChange, ref }: TimelineProps) {
   const projects = useMemo(() => {
     return experiences.flatMap(exp => exp.projects);
   }, [experiences]);
 
   const {
     activeIndex,
-    itemRefs
-  } = useTimelineOrchestrator({ itemCount: projects.length, containerRef });
+    itemRefs,
+    isTimelineInFullView,
+    activeSection
+  } = useTimelineOrchestrator({ itemCount: projects.length, containerRef, sectionRefs });
+
+  useEffect(() => {
+    onActiveSectionChange(activeSection);
+  }, [activeSection, onActiveSectionChange]);
 
   return (
-    <div className="relative w-full grid">
+    <div ref={ref} className="relative w-full grid">
       <TimelineRail
         projects={projects}
         activeIndex={activeIndex}
+        isInFullView={isTimelineInFullView}
         onNavigate={(index) => {
           // 'smooth' was verified working pre-Phase-1 (distant rail-dot
           // clicks animated correctly). Under the grid+sticky layout it's

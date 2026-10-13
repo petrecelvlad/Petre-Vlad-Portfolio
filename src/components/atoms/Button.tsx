@@ -1,57 +1,79 @@
 import React from 'react';
 
-export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  children: React.ReactNode;
-  variant?: 'primary' | 'secondary' | 'accent' | 'outline' | 'ghost' | 'mint' | 'butter' | 'coral' | 'sky';
-  size?: 'sm' | 'md' | 'lg';
-  as?: React.ElementType;
-  href?: string;
+export interface ButtonColor {
+  fill: string;
+  /** The bevel's dark bottom line — a deeper shade of `fill`. */
+  deep: string;
 }
 
-const variantMap = {
-  primary: 'bg-ink-base text-surface-base shadow-raised border-[length:var(--border-width-sm)] border-ink-base active:shadow-none active:translate-y-[var(--press-depth)]',
-  secondary: 'bg-surface-base text-ink-base shadow-raised border-[length:var(--border-width-sm)] border-ink-base active:shadow-none active:translate-y-[var(--press-depth)]',
-  accent: 'bg-theme-accent text-white shadow-[inset_0_calc(var(--ui-depth)*-1)_0_var(--color-theme-accent-hover),0_var(--ui-depth)_0_0_var(--shadow-color)] border-[length:var(--border-width-sm)] border-ink-base active:shadow-[inset_0_calc(var(--ui-depth)*-1)_0_var(--color-theme-accent-hover)] active:translate-y-[var(--press-depth)]',
-  outline: 'bg-transparent text-ink-base shadow-raised border-[length:var(--border-width-sm)] border-ink-base active:shadow-none active:translate-y-[var(--press-depth)]',
-  ghost: 'bg-transparent border-none text-ink-base underline decoration-theme-accent-hover decoration-2 underline-offset-4 hover:decoration-3',
-  mint: 'bg-mint text-ink-base shadow-[inset_0_calc(var(--ui-depth)*-1)_0_var(--color-mint-deep),0_var(--ui-depth)_0_0_var(--shadow-color)] border-[length:var(--border-width-sm)] border-ink-base active:shadow-[inset_0_calc(var(--ui-depth)*-1)_0_var(--color-mint-deep)] active:translate-y-[var(--press-depth)]',
-  butter: 'bg-butter text-ink-base shadow-[inset_0_calc(var(--ui-depth)*-1)_0_var(--color-butter-deep),0_var(--ui-depth)_0_0_var(--shadow-color)] border-[length:var(--border-width-sm)] border-ink-base active:shadow-[inset_0_calc(var(--ui-depth)*-1)_0_var(--color-butter-deep)] active:translate-y-[var(--press-depth)]',
-  coral: 'bg-coral text-white shadow-[inset_0_calc(var(--ui-depth)*-1)_0_var(--color-coral-deep),0_var(--ui-depth)_0_0_var(--shadow-color)] border-[length:var(--border-width-sm)] border-ink-base active:shadow-[inset_0_calc(var(--ui-depth)*-1)_0_var(--color-coral-deep)] active:translate-y-[var(--press-depth)]',
-  sky: 'bg-sky text-ink-base shadow-[inset_0_calc(var(--ui-depth)*-1)_0_var(--color-sky-deep),0_var(--ui-depth)_0_0_var(--shadow-color)] border-[length:var(--border-width-sm)] border-ink-base active:shadow-[inset_0_calc(var(--ui-depth)*-1)_0_var(--color-sky-deep)] active:translate-y-[var(--press-depth)]',
+export const BUTTON_COLORS = {
+  periwinkle: { fill: 'var(--color-periwinkle)', deep: 'var(--color-periwinkle-darkest)' },
+  linkedin: { fill: 'var(--color-linkedin)', deep: 'var(--color-linkedin-deep)' },
+  white: { fill: 'var(--color-button-white)', deep: 'var(--color-button-white-deep)' },
+} satisfies Record<string, ButtonColor>;
+
+const SHAPES = {
+  rounded: 'rounded-md',
+  chip: 'rounded-xl',
+  pill: 'rounded-2xl',
 };
 
-const sizeMap = {
-  sm: 'text-sm py-2 px-3',
-  md: 'text-[length:var(--font-size-body-sm)] py-3 px-5',
-  lg: 'text-base py-4 px-6',
+// Physical parameters for the shared .raised-button behaviour in index.css.
+const SIZES = {
+  icon: { border: 'var(--border-width-xs)', bevel: '2px', depth: 'var(--ui-depth)', padding: 'p-1.5' },
+  sm: { border: '2.5px', bevel: '3px', depth: '3px', padding: '' },
+  lg: { border: 'var(--border-width-sm)', bevel: '3px', depth: '5px', padding: 'px-8 sm:px-10 py-3.5 sm:py-4' },
 };
 
-export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(({ 
-  children, 
-  variant = 'secondary', 
-  size = 'md',
-  className = '', 
-  as,
+export interface ButtonProps extends Omit<React.HTMLAttributes<HTMLElement>, 'color'> {
+  children: React.ReactNode;
+  color: ButtonColor;
+  shape?: keyof typeof SHAPES;
+  size?: keyof typeof SIZES;
+  /** Opacity of the bevel's light top line. */
+  highlight?: number;
+  href?: string;
+  target?: string;
+  rel?: string;
+}
+
+// The only raised button on the site: every instance shares the bevel and the hover/press slide;
+// callers vary color, shape and size, and add their own typography/layout through className.
+export function Button({
+  children,
+  color,
+  shape = 'rounded',
+  size = 'icon',
+  highlight,
   href,
-  onClick,
-  ...props 
-}, ref) => {
-  const Component = as || (href ? 'a' : 'button');
-  
-  // Ghost button overrides padding/shadow for simplicity
-  const sizeClasses = variant === 'ghost' ? 'px-1 py-1' : sizeMap[size];
-  const interactClasses = variant === 'ghost' ? '' : 'transition-all duration-100 ease-out hover:brightness-95';
-  
+  target,
+  rel,
+  className = '',
+  style,
+  ...props
+}: ButtonProps) {
+  const { border, bevel, depth, padding } = SIZES[size];
+  const buttonStyle = {
+    '--btn-fill': color.fill,
+    '--btn-deep': color.deep,
+    '--btn-border': border,
+    '--btn-bevel': bevel,
+    '--btn-depth': depth,
+    ...(highlight !== undefined && { '--btn-highlight': highlight }),
+    ...style,
+  } as React.CSSProperties;
+  const buttonClassName = `raised-button ${SHAPES[shape]} ${padding} ${className}`;
+
+  if (href) {
+    return (
+      <a href={href} target={target} rel={rel} className={buttonClassName} style={buttonStyle} {...props}>
+        {children}
+      </a>
+    );
+  }
   return (
-    <Component
-      ref={ref as React.Ref<HTMLElement>}
-      className={`inline-flex items-center gap-2 font-display font-medium rounded-md select-none focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-sky ${sizeClasses} ${variantMap[variant]} ${interactClasses} ${className}`}
-      href={href}
-      onClick={onClick as React.MouseEventHandler<HTMLElement> | undefined}
-      {...props}
-    >
+    <button type="button" className={buttonClassName} style={buttonStyle} {...props}>
       {children}
-    </Component>
+    </button>
   );
-});
-Button.displayName = 'Button';
+}

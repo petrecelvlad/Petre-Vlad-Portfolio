@@ -2,7 +2,7 @@
 type: Task
 title: "T-013: Remove unused AI-Studio scaffolding from package.json/.env.example"
 description: "@google/genai, express, dotenv dependencies and GEMINI_API_KEY/APP_URL env vars appear unused by the actual static app"
-status: backlog
+status: done
 priority: low
 tags: [roadmap, task, cleanup, dependencies]
 timestamp: 2026-08-16T00:00:00Z
@@ -22,15 +22,13 @@ JSON-driven site with no backend, no API calls, deployed to GitHub Pages
 This looks like leftover scaffolding from whatever AI-Studio starter template the project was
 originally bootstrapped from, never cleaned up once the real app diverged from it.
 
-## Acceptance Criteria
-
-- [ ] Confirm `@google/genai`, `express`, `dotenv` are genuinely unimported anywhere in `src/` (not
+- [x] Confirm `@google/genai`, `express`, `dotenv` are genuinely unimported anywhere in `src/` (not
       just assumed from this investigation — grep before removing).
-- [ ] If confirmed unused, remove them from `package.json` dependencies and delete the corresponding
+- [x] If confirmed unused, remove them from `package.json` dependencies and delete the corresponding
       lines from `.env.example`.
-- [ ] Rename `package.json`'s `"name"` field from `"react-example"` to something reflecting this
+- [x] Rename `package.json`'s `"name"` field from `"react-example"` to something reflecting this
       project.
-- [ ] Update `AGENT.md` §2 and `cone/project/operations/ENVIRONMENT.md` once this is done — both
+- [x] Update `AGENT.md` §2 and `cone/project/operations/ENVIRONMENT.md` once this is done — both
       currently document these as known-unused scaffolding pending removal.
 
 ## Sub-Tasks

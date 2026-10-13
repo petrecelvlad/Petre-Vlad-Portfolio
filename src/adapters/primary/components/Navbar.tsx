@@ -1,8 +1,7 @@
-import { Sliders } from 'lucide-react';
+import { Linkedin } from 'lucide-react';
 import { Row } from '@/src/components/atoms/Row';
-import { Heading } from '@/src/components/atoms/Heading';
-import { ANIMATION_PATHS, AnimationPathId, useAnimationPath } from '@/src/context/AnimationPathContext';
-import { useIslandPosition } from '@/src/context/IslandPositionContext';
+import { Button, BUTTON_COLORS } from '@/src/components/atoms/Button';
+import type { PageSection } from '@/src/hooks/useTimelineOrchestrator';
 import { BOARD_COLOR } from '@/src/components/bento/shared/palette';
 import {
   OUTLINE_COLOR, OUTLINE_WIDTH, BOARD_HIGHLIGHT_COLOR, BOARD_ELEVATION_COLOR,
@@ -10,15 +9,18 @@ import {
 } from '@/src/components/bento/shared/WoodPlankConstants';
 import { PlankGrain } from '@/src/components/bento/shared/PlankGrain';
 
+const NAV_ITEMS: { label: string; section: PageSection }[] = [
+  { label: 'Skilltree', section: 'skills' },
+  { label: 'Projects', section: 'projects' },
+  { label: 'Contact', section: 'contact' },
+];
+
 interface NavbarProps {
-  onToggleBacklog: () => void;
-  isBacklog: boolean;
+  activeSection: PageSection;
+  onNavigate: (section: PageSection) => void;
 }
 
-export function Navbar({ onToggleBacklog, isBacklog }: NavbarProps) {
-  const { animationPath, setAnimationPath } = useAnimationPath();
-  const { toggleEditor, isEditorOpen } = useIslandPosition();
-
+export function Navbar({ activeSection, onNavigate }: NavbarProps) {
   return (
     <nav
       className="h-[var(--chrome-navbar-height)] flex-shrink-0 relative w-full z-50 flex flex-col"
@@ -28,41 +30,49 @@ export function Navbar({ onToggleBacklog, isBacklog }: NavbarProps) {
       <div className="flex-1 relative overflow-hidden" style={{ backgroundColor: BOARD_COLOR }}>
         <PlankGrain vertical={false} />
         <div className="absolute inset-0 flex items-center justify-between px-6 md:px-8">
-          <Heading level={2} variant="subtitle" className="mt-1">Vlad Petre</Heading>
-
-          <Row align="center" gap="md">
           <button
-            onClick={toggleEditor}
-            className={`font-mono text-[length:var(--text-label-sm)] uppercase tracking-[0.15em] px-3 py-1.5 border-[length:var(--border-width-sm)] border-ink-base rounded-md flex items-center gap-1.5 transition-all duration-100 cursor-pointer ${
-              isEditorOpen
-                ? 'bg-amber-400 text-slate-950 font-bold shadow-none'
-                : 'bg-amber-300/80 hover:bg-amber-400 text-slate-900 font-semibold shadow-[0_var(--ui-depth)_0_0_var(--shadow-color)] hover:translate-y-[1px] hover:shadow-[0_2px_0_0_var(--shadow-color)] active:translate-y-[var(--press-depth)] active:shadow-none'
-            }`}
+            type="button"
+            onClick={() => onNavigate('hero')}
+            // 30px text over the Hero title's 96px (xl), so the outline keeps the Hero's proportions.
+            className="font-jersey font-bold text-3xl uppercase tracking-wider leading-none pixel-text-outline [--pixel-outline-unit:0.3125px] cursor-pointer"
           >
-            <Sliders className="w-3.5 h-3.5" />
-            <span>EDIT ISLAND 🏝️</span>
+            Vlad Petre
           </button>
 
-          <select
-            value={animationPath}
-            onChange={(e) => setAnimationPath(e.target.value as AnimationPathId)}
-            aria-label="Achievement Animation Path"
-            className="font-mono text-[length:var(--text-label-sm)] uppercase tracking-[0.15em] px-3 py-1.5 border-[length:var(--border-width-sm)] border-ink-base rounded-md bg-transparent text-ink-base shadow-[0_var(--ui-depth)_0_0_var(--shadow-color)] cursor-pointer"
-          >
-            {ANIMATION_PATHS.map((p) => (
-              <option key={p.id} value={p.id}>{p.label.toUpperCase()}</option>
+          <Row align="center" gap="xl" className="absolute left-1/2 -translate-x-1/2">
+            {NAV_ITEMS.map((item) => (
+              <button
+                key={item.section}
+                type="button"
+                onClick={() => onNavigate(item.section)}
+                aria-current={activeSection === item.section ? 'location' : undefined}
+                className={`carved-text text-[22px] leading-none cursor-pointer ${activeSection === item.section ? 'carved-text-selected' : ''}`}
+              >
+                {item.label}
+              </button>
             ))}
-          </select>
-          <button
-            onClick={onToggleBacklog}
-            className={`font-mono text-[length:var(--text-label-sm)] uppercase tracking-[0.15em] px-3 py-1.5 border-[length:var(--border-width-sm)] border-ink-base rounded-md transition-all duration-100 ${
-              isBacklog
-                ? 'bg-ink-base text-surface-base shadow-none'
-                : 'bg-transparent text-ink-base shadow-[0_var(--ui-depth)_0_0_var(--shadow-color)] hover:translate-y-[1px] hover:shadow-[0_2px_0_0_var(--shadow-color)] active:translate-y-[var(--press-depth)] active:shadow-none'
-            }`}
-          >
-            {isBacklog ? '← PORTFOLIO' : '[DEBUG] BACKLOG'}
-          </button>
+          </Row>
+
+          <Row align="center" gap="sm">
+            <Button
+              href="https://www.astrocade.com/profile/Octo"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Astrocade"
+              color={BUTTON_COLORS.white}
+            >
+              <img src={`${import.meta.env.BASE_URL}assets/icons/astrocade.webp`} alt="" className="w-4 h-4" />
+            </Button>
+            <Button
+              href="https://www.linkedin.com/in/vladpetrebiz/"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="LinkedIn"
+              color={BUTTON_COLORS.linkedin}
+              className="text-white"
+            >
+              <Linkedin className="w-4 h-4" />
+            </Button>
           </Row>
         </div>
       </div>

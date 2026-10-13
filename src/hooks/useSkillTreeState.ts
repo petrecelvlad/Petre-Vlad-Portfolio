@@ -15,17 +15,12 @@ export function useSkillTreeState(experiences: IExperience[]) {
   // SkillTree.tsx), so it's tracked as its own separate piece of state
   // rather than shoehorned into `Skill`.
   const [activeCategory, setActiveCategory] = useState<SkillCategory | null>(null);
-  // Which skills currently have their direct children revealed in the tree —
-  // separate from `activeSkill` (which drives the details panel + the
-  // active-path neon highlight, and starts pre-selected on DEFAULT_SKILL so
-  // the panel isn't empty on first load). Starts empty so the tree is
-  // genuinely collapsed on first render: DEFAULT_SKILL is a root skill, and
-  // treating it as expanded by default would reveal nearly the whole
-  // category, defeating the point of collapsing deep layers. A Set (not a
-  // single skill) because selecting a sibling within an already-open branch
-  // must not collapse what's already open — see getNextExpandedSkillIds for
-  // the exact accumulate-vs-reset rule.
-  const [expandedSkillIds, setExpandedSkillIds] = useState<Set<string>>(() => new Set());
+  // Which skills currently have their direct children revealed in the tree.
+  // Starts with DEFAULT_SKILL so the default selection is identical to having
+  // clicked it. A Set (not a single skill) because selecting a sibling within
+  // an already-open branch must not collapse what's already open — see
+  // getNextExpandedSkillIds for the exact accumulate-vs-reset rule.
+  const [expandedSkillIds, setExpandedSkillIds] = useState<Set<string>>(() => new Set([DEFAULT_SKILL.id]));
 
   const projectsById = useMemo(() => {
     const map = new Map<string, IProject>();
@@ -37,20 +32,15 @@ export function useSkillTreeState(experiences: IExperience[]) {
 
   const handleSelect = (skill: Skill) => {
     setActiveCategory(null);
-    setActiveSkill(prev => {
-      const nextSkill = prev?.id === skill.id ? null : skill;
-      if (nextSkill) {
-        DomainEventBus.publish({
-          type: 'NODE_SELECTED',
-          timestamp: Date.now(),
-          payload: {
-            nodeId: nextSkill.id,
-            nodeName: nextSkill.name,
-            category: nextSkill.category,
-          },
-        });
-      }
-      return nextSkill;
+    setActiveSkill(skill);
+    DomainEventBus.publish({
+      type: 'NODE_SELECTED',
+      timestamp: Date.now(),
+      payload: {
+        nodeId: skill.id,
+        nodeName: skill.name,
+        category: skill.category,
+      },
     });
     setExpandedSkillIds(prev => getNextExpandedSkillIds(prev, skill));
   };
@@ -62,7 +52,7 @@ export function useSkillTreeState(experiences: IExperience[]) {
   // "collapse everything" is the only sensible behavior here.
   const handleSelectCategory = (category: SkillCategory) => {
     setActiveSkill(null);
-    setActiveCategory(prev => (prev === category ? null : category));
+    setActiveCategory(category);
     setExpandedSkillIds(new Set());
   };
 

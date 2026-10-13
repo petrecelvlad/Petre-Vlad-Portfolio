@@ -32,6 +32,9 @@ broken out as children below.
 - [T-037](T-037-skilltree-selection-ux.md) — Fix buggy/unintuitive skill-selection interaction
 - [T-038](T-038-skilltree-banner-chrome-redesign.md) — Redesign the banner + board chrome
 - [T-039](T-039-skilltree-content-pass.md) — Content pass on skills (post user research)
+- [T-052](T-052-skilltree-panel-ribbon-paper.md) — Detail panel as ribbon over lined paper
+- [T-053](T-053-skilltree-pills-connectors.md) — Pills + connectors in the toy-box style
+- [T-054](T-054-skilltree-scale-to-fit.md) — Scale the tree to fit its board (category badges clipped ≤1440)
 
 ---
 

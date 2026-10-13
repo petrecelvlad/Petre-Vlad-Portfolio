@@ -3,7 +3,7 @@ import { AnimatePresence, motion } from 'motion/react';
 import { Skill, SkillCategory, CATEGORIES } from '@/src/core/domain/skillTreeTypes';
 import {
   LAYOUTS, getActivePathNodeIds, getActivePathOrder, getVisibleSkillIds, getLinkRevealTiming,
-  LayoutLink, segmentDuration,
+  LayoutLink, segmentDuration, PILL_W,
 } from '@/src/core/domain/skillTreeGeometry';
 import { SkillPill } from './SkillTreeNode';
 
@@ -18,6 +18,7 @@ function segmentPathLength(link: LayoutLink): number {
 // duration) and each connector's exit (delay = this duration, so it starts
 // retracting the instant the pill has finished disappearing).
 const PILL_EXIT_DURATION = 0.15;
+const UNLIT_CORE = '#8C5828';
 
 export interface TreeCanvasProps {
   category: SkillCategory;
@@ -33,11 +34,9 @@ export function TreeCanvas({ category, activeSkill, expandedSkillIds, onSelect }
   // Depth 0/1 always shown; deeper layers mount/unmount as `expandedSkillIds`
   // grows/shrinks — one layer at a time (a skill's children only reveal once
   // the skill ITSELF is in the set; a grandchild needs its own parent
-  // separately added, not just an ancestor). Deliberately driven by
-  // expandedSkillIds, NOT activeSkill (see useSkillTreeState.ts) —
-  // activeSkill starts pre-selected on a root skill for the details panel,
-  // and expanding a root's whole subtree by default would defeat the point
-  // of collapsing deep layers. Positions themselves never change — they're
+  // separately added, not just an ancestor). Driven by expandedSkillIds, not
+  // activeSkill, because selecting a sibling keeps the branches already open
+  // (see useSkillTreeState.ts). Positions themselves never change — they're
   // still the same static, module-load-computed LAYOUTS pixel coordinates as
   // before; only which nodes/links are currently mounted changes. See
   // getVisibleSkillIds/getNextExpandedSkillIds for the exact accumulate-vs-
@@ -58,17 +57,21 @@ export function TreeCanvas({ category, activeSkill, expandedSkillIds, onSelect }
     () => allLinks.filter(l => visibleIds.has(l.targetId)),
     [allLinks, visibleIds]
   );
+  // Only the open columns count toward the canvas's layout width, so the board's ScaleToFit zooms
+  // to what is shown rather than to the deepest branch; nodes still sit at their static positions
+  // and the SVG keeps the full size, overflowing visibly.
+  const openWidth = Math.max(...nodes.map(n => n.screenLeft)) + PILL_W;
 
   const activePathNodeIds = useMemo(
     () => getActivePathNodeIds(activeSkill),
     [activeSkill]
   );
 
-  // Per-link duration + cumulative delay for the active path (PASS 3/4
+  // Per-link duration + cumulative delay for the active path (PASS 3
   // below), in root-to-selection order, so segment N starts exactly when
   // segment N-1 finishes. The anchor→root link (the badge's own connector)
   // is index 0, same as every other link — it's rendered by the same
-  // PASS 1-4 loops below, no special case, so it's just the first entry in
+  // PASS 1-3 loops below, no special case, so it's just the first entry in
   // this same chain.
   const activeSegments = useMemo(() => {
     const segments = new Map<string, { duration: number; delay: number }>();
@@ -89,7 +92,7 @@ export function TreeCanvas({ category, activeSkill, expandedSkillIds, onSelect }
     return segments;
   }, [activeSkill, links]);
 
-  // Precomputed once per link — PASS 1-4 below all draw the same elbow-routing
+  // Precomputed once per link — PASS 1-3 below all draw the same elbow-routing
   // path, they just differ in stroke/animation, so the `d` string shouldn't be
   // recomputed identically in each pass.
   const linksWithPath = useMemo(
@@ -109,7 +112,7 @@ export function TreeCanvas({ category, activeSkill, expandedSkillIds, onSelect }
   );
 
   return (
-    <div className="relative flex-shrink-0" style={{ width: canvasWidth, height: canvasHeight }}>
+    <div className="relative flex-shrink-0" style={{ width: openWidth, height: canvasHeight }}>
       {/* SVG connector layer */}
       <svg
         className="absolute inset-0 pointer-events-none overflow-visible z-0"
@@ -130,7 +133,6 @@ export function TreeCanvas({ category, activeSkill, expandedSkillIds, onSelect }
                   strokeWidth={10}
                   strokeLinecap="round"
                   strokeLinejoin="round"
-                  opacity={0.85}
                   initial={{ pathLength: 0 }}
                   animate={{ pathLength: 1, transition: { duration: timing.duration, delay: timing.delay, ease: 'linear' } }}
                   exit={{ pathLength: 0, transition: { duration: timing.duration, delay: PILL_EXIT_DURATION, ease: 'linear' } }}
@@ -140,7 +142,7 @@ export function TreeCanvas({ category, activeSkill, expandedSkillIds, onSelect }
           </AnimatePresence>
         </g>
 
-        {/* PASS 2: Muted Dashed Inner Channel */}
+        {/* PASS 2: Unlit Wood Core */}
         <g id={`pass-channel-${category}`}>
           <AnimatePresence>
             {linksWithPath.map((link) => {
@@ -150,12 +152,10 @@ export function TreeCanvas({ category, activeSkill, expandedSkillIds, onSelect }
                   key={link.targetId}
                   d={link.d}
                   fill="none"
-                  stroke="var(--color-ink-base)"
-                  strokeWidth={4}
+                  stroke={UNLIT_CORE}
+                  strokeWidth={6}
                   strokeLinecap="round"
                   strokeLinejoin="round"
-                  opacity={0.25}
-                  strokeDasharray="4 4"
                   initial={{ pathLength: 0 }}
                   animate={{ pathLength: 1, transition: { duration: timing.duration, delay: timing.delay, ease: 'linear' } }}
                   exit={{ pathLength: 0, transition: { duration: timing.duration, delay: PILL_EXIT_DURATION, ease: 'linear' } }}
@@ -182,33 +182,6 @@ export function TreeCanvas({ category, activeSkill, expandedSkillIds, onSelect }
                 strokeLinejoin="round"
                 initial={{ pathLength: 0 }}
                 animate={{ pathLength: 1 }}
-                transition={{
-                  duration: segment.duration,
-                  delay: segment.delay,
-                  ease: 'linear',
-                }}
-              />
-            );
-          })}
-        </g>
-
-        {/* PASS 4: Glossy White Core Highlights */}
-        <g id={`pass-active-core-${category}`}>
-          {linksWithPath.map((link) => {
-            const segment = activeSegments.get(link.targetId);
-            if (!segment) return null;
-
-            return (
-              <motion.path
-                key={`active-core-${link.sourceId}-${link.targetId}-${activeSkill?.id}`}
-                d={link.d}
-                fill="none"
-                stroke="#FFFFFF"
-                strokeWidth={2}
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                initial={{ pathLength: 0, opacity: 0 }}
-                animate={{ pathLength: 1, opacity: 0.9 }}
                 transition={{
                   duration: segment.duration,
                   delay: segment.delay,

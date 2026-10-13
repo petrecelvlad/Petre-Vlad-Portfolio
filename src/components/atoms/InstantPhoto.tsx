@@ -5,6 +5,9 @@ export interface InstantPhotoProps {
   src: string;
   alt: string;
   rotation?: number;
+  /** Width / height of the photo itself. When set, the frame's height follows from its width so
+   *  the photo is never cropped; when omitted, the frame fills the footprint className gives it. */
+  photoAspect?: number;
   /** Controls the outer footprint (size, position) — the atom owns the frame/tape/shadow recipe only. */
   className?: string;
 }
@@ -15,23 +18,32 @@ export interface InstantPhotoProps {
 // same shape and tape everywhere, callers only vary size/position/rotation via props.
 //
 // No border anywhere in this component (2026-07-27, per reference: a real instant-photo print
-// has no ink outline at all — its edges read purely from shadow). Two separate shadows do that
-// job: a soft ambient shadow on the frame (lifts the whole card off whatever it's sitting on)
-// and a soft inset shadow on the photo itself (reads as the print sitting slightly recessed
-// into the white mat, which is what actually separates "photo" from "frame" without a stroke).
-// Deliberately soft/blurred, not the site's usual hard-offset --shadow-raised — that flat-offset
+// has no ink outline at all — its edges read purely from shadow). One soft ambient shadow on
+// the frame lifts the whole card off whatever it's sitting on. The photo itself has no shadow
+// or ring (removed 2026-10-12, user): on icons with transparent rounded corners it drew a grey
+// square around them. Deliberately soft/blurred, not the site's usual hard-offset --shadow-raised — that flat-offset
 // language is correct for UI cards (WindowCard, badges, etc.) but reads as a drawn-on outline
 // here; this is a physical object shadow, not a UI element's, same "opt out of the shared card
 // language on purpose" reasoning as the --chrome-device-* lock (Token_Contract.md §13).
 const TAPE_ROTATION = -4;
 const FRAME_SHADOW = '1.5px 4px 6px rgba(20, 14, 8, 0.3), 0 1px 2px rgba(20, 14, 8, 0.18)';
-const PHOTO_INSET_SHADOW = 'inset 0 0 4px rgba(0, 0, 0, 0.35), inset 0 0 0 1px rgba(0, 0, 0, 0.08)';
+// Mat widths as a percentage of the frame's width (CSS padding percentages are width-based).
+const MAT_SIDE_PCT = 5;
+const MAT_BOTTOM_PCT = 16;
 
-export function InstantPhoto({ src, alt, rotation = 0, className = '' }: InstantPhotoProps) {
+function getFrameAspectRatio(photoAspect: number) {
+  const photoHeightPct = (100 - 2 * MAT_SIDE_PCT) / photoAspect;
+  return `100 / ${photoHeightPct + MAT_SIDE_PCT + MAT_BOTTOM_PCT}`;
+}
+
+export function InstantPhoto({ src, alt, rotation = 0, photoAspect, className = '' }: InstantPhotoProps) {
   return (
     <div
       className={`relative ${className}`}
-      style={{ transform: `rotate(${rotation}deg)` }}
+      style={{
+        transform: `rotate(${rotation}deg)`,
+        aspectRatio: photoAspect ? getFrameAspectRatio(photoAspect) : undefined,
+      }}
       title={alt}
     >
       <div
@@ -39,8 +51,11 @@ export function InstantPhoto({ src, alt, rotation = 0, className = '' }: Instant
         style={{ transform: `rotate(${TAPE_ROTATION}deg)` }}
         aria-hidden
       />
-      <div className="relative w-full h-full bg-white p-[5%] pb-[16%]" style={{ boxShadow: FRAME_SHADOW }}>
-        <img src={src} alt={alt} className="w-full h-full object-cover" style={{ boxShadow: PHOTO_INSET_SHADOW }} />
+      <div
+        className="relative w-full h-full bg-white"
+        style={{ boxShadow: FRAME_SHADOW, padding: `${MAT_SIDE_PCT}% ${MAT_SIDE_PCT}% ${MAT_BOTTOM_PCT}%` }}
+      >
+        <img src={src} alt={alt} className="w-full h-full object-cover" />
       </div>
     </div>
   );

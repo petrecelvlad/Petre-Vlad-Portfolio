@@ -99,7 +99,7 @@ The full, canonical constraint registry lives in `cone/project/architecture/GUAR
 - **Data source:** Static JSON (`portfolio.json`) — no database, no API, no backend
 - **Deployment:** Static build (`vite build` → `dist/`) to GitHub Pages via `.github/workflows/deploy.yml`, triggered on push to `main`
 
-**Not part of the real stack, despite appearing in `package.json`:** `@google/genai`, `express`, `dotenv`, and the `GEMINI_API_KEY`/`APP_URL` vars in `.env.example` are unused leftover scaffolding from an AI-Studio starter template — the deploy pipeline never sets them and no source file imports them. Tracked for cleanup: `cone/project/roadmap/board/T-013-remove-unused-ai-studio-scaffolding.md`. Don't treat them as load-bearing config.
+`@google/genai`, `express`, `dotenv`, and the `GEMINI_API_KEY`/`APP_URL` vars were unused AI-Studio-starter scaffolding — removed in T-013. `package.json`'s `name` is `cv-portfolio`.
 
 ---
 

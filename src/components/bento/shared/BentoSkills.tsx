@@ -260,14 +260,7 @@ export function BentoSkills({ skills }: SkillsSlotProps) {
           uses for its board-joint seams (#6E2A2E dark line, #F3CE86 gold
           highlight), same opacities, so the text's depth cue reads as the
           same material logic as the desk itself, not an invented pair. */}
-      <span
-        style={{
-          fontFamily: 'var(--font-hand)',
-          color: '#6B3A1C',
-          textShadow: '0 -2px 0 rgba(110, 42, 46, 0.55), 0 2px 0 rgba(243, 206, 134, 0.45)',
-        }}
-        className="flex-shrink-0 rotate-[-2deg] text-[30px] md:text-[30px] leading-none font-bold uppercase px-1"
-      >
+      <span className="carved-text flex-shrink-0 rotate-[-2deg] text-[30px] md:text-[30px] leading-none px-1">
         Skills
       </span>
 

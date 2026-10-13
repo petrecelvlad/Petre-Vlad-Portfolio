@@ -2,7 +2,7 @@
 type: Task
 title: "T-035: Move SkillTree project photos into their own section"
 description: "The photo strip currently rendered stuck under the detail board should become its own dedicated section below the board, not attached to it"
-status: backlog
+status: done
 priority: medium
 parent: T-033
 tags: [roadmap, task, skilltree, visual-design]
@@ -21,8 +21,8 @@ attached to it. User wants it broken out into its own independent section instea
 
 ## Acceptance Criteria
 
-- [ ] Photos render in their own distinct section below the detail board, not visually stuck to it
-- [ ] Works for both skins
+- [x] Photos render in their own distinct section below the detail board, not visually stuck to it
+- [x] ~~Works for both skins~~ — the skill tree only has the gamified branch now
 
 ---
 
@@ -34,4 +34,6 @@ attached to it. User wants it broken out into its own independent section instea
 
 ## Notes
 
-(none yet)
+2026-10-13 (Session 09): `skilltree/SkillProjectPhotos.tsx` is a sibling row of the panel in
+`SkillTree.tsx`'s right column (`flex-1`), so a future mobile layout can reflow it independently.
+Photos centered, fit to the region's height, never larger than before (user choice).

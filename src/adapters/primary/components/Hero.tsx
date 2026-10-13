@@ -2,7 +2,9 @@ import { useMemo, useEffect, useRef, lazy, Suspense } from 'react';
 import { motion } from 'motion/react';
 import { AchievementShaderCanvas, ShaderType } from '@/src/components/backgrounds/AchievementShaderCanvas';
 import { FloatingIslandBackdrop } from '@/src/components/backgrounds/FloatingIslandBackdrop';
-import { AnimatedRoleTitle } from './AnimatedRoleTitle';
+import { Button, BUTTON_COLORS } from '@/src/components/atoms/Button';
+import { RibbonBanner } from '@/src/components/atoms/RibbonBanner';
+import { RibbonPaperSeam } from '@/src/components/atoms/RibbonPaperSeam';
 import { TornPaperPanel } from '@/src/components/atoms/TornPaperPanel';
 import { useIsVisible } from '@/src/hooks/useIsVisible';
 import { useIsScrolling } from '@/src/hooks/useIsScrolling';
@@ -83,7 +85,7 @@ export function Hero() {
   const achievements: AchievementData[] = [
     { id: 'exp', shaderType: 'levelup', value: years, label: 'YEARS OF EXPERIENCE' },
     { id: 'games', shaderType: 'cartridge', value: '31', label: 'PRODUCED GAMES' },
-    { id: 'levels', shaderType: 'factory', value: '+5000', label: 'CRAFTED LEVELS' },
+    { id: 'levels', shaderType: 'factory', value: '+5000', label: 'SHIPPED LEVELS' },
     { id: 'teams', shaderType: 'teamslead', value: '9', label: 'TEAMS LEAD' },
   ];
 
@@ -156,50 +158,62 @@ export function Hero() {
                     </motion.span>
                   ))}
                 </h1>
-
-                <AnimatedRoleTitle />
               </div>
             </div>
 
-            {/* Centered Content: Bio Note \u2014 vertically centered in the space between the title and the EXPLORE button */}
+            {/* Centered Content: Role Ribbon + Bio Note, fused into one object \u2014 vertically centered in the space between the title and the EXPLORE button */}
             <div className="flex-1 flex items-center justify-center w-full">
-              <TornPaperPanel
-                className="w-full max-w-[540px] mx-auto"
-                paperColor="#FFFDF7"
-                strokeColor="#1C1610"
-                strokeWidth={3}
-                shadowOffset={4}
-                shadowColor="#1C1610"
-                toothWidth={36}
-                toothHeight={13}
-                cornerRadius={8}
-                punchHoleY={16}
-                paddingTop={56}
-                paddingBottom={56}
-                ruleInsetX={16}
-                showRuledLines={true}
-                lineSpacing={28}
-                lineColor="rgba(203, 213, 225, 0.65)"
-                rotateDeg={-0.6}
-              >
-                <p
-                  style={{ lineHeight: '28px' }}
-                  className="font-mono text-xs sm:text-sm lg:text-base text-[#1C1610] text-center font-medium select-text px-1 m-0"
-                >
-                  Game Producer & Senior Designer with 19+ years creating engaging games, leading cross-functional teams, and crafting memorable player experiences across mobile and casual platforms.
-                </p>
-              </TornPaperPanel>
+              <div className="relative w-full max-w-[540px] mx-auto" style={{ transform: 'rotate(-0.6deg)' }}>
+                <RibbonBanner className="relative z-10 -mb-6 sm:-mb-7 w-[114%] -mx-[7%]">
+                  <h2 className="font-arcade font-black text-lg sm:text-xl lg:text-2xl text-white uppercase tracking-wider leading-none drop-shadow-[0_2px_0_rgba(0,0,0,0.6)]">
+                    GAME PRODUCER
+                  </h2>
+                </RibbonBanner>
+                <div className="relative w-full">
+                  <RibbonPaperSeam paperColor="#FFFDF7" outlineColor="#1C1610" className="absolute -top-2 left-0 right-0 z-[5]" />
+                  <TornPaperPanel
+                    className="w-full"
+                    paperColor="#FFFDF7"
+                    strokeColor="#1C1610"
+                    strokeWidth={3}
+                    shadowOffset={4}
+                    shadowColor="#1C1610"
+                    toothWidth={36}
+                    toothHeight={13}
+                    cornerRadius={8}
+                    punchHoleY={16}
+                    paddingTop={56}
+                    paddingBottom={56}
+                    ruleInsetX={16}
+                    showRuledLines={true}
+                    lineSpacing={28}
+                    lineColor="rgba(203, 213, 225, 0.65)"
+                    rotateDeg={0}
+                  >
+                    <p
+                      style={{ lineHeight: '28px' }}
+                      className="font-mono text-xs sm:text-sm lg:text-base text-[#1C1610] text-center font-medium select-text px-1 m-0"
+                    >
+                      Game Producer & Senior Designer with 19+ years creating engaging games, leading cross-functional teams, and crafting memorable player experiences across mobile and casual platforms.
+                    </p>
+                  </TornPaperPanel>
+                </div>
+              </div>
             </div>
 
             {/* Bottom Content: EXPLORE Button */}
             <div className="flex justify-center items-center w-full pb-2 sm:pb-4 pt-4">
-              <button
+              <Button
                 onClick={scrollNextSection}
-                className="bg-[#4ADE80] hover:bg-[#22C55E] text-[#1C1610] font-arcade text-base sm:text-lg lg:text-xl font-bold uppercase tracking-widest px-8 sm:px-10 py-3.5 sm:py-4 rounded-2xl border-3 border-[#1C1610] shadow-[0_5px_0_0_#1C1610] active:translate-y-1 active:shadow-none transition-all cursor-pointer flex items-center gap-3 group"
+                color={BUTTON_COLORS.periwinkle}
+                shape="pill"
+                size="lg"
+                className="text-[#1C1610] font-arcade text-base sm:text-lg lg:text-xl font-bold uppercase tracking-widest flex items-center justify-center"
               >
-                <span>EXPLORE</span>
-                <span className="group-hover:translate-y-1 transition-transform">▼</span>
-              </button>
+                {/* Centers the word on its ink: tracking-widest also spaces after the last letter (negative margin
+                    cancels it), and the arcade font's glyphs sit ~0.11em low in their line box (measured). */}
+                <span className="-mr-[0.1em] -translate-y-[0.11em]">EXPLORE</span>
+              </Button>
             </div>
 
           </div>
@@ -227,7 +241,7 @@ export function Hero() {
                     <div className="font-display font-black text-[clamp(1.1rem,26cqw,3.5rem)] text-[#1C1610] leading-none tracking-tight text-center w-full">
                       {item.value}
                     </div>
-                    <div className="font-arcade text-[clamp(0.4375rem,9.5cqw,0.75rem)] font-bold text-[#1C1610] uppercase tracking-wide leading-[1.15] mt-1 break-words w-full text-center">
+                    <div className="font-arcade text-[clamp(0.4375rem,10cqw,1.2rem)] font-bold text-[#1C1610] uppercase tracking-wide leading-[1.15] mt-1 break-words w-full text-center">
                       {item.label}
                     </div>
                   </div>

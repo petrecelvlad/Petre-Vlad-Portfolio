@@ -6,6 +6,7 @@ import { BentoSkills } from '../bento/shared/BentoSkills';
 import { BentoAchievement } from '../bento/shared/BentoAchievement';
 import { BentoVideoFrame } from '../bento/BentoVideoFrame';
 import { Stack } from '../atoms/Stack';
+import { getGalleryScreenshots } from '@/src/core/domain/projectMedia';
 
 interface ProjectDetailsProps {
   key?: React.Key;
@@ -28,12 +29,14 @@ export function ProjectDetails({ project, isActive }: ProjectDetailsProps) {
           />
           <div className="flex-grow min-h-0 flex flex-col">
             <BentoResponsibilities
+              overview={project.overview}
               responsibilities={project.responsibilities}
               role={project.role}
               title={project.title}
               icon={project.icon}
               startDate={project.startDate}
               endDate={project.endDate}
+              galleryScreenshots={getGalleryScreenshots(project)}
             />
           </div>
         </Stack>

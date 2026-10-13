@@ -1,6 +1,6 @@
 import { Skill, SkillCategory, SKILLS } from './skillTreeTypes';
 
-export const PILL_W = 160;
+export const PILL_W = 208;
 export const PILL_H = 32;
 export const GAP_X = 60;
 export const GAP_Y = 10;
@@ -331,9 +331,8 @@ function isDescendantOrSelf(skill: Skill, ancestorId: string, byId: Map<string, 
 
 /**
  * Next `expandedSkillIds` after clicking `skill`:
- * - Already expanded (toggle-off) → remove just it. Anything only reachable
- *   THROUGH it collapses too, automatically, via getVisibleSkillIds' own
- *   reachability walk — no explicit cascade/cleanup needed here.
+ * - Already expanded → unchanged. Clicking never collapses: a click always
+ *   means "select and expand".
  * - Not expanded, and it's a descendant of (or equal to) the currently open
  *   branch's root → add it. Siblings and everything else already open stay
  *   open — this is what lets clicking a second child under the same parent
@@ -346,11 +345,7 @@ function isDescendantOrSelf(skill: Skill, ancestorId: string, byId: Map<string, 
  *   a sibling as "outside" its own branch.
  */
 export function getNextExpandedSkillIds(expandedSkillIds: Set<string>, skill: Skill): Set<string> {
-  if (expandedSkillIds.has(skill.id)) {
-    const next = new Set(expandedSkillIds);
-    next.delete(skill.id);
-    return next;
-  }
+  if (expandedSkillIds.has(skill.id)) return expandedSkillIds;
 
   const byId = new Map(SKILLS.map(s => [s.id, s]));
   const depthOf = buildDepthMap(SKILLS.filter(s => s.category === skill.category));

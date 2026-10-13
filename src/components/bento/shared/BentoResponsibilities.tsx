@@ -1,15 +1,40 @@
 import { useId, useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
+import { FileText, Images, ListChecks, type LucideIcon } from 'lucide-react';
 import { Text } from '@/src/components/atoms/Text';
 import { InstantPhoto } from '@/src/components/atoms/InstantPhoto';
 import { ResponsibilitiesSlotProps } from '@/src/components/bento/ports';
 import { formatDateToQuarter } from '@/src/core/domain/formatDate';
+import { splitUnconfirmed } from '@/src/core/domain/unconfirmedCopy';
 import {
   HERITAGE_PALETTE, saturate, EMBOSS_LIGHT, EMBOSS_DARK, EMBOSS_AMBIENT_SHADOW,
   BOARD_COLOR, PAPER_COLOR, BOARD_UNDERSHADOW,
 } from './palette';
 
-const CHUNK_SIZE = 3;
+type SectionType = 'overview' | 'details' | 'gallery';
+
+interface ClipboardSection {
+  type: SectionType;
+  side: 'left' | 'right';
+  label: string;
+  Icon: LucideIcon;
+  isPresent: (props: ResponsibilitiesSlotProps) => boolean;
+}
+
+// Tab order is this array's order. A project only gets a tab for the sections it
+// has content for; a new section type is one entry here plus its renderSectionBody case.
+// Each tab keeps its side of the binder clip whether or not the others are present.
+const SECTIONS: ClipboardSection[] = [
+  { type: 'overview', side: 'left', label: 'Overview', Icon: FileText, isPresent: () => true },
+  { type: 'details', side: 'left', label: 'Details', Icon: ListChecks, isPresent: (p) => p.responsibilities.length > 0 },
+  { type: 'gallery', side: 'right', label: 'Gallery', Icon: Images, isPresent: (p) => p.galleryScreenshots.length > 0 },
+];
+
+// How far the binder clip sticks up above the board. Tabs rise the same distance
+// so their tops line up with the clip's, plus a tucked-in part hidden behind the board.
+const CLIP_OVERHANG_PX = 27;
+const TAB_TUCK_PX = 14;
+
 const PAPER_UNDERSHADOW = '2px 2px 0px rgba(43, 32, 22, 0.15)';
 // The project icon itself (frame, scotch tape, shadow) is the shared InstantPhoto atom
 // (components/atoms/InstantPhoto.tsx) — also used by SkillTree's project photos, same recipe,
@@ -114,8 +139,8 @@ function BinderClip() {
   return (
     <svg
       viewBox="0 0 56 32"
-      className="absolute -top-[27px] left-1/2 -translate-x-1/2 w-24 h-auto rotate-[-2deg] z-30"
-      style={{ filter: EMBOSS_AMBIENT_SHADOW }}
+      className="absolute left-1/2 -translate-x-1/2 w-24 h-auto rotate-[-2deg] z-30"
+      style={{ top: -CLIP_OVERHANG_PX, filter: EMBOSS_AMBIENT_SHADOW }}
       aria-hidden
     >
       <defs>
@@ -139,31 +164,122 @@ function BinderClip() {
   );
 }
 
-export function BentoResponsibilities({
-  responsibilities,
-  role,
-  title,
-  icon,
-  startDate,
-  endDate,
-}: ResponsibilitiesSlotProps) {
-  const [page, setPage] = useState(0);
-  const chunks: string[][] = [];
-  for (let i = 0; i < responsibilities.length; i += CHUNK_SIZE) {
-    chunks.push(responsibilities.slice(i, i + CHUNK_SIZE));
-  }
-  const totalPages = Math.max(1, chunks.length);
-  const activePage = Math.min(page, totalPages - 1);
-  const isCover = activePage === 0;
+function CopyWithGaps({ copy }: { copy: string }) {
+  return (
+    <>
+      {splitUnconfirmed(copy).map((segment, i) =>
+        segment.isConfirmed ? segment.text : <span key={i} className="text-error">{segment.text}</span>
+      )}
+    </>
+  );
+}
+
+export function BentoResponsibilities(props: ResponsibilitiesSlotProps) {
+  const { overview, responsibilities, role, title, icon, startDate, endDate, galleryScreenshots } = props;
+  const [activeIndex, setActiveIndex] = useState(0);
+  const sections = SECTIONS.filter((section) => section.isPresent(props));
+  const activeSection = sections[activeIndex];
+  const isCover = activeIndex === 0;
+
+  const renderTab = (section: ClipboardSection, index: number) => {
+    const isActive = index === activeIndex;
+    return (
+      <button
+        key={section.type}
+        type="button"
+        onClick={() => setActiveIndex(index)}
+        aria-label={section.label}
+        aria-current={isActive}
+        title={section.label}
+        className={`w-10 md:w-11 flex justify-center pt-[3px] rounded-t-md border-[length:var(--border-width-md)] border-ink-base shadow-[var(--shadow-raised)] transition-transform ${
+          isActive ? 'cursor-default' : 'translate-y-[3px] hover:translate-y-px brightness-95 hover:brightness-100 cursor-pointer'
+        }`}
+        style={{
+          height: CLIP_OVERHANG_PX + TAB_TUCK_PX,
+          backgroundColor: TAB_ACCENTS[index % TAB_ACCENTS.length],
+          color: 'var(--color-ink-base)',
+        }}
+      >
+        <section.Icon className="w-4 h-4" strokeWidth={2.5} aria-hidden />
+      </button>
+    );
+  };
+
+  const renderSectionBody = (type: SectionType) => {
+    switch (type) {
+      case 'overview':
+        return (
+          <>
+            <Text variant="mono" size="sm" color="subtle" style={{ lineHeight: `${RULE_HEIGHT}px` }}>
+              <CopyWithGaps copy={overview.facts.join(' · ')} />
+            </Text>
+            <p
+              style={{ fontFamily: 'var(--font-hand)', lineHeight: `${RULE_HEIGHT}px` }}
+              className="m-0 text-lg text-ink-base"
+            >
+              <CopyWithGaps copy={overview.summary} />
+            </p>
+          </>
+        );
+      case 'details':
+        // Bullet line-height is locked to RULE_HEIGHT so every line, wrapped or
+        // not, advances in the same steps as the ruled background. Starts on
+        // BULLETS_START_LINE by construction when the header above is shown
+        // (that container's height is lineTop(BULLETS_START_LINE)), else line 1.
+        return (
+          <ul>
+            {responsibilities.map((item, i) => (
+              <li key={i} className="flex gap-2 items-start">
+                <span className="flex-shrink-0 w-1.5 h-1.5 rounded-full bg-ink-base mt-[11px]" />
+                <p
+                  style={{ fontFamily: 'var(--font-hand)', lineHeight: `${RULE_HEIGHT}px` }}
+                  className="m-0 text-lg text-ink-base"
+                >
+                  {item}
+                </p>
+              </li>
+            ))}
+          </ul>
+        );
+      case 'gallery':
+        return (
+          <div className="flex flex-wrap justify-center gap-6 pt-4">
+            {galleryScreenshots.map((src, i) => (
+              <InstantPhoto
+                key={src}
+                src={src}
+                alt={`${title ?? role} screenshot ${i + 1}`}
+                rotation={i % 2 === 0 ? -2 : 2}
+                className={`${galleryScreenshots.length === 1 ? 'w-[85%]' : 'w-[calc(50%-16px)]'} aspect-[4/3]`}
+              />
+            ))}
+          </div>
+        );
+    }
+  };
 
   return (
     <div className="relative h-full pl-1 pr-1" style={{ perspective: 1600 }}>
       <BinderClip />
 
+      {/* Section tabs — behind the board, poking up past its top edge on either
+          side of the binder clip. The board's z-10 is what keeps them behind it.
+          The active tab stands at full height; the rest sit a little lower. */}
+      {sections.length > 1 && (
+        <>
+          <div className="absolute left-6 flex gap-1" style={{ top: -CLIP_OVERHANG_PX }}>
+            {sections.map((section, i) => section.side === 'left' && renderTab(section, i))}
+          </div>
+          <div className="absolute right-6 flex gap-1" style={{ top: -CLIP_OVERHANG_PX }}>
+            {sections.map((section, i) => section.side === 'right' && renderTab(section, i))}
+          </div>
+        </>
+      )}
+
       {/* Clipboard board — bottom layer, rounded corners, the only rounded
           element in the stack; the papers on top stay sharp-cornered. */}
       <div
-        className="relative h-full rounded-2xl border-[length:var(--border-width-md)] border-ink-base p-[10px] md:p-3"
+        className="relative z-10 h-full rounded-2xl border-[length:var(--border-width-md)] border-ink-base p-[10px] md:p-3"
         style={{ backgroundColor: BOARD_COLOR, boxShadow: `${BOARD_UNDERSHADOW}, var(--shadow-raised)` }}
       >
         {/* Back sheet — a second piece of paper peeking out behind, sharp corners.
@@ -185,49 +301,6 @@ export function BentoResponsibilities({
           aria-hidden
         />
 
-        {/* Page tabs — sandwiched between the board and the front sheet
-            (Vlad, 2026-07-24): visible against the board's own brown where
-            they poke past the front sheet's right edge, hidden under the
-            front sheet everywhere they overlap it. This is a DOM-order
-            child of the board now (was a sibling positioned before the
-            whole board, reading as "emerging from behind the clipboard" —
-            a different, previously-requested effect); the front sheet
-            below still wins the paint order regardless of DOM position
-            because it carries an explicit z-20 (tabs and the back sheet
-            above stay at the implicit z-index:auto == 0), so this only
-            needs to sit after the back sheet and before the front sheet
-            for readability, not for correctness.
-            Went through two rounds live with Vlad (2026-07-24): right-1/2
-            was barely past the board's own padding (front sheet, which
-            fills the board's full padded width, covered almost the whole
-            tab); -right-3/-4 still wasn't enough. Pushed further still —
-            comparable to the old "emerge from behind the clipboard" pass's
-            own poke-out distance, just with the front sheet now covering
-            the near side instead of the board doing the covering. Border/
-            emboss/size/top-anchoring unchanged from that pass — same
-            square click targets, same var(--shadow-raised) depth cue, no
-            gradient. */}
-        {totalPages > 1 && (
-          <div className="absolute top-14 md:top-16 -right-6 md:-right-8 flex flex-col gap-0.5">
-            {chunks.map((_, i) => (
-              <button
-                key={i}
-                onClick={() => setPage(i)}
-                aria-label={`Page ${i + 1}`}
-                className={`w-11 h-11 md:w-14 md:h-14 rounded-md border-[length:var(--border-width-md)] border-ink-base shadow-[var(--shadow-raised)] text-lg md:text-xl font-mono font-bold flex items-center justify-center transition-all ${
-                  i === activePage ? 'translate-x-1.5' : 'brightness-95 hover:brightness-100'
-                }`}
-                style={{
-                  backgroundColor: TAB_ACCENTS[i % TAB_ACCENTS.length],
-                  color: 'var(--color-ink-base)',
-                }}
-              >
-                {i + 1}
-              </button>
-            ))}
-          </div>
-        )}
-
         {/* Front sheet — sharp corners, thin paper-like border, the actual content.
             Tilt mirrored (Vlad, 2026-07-24): rotate(-1deg) -> rotate(1deg), same
             "negate the angle" mirror as the back sheet. Content stays readable —
@@ -242,15 +315,15 @@ export function BentoResponsibilities({
         >
           <AnimatePresence mode="wait" initial={false}>
             <motion.div
-              key={activePage}
+              key={activeIndex}
               initial={{ rotateX: -100, opacity: 0 }}
               animate={{ rotateX: 0, opacity: 1 }}
               exit={{ rotateX: 100, opacity: 0 }}
               transition={{ duration: 0.45, ease: 'easeInOut' }}
               style={{
                 transformOrigin: 'top center',
-                // Ruled lines live here (2026-07-24), on the same padded,
-                // scrolling element the text sits in — background-origin
+                // Ruled lines live here (2026-07-24), on the same padded
+                // element the text sits in — background-origin
                 // defaults to padding-box, so this gradient's own y=0
                 // lands exactly at the padding edge, the same coordinate
                 // the text content starts from, and scrolls together with
@@ -263,7 +336,7 @@ export function BentoResponsibilities({
                   var(--color-rule-soft) ${RULE_HEIGHT - 1}px, var(--color-rule-soft) ${RULE_HEIGHT}px
                 )`,
               }}
-              className="absolute inset-0 p-6 md:p-8 overflow-y-auto"
+              className="absolute inset-0 p-6 md:p-8 overflow-hidden"
             >
               {/* Single shared phase correction for EVERYTHING below — see
                   the RULE_HEIGHT/PAPER_BASELINE_NUDGE comment above. Every
@@ -289,7 +362,7 @@ export function BentoResponsibilities({
                       size="sm"
                       className="h-full px-2 flex items-center rounded bg-slot-casing text-slot-text"
                     >
-                      {formatDateToQuarter(startDate)} — {formatDateToQuarter(endDate)}
+                      {formatDateToQuarter(startDate)} - {formatDateToQuarter(endDate)}
                     </Text>
                   </div>
                 )}
@@ -310,7 +383,8 @@ export function BentoResponsibilities({
                         src={icon}
                         alt={title ?? role}
                         rotation={3}
-                        className="absolute left-0 top-0 w-[126px] h-[126px] md:w-[144px] md:h-[144px]"
+                        photoAspect={1}
+                        className="absolute left-0 top-0 w-[126px] md:w-[144px]"
                       />
                     )}
                     {/* left matches icon width (126/144) + the old gap-3
@@ -344,36 +418,7 @@ export function BentoResponsibilities({
                   </div>
                 )}
 
-                {/* Bullet line-height locked to the paper's own rule spacing
-                    (RULE_HEIGHT, same constant the background above uses)
-                    so every line of text — including wrapped lines and
-                    separate bullets — advances in the same steps as the
-                    ruled lines. space-y-2.5 is dropped for the same reason:
-                    an extra gap between bullets that wasn't a RULE_HEIGHT
-                    multiple would break the rhythm back apart between
-                    items. No marginTop here — the isCover header container
-                    above has an explicit height of lineTop(BULLETS_START_LINE),
-                    so this list (next in normal flow right after it) always
-                    starts exactly on BULLETS_START_LINE by construction, not
-                    by a margin that has to be kept in sync with RULE_HEIGHT
-                    by hand. Non-cover pages render no header at all, so the
-                    list is the wrapper's first child and starts at line 1
-                    instead — also correct with no extra offset. The single
-                    PAPER_BASELINE_NUDGE on the wrapper above is still the
-                    only whole-subtree phase correction. */}
-                <ul>
-                  {chunks[activePage]?.map((item, i) => (
-                    <li key={i} className="flex gap-2 items-start">
-                      <span className="flex-shrink-0 w-1.5 h-1.5 rounded-full bg-ink-base mt-[11px]" />
-                      <p
-                        style={{ fontFamily: 'var(--font-hand)', lineHeight: `${RULE_HEIGHT}px` }}
-                        className="m-0 text-lg text-ink-base"
-                      >
-                        {item}
-                      </p>
-                    </li>
-                  ))}
-                </ul>
+                {activeSection && renderSectionBody(activeSection.type)}
               </div>
             </motion.div>
           </AnimatePresence>
