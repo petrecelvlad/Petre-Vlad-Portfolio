@@ -33,11 +33,9 @@ export function TreeCanvas({ category, activeSkill, expandedSkillIds, onSelect }
   // Depth 0/1 always shown; deeper layers mount/unmount as `expandedSkillIds`
   // grows/shrinks — one layer at a time (a skill's children only reveal once
   // the skill ITSELF is in the set; a grandchild needs its own parent
-  // separately added, not just an ancestor). Deliberately driven by
-  // expandedSkillIds, NOT activeSkill (see useSkillTreeState.ts) —
-  // activeSkill starts pre-selected on a root skill for the details panel,
-  // and expanding a root's whole subtree by default would defeat the point
-  // of collapsing deep layers. Positions themselves never change — they're
+  // separately added, not just an ancestor). Driven by expandedSkillIds, not
+  // activeSkill, because selecting a sibling keeps the branches already open
+  // (see useSkillTreeState.ts). Positions themselves never change — they're
   // still the same static, module-load-computed LAYOUTS pixel coordinates as
   // before; only which nodes/links are currently mounted changes. See
   // getVisibleSkillIds/getNextExpandedSkillIds for the exact accumulate-vs-
