@@ -52,9 +52,10 @@ Reading them out of order means reading a document that references concepts you 
 | Step | Document | What I gain |
 |---|---|---|
 | 1 | `AGENT.md` | My constitution: phases, guardrails, standing rules |
-| 2 | [PHILOSOPHY.md](../../PHILOSOPHY.md) | Framework purpose, principles, and evolution model |
-| 3 | `CLAUDE.md` (or provider companion) | My onboarding sequence, session protocol, memory rules |
-| 4 | [CODING_COMPANION.md](./CODING_COMPANION.md) | My coding discipline: naming, functions, errors, types |
+| 2 | [Retard.md](./Retard.md) | Mandatory lessons from past agent mistakes (local only, skip if absent) |
+| 3 | [PHILOSOPHY.md](../../PHILOSOPHY.md) | Framework purpose, principles, and evolution model |
+| 4 | `CLAUDE.md` (or provider companion) | My onboarding sequence, session protocol, memory rules |
+| 5 | [CODING_COMPANION.md](./CODING_COMPANION.md) | My coding discipline: naming, functions, errors, types |
 
 After Phase 1, I can operate safely on any task. I know the rules, the constraints, and how to write code that meets the project's standards.
 
@@ -66,9 +67,9 @@ After Phase 1, I can operate safely on any task. I know the rules, the constrain
 
 | Step | Document | What I gain |
 |---|---|---|
-| 5 | [OVERVIEW.md](../../project/architecture/OVERVIEW.md) | System design, key decisions, component structure |
-| 6 | [systems/*.md](../../project/architecture/systems/TEMPLATE.md) | Deep-dive into specific subsystems (read as needed) |
-| 7 | `GRAPH_SPINE.md` (when available) | Dependency graph, god nodes, blast radius awareness |
+| 6 | [OVERVIEW.md](../../project/architecture/OVERVIEW.md) | System design, key decisions, component structure |
+| 7 | [systems/*.md](../../project/architecture/systems/TEMPLATE.md) | Deep-dive into specific subsystems (read as needed) |
+| 8 | `GRAPH_SPINE.md` (when available) | Dependency graph, god nodes, blast radius awareness |
 
 After Phase 2, I understand what was built and why. I can assess blast radius before making changes and navigate the codebase with context.
 
@@ -80,10 +81,10 @@ After Phase 2, I understand what was built and why. I can assess blast radius be
 
 | Step | Document | What I gain |
 |---|---|---|
-| 8 | [COMMUNICATOR.md](../personas/COMMUNICATOR.md) | Information density, response calibration (always-active) |
-| 9 | [PLANNER.md](../personas/PLANNER.md) | Task granularity, board-card discipline, WIP hygiene (always-active) |
-| 10 | [DEVELOPER.md](../personas/DEVELOPER.md) | Coding mental model (activate if coding this session) |
-| 11 | Other personas as needed | Task-specific mental models |
+| 9 | [COMMUNICATOR.md](../personas/COMMUNICATOR.md) | Information density, response calibration (always-active) |
+| 10 | [PLANNER.md](../personas/PLANNER.md) | Task granularity, board-card discipline, WIP hygiene (always-active) |
+| 11 | [DEVELOPER.md](../personas/DEVELOPER.md) | Coding mental model (activate if coding this session) |
+| 12 | Other personas as needed | Task-specific mental models |
 
 After Phase 3, I'm fully onboarded. I have rules, territory, and identity. I can begin work.
 
