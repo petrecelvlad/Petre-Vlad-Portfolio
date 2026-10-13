@@ -2,7 +2,7 @@
 type: Task
 title: "T-038: Redesign SkillTree banner + board chrome"
 description: "Banner should just say 'Skilltree'; the board/container UI element should move away from the current gradient look toward the site's established visual style"
-status: backlog
+status: done
 priority: high
 parent: T-033
 tags: [roadmap, task, skilltree, visual-design]
@@ -21,10 +21,11 @@ thing" — possibly a full redesign of the SkillTree's container chrome
 
 ## Acceptance Criteria
 
-- [ ] Banner text simplified to just "Skilltree"
-- [ ] Board/container visual treatment moved away from its current gradient-heavy look
-- [ ] New treatment matches the site's established visual language (heritage/gamified skin
-      system, existing bevel/border/shadow conventions used elsewhere)
+- [x] Banner text simplified to just "Skilltree"
+- [x] Banner is the Hero's `RibbonBanner`, about twice today's size, with a 3px bevel (new
+      opt-in prop — the Hero's own ribbon keeps its current bands until the redesign reaches it)
+- [x] Board frame: flat wood, ink outline, 3px bevel, 8px hard bottom edge (no blurred shadow)
+- [x] Steel corner brackets replaced by flat, ink-outlined corner caps (user, 2026-10-13)
 
 ---
 

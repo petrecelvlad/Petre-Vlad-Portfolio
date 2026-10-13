@@ -23,7 +23,7 @@ It shares a material vocabulary with Heritage (both are "physical object" skins,
 Gamified is built from two separate implementations that share heuristics but not mechanisms:
 
 ### A. DOM/CSS tactile chrome (project cards, skill tree)
-`src/components/bento/skins/gamified/` — `GamifiedBoard.tsx` (the bento card's wooden-frame + cork-board container, used as the skin's `BoardContainer`), `GamifiedParchmentPanel.tsx` (skill-tree detail panel — hanging wooden bar + parchment scroll + wax seal), `GamifiedBannerPlaque.tsx`, `GamifiedSVGAssets.tsx` (`SteelCornerBrackets`, etc.), and the `widgets/` tree (`CorkboardNote`, `ToggleSwitch`, `SlideGauge`, `EmergencyButton`, `PolaroidWaxSeal`, `WorkbenchMasterView` and friends, assembled via `factory/BentoWidgetFactory.ts`). Built from the macro heuristics in `docs/Design/Tactile_Style.md`.
+`src/components/bento/skins/gamified/` — `GamifiedBoard.tsx` (the skill tree's wooden-frame + cork-board container, with the Hero's `RibbonBanner` as its banner), `GamifiedCornerCaps.tsx`, `GamifiedWaxSeal.tsx` (on the skill-tree detail panel, which is now the Hero's ribbon-over-paper object), and the `widgets/` tree (`CorkboardNote`, `ToggleSwitch`, `SlideGauge`, `EmergencyButton`, `PolaroidWaxSeal`, `WorkbenchMasterView` and friends, assembled via `factory/BentoWidgetFactory.ts`). Built from the macro heuristics in `docs/Design/Tactile_Style.md`.
 
 ### B. WebGL shader micro-vignettes (Hero banner achievement cards)
 Four self-contained animated shader cards in `AchievementShaderCanvas.tsx` (Years of Experience → 16-bit level-up gauge, Games Produced → raymarched 3D golden cartridge, Levels Crafted → 2D assembly-line factory, Teams Lead → 2.5D island-overworld map), each a 4–7 second looping build-up/impact/reward/cooldown cycle rendered in pure GLSL (SDF primitives, quantized 16-color banding, contour outlining). Full spec in `docs/Design/Hero_Animated_Cards_Style_Guide.md`; the island-overworld card's own sub-style in `docs/Design/Island_Overworld_Style.md`; the vector-arcade contour/extrusion treatment shared across cards in `docs/Design/Ketchapp_Casual_Style.md`. The Hero's 3-column layout ratio (30/40/30, center/center/right-anchored) that houses these cards is locked per `docs/Architecture/specs/Hero_Layout_Refactor_Spec.md`.
@@ -59,11 +59,11 @@ Text on any textured/gradient surface gets an outline + drop shadow (`paintOrder
 
 ## 4. Component Construction Guidelines
 
-### Wooden Board Chassis (`GamifiedBoard`, project-card `BoardContainer`)
-Dark oak gradient background (`#8C5828 → #673E19 → #4A2A0C`), 4px dark outline, `SteelCornerBrackets` at the corners, inset cork-board interior (radial dot-grid pattern) with a deep inset shadow. This is the pattern for any new "framed wooden container."
+### Wooden Board Chassis (`GamifiedBoard`, skill tree)
+Rebuilt 2026-10-13 (T-038) in the toy-box style: flat `#673E19` wood, 4px ink outline, a `--bevel-width` (3px) light-top/dark-bottom bevel, an 8px hard bottom edge (`--ui-depth-lg`), flat butter `GamifiedCornerCaps` at the corners, inset cork interior (radial dot grid) keeping `--shadow-sunken`. Banner: `RibbonBanner` with `bevelWidth={3}`. This is the pattern for any new "framed wooden container."
 
-### Parchment Scroll Panel (`GamifiedParchmentPanel`, skill-tree detail)
-Top wooden hanging bar (with two blued-steel rivets) sitting slightly *above and wider than* the parchment body — the parchment tucks under it, not inside it. Parchment body: cream-to-gold gradient, inner dashed stitching border, category/rank badges in the header row, a wax-seal SVG sigil overlapping the top-right corner as an accent.
+### Skill-Tree Detail Panel
+Rebuilt 2026-10-13 (T-052) as the Hero's ribbon-over-lined-paper object (`RibbonBanner` + `RibbonPaperSeam` + `TornPaperPanel`); the parchment scroll, hanging bar, stitching and dashed divider are gone. The wax seal stays (user decision).
 
 ### Wax Seal Accent
 A layered SVG: melted-wax outer blob (two overlapping red tones), ribbon-end tails, a stamped inner emblem circle with an embossed crest. Used as a corner accent on parchment surfaces, not a full component on its own.

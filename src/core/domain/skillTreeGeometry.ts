@@ -1,6 +1,6 @@
 import { Skill, SkillCategory, SKILLS } from './skillTreeTypes';
 
-export const PILL_W = 160;
+export const PILL_W = 208;
 export const PILL_H = 32;
 export const GAP_X = 60;
 export const GAP_Y = 10;

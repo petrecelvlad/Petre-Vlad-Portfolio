@@ -14,6 +14,9 @@ export interface RibbonBannerProps {
   strokeWidth?: number;
   shadowOffset?: number;
   foldCreaseColor?: string;
+  /** Visible height of the light top and dark bottom bands, in px. When omitted, each band is 16%
+   *  of the body's height. */
+  bevelWidth?: number;
 }
 
 /**
@@ -38,6 +41,7 @@ export const RibbonBanner: React.FC<RibbonBannerProps> = ({
   strokeWidth = 3,
   shadowOffset = 4,
   foldCreaseColor,
+  bevelWidth,
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [dimensions, setDimensions] = useState({ width: 400, height: 70 });
@@ -123,7 +127,8 @@ export const RibbonBanner: React.FC<RibbonBannerProps> = ({
 
   const tailBandY = tailTopY + (tailBottomY - tailTopY) * 0.55;
   const tailBandHeight = (tailBottomY - tailTopY) * 0.45;
-  const bandHeight = bodyH * 0.16;
+  // The outline stroke is centered on the body's edge, so it covers half its width of each band.
+  const bandHeight = bevelWidth === undefined ? bodyH * 0.16 : bevelWidth + strokeWidth / 2;
   const creaseColor = foldCreaseColor ?? darken(tailColor, 22);
 
   return (

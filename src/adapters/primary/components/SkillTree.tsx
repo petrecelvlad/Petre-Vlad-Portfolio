@@ -3,12 +3,16 @@ import { WoodBackground } from '@/src/components/bento/shared/WoodBackground';
 import { GamifiedBoard } from '@/src/components/bento/skins/gamified/GamifiedBoard';
 import type { IExperience } from '@/src/core/domain/models';
 import { SkillCategory, CATEGORIES } from '@/src/core/domain/skillTreeTypes';
-import { LAYOUTS } from '@/src/core/domain/skillTreeGeometry';
+import { LAYOUTS, PILL_H } from '@/src/core/domain/skillTreeGeometry';
 import { TreeCanvas } from './skilltree/SkillTreeConnections';
 import { SkillDetailsPanel } from './skilltree/SkillDetailsPanel';
+import { SkillProjectPhotos } from './skilltree/SkillProjectPhotos';
 import { getArcadeButtonColor, getArcadeHighlight, getArcadeOutlineStyle } from './skilltree/arcadeStyle';
 import { Button } from '@/src/components/atoms/Button';
+import { ScaleToFit } from '@/src/components/layout/ScaleToFit';
 import { useSkillTreeState } from '@/src/hooks/useSkillTreeState';
+
+const BADGE_H = 72;
 
 export function SkillTree({ experiences }: { experiences: IExperience[] }) {
   const { activeSkill, activeCategory, expandedSkillIds, projectsById, handleSelect, handleSelectCategory } = useSkillTreeState(experiences);
@@ -17,20 +21,27 @@ export function SkillTree({ experiences }: { experiences: IExperience[] }) {
     const isCategoryOnPath = activeSkill !== null && activeSkill.category === cat;
     const isCategorySelected = activeCategory === cat;
     const badgeState = isCategorySelected ? 'active' : isCategoryOnPath ? 'onPath' : 'default';
+    const CategoryIcon = CATEGORIES[cat].icon;
 
     return (
       <div key={cat} className="flex items-start">
         <Button
           onClick={() => handleSelectCategory(cat)}
-          color={getArcadeButtonColor(CATEGORIES[cat])}
+          aria-pressed={isCategorySelected}
+          color={getArcadeButtonColor(CATEGORIES[cat], badgeState)}
           shape="chip"
           size="sm"
           highlight={getArcadeHighlight(badgeState)}
-          className="w-[96px] h-[30px] flex-shrink-0 flex items-center justify-center font-display font-black text-[9.5px] uppercase tracking-wider text-ink-base select-none relative z-10 overflow-hidden"
-          style={{ marginTop: LAYOUTS[cat].rootTop, ...getArcadeOutlineStyle(CATEGORIES[cat], badgeState) }}
+          className="w-[96px] flex-shrink-0 flex flex-col items-center justify-center gap-1.5 text-ink-base select-none relative z-10 overflow-hidden"
+          style={{
+            height: BADGE_H,
+            // Centered on the anchor connector, which leaves the badge at the roots' mean row center.
+            marginTop: LAYOUTS[cat].rootTop + PILL_H / 2 - BADGE_H / 2,
+            ...getArcadeOutlineStyle(CATEGORIES[cat], badgeState),
+          }}
         >
-          <span className="absolute top-[2px] right-[6px] w-[12px] h-[4px] rounded-full bg-white/50 pointer-events-none" />
-          <span className="-mt-[1px]">{CATEGORIES[cat].label}</span>
+          <CategoryIcon size={26} strokeWidth={2.5} />
+          <span className="font-jersey text-[16px] uppercase leading-none">{CATEGORIES[cat].label}</span>
         </Button>
 
         <TreeCanvas
@@ -60,17 +71,20 @@ export function SkillTree({ experiences }: { experiences: IExperience[] }) {
           className="flex-1 min-w-0"
           contentClassName="p-1"
           fillHeight
-          bannerTitle="GUILD SKILL TREE"
+          bannerTitle="Skilltree"
         >
-          <div className="flex flex-col gap-6">
-            {treeRows}
-          </div>
+          <ScaleToFit className="flex-1 min-h-0 self-stretch">
+            <div className="flex flex-col gap-6 px-6">
+              {treeRows}
+            </div>
+          </ScaleToFit>
         </GamifiedBoard>
       </div>
 
-      {/* Right column — detail panel */}
+      {/* Right column — detail panel row, project photos row */}
       <div className="hidden lg:flex flex-col w-[600px] flex-shrink-0 my-8 md:my-10 ml-4 md:ml-6 mr-8 md:mr-12">
-        <SkillDetailsPanel skill={activeSkill} category={activeCategory} projectsById={projectsById} />
+        <SkillDetailsPanel skill={activeSkill} category={activeCategory} />
+        <SkillProjectPhotos className="flex-1 min-h-0" skill={activeSkill} projectsById={projectsById} />
       </div>
     </motion.section>
   );

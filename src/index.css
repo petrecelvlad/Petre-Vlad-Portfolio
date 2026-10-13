@@ -156,6 +156,9 @@
 
   /* Unified depth system — one physical depth for the entire UI */
   --ui-depth: 4px;
+  /* Hard bottom edge for board-sized objects, and the one light-top / dark-bottom bevel line used at every size. */
+  --ui-depth-lg: 8px;
+  --bevel-width: 3px;
   --shadow-color: #000000;
   --inset-color: #E4DAC4;
 
@@ -387,7 +390,8 @@ body::before {
 }
 
 .raised-button:hover,
-.raised-button:active {
+.raised-button:active,
+.raised-button[aria-pressed="true"] {
   transform: translateY(var(--btn-depth));
   box-shadow:
     inset 0 var(--btn-bevel) 0 0 rgba(255, 246, 219, var(--btn-highlight, 0.5)),
