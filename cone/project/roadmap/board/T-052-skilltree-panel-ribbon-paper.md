@@ -1,6 +1,6 @@
 ---
 type: Task
-title: "T-052: SkillTree detail panel as ribbon over lined paper"
+title: "T-052: SkillTree detail panel as ribbon over lined paper (REVERTED)"
 description: "Rebuild the detail panel from the Hero's RibbonBanner + RibbonPaperSeam + TornPaperPanel; the wax seal stays"
 status: done
 priority: high
@@ -32,3 +32,10 @@ reference.
 ## Notes
 
 User decision: the wax seal remains.
+
+**2026-10-13 — reverted at the user's request.** The user disliked the redesign ("that panel should not
+have been changed, you changed it too drastically"). The parchment panel is back exactly as it stood
+before this card: `GamifiedParchmentPanel` (hanging bar, stitching, inline wax seal), dashed divider,
+the session's earlier tweaks kept (no "ABILITY EFFECT:" label, `min-h-[336px]`, `text-base`).
+`GamifiedWaxSeal.tsx` (extracted only for this card) deleted. Do not restyle this panel again unless
+the user names it.

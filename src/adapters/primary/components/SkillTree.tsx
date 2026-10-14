@@ -27,8 +27,7 @@ export function SkillTree({ experiences }: { experiences: IExperience[] }) {
       <div key={cat} className="flex items-start">
         <Button
           onClick={() => handleSelectCategory(cat)}
-          aria-pressed={isCategorySelected}
-          color={getArcadeButtonColor(CATEGORIES[cat], badgeState)}
+          color={getArcadeButtonColor(CATEGORIES[cat])}
           shape="chip"
           size="sm"
           highlight={getArcadeHighlight(badgeState)}

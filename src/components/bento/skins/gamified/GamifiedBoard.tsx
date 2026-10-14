@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { RibbonBanner } from '@/src/components/atoms/RibbonBanner';
+import { PixelRibbonBanner } from '@/src/components/atoms/PixelRibbonBanner';
 import { GamifiedCornerCaps } from './GamifiedCornerCaps';
 
 interface GamifiedBoardProps {
@@ -26,11 +26,9 @@ export function GamifiedBoard({
   return (
     <div className={`relative ${fillHeight ? 'flex flex-col' : ''} ${className}`}>
       <div className="absolute -top-[34px] left-1/2 -translate-x-1/2 z-30 w-[min(460px,70%)] pointer-events-none">
-        <RibbonBanner className="w-full" bevelWidth={3}>
-          <span className="font-arcade font-black text-2xl text-white uppercase tracking-wider leading-none drop-shadow-[0_2px_0_rgba(0,0,0,0.6)]">
-            {bannerTitle}
-          </span>
-        </RibbonBanner>
+        <PixelRibbonBanner className="w-full">
+          <span className="text-xl">{bannerTitle}</span>
+        </PixelRibbonBanner>
       </div>
 
       <GamifiedCornerCaps />

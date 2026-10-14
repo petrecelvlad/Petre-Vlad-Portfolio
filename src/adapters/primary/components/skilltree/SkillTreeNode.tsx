@@ -38,8 +38,7 @@ export function SkillPill({
   return (
     <Button
       onClick={() => onSelect(skill)}
-      aria-pressed={active}
-      color={getArcadeButtonColor(catConfig, state)}
+      color={getArcadeButtonColor(catConfig)}
       shape="chip"
       size="sm"
       highlight={getArcadeHighlight(state)}

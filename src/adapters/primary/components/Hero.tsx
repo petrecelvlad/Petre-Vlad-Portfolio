@@ -1,9 +1,9 @@
-import { useMemo, useEffect, useRef, lazy, Suspense } from 'react';
+import { useMemo, useEffect, useLayoutEffect, useRef, useState, lazy, Suspense } from 'react';
 import { motion } from 'motion/react';
 import { AchievementShaderCanvas, ShaderType } from '@/src/components/backgrounds/AchievementShaderCanvas';
 import { FloatingIslandBackdrop } from '@/src/components/backgrounds/FloatingIslandBackdrop';
 import { Button, BUTTON_COLORS } from '@/src/components/atoms/Button';
-import { RibbonBanner } from '@/src/components/atoms/RibbonBanner';
+import { PixelRibbonBanner } from '@/src/components/atoms/PixelRibbonBanner';
 import { RibbonPaperSeam } from '@/src/components/atoms/RibbonPaperSeam';
 import { TornPaperPanel } from '@/src/components/atoms/TornPaperPanel';
 import { useIsVisible } from '@/src/hooks/useIsVisible';
@@ -73,6 +73,32 @@ export function Hero() {
       video.pause();
     }
   }, [isVisible]);
+
+  // Desktop only (columns side by side): the ribbon's top edge lines up with the first achievement
+  // card's bottom edge in the right column. Null = stacked layout, where the block stays centered.
+  const ribbonSlotRef = useRef<HTMLDivElement>(null);
+  const firstAchievementRef = useRef<HTMLDivElement>(null);
+  const [ribbonOffset, setRibbonOffset] = useState<number | null>(null);
+
+  useLayoutEffect(() => {
+    const slot = ribbonSlotRef.current!;
+    const card = firstAchievementRef.current!;
+    const sideBySide = window.matchMedia('(min-width: 1024px)');
+    const measure = () => {
+      setRibbonOffset(sideBySide.matches
+        ? Math.max(0, card.getBoundingClientRect().bottom - slot.getBoundingClientRect().top)
+        : null);
+    };
+    measure();
+    const observer = new ResizeObserver(measure);
+    observer.observe(slot);
+    observer.observe(card);
+    sideBySide.addEventListener('change', measure);
+    return () => {
+      observer.disconnect();
+      sideBySide.removeEventListener('change', measure);
+    };
+  }, []);
 
   const years = useMemo(() => {
     const start = new Date(2007, 0, 1);
@@ -161,15 +187,18 @@ export function Hero() {
               </div>
             </div>
 
-            {/* Centered Content: Role Ribbon + Bio Note, fused into one object \u2014 vertically centered in the space between the title and the EXPLORE button */}
-            <div className="flex-1 flex items-center justify-center w-full">
-              <div className="relative w-full max-w-[540px] mx-auto" style={{ transform: 'rotate(-0.6deg)' }}>
-                <RibbonBanner className="relative z-10 -mb-6 sm:-mb-7 w-[114%] -mx-[7%]">
-                  <h2 className="font-arcade font-black text-lg sm:text-xl lg:text-2xl text-white uppercase tracking-wider leading-none drop-shadow-[0_2px_0_rgba(0,0,0,0.6)]">
-                    GAME PRODUCER
-                  </h2>
-                </RibbonBanner>
-                <div className="relative w-full">
+            {/* Role Ribbon + Bio Note, fused into one object: top-aligned to the first achievement card on desktop, centered when stacked */}
+            <div
+              ref={ribbonSlotRef}
+              className={`flex-1 flex justify-center w-full ${ribbonOffset === null ? 'items-center' : 'items-start'}`}
+              style={ribbonOffset === null ? undefined : { paddingTop: ribbonOffset }}
+            >
+              <div className="relative w-full max-w-[540px] mx-auto">
+                {/* 60px = the ribbon's 8-pixel tail run + 2 pixels: the body overhangs the paper by 12px and the tails end at its edge. */}
+                <PixelRibbonBanner className="-mb-[34px] w-[calc(100%+120px)] -mx-[60px]">
+                  <h2>GAME PRODUCER</h2>
+                </PixelRibbonBanner>
+                <div className="relative z-10 w-full">
                   <RibbonPaperSeam paperColor="#FFFDF7" outlineColor="#1C1610" className="absolute -top-2 left-0 right-0 z-[5]" />
                   <TornPaperPanel
                     className="w-full"
@@ -221,9 +250,10 @@ export function Hero() {
 
         {/* ── RIGHT COLUMN (30% width, Center Anchored): 4 Aggregated Achievement Rows ── */}
         <div className="@container lg:[container-type:size] w-full lg:w-[30%] flex-shrink-0 flex flex-col items-center justify-between gap-2.5 sm:gap-3 lg:gap-4 px-3 sm:px-4 md:px-5 lg:px-5 xl:px-8">
-          {achievements.map((item) => (
+          {achievements.map((item, index) => (
             <div
               key={item.id}
+              ref={index === 0 ? firstAchievementRef : undefined}
               className="w-full lg:w-[min(100%,calc(69cqh-33px))] flex items-center justify-center gap-2 sm:gap-3 hover:translate-y-[-2px] transition-transform"
             >
               {/* Left Box: Shader Animation Card — 16 parts of the row's width, height auto-derives via aspect-video. Border/shadow live on a non-clipped overlay sibling so they carry zero box-model weight on the sizing box itself — the 16:9 split must stay exact. */}

@@ -305,9 +305,9 @@ The connecting line from root splits into two branches using a horizontal segmen
 §6.2–6.4 describe the original design; the shipped build differs. Built to the toy-box style (ink outline, 3px light/dark bevel, hard bottom edge, no gradients):
 
 - **Board** (`GamifiedBoard`): flat wood frame, 4px ink outline, `--bevel-width` bevel, `--ui-depth-lg` (8px) hard bottom edge; flat butter corner caps (`GamifiedCornerCaps`); recessed cork tray keeps `--shadow-sunken`.
-- **Banner**: the Hero's `RibbonBanner` reading "Skilltree", `bevelWidth={3}` (the Hero's own ribbon keeps its proportional bands until the redesign reaches it).
+- **Banner**: `PixelRibbonBanner` reading "Skilltree" — the same 8-bit ribbon as the Hero (user, 2026-10-13).
 - **Fit** (`ScaleToFit`): the tree shrinks uniformly to the board, never enlarges. Each category canvas takes only the width of its open columns, so the default view stays near 100% and the tree eases out as deeper columns open; anchored left so the badges never move sideways.
-- **Pills**: `PILL_W` 208 × `PILL_H` 32, Jersey 15 at 16px (fits the longest name, "Cross-Functional Comms"). Selected = white fill + pressed (`aria-pressed` on `.raised-button`); on-path = category-tint outline.
+- **Pills**: `PILL_W` 208 × `PILL_H` 32, Jersey 15 at 16px (fits the longest name, "Cross-Functional Comms"). Selected = category fill + 2px white outline (user: never recolor the selected pill); on-path = category-tint outline.
 - **Category badges**: 96×72 tiles, icon above label (PenTool / Factory / Crown on `CategoryConfig.icon`), centered on the anchor connector.
 - **Connectors**: opaque ink casing (10px), solid wood core (6px), category color lights the active path. No dashes, no white gloss.
 
@@ -325,17 +325,17 @@ On mobile the 4-column grid collapses. Each category tree stacks vertically, sep
 |---|---|
 | **Default** | All nodes at full opacity. Detail panel shows: `"SELECT A SKILL TO INSPECT"` in mono uppercase. |
 | **Hover** | Node background → `bg-surface-soft`, scale `1.03`. Proficiency dots animate from unfilled → filled (150ms, left-to-right stagger). |
-| **Active / selected** | Node → white fill, pressed down (`aria-pressed`). Selection persists on click. |
+| **Active / selected** | Node keeps its category fill and gets a 2px white outline. Selection persists on click. |
 | **Detail panel empty** | Periwinkle-outlined WindowCard, centered mono prompt, icon of a cursor. |
 | **Detail panel populated** | Skill name + description only (decluttered 2026-10-13, T-034); the project photos are a separate region below the panel (`SkillProjectPhotos`). Transitions via `AnimatePresence` — content fades out/in when selection changes. |
 
 ### Detail Panel Content
 
-The Hero's ribbon-over-lined-paper object (T-052): skill/category name in a `RibbonBanner` (Silkscreen, 3px bevel), description on `TornPaperPanel` (font-body text-base, 28px ruled lines), `RibbonPaperSeam` between them, the wax seal (`GamifiedWaxSeal`) hanging off the paper's top-right edge. The category view adds the "DISCIPLINE OVERVIEW:" label.
+`GamifiedParchmentPanel`: wooden hanging bar with rivets, parchment with a stitched border and the wax seal at its bottom-right, its flaps hanging just below the parchment's bottom edge; skill/category name, dashed divider, description box (font-body text-base). The category view adds the "DISCIPLINE OVERVIEW:" label. Kept out of the toy-box redesign (user): T-052 rebuilt it as ribbon-over-paper and was reverted the same day.
 
-Removed 2026-10-13 (T-034, user decision): parchment header line (branch badge, "SKILL INSPECTOR", rank), stars + MASTERED, years text, mastery/experience/impact bars, empty state (unreachable — a skill or category is always selected), the skill view's "ABILITY EFFECT:" label. Removed in the redesign (T-052): the parchment, its hanging wooden bar, stitching and dashed divider. The wax seal stays (user). A single career-relative experience bar is planned (T-051).
+Removed 2026-10-13 (T-034, user decision): parchment header line (branch badge, "SKILL INSPECTOR", rank), stars + MASTERED, years text, mastery/experience/impact bars, empty state (unreachable — a skill or category is always selected), the skill view's "ABILITY EFFECT:" label. A single career-relative experience bar is planned (T-051).
 
-Panel total height ≈ 336px (paper `min-h-[292px]` + the ribbon's overhang): the tallest it can be while the photo region at 1366×768 still has the 264px it needs for full-size (172px) photos.
+Panel `min-h-[336px]`: the tallest it can be while the photo region at 1366×768 still has the 264px it needs for full-size (172px) photos.
 
 Phase 5 enhancement (post-MVP): project badges in the detail panel scroll to that project card when clicked.
 

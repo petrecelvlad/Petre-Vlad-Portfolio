@@ -8,7 +8,7 @@ export interface RibbonPaperSeamProps {
 }
 
 /**
- * RibbonPaperSeam: a small joinery shape for the transition between `RibbonBanner` and
+ * RibbonPaperSeam: a small joinery shape for the transition between `PixelRibbonBanner` and
  * `TornPaperPanel` — one shallow-sagging band in a darkened shade of the paper's own color, one
  * thin transitional stroke, one flat offset shadow. Modeled on `BentoResponsibilities.tsx`'s
  * `BinderClip` (one small shape + one shadow straddling a seam between two different objects),
@@ -25,7 +25,7 @@ export const RibbonPaperSeam: React.FC<RibbonPaperSeamProps> = ({
 
   return (
     <div className={`pointer-events-none ${className}`} style={{ filter: `drop-shadow(0 2px 0 ${outlineColor})` }}>
-      {/* Purely decorative — hiding TornPaperPanel's punch-hole row is `RibbonBanner`'s own
+      {/* Purely decorative — hiding TornPaperPanel's punch-hole row is `PixelRibbonBanner`'s own
           negative-margin overlap's job (proven to work on its own), not this element's. This is
           positioned absolutely over the paper's top edge in Hero.tsx, so it never participates in
           block-flow margin math between the ribbon and the paper. */}
