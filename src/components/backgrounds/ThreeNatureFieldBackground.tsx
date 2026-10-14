@@ -32,6 +32,8 @@ const CAMERA_TARGET = new THREE.Vector3(0, 2.5, 0);
 const CAMERA_RADIUS = Math.hypot(0, 12); // initial (0, 2.5, 12) offset from target in the XZ plane — pulled back from the original (0, 2.0, 10) for a wider view
 const CAMERA_HEIGHT = 2.5;
 const CAMERA_ORBIT_SPEED = -0.0131; // rad/s — quarter of the original 0.0524, reversed direction (OrbitControls autoRotateSpeed=0.5 at 60fps)
+const CLOUD_RING_RADIUS = 76; // midpoint of the old random 68–84 spread, now shared so equal angles read as equal gaps
+const CLOUD_ORBIT_SPEED = 0.0435; // rad/s — the old per-cloud average (0.0725 * 0.01 rad per frame at 60fps)
 const WORLD_UP = new THREE.Vector3(0, 1, 0);
 const CAMERA_LOOK_OFFSET = 0.6; // world units the look target shifts vertically at max cursor deflection (~2.9° at CAMERA_RADIUS) — position never moves, only gaze
 const CAMERA_LOOK_SMOOTHING = 1.6; // lower = slower, gentler catch-up to the cursor (avoids a snappy/jagged feel)
@@ -357,11 +359,6 @@ export function ThreeNatureFieldBackground({ className = '', isVisible = true }:
     });
 
     // --- Marshmallow Clouds ---
-    interface CloudUserData {
-      speed: number;
-      angle: number;
-      dist: number;
-    }
     const cloudGroup = new THREE.Group();
     const cloudMat = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 1.0, flatShading: true });
     const cloudGeometries: THREE.BufferGeometry[] = [];
@@ -393,7 +390,7 @@ export function ThreeNatureFieldBackground({ className = '', isVisible = true }:
 
         float cloudPhase = position.x * 0.9 + position.y * 1.3 + position.z * 0.7
           + modelMatrix[3].x * 0.15 + modelMatrix[3].y * 0.11 + modelMatrix[3].z * 0.09;
-        float breathe = sin(uTime * 0.15 + cloudPhase) * 0.25;
+        float breathe = sin(uTime * 0.25 + cloudPhase) * 0.25;
         transformed += normalize(normal) * breathe;
         `
       );
@@ -409,13 +406,12 @@ export function ThreeNatureFieldBackground({ className = '', isVisible = true }:
         mesh.position.set((b - blobCount / 2) * 2.5, (Math.random() - 0.5) * 1.5, (Math.random() - 0.5) * 2.0);
         singleCloud.add(mesh);
       }
-      // Angle starts evenly spaced by index; dist/height/speed variance is kept small so
-      // that even spacing holds up visually over time instead of drifting into clumps as
-      // faster clouds lap slower ones.
+      // Evenly spaced on one shared ring; the whole group turns as one (animate loop), so the
+      // spacing never drifts. Each cloud's blob row is turned along the ring's tangent so it is
+      // always seen side-on, at the same apparent width.
       const angle = (i / 12) * Math.PI * 2;
-      const dist = 68 + Math.random() * 16;
-      singleCloud.position.set(Math.cos(angle) * dist, 40 + Math.random() * 8, Math.sin(angle) * dist);
-      singleCloud.userData = { speed: 0.065 + Math.random() * 0.015, angle, dist } satisfies CloudUserData;
+      singleCloud.position.set(Math.cos(angle) * CLOUD_RING_RADIUS, 40 + Math.random() * 8, Math.sin(angle) * CLOUD_RING_RADIUS);
+      singleCloud.rotation.y = -(angle + Math.PI / 2);
       cloudGroup.add(singleCloud);
     }
     scene.add(cloudGroup);
@@ -524,12 +520,8 @@ export function ThreeNatureFieldBackground({ className = '', isVisible = true }:
         cloudShader.uniforms.uTime.value = time;
       }
 
-      cloudGroup.children.forEach((cloud) => {
-        const data = cloud.userData as CloudUserData;
-        data.angle += data.speed * 0.01;
-        cloud.position.x = Math.cos(data.angle) * data.dist;
-        cloud.position.z = Math.sin(data.angle) * data.dist;
-      });
+      // Negative: a positive rotation.y turns ring positions toward decreasing angle, the opposite of the old drift.
+      cloudGroup.rotation.y -= CLOUD_ORBIT_SPEED * delta;
 
       birds.forEach((bird) => {
         const data = bird.userData as BirdUserData;

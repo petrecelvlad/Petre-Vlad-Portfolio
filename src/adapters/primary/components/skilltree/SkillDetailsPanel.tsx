@@ -1,8 +1,6 @@
+import React from 'react';
 import { AnimatePresence, motion } from 'motion/react';
-import { RibbonBanner } from '@/src/components/atoms/RibbonBanner';
-import { RibbonPaperSeam } from '@/src/components/atoms/RibbonPaperSeam';
-import { TornPaperPanel } from '@/src/components/atoms/TornPaperPanel';
-import { GamifiedWaxSeal } from '@/src/components/bento/skins/gamified/GamifiedWaxSeal';
+import { GamifiedParchmentPanel } from '@/src/components/bento/skins/gamified/GamifiedParchmentPanel';
 import { Skill, SkillCategory, CATEGORIES } from '@/src/core/domain/skillTreeTypes';
 
 export interface SkillDetailsPanelProps {
@@ -11,71 +9,43 @@ export interface SkillDetailsPanelProps {
   category: SkillCategory | null;
 }
 
-const PAPER = '#FFFDF7';
-const CONTOUR = '#1C1610';
-const LINE_HEIGHT = '28px';
-const SWAP = {
-  initial: { opacity: 0, y: 4 },
-  animate: { opacity: 1, y: 0 },
-  exit: { opacity: 0, y: -4 },
-  transition: { duration: 0.2 },
-};
-
-// Same ribbon-over-lined-paper object as the Hero's role card.
 export function SkillDetailsPanel({ skill, category }: SkillDetailsPanelProps) {
   const { key, title, descriptionLabel, description } = skill !== null
     ? { key: skill.id, title: skill.name, descriptionLabel: null, description: skill.description }
     : { key: `category-${category}`, title: CATEGORIES[category!].label, descriptionLabel: 'DISCIPLINE OVERVIEW:', description: CATEGORIES[category!].description };
 
   return (
-    <div className="relative flex flex-col w-full mt-4">
-      <RibbonBanner className="relative z-10 -mb-6 w-[108%] -mx-[4%]" bevelWidth={3}>
+    <div className="flex flex-col w-full mt-4">
+      <GamifiedParchmentPanel className="w-full min-h-[336px]">
         <AnimatePresence mode="wait">
-          <motion.h3
+          <motion.div
             key={key}
-            {...SWAP}
-            className="font-arcade font-black text-xl text-white uppercase tracking-wider leading-none text-center drop-shadow-[0_2px_0_rgba(0,0,0,0.6)]"
+            initial={{ opacity: 0, y: 4 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -4 }}
+            transition={{ duration: 0.2 }}
+            className="flex flex-col h-full"
           >
-            {title}
-          </motion.h3>
-        </AnimatePresence>
-      </RibbonBanner>
+            <div className="font-display font-black text-xl md:text-2xl leading-tight text-[#1C1610] uppercase tracking-wide">
+              {title}
+            </div>
 
-      <div className="relative w-full">
-        <RibbonPaperSeam paperColor={PAPER} outlineColor={CONTOUR} className="absolute -top-2 left-0 right-0 z-[5]" />
-        <TornPaperPanel
-          className="w-full min-h-[292px]"
-          paperColor={PAPER}
-          strokeColor={CONTOUR}
-          strokeWidth={3}
-          shadowOffset={4}
-          shadowColor={CONTOUR}
-          toothWidth={36}
-          toothHeight={13}
-          cornerRadius={8}
-          showPunchHoles={false}
-          paddingTop={56}
-          paddingBottom={40}
-          paddingRight={56}
-          ruleInsetX={16}
-          lineSpacing={28}
-          rotateDeg={0}
-        >
-          <AnimatePresence mode="wait">
-            <motion.div key={key} {...SWAP} className="flex flex-col">
+            <div className="h-px border-b border-dashed border-[#B89C6C] my-2" />
+
+            <div className="p-3 rounded-lg bg-[#F0E2C3] border border-[#D4C096] text-[#2C1A0E] flex flex-col gap-1 shadow-inner my-2">
               {descriptionLabel !== null && (
-                <span className="font-mono font-bold text-[10px] uppercase tracking-wider text-[#451A03]" style={{ lineHeight: LINE_HEIGHT }}>
+                <span className="font-mono font-bold text-[10px] uppercase tracking-wider text-[#451A03]">
                   {descriptionLabel}
                 </span>
               )}
-              <p className="font-body text-base text-[#2C1A0E] m-0" style={{ lineHeight: LINE_HEIGHT }}>
+              <p className="font-body text-base leading-relaxed text-[#2C1A0E]">
                 {description}
               </p>
-            </motion.div>
-          </AnimatePresence>
-        </TornPaperPanel>
-        <GamifiedWaxSeal className="absolute -right-5 top-6 z-20" />
-      </div>
+            </div>
+          </motion.div>
+        </AnimatePresence>
+      </GamifiedParchmentPanel>
     </div>
   );
 }
+

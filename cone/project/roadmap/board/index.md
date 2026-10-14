@@ -43,7 +43,7 @@ Individual Kanban cards — see [BOARD.md](../BOARD.md) for the protocol (states
     * [T-038](T-038-skilltree-banner-chrome-redesign.md) - Redesign SkillTree banner + board chrome *(done)*
     * [T-039](T-039-skilltree-content-pass.md) - SkillTree content pass (post user research) *(backlog)*
     * [T-051](T-051-skilltree-experience-bar.md) - Skill experience bar from project dates *(backlog — blocked by T-050)*
-    * [T-052](T-052-skilltree-panel-ribbon-paper.md) - Detail panel as ribbon over lined paper *(done)*
+    * [T-052](T-052-skilltree-panel-ribbon-paper.md) - Detail panel as ribbon over lined paper *(done, REVERTED — user disliked it; parchment panel restored)*
     * [T-053](T-053-skilltree-pills-connectors.md) - Pills + connectors in the toy-box style *(done)*
     * [T-054](T-054-skilltree-scale-to-fit.md) - Scale the tree to fit its board *(done)*
   * [T-040](T-040-project-section-overhaul.md) - Project section overhaul *(backlog)*
