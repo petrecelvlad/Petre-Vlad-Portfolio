@@ -35,6 +35,7 @@ const CAMERA_ORBIT_SPEED = -0.0131; // rad/s — quarter of the original 0.0524,
 const CLOUD_RING_RADIUS = 76; // midpoint of the old random 68–84 spread, now shared so equal angles read as equal gaps
 const CLOUD_ORBIT_SPEED = 0.0435; // rad/s — the old per-cloud average (0.0725 * 0.01 rad per frame at 60fps)
 const WORLD_UP = new THREE.Vector3(0, 1, 0);
+const TAU = Math.PI * 2;
 const CAMERA_LOOK_OFFSET = 0.6; // world units the look target shifts vertically at max cursor deflection (~2.9° at CAMERA_RADIUS) — position never moves, only gaze
 const CAMERA_LOOK_SMOOTHING = 1.6; // lower = slower, gentler catch-up to the cursor (avoids a snappy/jagged feel)
 const SUN_BACK_DISTANCE = 45; // world units behind the camera, along its view direction
@@ -158,12 +159,14 @@ export function ThreeNatureFieldBackground({ className = '', isVisible = true }:
 
     let grassShader: THREE.WebGLProgramParametersWithUniforms | null = null;
     grassMat.onBeforeCompile = (shader) => {
-      shader.uniforms.uTime = { value: 0 };
+      shader.uniforms.uWindPhaseX = { value: 0 };
+      shader.uniforms.uWindPhaseZ = { value: 0 };
       grassShader = shader;
 
       shader.vertexShader =
         `
-        uniform float uTime;
+        uniform float uWindPhaseX;
+        uniform float uWindPhaseZ;
         attribute vec3 aOffset;
         attribute float aScale;
         attribute float aRotation;
@@ -179,9 +182,9 @@ export function ThreeNatureFieldBackground({ className = '', isVisible = true }:
         float heightFactor = position.y / 0.85;
         float bendAmount = heightFactor * heightFactor * 0.35;
 
-        float windWave = sin(uTime * 2.5 + aOffset.x * 0.5 + aOffset.z * 0.5);
+        float windWave = sin(uWindPhaseX + aOffset.x * 0.5 + aOffset.z * 0.5);
         transformed.x += windWave * bendAmount;
-        transformed.z += cos(uTime * 2.0 + aOffset.x * 0.3) * bendAmount * 0.5;
+        transformed.z += cos(uWindPhaseZ + aOffset.x * 0.3) * bendAmount * 0.5;
 
         float s = sin(aRotation);
         float c = cos(aRotation);
@@ -375,12 +378,12 @@ export function ThreeNatureFieldBackground({ className = '', isVisible = true }:
     // of shearing, which is what reads as "breathing" rather than "wobbling."
     let cloudShader: THREE.WebGLProgramParametersWithUniforms | null = null;
     cloudMat.onBeforeCompile = (shader) => {
-      shader.uniforms.uTime = { value: 0 };
+      shader.uniforms.uBreathePhase = { value: 0 };
       cloudShader = shader;
 
       shader.vertexShader =
         `
-        uniform float uTime;
+        uniform float uBreathePhase;
       ` + shader.vertexShader;
 
       shader.vertexShader = shader.vertexShader.replace(
@@ -390,7 +393,7 @@ export function ThreeNatureFieldBackground({ className = '', isVisible = true }:
 
         float cloudPhase = position.x * 0.9 + position.y * 1.3 + position.z * 0.7
           + modelMatrix[3].x * 0.15 + modelMatrix[3].y * 0.11 + modelMatrix[3].z * 0.09;
-        float breathe = sin(uTime * 0.25 + cloudPhase) * 0.25;
+        float breathe = sin(uBreathePhase + cloudPhase) * 0.25;
         transformed += normalize(normal) * breathe;
         `
       );
@@ -512,12 +515,16 @@ export function ThreeNatureFieldBackground({ className = '', isVisible = true }:
       const delta = clock.getDelta();
       const time = clock.elapsedTime;
 
+      // Shader phases are wrapped to one cycle here, in double precision: the GPU's sin() loses
+      // accuracy as its argument grows (on an Intel HD 4600, ~0.02 off after an hour of raw
+      // time), and the motion then steps instead of flowing.
       if (grassShader) {
-        grassShader.uniforms.uTime.value = time;
+        grassShader.uniforms.uWindPhaseX.value = (time * 2.5) % TAU;
+        grassShader.uniforms.uWindPhaseZ.value = (time * 2.0) % TAU;
       }
 
       if (cloudShader) {
-        cloudShader.uniforms.uTime.value = time;
+        cloudShader.uniforms.uBreathePhase.value = (time * 0.25) % TAU;
       }
 
       // Negative: a positive rotation.y turns ring positions toward decreasing angle, the opposite of the old drift.

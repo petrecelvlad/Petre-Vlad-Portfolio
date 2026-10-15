@@ -56,6 +56,7 @@ timestamp: 2026-10-14T00:00:00Z
   - Design skills reviewed by the user; their `projects` lists in `skillTreeTypes.ts` now follow it (lists of today kept in order, additions after, newest first; unanswered `?` left out). Project `proj-lead-level-designer` retitled "Amber" at the user's request
   - Production and leadership reviewed and saved the same way; all 34 lists now match the audit (3 unanswered `?` left out)
   - Code: `Skill.years` deleted; `getMonthsCovered`/`formatMonthsShort` in `career.ts`; `useSkillTreeState` computes `skillMonths`/`careerMonths`; new `SkillExperienceBar` between the name and the description in `SkillDetailsPanel` and `SkillTreeMobile`. Checked live at 1366 and 390 (System Design 15y 4m, Game Design 12y 2m, Level Design 8y 1m, matching the lists); tsc and build clean
+- [x] Hero grass stutter after the page is left open: GPU `sin()` loses accuracy on a growing time argument (measured on Intel HD 4600: 2e-5 at 30 min, 0.02 at 1 h, 0.67 at 2 h). `ThreeNatureFieldBackground` now passes the wind phases wrapped to one cycle on the CPU (`uWindPhaseX`/`uWindPhaseZ`); error stays ~5e-5 up to 24 h. Cloud breathing had the same pattern at a 10× slower rate; fixed the same way at the user's request (`uBreathePhase`)
 
 ---
 
