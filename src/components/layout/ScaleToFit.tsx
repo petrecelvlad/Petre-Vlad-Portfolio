@@ -3,6 +3,8 @@ import { useLayoutEffect, useRef, useState, type ReactNode } from 'react';
 interface ScaleToFitProps {
   children: ReactNode;
   className?: string;
+  /** Called with the box whenever its size changes, before the content is re-measured. */
+  onFrameResize?: (frame: HTMLElement) => void;
 }
 
 // Shrinks its content uniformly until it fits the box this element fills, never enlarging it, and
@@ -11,10 +13,14 @@ interface ScaleToFitProps {
 // node positions) stays valid. Anchored left and centered vertically, so content that grows to the
 // right zooms out without its left edge moving. The box must get its size from its parent — it
 // never sizes itself from the content.
-export function ScaleToFit({ children, className = '' }: ScaleToFitProps) {
+export function ScaleToFit({ children, className = '', onFrameResize }: ScaleToFitProps) {
   const frameRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   const [fit, setFit] = useState({ scale: 1, width: 0, height: 0 });
+  const onFrameResizeRef = useRef(onFrameResize);
+  useLayoutEffect(() => {
+    onFrameResizeRef.current = onFrameResize;
+  });
 
   useLayoutEffect(() => {
     const frame = frameRef.current!;
@@ -26,8 +32,12 @@ export function ScaleToFit({ children, className = '' }: ScaleToFitProps) {
       setFit({ scale, width, height });
     };
 
+    onFrameResizeRef.current?.(frame);
     measure();
-    const observer = new ResizeObserver(measure);
+    const observer = new ResizeObserver(entries => {
+      if (entries.some(entry => entry.target === frame)) onFrameResizeRef.current?.(frame);
+      measure();
+    });
     observer.observe(frame);
     observer.observe(content);
     return () => observer.disconnect();

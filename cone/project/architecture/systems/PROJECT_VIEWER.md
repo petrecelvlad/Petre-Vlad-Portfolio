@@ -79,6 +79,10 @@ The content swap itself is instant — same as the current no-animation state es
 
 ---
 
+### 2.5 Mobile screen tier: no stage (2026-10-14, T-055)
+
+Phones scroll normally, so there is no one-screen stage to swap content in. On the mobile tier `Timeline` renders every project in turn, each block its own `WoodBackground` and its own scroll trigger (`itemRefs`), as tall as its content; `useTimelineOrchestrator` is unchanged and still picks the block nearest the viewport center as `activeIndex`. Only the active project's `BentoVideoFrame` gets a YouTube player — the others show their key screenshot in the same device shell — and the frame is keyed on that state: the YouTube API replaces the player's placeholder node with its iframe, so React must remove the whole frame, never that node on its own (removing it crashed the page). `TimelineRail` turns horizontal under the navbar on this tier. Tablet and up keep the sticky stage described above.
+
 ## 3. Phase 2 (future, not built yet) — animated content transitions
 
 Once Phase 1 is validated — the shell genuinely reads as one static stage, the rail and click-navigation are unaffected, scroll still feels correct — the *instant* content swap becomes an *animated* one. Explicitly out of scope for the current pass; recorded here so Phase 1 is built without closing off this path.

@@ -57,3 +57,5 @@ Individual Kanban cards — see [BOARD.md](../BOARD.md) for the protocol (states
     * [T-049](T-049-project-gallery-tab.md) - Optional Gallery tab *(done)*
   * [T-047](T-047-footer-mvp-additions.md) - Footer MVP additions *(backlog)*
   * [T-050](T-050-career-clock.md) - Career clock (2007-01-01 anchor) for Hero + skill tree *(backlog)*
+  * [T-055](T-055-screen-tiers.md) - Screen tiers: desktop, laptop, tablet, mobile for the whole site *(done)*
+    * [T-056](T-056-screen-tiers-proposal.md) - Tiers proposal artifact *(done)*

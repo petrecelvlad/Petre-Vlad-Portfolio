@@ -105,7 +105,7 @@ export const SKILLS: Skill[] = [
     projects: ['proj-lead-level-designer', 'proj-idle-td', 'proj-merge-mansion', 'proj-bubble-witch-saga', 'proj-alphabetty-saga'],
   },
   {
-    id: 'balancing', name: 'Balancing', category: 'design', parent: 'level-design',
+    id: 'balancing', name: 'Balancing', category: 'design', parent: 'game-design',
     icon: Scale, years: 10,
     description: 'Tuning difficulty curves, enemy and level stats, and content pacing to keep challenge fair across a full progression arc.',
     projects: ['proj-idle-td', 'proj-lead-level-designer', 'proj-merge-mansion', 'proj-bubble-witch-saga'],
@@ -117,7 +117,7 @@ export const SKILLS: Skill[] = [
     projects: ['proj-fe-high-voltage', 'proj-newton-slots', 'proj-idle-td', 'proj-deca-rotmg'],
   },
   {
-    id: 'monetization', name: 'Monetization', category: 'design', parent: 'economy-design',
+    id: 'monetization', name: 'Monetization', category: 'design', parent: 'game-design',
     icon: TrendingUp, years: 9,
     description: 'Designing monetization systems: IAP pack pricing and discount structures, loot boxes, payout formulas, and progression gates.',
     projects: ['proj-newton-slots', 'proj-idle-td'],
@@ -159,7 +159,7 @@ export const SKILLS: Skill[] = [
     projects: ['proj-fe-high-voltage', 'proj-fitkin', 'proj-castellum'],
   },
   {
-    id: 'ftue-onboarding', name: 'FTUE & Onboarding', category: 'design', parent: 'ux-design',
+    id: 'ftue-onboarding', name: 'FTUE & Onboarding', category: 'design', parent: 'web-design',
     icon: Footprints, years: 7,
     description: 'Owning the end-to-end first-time user experience: onboarding strategy, tutorial sequencing, and the cadence of introducing new mechanics to new players.',
     projects: ['proj-idle-td', 'proj-alphabetty-saga'],
@@ -197,7 +197,7 @@ export const SKILLS: Skill[] = [
     projects: ['proj-lead-level-designer', 'proj-fe-high-voltage', 'proj-idle-td', 'proj-alphabetty-saga', 'proj-fitkin', 'proj-castellum'],
   },
   {
-    id: 'standards-patterns', name: 'Standards & Patterns', category: 'production', parent: 'documentation',
+    id: 'standards-patterns', name: 'Standards & Patterns', category: 'production', parent: 'agile-planning',
     icon: Ruler, years: 12,
     description: 'Identifying recurring patterns across a project and codifying them into heuristic rules and standards that ensure systemic coherence and predictability.',
     projects: ['proj-lead-level-designer', 'proj-fe-high-voltage'],

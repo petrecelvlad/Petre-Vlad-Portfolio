@@ -33,10 +33,10 @@ export function ProjectStage({ project }: ProjectStageProps) {
       </div>
 
       {/* Left column: spacer, keeps content clear of the fixed TimelineRail. */}
-      <div className="w-[48px] md:w-[88px] flex-shrink-0 relative pointer-events-none" />
+      <div className="w-[88px] flex-shrink-0 relative pointer-events-none" />
 
       {/* Right column: content */}
-      <div className="relative z-0 flex-grow h-full pt-[24px] md:pt-[24px] pb-3 md:pb-5 pr-2 md:pr-4 min-w-0 flex flex-col justify-start">
+      <div className="relative z-0 flex-grow h-full pt-[24px] pb-5 pr-4 min-w-0 flex flex-col justify-start">
         <div className="w-full h-full mx-auto overflow-hidden flex items-start justify-center pointer-events-auto">
           <div className="w-full h-full flex flex-col justify-start min-h-0">
             <ProjectDetails key={project.id} project={project} isActive />

@@ -1,4 +1,4 @@
-import { useId, useState } from 'react';
+import { useId, useLayoutEffect, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 import { FileText, Images, ListChecks, type LucideIcon } from 'lucide-react';
 import { Text } from '@/src/components/atoms/Text';
@@ -86,7 +86,7 @@ const EMBOSS_LINE_HEIGHT = 3;
 // for one specific RULE_HEIGHT value (28) — the moment RULE_HEIGHT changed
 // (to 30, tuning the bullets), that margin math silently went stale, and
 // title/role/date-badge drifted again. Fixed properly this time: every text
-// element gets an EXPLICIT LINE NUMBER (the _LINE constants below) instead
+// element gets an EXPLICIT LINE NUMBER (the COVER_LINES maps below) instead
 // of an inferred position derived from a neighboring element's height. Move
 // something by changing ITS line number — never by adjusting a margin,
 // height, or a second offset value anywhere in this file.
@@ -106,13 +106,13 @@ const EMBOSS_LINE_HEIGHT = 3;
 // itself. The bullet list is the one exception that can't use box-
 // centering (it's flowing, wrapping paragraph text, not a fixed-height
 // block) — it keeps its own line-height: RULE_HEIGHT instead, and its
-// start position is set via its own _LINE constant as a marginTop.
+// start position is set via its own COVER_LINES entry.
 //
 // PAPER_BASELINE_NUDGE is still the one whole-block phase correction against
 // the fixed rule background (applied once, via transform: translateY() on
-// the content wrapper) — it moves EVERYTHING together after all the _LINE
+// the content wrapper) — it moves EVERYTHING together after all the COVER_LINES
 // constants have placed things correctly relative to each other. Tune the
-// _LINE constants first for relative position; use this only for the final
+// COVER_LINES first for relative position; use this only for the final
 // shared phase, same as before.
 const RULE_HEIGHT = 30;
 const PAPER_BASELINE_NUDGE = 0;
@@ -123,13 +123,19 @@ function lineTop(line: number) {
 
 // Explicit per-element line assignments — the only numbers that should ever
 // need changing to move something. Two elements can share the same line
-// number (e.g. TITLE_LINE === DATE_BADGE_LINE) and will sit side by side on
+// number and will sit side by side on
 // it, since each element's HORIZONTAL position (left/right) is set
 // independently of its line number.
-const TITLE_LINE = 2;
-const ROLE_LINE = 3;
-const DATE_BADGE_LINE = 1;
-const BULLETS_START_LINE = 7;
+// Two cover arrangements, each its own line map. Side by side: title and role beside the photo,
+// the date badge top right. Stacked, for a clipboard too narrow to fit the title and role beside
+// the photo (phones, sideways tablets): a smaller photo, then title, role and date under it at
+// full width.
+const COVER_LINES = {
+  side: { title: 2, role: 3, dateBadge: 1, bulletsStart: 7 },
+  stacked: { title: 5, role: 6, dateBadge: 7, bulletsStart: 9 },
+};
+// Paper content width below which the cover stacks: photo column (156) + room for a title and role.
+const SIDE_COVER_MIN_WIDTH = 480;
 
 // Bulldog-clip silhouette: a tapering trapezoid body with a crease line —
 // reads as "pinned paper" without a wire-loop handle (which read as a bag).
@@ -181,6 +187,16 @@ export function BentoResponsibilities(props: ResponsibilitiesSlotProps) {
   const activeSection = sections[activeIndex];
   const isCover = activeIndex === 0;
 
+  const sheetRef = useRef<HTMLDivElement>(null);
+  const [isStackedCover, setIsStackedCover] = useState(false);
+  useLayoutEffect(() => {
+    const sheet = sheetRef.current!;
+    const observer = new ResizeObserver(() => setIsStackedCover(sheet.clientWidth < SIDE_COVER_MIN_WIDTH));
+    observer.observe(sheet);
+    return () => observer.disconnect();
+  }, []);
+  const lines = isStackedCover ? COVER_LINES.stacked : COVER_LINES.side;
+
   const renderTab = (section: ClipboardSection, index: number) => {
     const isActive = index === activeIndex;
     return (
@@ -224,8 +240,8 @@ export function BentoResponsibilities(props: ResponsibilitiesSlotProps) {
       case 'details':
         // Bullet line-height is locked to RULE_HEIGHT so every line, wrapped or
         // not, advances in the same steps as the ruled background. Starts on
-        // BULLETS_START_LINE by construction when the header above is shown
-        // (that container's height is lineTop(BULLETS_START_LINE)), else line 1.
+        // lines.bulletsStart by construction when the header above is shown
+        // (that container's height is lineTop(lines.bulletsStart)), else line 1.
         return (
           <ul>
             {responsibilities.map((item, i) => (
@@ -307,6 +323,7 @@ export function BentoResponsibilities(props: ResponsibilitiesSlotProps) {
             confirmed with Vlad that a true scaleX(-1) here (which would also
             mirror all the text/photo, rendering it backwards) was not wanted. */}
         <div
+          ref={sheetRef}
           className="relative z-20 h-full border-[1.5px] border-ink-base overflow-hidden rotate-[1deg]"
           style={{
             backgroundColor: PAPER_COLOR,
@@ -354,8 +371,8 @@ export function BentoResponsibilities(props: ResponsibilitiesSlotProps) {
                   // wrapper div instead; Text itself just fills it (h-full)
                   // and centers its own content.
                   <div
-                    className="absolute right-4 md:right-5 z-10"
-                    style={{ top: lineTop(DATE_BADGE_LINE), height: RULE_HEIGHT }}
+                    className={`absolute z-10 ${isStackedCover ? 'left-0' : 'right-4 md:right-5'}`}
+                    style={{ top: lineTop(lines.dateBadge), height: RULE_HEIGHT }}
                   >
                     <Text
                       variant="mono"
@@ -370,32 +387,30 @@ export function BentoResponsibilities(props: ResponsibilitiesSlotProps) {
                 {isCover && (
                   // Explicit line-number placement (see the system comment
                   // above) — icon anchored top-left, title/role each
-                  // independently positioned via their own _LINE constant
+                  // independently positioned via their own COVER_LINES entry
                   // instead of being centered as a stack within a height
                   // inferred from the icon. This container's own height is
-                  // set to exactly lineTop(BULLETS_START_LINE) so the ul
+                  // set to exactly lineTop(lines.bulletsStart) so the ul
                   // (next in normal flow, right after this div) starts
                   // there automatically — no separate margin to keep in
                   // sync with RULE_HEIGHT by hand anymore.
-                  <div className="relative" style={{ height: lineTop(BULLETS_START_LINE) }}>
+                  <div className="relative" style={{ height: lineTop(lines.bulletsStart) }}>
                     {icon && (
                       <InstantPhoto
                         src={icon}
                         alt={title ?? role}
                         rotation={3}
                         photoAspect={1}
-                        className="absolute left-0 top-0 w-[126px] md:w-[144px]"
+                        className={`absolute left-0 top-0 ${isStackedCover ? 'w-[96px]' : 'w-[126px] md:w-[144px]'}`}
                       />
                     )}
-                    {/* left matches icon width (126/144) + the old gap-3
-                        (12px); right leaves room for the date badge, same
-                        pr-20/pr-28 the row used to reserve. Setting both
-                        left and right on an absolutely positioned element
-                        defines its width via the gap between them — no
-                        separate width/max-width needed. */}
+                    {/* Side by side: left matches icon width (126/144) + the old gap-3 (12px). The
+                        date badge sits on its own line above, so the title and role run to the
+                        right edge. Setting both left and right on an absolutely positioned
+                        element defines its width via the gap between them. */}
                     <p
-                      style={{ fontFamily: 'var(--font-hand)', top: lineTop(TITLE_LINE), height: RULE_HEIGHT }}
-                      className="absolute left-[138px] md:left-[156px] right-20 md:right-28 m-0 flex items-center text-xl md:text-2xl leading-tight text-ink-base truncate"
+                      style={{ fontFamily: 'var(--font-hand)', top: lineTop(lines.title), height: RULE_HEIGHT }}
+                      className={`absolute ${isStackedCover ? 'left-0' : 'left-[138px] md:left-[156px]'} right-0 m-0 flex items-center text-xl md:text-2xl leading-tight text-ink-base truncate`}
                     >
                       {title}
                     </p>
@@ -403,14 +418,14 @@ export function BentoResponsibilities(props: ResponsibilitiesSlotProps) {
                         badge above — position on the wrapper, Text fills
                         it (h-full) and centers its own content. */}
                     <div
-                      className="absolute left-[138px] md:left-[156px] right-20 md:right-28"
-                      style={{ top: lineTop(ROLE_LINE), height: RULE_HEIGHT }}
+                      className={`absolute ${isStackedCover ? 'left-0' : 'left-[138px] md:left-[156px]'} right-0`}
+                      style={{ top: lineTop(lines.role), height: RULE_HEIGHT }}
                     >
                       <Text
                         variant="mono"
                         size="sm"
                         color="subtle"
-                        className="h-full flex items-center uppercase tracking-widest"
+                        className="h-full flex items-center uppercase tracking-widest truncate"
                       >
                         {role}
                       </Text>

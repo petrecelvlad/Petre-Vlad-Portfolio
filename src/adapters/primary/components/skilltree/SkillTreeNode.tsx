@@ -23,6 +23,8 @@ export interface SkillPillProps {
   isOnPath: boolean;
   onSelect: (s: Skill) => void;
   depth: number;
+  /** Fills its container's width at a touch-sized height (mobile list) instead of the tree's fixed pill size. */
+  fluid?: boolean;
 }
 
 export function SkillPill({
@@ -30,6 +32,7 @@ export function SkillPill({
   active,
   isOnPath,
   onSelect,
+  fluid = false,
 }: SkillPillProps) {
   const Icon = skill.icon;
   const catConfig = CATEGORIES[skill.category];
@@ -47,7 +50,7 @@ export function SkillPill({
         text-left relative overflow-hidden select-none
         ${active ? 'z-10' : isOnPath ? 'z-1 scale-[1.02]' : ''}
       `}
-      style={{ width: PILL_W, height: PILL_H, ...getArcadeOutlineStyle(catConfig, state) }}
+      style={{ width: fluid ? '100%' : PILL_W, height: fluid ? 40 : PILL_H, ...getArcadeOutlineStyle(catConfig, state) }}
     >
       <Icon
         size={16}

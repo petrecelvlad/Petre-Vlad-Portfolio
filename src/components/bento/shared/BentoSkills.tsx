@@ -203,7 +203,7 @@ function StickyNote({ color, rotation, skill, effect, pinColor, foldCorner }: St
   const isFold = effect === 'fold';
   return (
     <div
-      className="relative w-[124px] h-[124px] md:w-[148px] md:h-[148px] flex-shrink-0"
+      className="relative [container-type:size] w-[124px] h-[124px] tablet:w-[var(--note-size)] tablet:h-[var(--note-size)] flex-shrink-0"
       style={{
         transform: `rotate(${rotation}deg)`,
         // clip-path (the fold notch) clips away box-shadow along with it, so
@@ -228,11 +228,11 @@ function StickyNote({ color, rotation, skill, effect, pinColor, foldCorner }: St
         }}
       >
         <div className="text-ink-base flex-shrink-0">
-          {React.cloneElement(getIcon(skill), { size: 36, strokeWidth: 2 })}
+          {React.cloneElement(getIcon(skill), { strokeWidth: 2, className: 'w-[24.3cqw] h-[24.3cqw]' })}
         </div>
         <span
           style={{ fontFamily: 'var(--font-hand)' }}
-          className="text-[17px] leading-[1.05] text-ink-base text-center line-clamp-2"
+          className="text-[11.5cqw] leading-[1.05] text-ink-base text-center line-clamp-2"
         >
           {skill}
         </span>
@@ -268,7 +268,12 @@ export function BentoSkills({ skills }: SkillsSlotProps) {
           the skills a project actually has get a note, spread evenly across
           the same width regardless of count, rather than reserving all 6
           positions and marking the rest empty. */}
-      <div className="flex justify-evenly w-full gap-2">
+      {/* Mobile: 124px notes, two per row. Tablet and up: one row, each note 148px or whatever the
+          row's width allows for this many notes. */}
+      <div
+        className="flex flex-wrap justify-center gap-x-6 gap-y-4 tablet:flex-nowrap tablet:justify-evenly tablet:gap-2 w-full [container-type:inline-size] max-w-[300px] tablet:max-w-none"
+        style={{ '--note-size': `min(148px, calc((100cqw - ${displaySkills.length - 1} * 8px) / ${displaySkills.length}))` } as React.CSSProperties}
+      >
         {displaySkills.map((skill, i) => (
           <StickyNote
             key={i}

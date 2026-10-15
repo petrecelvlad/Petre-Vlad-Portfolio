@@ -14,10 +14,13 @@ interface ProjectDetailsProps {
   isActive: boolean;
 }
 
+// Landscape (tablet and up): clipboard column beside achievement, video and notes, one screen.
+// Portrait tablet: the same pieces stacked, the clipboard at a fixed height so it still fits one
+// screen. Mobile: stacked at natural heights, as tall as the content.
 export function ProjectDetails({ project, isActive }: ProjectDetailsProps) {
   return (
-    <Stack gap="md" className="w-full h-full min-h-0 overflow-y-auto overflow-x-hidden px-1 py-7">
-      <div className="grid grid-cols-1 lg:grid-cols-[40%_1fr] flex-grow gap-4 md:gap-6 items-stretch min-h-0">
+    <Stack gap="md" className="w-full tablet:h-full min-h-0 tablet:overflow-y-auto overflow-x-hidden px-1 py-7">
+      <div className="grid grid-cols-1 tablet:landscape:grid-cols-[40%_1fr] tablet:portrait:grid-rows-[430px_minmax(0,1fr)] flex-grow gap-4 md:gap-6 items-stretch min-h-0">
         
         {/* Left Column */}
         <Stack gap="md" className="min-h-0">
@@ -27,7 +30,7 @@ export function ProjectDetails({ project, isActive }: ProjectDetailsProps) {
             startDate={project.startDate}
             endDate={project.endDate}
           />
-          <div className="flex-grow min-h-0 flex flex-col">
+          <div className="h-[500px] tablet:h-auto flex-grow min-h-0 flex flex-col">
             <BentoResponsibilities
               overview={project.overview}
               responsibilities={project.responsibilities}
@@ -46,10 +49,15 @@ export function ProjectDetails({ project, isActive }: ProjectDetailsProps) {
           <div className="flex-shrink-0">
             <BentoAchievement achievement={project.achievements?.[0]} />
           </div>
-          <div className="flex-grow min-h-0 flex flex-col">
+          {/* Mobile has no screen height to fill, so the frame takes a 16:9 box of its own. Only the
+              active project gets its YouTube player; the rest show their screenshot in the same shell.
+              The key swaps the whole frame: the YouTube API replaces the player's placeholder node with
+              its iframe, so React must never be left to remove that node on its own. */}
+          <div className="aspect-video tablet:aspect-auto flex-grow min-h-0 flex flex-col">
             <BentoVideoFrame
+              key={isActive ? 'player' : 'screenshot'}
               screenshot={project.keyScreenshots[0]}
-              youtubeUrl={project.links.youtube}
+              youtubeUrl={isActive ? project.links.youtube : undefined}
               isActive={isActive}
             />
           </div>

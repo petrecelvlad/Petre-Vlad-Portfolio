@@ -6,6 +6,8 @@ import { getNextExpandedSkillIds } from '@/src/core/domain/skillTreeGeometry';
 
 const DEFAULT_SKILL = SKILLS.find(s => s.id === 'system-design')!;
 
+export type SkillTreeState = ReturnType<typeof useSkillTreeState>;
+
 export function useSkillTreeState(experiences: IExperience[]) {
   const [activeSkill, setActiveSkill] = useState<Skill | null>(DEFAULT_SKILL);
   // The category badge (DESIGN/PRODUCTION/LEADERSHIP) itself, when selected
@@ -15,11 +17,9 @@ export function useSkillTreeState(experiences: IExperience[]) {
   // SkillTree.tsx), so it's tracked as its own separate piece of state
   // rather than shoehorned into `Skill`.
   const [activeCategory, setActiveCategory] = useState<SkillCategory | null>(null);
-  // Which skills currently have their direct children revealed in the tree.
-  // Starts with DEFAULT_SKILL so the default selection is identical to having
-  // clicked it. A Set (not a single skill) because selecting a sibling within
-  // an already-open branch must not collapse what's already open — see
-  // getNextExpandedSkillIds for the exact accumulate-vs-reset rule.
+  // Which skills currently have their direct children revealed in the tree:
+  // always one root-to-skill path (see getNextExpandedSkillIds). Starts with
+  // DEFAULT_SKILL so the default selection is identical to having clicked it.
   const [expandedSkillIds, setExpandedSkillIds] = useState<Set<string>>(() => new Set([DEFAULT_SKILL.id]));
 
   const projectsById = useMemo(() => {

@@ -13,12 +13,15 @@ interface UseTimelineOrchestratorProps {
   itemCount: number;
   containerRef?: RefObject<HTMLDivElement>;
   sectionRefs?: PageSectionRefs;
+  // Changes whenever the caller renders a different set of trigger elements, so they get re-observed.
+  triggerLayout?: string;
 }
 
 export function useTimelineOrchestrator({ 
   itemCount,
   containerRef,
-  sectionRefs
+  sectionRefs,
+  triggerLayout
 }: UseTimelineOrchestratorProps) {
   // 1. All hooks at the top, stable order
   const { scrollY } = useScroll({ container: containerRef });
@@ -67,7 +70,7 @@ export function useTimelineOrchestrator({
 
     measureFullView();
     return scrollY.on('change', measureFullView);
-  }, [scrollY, itemCount, containerRef]);
+  }, [scrollY, itemCount, containerRef, triggerLayout]);
 
   // The section under the middle of the scrollport — the last one whose top has passed it.
   useEffect(() => {
@@ -180,7 +183,7 @@ export function useTimelineOrchestrator({
     });
 
     return () => observer.disconnect();
-  }, [itemCount, containerRef]);
+  }, [itemCount, containerRef, triggerLayout]);
 
   return {
     activeIndex,

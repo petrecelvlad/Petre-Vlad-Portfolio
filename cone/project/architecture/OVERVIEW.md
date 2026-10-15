@@ -98,7 +98,7 @@ The application uses a shell architecture that separates fixed chrome from scrol
 
 ```
 ┌─────────────────────────────────────────────┐
-│              NAVBAR (fixed, 64px)            │
+│        NAVBAR (fixed, 64px; 56px phones)     │
 ├─────────────────────────────────────────────┤
 │         SCROLL ENVELOPE                     │
 │    height: calc(100vh - navbar height)      │
@@ -126,7 +126,7 @@ The application uses a shell architecture that separates fixed chrome from scrol
 └─────────────────────────────────────────────┘
 ```
 
-**The Envelope Rule:** Every snap section uses `h-[calc(100vh-var(--chrome-navbar-height))]` explicitly, never `h-full` — it cascades fail through React fragments. Settled after 4 attempts (see `cone/project/archive/decisions/LEGACY_DECISIONS_LOG.md`).
+**The Envelope Rule:** Every snap section uses `h-[calc(100vh-var(--chrome-navbar-height))]` explicitly, never `h-full` — it cascades fail through React fragments. Settled after 4 attempts (see `cone/project/archive/decisions/LEGACY_DECISIONS_LOG.md`). On the mobile screen tier (T-055) `<main>` drops scroll snapping and every section is at least one screen tall (`min-h-[...]`), growing with its content; the exact one-screen height applies from the tablet tier up (`tablet:h-[...]`). The project region on mobile is a plain stack of projects instead of the sticky stage (`PROJECT_VIEWER.md` §2.5).
 
 ---
 
@@ -175,7 +175,7 @@ The Navbar and TimelineTrack both consume orchestrator state — they never main
 
 - **No mocked data.** All content comes from `portfolio.json`. Period.
 - **No generic Tailwind.** Strict token-driven styles — see `systems/SKIN_GAMIFIED.md`/`systems/SKIN_HERITAGE.md` for the current skins' aesthetic rules, `systems/TOKEN_CONTRACT.md` for the token system itself.
-- **The navbar height is load-bearing.** `--chrome-navbar-height` (64px) feeds into `calc()` expressions across every snap section. Changing it propagates everywhere — that's intentional.
+- **The navbar height is load-bearing.** `--chrome-navbar-height` (64px, 56px on the mobile screen tier) feeds into `calc()` expressions across every snap section. Changing it propagates everywhere — that's intentional.
 - **Navbar and TimelineTrack must not maintain disconnected active-index states.** Both read from the orchestrator.
 - **`core/` never imports from `adapters/` or `infrastructure/`** (the Leak Test above).
 

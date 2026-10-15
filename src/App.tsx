@@ -51,14 +51,14 @@ export default function App() {
         <Navbar activeSection={activeSection} onNavigate={navigateTo} />
         <IslandPositionPanel />
 
-        <main ref={mainRef} className="flex-1 w-full relative overflow-y-auto snap-y snap-mandatory select-none">
-          <div className="snap-start snap-always h-[calc(100vh-var(--chrome-navbar-height))] w-full flex items-center justify-center relative z-0">
+        <main ref={mainRef} className="flex-1 w-full relative overflow-y-auto tablet:snap-y tablet:snap-mandatory select-none">
+          <div className="snap-start snap-always min-h-[calc(100vh-var(--chrome-navbar-height))] tablet:h-[calc(100vh-var(--chrome-navbar-height))] w-full flex flex-col relative z-0">
             <ErrorBoundary>
               <Hero />
             </ErrorBoundary>
           </div>
           <Suspense fallback={null}>
-            <div ref={skillsRef} className="snap-start snap-always h-[calc(100vh-var(--chrome-navbar-height))] w-full relative z-0">
+            <div ref={skillsRef} className="snap-start snap-always min-h-[calc(100vh-var(--chrome-navbar-height))] tablet:h-[calc(100vh-var(--chrome-navbar-height))] w-full relative z-0 flex flex-col">
               <SkillTree experiences={experiences} />
             </div>
             <Timeline
@@ -70,11 +70,11 @@ export default function App() {
             />
           </Suspense>
           
-          <footer ref={contactRef} className="footer-snap snap-start snap-always bg-surface-inverse text-surface-base px-8 py-20 border-t-[length:var(--border-width-lg)] border-ink-base relative overflow-hidden h-[calc(100vh-var(--chrome-navbar-height))] flex flex-col justify-center">
+          <footer ref={contactRef} className="footer-snap snap-start snap-always bg-surface-inverse text-surface-base px-[var(--tier-gutter)] py-14 tablet:px-8 tablet:py-20 border-t-[length:var(--border-width-lg)] border-ink-base relative overflow-hidden tablet:h-[calc(100vh-var(--chrome-navbar-height))] flex flex-col justify-center">
             {/* Background Decorative Shape */}
             <div className="absolute bottom-0 right-0 w-96 h-96 bg-coral/10 rounded-full -mr-48 -mb-48" />
 
-            <div className="max-w-7xl mx-auto relative z-10 flex flex-col items-center gap-12">
+            <div className="max-w-7xl mx-auto relative z-10 flex flex-col items-center gap-8 tablet:gap-12">
               <div className="flex gap-4">
                  <Circle className="w-12 h-12 fill-coral text-ink-base" />
                  <Square className="w-12 h-12 fill-sky text-ink-base" />
@@ -98,7 +98,7 @@ export default function App() {
                 LinkedIn
               </a>
 
-              <div className="font-mono pt-20 border-t border-surface-base/10 w-full text-center text-xs font-bold uppercase tracking-[0.5em] text-surface-base/30">
+              <div className="font-mono pt-10 tablet:pt-20 border-t border-surface-base/10 w-full text-center text-xs font-bold uppercase tracking-[0.2em] tablet:tracking-[0.5em] text-surface-base/30">
                 &copy; {new Date().getFullYear()} Vlad Petre &bull; Game Designer &amp; Producer
               </div>
             </div>
