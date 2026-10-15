@@ -10,6 +10,7 @@ import { useIsScrolling } from '@/src/hooks/useIsScrolling';
 import { useDeferredMount } from '@/src/hooks/useDeferredMount';
 import { useIslandPosition } from '@/src/context/IslandPositionContext';
 import { useScreenTier } from '@/src/hooks/useScreenTier';
+import { getCareerYears } from '@/src/core/domain/career';
 
 // Code-split: three.js is large, and this background can fail to even initialize on
 // GPUs/drivers without usable WebGL (see ThreeNatureFieldBackground's own try/catch fallback).
@@ -103,16 +104,10 @@ export function Hero() {
 
   const islandTransform = `translate(${islandPosition.offsetX}px, ${islandPosition.offsetY}px) scale(${islandPosition.scale})`;
 
-  const years = useMemo(() => {
-    const start = new Date(2007, 0, 1);
-    const now = new Date();
-    let y = now.getFullYear() - start.getFullYear();
-    if (now < new Date(now.getFullYear(), start.getMonth(), start.getDate())) y--;
-    return String(y);
-  }, []);
+  const careerYears = useMemo(() => getCareerYears(new Date()), []);
 
   const achievements: AchievementData[] = [
-    { id: 'exp', shaderType: 'levelup', value: years, label: 'YEARS OF EXPERIENCE' },
+    { id: 'exp', shaderType: 'levelup', value: String(careerYears), label: 'YEARS OF EXPERIENCE' },
     { id: 'games', shaderType: 'cartridge', value: '31', label: 'PRODUCED GAMES' },
     { id: 'levels', shaderType: 'factory', value: '+5000', label: 'SHIPPED LEVELS' },
     { id: 'teams', shaderType: 'teamslead', value: '9', label: 'TEAMS LEAD' },
@@ -238,7 +233,7 @@ export function Hero() {
                       style={{ lineHeight: '28px' }}
                       className="font-mono text-xs sm:text-sm lg:text-base text-[#1C1610] text-center font-medium select-text px-1 m-0"
                     >
-                      Game Producer & Senior Designer with 19+ years creating engaging games, leading cross-functional teams, and crafting memorable player experiences across mobile and casual platforms.
+                      Game Producer & Senior Designer with {careerYears}+ years creating engaging games, leading cross-functional teams, and crafting memorable player experiences across mobile and casual platforms.
                     </p>
                   </TornPaperPanel>
                 </div>

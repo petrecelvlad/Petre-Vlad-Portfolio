@@ -39,7 +39,7 @@ build each section against the tiers.
 - Skill tree conversion *(done, session 10: all four tiers, verified at 1920×1080, 1600×900, 1440×900, 1366×768, 1280×720, 1180×820, 1024×768, 820×1180, 390×844, 844×390)*
 - Navbar conversion *(done, session 10: phone section links as icon buttons in one row with the profile links (replaced the earlier menu button 2026-10-15); tablet links centered between name and buttons, laptop and up unchanged)*
 - Hero conversion *(done: name size per tier; tablet two-row grid with the character beside the ribbon and bio, achievements 4 across sideways / 2 × 2 upright; mobile one column with joined achievement tiles, the ribbon keeping its tails over a narrower paper; island anchored under the character in the stacked layouts)*
-- Projects conversion *(done: clipboard cover stacks title/role/date under the photo when the paper is under 480px wide; sticky notes shrink to fit one row on tablet and up, two per row on mobile; upright tablets stack with a 430px clipboard; mobile stacks every project in normal scrolling with the horizontal rail; only the active project loads its YouTube player)*
+- Projects conversion *(done: clipboard cover stacks title/role/date under the photo when the paper is under 480px wide (replaced by T-057's cover); sticky notes shrink to fit one row on tablet and up, two per row on mobile; upright tablets stack with a 430px clipboard; mobile stacks every project in normal scrolling with the horizontal rail; only the active project loads its YouTube player)*
 - Footer conversion *(done: content height and tighter spacing on mobile)*
 - Mobile page scrolling *(done: no snap on the mobile tier)*
 

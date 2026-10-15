@@ -18,6 +18,8 @@ export interface ResponsibilitiesSlotProps {
   startDate?: string;
   endDate?: string;
   galleryScreenshots: string[];
+  /** Point at the Details tab after a short dwell, until the visitor first clicks a tab. */
+  showDetailsHint?: boolean;
 }
 
 export interface SkillsSlotProps {

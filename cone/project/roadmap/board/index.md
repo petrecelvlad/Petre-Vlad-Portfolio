@@ -42,7 +42,7 @@ Individual Kanban cards — see [BOARD.md](../BOARD.md) for the protocol (states
     * [T-037](T-037-skilltree-selection-ux.md) - Fix buggy/unintuitive SkillTree selection interaction *(backlog)*
     * [T-038](T-038-skilltree-banner-chrome-redesign.md) - Redesign SkillTree banner + board chrome *(done)*
     * [T-039](T-039-skilltree-content-pass.md) - SkillTree content pass (post user research) *(backlog)*
-    * [T-051](T-051-skilltree-experience-bar.md) - Skill experience bar from project dates *(backlog — blocked by T-050)*
+    * [T-051](T-051-skilltree-experience-bar.md) - Skill experience bar from project dates *(done)*
     * [T-052](T-052-skilltree-panel-ribbon-paper.md) - Detail panel as ribbon over lined paper *(done, REVERTED — user disliked it; parchment panel restored)*
     * [T-053](T-053-skilltree-pills-connectors.md) - Pills + connectors in the toy-box style *(done)*
     * [T-054](T-054-skilltree-scale-to-fit.md) - Scale the tree to fit its board *(done)*
@@ -53,9 +53,10 @@ Individual Kanban cards — see [BOARD.md](../BOARD.md) for the protocol (states
     * [T-044](T-044-project-tabs-standardization.md) - Semantic project tabs (Overview / Details / optional Gallery), top edge *(in-progress — Overview/Details/Gallery live, unconfirmed copy in red)*
     * [T-045](T-045-add-more-projects.md) - Add more projects (recent jobs) *(backlog)*
     * [T-046](T-046-rewrite-project-copy.md) - Rewrite project copy toward Game Producer framing *(in-progress — Overview copy live, awaiting user answers on red items)*
-    * [T-048](T-048-project-tab2-discovery-cues.md) - Make the Details tab discoverable *(backlog)*
+    * [T-048](T-048-project-tab2-discovery-cues.md) - Make the Details tab discoverable *(done)*
     * [T-049](T-049-project-gallery-tab.md) - Optional Gallery tab *(done)*
+    * [T-057](T-057-clipboard-overview-redesign.md) - Clipboard Overview redesign: layout C, summaries, duration, Read more, clearer tabs *(done)*
   * [T-047](T-047-footer-mvp-additions.md) - Footer MVP additions *(backlog)*
-  * [T-050](T-050-career-clock.md) - Career clock (2007-01-01 anchor) for Hero + skill tree *(backlog)*
+  * [T-050](T-050-career-clock.md) - Career clock (2007-01-01 anchor) for Hero + skill tree *(done)*
   * [T-055](T-055-screen-tiers.md) - Screen tiers: desktop, laptop, tablet, mobile for the whole site *(done)*
     * [T-056](T-056-screen-tiers-proposal.md) - Tiers proposal artifact *(done)*

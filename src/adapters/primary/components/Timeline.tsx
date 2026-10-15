@@ -73,7 +73,7 @@ export function Timeline({ experiences, containerRef, sectionRefs, onActiveSecti
               <WoodBackground />
             </div>
             <div className="relative z-0">
-              <ProjectDetails project={project} isActive={index === activeIndex} />
+              <ProjectDetails project={project} isActive={index === activeIndex} showDetailsHint={index === 0 && index === activeIndex} />
             </div>
           </div>
         ))}
@@ -126,7 +126,7 @@ export function Timeline({ experiences, containerRef, sectionRefs, onActiveSecti
           section behind it (SkillTree/whatever's above) showed through. */}
       {activeIndex !== -1 && (
         <div className="[grid-area:1/1] sticky top-0 h-[calc(100vh-var(--chrome-navbar-height))] w-full">
-          <ProjectStage project={projects[activeIndex]} />
+          <ProjectStage project={projects[activeIndex]} showDetailsHint={activeIndex === 0} />
         </div>
       )}
     </div>

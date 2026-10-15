@@ -12,15 +12,16 @@ interface ProjectDetailsProps {
   key?: React.Key;
   project: IProject;
   isActive: boolean;
+  showDetailsHint?: boolean;
 }
 
 // Landscape (tablet and up): clipboard column beside achievement, video and notes, one screen.
 // Portrait tablet: the same pieces stacked, the clipboard at a fixed height so it still fits one
 // screen. Mobile: stacked at natural heights, as tall as the content.
-export function ProjectDetails({ project, isActive }: ProjectDetailsProps) {
+export function ProjectDetails({ project, isActive, showDetailsHint = false }: ProjectDetailsProps) {
   return (
     <Stack gap="md" className="w-full tablet:h-full min-h-0 tablet:overflow-y-auto overflow-x-hidden px-1 py-7">
-      <div className="grid grid-cols-1 tablet:landscape:grid-cols-[40%_1fr] tablet:portrait:grid-rows-[430px_minmax(0,1fr)] flex-grow gap-4 md:gap-6 items-stretch min-h-0">
+      <div className="grid grid-cols-1 tablet:landscape:grid-cols-[46%_1fr] laptop:landscape:grid-cols-[40%_1fr] tablet:portrait:grid-rows-[470px_minmax(0,1fr)] flex-grow gap-4 md:gap-6 items-stretch min-h-0">
         
         {/* Left Column */}
         <Stack gap="md" className="min-h-0">
@@ -30,7 +31,7 @@ export function ProjectDetails({ project, isActive }: ProjectDetailsProps) {
             startDate={project.startDate}
             endDate={project.endDate}
           />
-          <div className="h-[500px] tablet:h-auto flex-grow min-h-0 flex flex-col">
+          <div className="flex-grow min-h-0 flex flex-col">
             <BentoResponsibilities
               overview={project.overview}
               responsibilities={project.responsibilities}
@@ -40,6 +41,7 @@ export function ProjectDetails({ project, isActive }: ProjectDetailsProps) {
               startDate={project.startDate}
               endDate={project.endDate}
               galleryScreenshots={getGalleryScreenshots(project)}
+              showDetailsHint={showDetailsHint}
             />
           </div>
         </Stack>

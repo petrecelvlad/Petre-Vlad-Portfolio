@@ -4,6 +4,7 @@ import { WoodBackground } from '@/src/components/bento/shared/WoodBackground';
 
 interface ProjectStageProps {
   project: IProject;
+  showDetailsHint: boolean;
 }
 
 // The persistent Project Viewer shell — Phase 1 of
@@ -25,7 +26,7 @@ interface ProjectStageProps {
 // not this shell) on every swap, which for Phase 1's "instant swap, no
 // animation" posture is exactly the right amount of continuity: the frame
 // stays, the content starts fresh.
-export function ProjectStage({ project }: ProjectStageProps) {
+export function ProjectStage({ project, showDetailsHint }: ProjectStageProps) {
   return (
     <div className="relative z-0 h-full w-full flex">
       <div className="absolute inset-0 w-full h-full pointer-events-none overflow-hidden z-0">
@@ -39,7 +40,7 @@ export function ProjectStage({ project }: ProjectStageProps) {
       <div className="relative z-0 flex-grow h-full pt-[24px] pb-5 pr-4 min-w-0 flex flex-col justify-start">
         <div className="w-full h-full mx-auto overflow-hidden flex items-start justify-center pointer-events-auto">
           <div className="w-full h-full flex flex-col justify-start min-h-0">
-            <ProjectDetails key={project.id} project={project} isActive />
+            <ProjectDetails key={project.id} project={project} isActive showDetailsHint={showDetailsHint} />
           </div>
         </div>
       </div>

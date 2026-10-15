@@ -22,7 +22,7 @@ function readPx(el: Element, name: string): number {
 // Tablet and up: the board beside the details column, or above it on an upright screen. The tree's
 // gaps stretch to fill the board within the tier's bounds (index.css); the details column takes
 // what the board leaves once the full tree has its minimum gaps, clamped to the tier's own bounds.
-export function SkillTreeBoard({ activeSkill, activeCategory, expandedSkillIds, projectsById, handleSelect, handleSelectCategory }: SkillTreeState) {
+export function SkillTreeBoard({ activeSkill, activeCategory, expandedSkillIds, projectsById, careerMonths, skillMonths, handleSelect, handleSelectCategory }: SkillTreeState) {
   const boardColumnRef = useRef<HTMLDivElement>(null);
   const [spacing, setSpacing] = useState(DEFAULT_SPACING);
   const [boardMinWidth, setBoardMinWidth] = useState<number>();
@@ -98,7 +98,7 @@ export function SkillTreeBoard({ activeSkill, activeCategory, expandedSkillIds, 
       </div>
 
       <div className="flex flex-col flex-shrink-0 w-[clamp(var(--skilltree-details-min-width),calc(100%_-_var(--skilltree-board-min-width,0px)_-_var(--tier-column-gap)),var(--skilltree-details-max-width))] tablet:portrait:w-full tablet:portrait:h-[38%]">
-        <SkillDetailsPanel className="min-h-[336px] tablet:portrait:min-h-0" skill={activeSkill} category={activeCategory} />
+        <SkillDetailsPanel className="min-h-[336px] tablet:portrait:min-h-0" skill={activeSkill} category={activeCategory} skillMonths={skillMonths} careerMonths={careerMonths} />
         <SkillProjectPhotos className="flex-1 min-h-0" skill={activeSkill} projectsById={projectsById} />
       </div>
     </div>

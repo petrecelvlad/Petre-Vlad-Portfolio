@@ -49,6 +49,13 @@ timestamp: 2026-10-14T00:00:00Z
 - [x] Rail missing on phones: the orchestrator's IntersectionObserver was set up once on mount, so after the tier changed (a desktop window narrowed to phone size) it kept watching the removed desktop triggers and the rail never showed; it now re-observes when the trigger layout changes (`triggerLayout`). Verified narrowing 1280→390 and widening 390→1280
 - [x] Phone navbar segmented (user): section icons centered in the bar, profile links anchored right (grid with equal side columns; the icons shift right only where the name is wider than its half, 20px at 360px), each section icon its own color (butter, mint, coral; added to `BUTTON_COLORS`), selected section marked with the skill tree's white outline; unused `RibbonPaperSeam.tsx` deleted
 - [x] The 4 long-standing `MotionStyle` type errors: `node_modules/csstype/index.d.ts` (and `index.js.flow`) were 0-byte files, a damaged install, so React's `CSSProperties` was empty and so was Motion's style type; restored both from the registry's csstype 3.2.3 (the installed version, no package.json/lock change). `tsc` now reports 0 errors
+- [x] Clipboard Overview redesign (T-057, 2026-10-15): proposal artifact https://claude.ai/artifact/EU599tQZwXYF7UyTokzygx; user picked layout C in its 1366 form for every screen. Open tab deeper color and 10% larger; duration under the dates (`formatDuration`); "Read more ›" opens Details; 14 summaries drafted (game + role, resume voice, unbacked parts marked `[? …]`); duration dropped from the facts. Cover photo picks one of three sizes by sheet size; clipboard column 46% on sideways tablets, 470px tall on upright tablets; phone sheet grows with its page. All 14 projects fit at 1920, 1366, 1280, 1180×820, 1024×768, 820×1180, 768×1024, 844×390 and 390; `tsc` 0 errors; build passes
+- [x] Details-tab hint (T-048, user's pick of the next task): tutorial hand under the Details tab on the first project after a 2s dwell, retired everywhere by the first tab click or Read more, remembered in `localStorage`, still under reduced motion. Verified at 1920 (reduced motion), 1366 and 390
+- [x] Career clock (T-050, session 09's leftover): `core/domain/career.ts` (`CAREER_START_DATE`, `getCareerYears`, `getCareerMonths`, `now` injected); the Hero's years card and bio read it instead of inline math and a hardcoded "19+". Unblocks T-051
+- [x] Skill experience bar (T-051): skill-to-project audit drafted for the user's review at https://claude.ai/artifact/Jm6th2oSMKUcHvz7fkG7VG (kept, added from project text, and `?` guesses; live months per skill). Code waits for the confirmed list
+  - Design skills reviewed by the user; their `projects` lists in `skillTreeTypes.ts` now follow it (lists of today kept in order, additions after, newest first; unanswered `?` left out). Project `proj-lead-level-designer` retitled "Amber" at the user's request
+  - Production and leadership reviewed and saved the same way; all 34 lists now match the audit (3 unanswered `?` left out)
+  - Code: `Skill.years` deleted; `getMonthsCovered`/`formatMonthsShort` in `career.ts`; `useSkillTreeState` computes `skillMonths`/`careerMonths`; new `SkillExperienceBar` between the name and the description in `SkillDetailsPanel` and `SkillTreeMobile`. Checked live at 1366 and 390 (System Design 15y 4m, Game Design 12y 2m, Level Design 8y 1m, matching the lists); tsc and build clean
 
 ---
 
@@ -90,6 +97,11 @@ timestamp: 2026-10-14T00:00:00Z
 - `src/App.tsx` — skill tree wrapper: one screen tall on tablet and up, at least one screen on mobile
 - `src/adapters/primary/components/Navbar.tsx` — phone icon-button row (replaced the menu button and drop-down); `ProfileLinks` shared by both rows; tablet link placement
 - `src/hooks/useTimelineOrchestrator.ts` — `triggerLayout` re-observes triggers after a layout change
+- `src/components/bento/shared/BentoResponsibilities.tsx` — layout C cover, open-tab state, Read more link
+- `src/core/domain/formatDate.ts` — `formatDuration`
+- `src/core/domain/career.ts` — career clock; `Hero.tsx` uses it
+- `src/hooks/useDetailsHint.ts` — shared, stored hint dismissal; `ProjectStage`, `ProjectDetails`, `Timeline` pass `showDetailsHint` for the first project
+- `src/infrastructure/data/portfolio.json` — 14 summaries, duration removed from facts
 - `src/adapters/primary/components/skilltree/SkillTreeMobile.tsx` — no project photos in the phone sheet
 - `src/adapters/primary/components/Hero.tsx` — tier layouts, `useScreenTier` replaces the hardcoded 1024px media query, `scrollPast` replaces the one-screen Explore scroll
 - `src/App.tsx` — `<main>` snaps from tablet up only; hero and footer one screen tall from tablet up, content height on mobile

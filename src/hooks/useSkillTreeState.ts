@@ -3,6 +3,7 @@ import { Skill, SkillCategory, SKILLS } from '@/src/core/domain/skillTreeTypes';
 import type { IExperience, IProject } from '@/src/core/domain/models';
 import { DomainEventBus } from '@/src/core/events/DomainEventBus';
 import { getNextExpandedSkillIds } from '@/src/core/domain/skillTreeGeometry';
+import { getCareerMonths, getMonthsCovered } from '@/src/core/domain/career';
 
 const DEFAULT_SKILL = SKILLS.find(s => s.id === 'system-design')!;
 
@@ -29,6 +30,20 @@ export function useSkillTreeState(experiences: IExperience[]) {
     }
     return map;
   }, [experiences]);
+
+  const { careerMonths, skillMonths } = useMemo(() => {
+    const now = new Date();
+    const months = new Map<string, number>();
+    for (const skill of SKILLS) {
+      const projects = skill.projects.map(id => {
+        const project = projectsById.get(id);
+        if (project === undefined) throw new Error(`Skill "${skill.id}" lists unknown project "${id}"`);
+        return project;
+      });
+      months.set(skill.id, getMonthsCovered(projects, now));
+    }
+    return { careerMonths: getCareerMonths(now), skillMonths: months };
+  }, [projectsById]);
 
   const handleSelect = (skill: Skill) => {
     setActiveCategory(null);
@@ -61,6 +76,8 @@ export function useSkillTreeState(experiences: IExperience[]) {
     activeCategory,
     expandedSkillIds,
     projectsById,
+    careerMonths,
+    skillMonths,
     handleSelect,
     handleSelectCategory,
   };

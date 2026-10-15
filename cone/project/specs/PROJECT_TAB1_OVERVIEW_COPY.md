@@ -162,6 +162,17 @@ string. Red beyond the `[?]` gaps above:
 - **Summary lines with nothing high-level left that Details doesn't already say:** Lead Level
   Designer (which King titles), Clash of Towers, Bubble Witch Saga, Newgrounds Flash Games.
 
+## Current format (2026-10-15, T-057)
+
+Supersedes the session 08 format above. The Overview page is the cover (photo with the title,
+role, quarter dates and duration beside it), then the `summary`, then the facts.
+
+- **Summary:** one or two sentences: what the game is, then the role at a high level, so a
+  recruiter gets the role at a glance; Details holds the rest. Resume voice (no "I"). Drafted for
+  all 14 projects from each project's own copy; anything not backed by it is marked `[? …]`.
+- **Facts:** Studio · Team · Platform · Stage, shown one per line. No duration: the cover works it
+  out from `startDate`/`endDate` (`formatDuration`) and shows it under the dates.
+
 ## Open questions for the user
 
 1. Fill every `[?]` (team sizes, platforms, stages, metrics).

@@ -8,6 +8,7 @@ import type { SkillTreeState } from '@/src/hooks/useSkillTreeState';
 import { Button, BUTTON_COLORS } from '@/src/components/atoms/Button';
 import { SkillPill } from './SkillTreeNode';
 import { getSkillDetails } from './SkillDetailsPanel';
+import { SkillExperienceBar } from './SkillExperienceBar';
 import { getArcadeButtonColor, getArcadeHighlight, getArcadeOutlineStyle } from './arcadeStyle';
 
 // Phones: one column of the tree at a time. The listed column is the selected skill's children, or
@@ -16,7 +17,7 @@ import { getArcadeButtonColor, getArcadeHighlight, getArcadeOutlineStyle } from 
 // a sheet docked at the bottom of the board, without the project photos: they are too small to read
 // at this width. At least one screen tall; a long column or a short
 // screen (a phone held sideways) makes the section taller instead of scrolling inside it.
-export function SkillTreeMobile({ activeSkill, activeCategory, handleSelect, handleSelectCategory }: SkillTreeState) {
+export function SkillTreeMobile({ activeSkill, activeCategory, careerMonths, skillMonths, handleSelect, handleSelectCategory }: SkillTreeState) {
   const category = activeCategory ?? activeSkill!.category;
   const focus = activeSkill === null ? null : getChildSkills(activeSkill.id).length > 0 ? activeSkill : getParentSkill(activeSkill);
   const listed = focus === null ? getRootSkills(category) : getChildSkills(focus.id);
@@ -90,6 +91,9 @@ export function SkillTreeMobile({ activeSkill, activeCategory, handleSelect, han
             <div className="font-display font-black text-xl leading-tight text-[#1C1610] uppercase tracking-wide">
               {details.title}
             </div>
+            {activeSkill !== null && (
+              <SkillExperienceBar skill={activeSkill} months={skillMonths.get(activeSkill.id)!} careerMonths={careerMonths} />
+            )}
             {details.descriptionLabel !== null && (
               <span className="font-mono font-bold text-[10px] uppercase tracking-wider text-[#451A03]">
                 {details.descriptionLabel}

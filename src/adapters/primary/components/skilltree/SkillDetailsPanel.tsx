@@ -2,11 +2,14 @@ import React from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 import { GamifiedParchmentPanel } from '@/src/components/bento/skins/gamified/GamifiedParchmentPanel';
 import { Skill, SkillCategory, CATEGORIES } from '@/src/core/domain/skillTreeTypes';
+import { SkillExperienceBar } from './SkillExperienceBar';
 
 export interface SkillDetailsPanelProps {
   skill: Skill | null;
   /** The category badge selected directly, rather than a skill within it — mutually exclusive with `skill`. */
   category: SkillCategory | null;
+  skillMonths: Map<string, number>;
+  careerMonths: number;
   className?: string;
 }
 
@@ -16,7 +19,7 @@ export function getSkillDetails(skill: Skill | null, category: SkillCategory | n
     : { key: `category-${category}`, title: CATEGORIES[category!].label, descriptionLabel: 'DISCIPLINE OVERVIEW:', description: CATEGORIES[category!].description };
 }
 
-export function SkillDetailsPanel({ skill, category, className = '' }: SkillDetailsPanelProps) {
+export function SkillDetailsPanel({ skill, category, skillMonths, careerMonths, className = '' }: SkillDetailsPanelProps) {
   const { key, title, descriptionLabel, description } = getSkillDetails(skill, category);
 
   return (
@@ -36,6 +39,12 @@ export function SkillDetailsPanel({ skill, category, className = '' }: SkillDeta
             </div>
 
             <div className="h-px border-b border-dashed border-[#B89C6C] my-2" />
+
+            {skill !== null && (
+              <div className="my-1">
+                <SkillExperienceBar skill={skill} months={skillMonths.get(skill.id)!} careerMonths={careerMonths} />
+              </div>
+            )}
 
             <div className="p-3 rounded-lg bg-[#F0E2C3] border border-[#D4C096] text-[#2C1A0E] flex flex-col gap-1 shadow-inner my-2">
               {descriptionLabel !== null && (
