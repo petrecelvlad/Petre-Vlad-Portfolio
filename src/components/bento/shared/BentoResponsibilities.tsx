@@ -141,6 +141,40 @@ function CopyWithGaps({ copy }: { copy: string }) {
   );
 }
 
+// One empty ruled line between bullets, dropped when the spaced list would run past the page.
+// Bullet line-height is locked to RULE_HEIGHT so every line, wrapped or not, advances in the
+// same steps as the ruled background.
+function DetailsList({ items }: { items: string[] }) {
+  const listRef = useRef<HTMLUListElement>(null);
+  useLayoutEffect(() => {
+    const list = listRef.current!;
+    const page = list.closest<HTMLElement>('[data-ruled-page]')!;
+    const fit = () => {
+      list.style.rowGap = `${RULE_HEIGHT}px`;
+      if (page.scrollHeight > page.clientHeight) list.style.rowGap = '0px';
+    };
+    const observer = new ResizeObserver(fit);
+    observer.observe(page);
+    observer.observe(list);
+    return () => observer.disconnect();
+  }, []);
+  return (
+    <ul ref={listRef} className="flex flex-col" style={{ rowGap: RULE_HEIGHT }}>
+      {items.map((item, i) => (
+        <li key={i} className="flex gap-2 items-start">
+          <span className="flex-shrink-0 w-1.5 h-1.5 rounded-full bg-ink-base mt-[11px]" />
+          <p
+            style={{ fontFamily: 'var(--font-hand)', lineHeight: `${RULE_HEIGHT}px` }}
+            className="m-0 text-lg text-ink-base"
+          >
+            {item}
+          </p>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
 export function BentoResponsibilities(props: ResponsibilitiesSlotProps) {
   const { overview, responsibilities, role, title, icon, startDate, endDate, galleryScreenshots, showDetailsHint = false } = props;
   const [activeIndex, setActiveIndex] = useState(0);
@@ -269,23 +303,7 @@ export function BentoResponsibilities(props: ResponsibilitiesSlotProps) {
           </>
         );
       case 'details':
-        // Bullet line-height is locked to RULE_HEIGHT so every line, wrapped or
-        // not, advances in the same steps as the ruled background.
-        return (
-          <ul>
-            {responsibilities.map((item, i) => (
-              <li key={i} className="flex gap-2 items-start">
-                <span className="flex-shrink-0 w-1.5 h-1.5 rounded-full bg-ink-base mt-[11px]" />
-                <p
-                  style={{ fontFamily: 'var(--font-hand)', lineHeight: `${RULE_HEIGHT}px` }}
-                  className="m-0 text-lg text-ink-base"
-                >
-                  {item}
-                </p>
-              </li>
-            ))}
-          </ul>
-        );
+        return <DetailsList items={responsibilities} />;
       case 'gallery':
         return (
           <div className="flex flex-wrap justify-center gap-6 pt-4">
@@ -390,6 +408,7 @@ export function BentoResponsibilities(props: ResponsibilitiesSlotProps) {
           <AnimatePresence mode="wait" initial={false}>
             <motion.div
               key={activeIndex}
+              data-ruled-page
               initial={{ rotateX: -100, opacity: 0 }}
               animate={{ rotateX: 0, opacity: 1 }}
               exit={{ rotateX: 100, opacity: 0 }}

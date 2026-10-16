@@ -391,7 +391,7 @@
         ],
         "technologies": ["Level Design", "Puzzle Design", "FTUE & Onboarding", "A/B Testing", "KPI Tracking"],
         "keyScreenshots": ["/assets/screenshots/SS_Alphabetty.png"],
-        "links": { "website": "https://king.com" }
+        "links": { "website": "https://king.com", "youtube": "https://www.youtube.com/watch?v=BX3bAjDRLdM" }
       }
     ]
   },

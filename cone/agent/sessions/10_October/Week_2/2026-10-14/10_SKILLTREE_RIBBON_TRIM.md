@@ -13,7 +13,7 @@ timestamp: 2026-10-14T00:00:00Z
 - **Date:** 2026-10-14
 - **Agent:** Claude Code (claude-opus-5-5)
 - **Goal:** Skill tree work. First: the title ribbon overlaps the "Level Design" pill — scale it down and remove its side tails, without touching the hero ribbon. Second: remove the 4th layer and allow only one open branch at every level, so the tree never scales down to fit. Third (now the main scope): screen tiers for the whole site, starting with a proposal.
-- **Status:** IN-PROGRESS
+- **Status:** COMPLETE ✅
 - **Previous:** [Session 09](../2026-10-13/09_SKILLTREE_PHOTO_REGION.md) (HANDOFF — T-050/T-051 are not this session's scope)
 
 ---
@@ -58,6 +58,8 @@ timestamp: 2026-10-14T00:00:00Z
   - Code: `Skill.years` deleted; `getMonthsCovered`/`formatMonthsShort` in `career.ts`; `useSkillTreeState` computes `skillMonths`/`careerMonths`; new `SkillExperienceBar` between the name and the description in `SkillDetailsPanel` and `SkillTreeMobile`. Checked live at 1366 and 390 (System Design 15y 4m, Game Design 12y 2m, Level Design 8y 1m, matching the lists); tsc and build clean
 - [x] Hero grass stutter after the page is left open: GPU `sin()` loses accuracy on a growing time argument (measured on Intel HD 4600: 2e-5 at 30 min, 0.02 at 1 h, 0.67 at 2 h). `ThreeNatureFieldBackground` now passes the wind phases wrapped to one cycle on the CPU (`uWindPhaseX`/`uWindPhaseZ`); error stays ~5e-5 up to 24 h. Cloud breathing had the same pattern at a 10× slower rate; fixed the same way at the user's request (`uBreathePhase`)
 - [x] Phone frame side buttons (user's mockup review at https://claude.ai/artifact/2K1q9FtbPPYcyskxvkQjdw): volume rocker 93 px at 76 px, power 60 px at 191 px (56 px at 46 px and 36 px at 114 px under md), 4 px thick (3 px under md). Fixed px, not % of the frame: the frame is 1041 px wide at 1920, where % lengths nearly doubled against the 545 px mockup; shell `--chrome-device-shell` #191919 → #000000. Verified at 1920, 1536, 1366 and 390
+- [x] AlphaBetty Saga trailer: `links.youtube` = BX3bAjDRLdM in `portfolio.json`; plays in the phone frame at 1366
+- [x] Details tab: one empty ruled line between bullets (`DetailsList`), dropped per project when the spaced list would run past the page (user's pick over scrolling or smaller text). 1920: all 14 spaced; 1366×768: 8 spaced, 6 tight (Amber, Tap TD, Lucky Slots, FitKin, Castellum, AlphaBetty), none clipped; 390: all spaced
 
 ---
 
@@ -110,6 +112,10 @@ timestamp: 2026-10-14T00:00:00Z
 - `src/adapters/primary/components/Timeline.tsx` — mobile renders every project in flow
 - `src/components/timeline/ProjectDetails.tsx`, `ProjectStage.tsx`, `TimelineRail.tsx` (horizontal mobile rail, shared `RailDot`)
 - `src/components/bento/shared/BentoResponsibilities.tsx` (`COVER_LINES` side/stacked), `BentoSkills.tsx` (fit-to-row notes)
+- `src/components/backgrounds/ThreeNatureFieldBackground.tsx` — wind and cloud phases wrapped on the CPU
+- `src/components/bento/BentoVideoFrame.tsx` — side buttons; `src/index.css` and `TOKEN_CONTRACT.md` — `--chrome-device-shell` #000000
+- `src/infrastructure/data/portfolio.json` — AlphaBetty Saga trailer
+- `src/components/bento/shared/BentoResponsibilities.tsx` — `DetailsList` with fitted bullet spacing
 
 ---
 
@@ -117,4 +123,4 @@ timestamp: 2026-10-14T00:00:00Z
 
 ---
 
-*Last updated: 2026-10-14*
+*Last updated: 2026-10-16*
