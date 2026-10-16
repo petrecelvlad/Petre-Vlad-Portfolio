@@ -240,7 +240,7 @@
    * pixel-identical across every skin, including future mockups — see
    * Skin_System.md's Locked Constraints.
    */
-  --chrome-device-shell: #191919;
+  --chrome-device-shell: #000000;
   --chrome-device-shadow: 0 4px 0 0 #000000;
 
   /* Background texture */
