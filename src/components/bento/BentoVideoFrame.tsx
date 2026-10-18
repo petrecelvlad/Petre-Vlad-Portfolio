@@ -172,8 +172,9 @@ export function BentoVideoFrame({ screenshot, youtubeUrl, isActive }: BentoVideo
         style={{ width: 'min(100%, calc(100cqh * 16 / 9))' }}
       >
         {/* Hardware Buttons on top edge — locked chrome, never skin-driven, see index.css */}
-        <div className="absolute -top-[6px] left-[20%] md:left-[25%] w-12 md:w-16 h-[6px] bg-[var(--chrome-device-shell)] rounded-t-md z-0" />
-        <div className="absolute -top-[6px] left-[40%] md:left-[45%] w-16 md:w-20 h-[6px] bg-[var(--chrome-device-shell)] rounded-t-md z-0" />
+        {/* Volume rocker, then the shorter power key: an Android phone's right side, turned so the camera sits on the left. */}
+        <div className="absolute -top-[3px] md:-top-[4px] left-[46px] md:left-[76px] w-[56px] md:w-[93px] h-[3px] md:h-[4px] bg-[var(--chrome-device-shell)] rounded-t-[2px] z-0" />
+        <div className="absolute -top-[3px] md:-top-[4px] left-[114px] md:left-[191px] w-[36px] md:w-[60px] h-[3px] md:h-[4px] bg-[var(--chrome-device-shell)] rounded-t-[2px] z-0" />
 
         <div className="relative group w-full h-full border-[8px] border-[var(--chrome-device-shell)] rounded-[40px] bg-[var(--chrome-device-shell)] overflow-hidden shadow-[var(--chrome-device-shadow)] z-10">
           {/* Device Notch */}
@@ -242,7 +243,7 @@ export function BentoVideoFrame({ screenshot, youtubeUrl, isActive }: BentoVideo
               <div className="flex-grow flex items-center justify-center">
                 <button
                   onClick={togglePlay}
-                  className="pointer-events-auto text-white/0 group-hover:text-white/90 hover:!text-white transition-all duration-300 cursor-pointer drop-shadow-lg"
+                  className="pointer-events-auto text-white/0 group-hover:text-white/90 hover:!text-white transition-colors duration-300 cursor-pointer drop-shadow-lg"
                   aria-label={isPlaying ? "Pause" : "Play"}
                 >
                   {isPlaying ? <Pause size={56} fill="currentColor" /> : <Play size={56} fill="currentColor" />}

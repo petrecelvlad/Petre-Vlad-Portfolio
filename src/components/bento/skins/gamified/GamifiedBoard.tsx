@@ -4,7 +4,7 @@ import { GamifiedCornerCaps } from './GamifiedCornerCaps';
 
 interface GamifiedBoardProps {
   children: ReactNode;
-  bannerTitle: string;
+  bannerTitle?: string;
   className?: string;
   contentClassName?: string;
   fillHeight?: boolean;
@@ -25,11 +25,13 @@ export function GamifiedBoard({
 }: GamifiedBoardProps) {
   return (
     <div className={`relative ${fillHeight ? 'flex flex-col' : ''} ${className}`}>
-      <div className="absolute -top-[34px] left-1/2 -translate-x-1/2 z-30 w-[min(460px,70%)] pointer-events-none">
-        <PixelRibbonBanner className="w-full">
-          <span className="text-xl">{bannerTitle}</span>
-        </PixelRibbonBanner>
-      </div>
+      {bannerTitle !== undefined && (
+        <div className="absolute -top-[34px] left-1/2 -translate-x-1/2 scale-80 z-30 w-[min(460px,70%)] pointer-events-none">
+          <PixelRibbonBanner className="w-full" hasTails={false}>
+            <span className="text-xl">{bannerTitle}</span>
+          </PixelRibbonBanner>
+        </div>
+      )}
 
       <GamifiedCornerCaps />
 

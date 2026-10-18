@@ -222,10 +222,10 @@ This is the **contract layer** of the design system. It defines every CSS custom
 
 | Token | Semantic Purpose | Current Value (Gamified) | Status |
 |---|---|---|---|
-| `--chrome-navbar-height` | Fixed Navbar height (load-bearing for the scroll envelope) | `64px` | DEFINED, and confirmed in use — every `calc(100vh-...)` snap section (`App.tsx`, `Timeline.tsx`, `BacklogView.tsx`) already references `var(--chrome-navbar-height)`, not a literal. |
+| `--chrome-navbar-height` | Navbar height (load-bearing for the scroll envelope); varies per screen tier, defined in the tier block (§15) | `56px` mobile, `64px` tablet and up | DEFINED, and confirmed in use — every `calc(100vh-...)` snap section (`App.tsx`, `Timeline.tsx`, `BacklogView.tsx`) already references `var(--chrome-navbar-height)`, not a literal. |
 | `--chrome-icon-slot-size` | Skill/icon slot square max-width in bento | `90px` | DEFINED |
 | `--chrome-icon-size` | Icon size inside skill slots | `36px` | DEFINED — `BentoSkills` now sizes cloned icons via `className` (`w-[var(--chrome-icon-size)] h-[var(--chrome-icon-size)]`) instead of Lucide's numeric `size` prop, so it participates in the token system |
-| `--chrome-device-shell` | `BentoVideoFrame`'s device shell/hardware-button/notch color | `#191919` (literal, not `→ --color-ink-base`) | DEFINED — deliberately a hardcoded literal, not an alias. See `Skin_System.md`'s Locked Constraints: an alias would still re-resolve against an active skin at its point of use, which defeats the point of locking this frame |
+| `--chrome-device-shell` | `BentoVideoFrame`'s device shell/hardware-button/notch color | `#000000` (literal, not `→ --color-ink-base`) | DEFINED — deliberately a hardcoded literal, not an alias. See `Skin_System.md`'s Locked Constraints: an alias would still re-resolve against an active skin at its point of use, which defeats the point of locking this frame |
 | `--chrome-device-shadow` | `BentoVideoFrame`'s device shell shadow | `0 4px 0 0 #000000` (literal, not `→ --shadow-raised`) | DEFINED — same reasoning as above |
 
 > `--chrome-navbar-height` is especially critical — it is the root value of the `calc(100vh-64px)` envelope. Now defined in `@theme`; confirm `calc()` call sites reference the variable, not the literal.
@@ -244,6 +244,32 @@ This is the **contract layer** of the design system. It defines every CSS custom
 | `--texture-stripe-period` | Repeat period of the stripe pattern (renamed from the originally-proposed `--texture-stripe-gap`) | `8px` | DEFINED |
 
 > `--motif-dot-texture` (Tier 2, `Skin_System.md`) governs whether this texture renders at all for a given skin; these five tokens govern its appearance when it does.
+
+---
+
+### 15 — Screen Tiers (added 2026-10-14, T-055)
+*Per-screen-size values. The tier boundaries exist only in `index.css`'s four `@custom-variant`s; the token block below is written with `@variant`, so each value is set once per tier. Not skin values: every skin shares them.*
+
+| Tier | Condition | Variant |
+|---|---|---|
+| Mobile | narrower than 768px, or shorter than 600px | `mobile:` (mobile only) |
+| Tablet | 768–1279px wide, 600px+ tall | `tablet:` (tablet and up) |
+| Laptop | 1280–1599px wide, 600px+ tall | `laptop:` (laptop and up) |
+| Desktop | 1600px+ wide, 600px+ tall | `desktop:` (desktop only) |
+
+| Token | Semantic Purpose | Mobile / Tablet / Laptop / Desktop | Status |
+|---|---|---|---|
+| `--screen-tier` | Tier name for JS so scripts never repeat the media conditions | `mobile` / `tablet` / `laptop` / `desktop` | DEFINED — read by `useScreenTier` (skill tree mobile/board switch) |
+| `--tier-gutter` | Section side margin | `12px` / `16px` / `24px` / `48px` | DEFINED — skill tree |
+| `--tier-gutter-y` | Section top/bottom margin | `12px` / `24px` / `24px` / `40px` | DEFINED — skill tree |
+| `--tier-column-gap` | Gap between a section's side-by-side columns | `12px` / `24px` / `32px` / `48px` | DEFINED — skill tree |
+| `--tier-hero-name-size` | Hero name font size | `56px` / `72px` / `72px` / `96px` | DEFINED — no consumer yet |
+| `--skilltree-pad` | Board padding beside the tree | none / `8px` / `12px` / `24px` | DEFINED — `SkillTreeBoard` |
+| `--skilltree-gap-min` / `-max` | Range the skill tree's column gap stretches within | none / `16–60px` / `24–60px` / `60–160px` | DEFINED — `SkillTreeBoard` via `fitTreeSpacing` |
+| `--skilltree-row-gap-max` | How far the row gap (min 10px) may stretch | none / `10px` / `10px` / `20px` | DEFINED — `SkillTreeBoard` via `fitTreeSpacing` |
+| `--skilltree-details-min-width` / `-max-width` | Skill details column = clamp(min, what the full-size tree leaves, max) | none (bottom sheet) / `330px` / `330–400px` / `600px` | DEFINED — `SkillTreeBoard` (with its measured `--skilltree-board-min-width`) |
+
+> Page scrolling (snap on tablet and up, normal on mobile), the hero/skill-tree/projects rearrangements and the phone rail are structural, not values: components switch them with the tier variants (plus Tailwind's `portrait:`/`landscape:` for tablet). Approved layouts: https://claude.ai/artifact/J7N3sEbnCVjLWyaARDYjgH
 
 ---
 

@@ -1,9 +1,9 @@
 import React, { useMemo } from 'react';
-import { AnimatePresence, motion } from 'motion/react';
+import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
 import { Skill, SkillCategory, CATEGORIES } from '@/src/core/domain/skillTreeTypes';
 import {
-  LAYOUTS, getActivePathNodeIds, getActivePathOrder, getVisibleSkillIds, getLinkRevealTiming,
-  LayoutLink, segmentDuration, PILL_W,
+  getActivePathNodeIds, getActivePathOrder, getVisibleSkillIds, getLinkRevealTiming,
+  LayoutLink, TreeLayout, segmentDuration, PILL_W,
 } from '@/src/core/domain/skillTreeGeometry';
 import { SkillPill } from './SkillTreeNode';
 
@@ -18,30 +18,31 @@ function segmentPathLength(link: LayoutLink): number {
 // duration) and each connector's exit (delay = this duration, so it starts
 // retracting the instant the pill has finished disappearing).
 const PILL_EXIT_DURATION = 0.15;
+const PILL_HIDDEN_SCALE = 0.85;
 const UNLIT_CORE = '#8C5828';
 
 export interface TreeCanvasProps {
   category: SkillCategory;
+  layout: TreeLayout;
   activeSkill: Skill | null;
   expandedSkillIds: Set<string>;
   onSelect: (s: Skill) => void;
 }
 
-export function TreeCanvas({ category, activeSkill, expandedSkillIds, onSelect }: TreeCanvasProps) {
-  const { nodes: allNodes, links: allLinks, canvasWidth, canvasHeight } = LAYOUTS[category];
+export function TreeCanvas({ category, layout, activeSkill, expandedSkillIds, onSelect }: TreeCanvasProps) {
+  const { nodes: allNodes, links: allLinks, canvasWidth, canvasHeight } = layout;
   const catConfig = CATEGORIES[category];
+  const isReducedMotion = useReducedMotion();
 
   // Depth 0/1 always shown; deeper layers mount/unmount as `expandedSkillIds`
   // grows/shrinks — one layer at a time (a skill's children only reveal once
   // the skill ITSELF is in the set; a grandchild needs its own parent
   // separately added, not just an ancestor). Driven by expandedSkillIds, not
-  // activeSkill, because selecting a sibling keeps the branches already open
-  // (see useSkillTreeState.ts). Positions themselves never change — they're
-  // still the same static, module-load-computed LAYOUTS pixel coordinates as
-  // before; only which nodes/links are currently mounted changes. See
-  // getVisibleSkillIds/getNextExpandedSkillIds for the exact accumulate-vs-
-  // reset rule (siblings within an open branch stay open; a skill outside
-  // the currently open branch collapses it and starts fresh).
+  // activeSkill, because clicking an already-open ancestor keeps its deeper
+  // branch open. Positions never change as branches open — they come from the
+  // board's fitted spacing (see fitTreeSpacing); only which nodes/links are
+  // currently mounted changes. Only one root-to-skill path is ever open
+  // (see getNextExpandedSkillIds).
   const visibleIds = useMemo(
     () => getVisibleSkillIds(category, expandedSkillIds),
     [category, expandedSkillIds]
@@ -205,16 +206,22 @@ export function TreeCanvas({ category, activeSkill, expandedSkillIds, onSelect }
               key={node.skill.id}
               className="absolute z-10"
               style={{ left: node.screenLeft, top: node.screenTop }}
-              initial={{ opacity: 0, scale: 0.85 }}
+              // A `transform` string runs on the GPU where `scale` runs in JS, but Motion's
+              // reduced-motion switch only covers `scale`, hence the explicit check.
+              initial={{ opacity: 0, transform: `scale(${PILL_HIDDEN_SCALE})` }}
               animate={{
                 opacity: 1,
-                scale: 1,
-                transition: { delay: timing.delay + timing.duration, duration: 0.2, ease: 'easeOut' },
+                transform: 'scale(1)',
+                transition: isReducedMotion
+                  ? { duration: 0 }
+                  : { delay: timing.delay + timing.duration, duration: 0.2, ease: 'easeOut' },
               }}
               exit={{
                 opacity: 0,
-                scale: 0.85,
-                transition: { delay: 0, duration: PILL_EXIT_DURATION, ease: 'easeIn' },
+                transform: `scale(${PILL_HIDDEN_SCALE})`,
+                transition: isReducedMotion
+                  ? { duration: 0 }
+                  : { delay: 0, duration: PILL_EXIT_DURATION, ease: 'easeIn' },
               }}
             >
               <SkillPill

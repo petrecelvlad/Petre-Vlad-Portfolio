@@ -1,5 +1,42 @@
 [
   {
+    "id": "exp-styngr-2026",
+    "company": "Styngr",
+    "companyLogo": "",
+    "startDate": "2026-04-13",
+    "endDate": "2026-08-31",
+    "projects": [
+      {
+        "id": "proj-playmusic",
+        "title": "PlayMusic",
+        "role": "Game Designer & Developer (Contract)",
+        "startDate": "2026-04-13",
+        "endDate": "2026-08-31",
+        "description": "Styngr's PlayMusic is a game platform where creators customize ready-made game templates instead of building games from scratch, with music at the core: the song a creator picks drives the gameplay. Designed and developed new game templates end to end, from design docs to code, polish and release.",
+        "type": "GAME",
+        "overview": {
+          "summary": "A music game platform by Styngr where creators customize ready-made game templates, and the song they pick drives the gameplay. Game designer and developer who built new templates from concept to release."
+        },
+        "responsibilities": [
+          "Designed and coded new games from scratch, from design docs to release",
+          "Made the music drive the game: each song is split into drums, bass and vocals",
+          "Tied each part to a game action (drums spawn enemies), so faster songs play faster",
+          "Decided what creators could customize, from the visuals to the song itself",
+          "Built game templates modeled on osu!, Mania, Catch the Fruit and Taiko",
+          "Designed a shooter concept, a pinball prototype and a 2D runner platformer",
+          "Helped design the shared game architecture that keeps every template modular",
+          "Coded with Claude Code; shipped through GitHub commits and pull requests"
+        ],
+        "achievements": [
+          "Built 4 rhythm game templates that play with any song"
+        ],
+        "technologies": ["Game Design", "System Design", "Game Development", "Claude Code", "GitHub"],
+        "keyScreenshots": [],
+        "links": { "website": "https://playmusic.gg/", "youtube": "https://www.youtube.com/watch?v=mrIzOBLPwA0" }
+      }
+    ]
+  },
+  {
     "id": "exp-metacore-2024",
     "company": "Metacore",
     "companyLogo": "",
@@ -17,8 +54,7 @@
         "icon": "/assets/icons/Icon_MM.png",
         "type": "GAME",
         "overview": {
-          "facts": ["Metacore", "Team [?]", "Mobile", "Live ops", "6 months (contract)"],
-          "summary": "Merge game."
+          "summary": "One of the world's top-grossing merge games, run as a live service by Metacore. Contract level designer on live events and the core progression."
         },
         "responsibilities": [
           "Designed and balanced levels for live events and core game progression",
@@ -27,7 +63,7 @@
         "achievements": [
           "Contributed to one of the world's top-grossing merge games"
         ],
-        "technologies": ["Game Design", "Game Balance", "Level Design"],
+        "technologies": ["Game Design", "Balancing", "Level Design"],
         "keyScreenshots": [],
         "links": {
           "youtube": "https://www.youtube.com/watch?v=DUZSjukx2OI"
@@ -53,8 +89,7 @@
         "icon": "/assets/icons/Icon_ROTMG.png",
         "type": "GAME",
         "overview": {
-          "facts": ["DECA Games", "Team [?]", "[? PC]", "Live ops", "6 months"],
-          "summary": "MMO."
+          "summary": "A long-running MMO in DECA Games' portfolio of live games. Senior designer running live operations and feature design for the title."
         },
         "responsibilities": [
           "Provided Senior Game Design across DECA's portfolio of acquired titles",
@@ -82,7 +117,7 @@
     "projects": [
       {
         "id": "proj-lead-level-designer",
-        "title": "Lead Level Designer",
+        "title": "Amber",
         "role": "Lead Level Designer",
         "startDate": "2019-03-01",
         "endDate": "2022-10-30",
@@ -90,8 +125,7 @@
         "icon": "/assets/icons/Icon_Amber.png",
         "type": "GAME",
         "overview": {
-          "facts": ["Amber Studio for King", "6 teams, 15 designers", "[? Mobile]", "[? Live content]", "3 years 8 months"],
-          "summary": "[? Which King titles]"
+          "summary": "Level production for several live King puzzle games [? which titles], delivered by Amber Studio. Led 6 concurrent teams and owned the King partnership as the main contact for King's studio leads."
         },
         "responsibilities": [
           "Led 6 concurrent level design teams across multiple King puzzle titles",
@@ -120,8 +154,7 @@
         "icon": "/assets/icons/Icon_FEHV.png",
         "type": "GAME",
         "overview": {
-          "facts": ["Amber Studio for Animoca Brands", "Team [?]", "Platform [?]", "Stage [?]", "6 months"],
-          "summary": "Formula E team-management game with NFT cars and drivers."
+          "summary": "A Formula E team-management game with NFT cars and drivers, made for Animoca Brands. Principal designer who owned the design of every core gameplay system."
         },
         "responsibilities": [
           "Oversaw all core gameplay design, aligned with the REVV token economy",
@@ -158,8 +191,7 @@
         "icon": "/assets/icons/Icon_TapTD.png",
         "type": "GAME",
         "overview": {
-          "facts": ["[? Self-published]", "Team of 4", "Mobile [? Android / iOS]", "Concept → launch → live updates", "10 months"],
-          "summary": "Idle tower-defense game."
+          "summary": "An idle tower-defense game for mobile, [? self-published] with three former King developers. Producer and design lead who took it from concept to launch and live updates."
         },
         "responsibilities": [
           "Produced the game with 3 former King employees, leading planning to launch",
@@ -173,7 +205,7 @@
         "achievements": [
           "100K App Installs"
         ],
-        "technologies": ["Game Production", "Game Design", "Economy Design", "Level Design", "UX Design", "Community Management", "Monetization", "KPI Tracking"],
+        "technologies": ["Game Production", "Game Design", "Economy Design", "Level Design", "UX Design", "Community Mgmt", "Monetization", "KPI Tracking"],
         "keyScreenshots": [],
         "links": {
           "youtube": "https://www.youtube.com/watch?v=6OuN6ncCRNo"
@@ -198,8 +230,7 @@
         "icon": "/assets/icons/Icon_Slots.jpg",
         "type": "GAME",
         "overview": {
-          "facts": ["Newton Slots", "Team [?]", "Mobile [?]", "Stage [?]", "7 months"],
-          "summary": "Slots game where players interact with elements on the screen."
+          "summary": "A slots game where players interact with the reels, mixing slots with match-3. Game designer who took the new hybrid mechanic from concept to implementation."
         },
         "responsibilities": [
           "Redesigned a Slots game with Match-3 mechanics, a first-of-its-kind hybrid",
@@ -235,8 +266,7 @@
         "icon": "/assets/icons/Icon_COT.jpg",
         "type": "GAME",
         "overview": {
-          "facts": ["[? Self-published]", "Team of 3", "Android", "Concept → launch", "3 months"],
-          "summary": "[? What the game is: genre and core hook]"
+          "summary": "An indie mobile game [? genre and core hook], taken from concept to Google Play in 2 months. Producer running a fully remote team of three across time zones."
         },
         "responsibilities": [
           "Launched an indie mobile game on Google Play, from concept in 2 months",
@@ -271,8 +301,7 @@
         "icon": "/assets/icons/Icon_Fitkin.png",
         "type": "GAME",
         "overview": {
-          "facts": ["Intense Life", "Team of 8", "[? Mobile]", "Stage [?]", "1 year"],
-          "summary": "Gamified app that encourages a healthy lifestyle."
+          "summary": "A gamified health app where real-world steps advance the story. Game designer on an 8-person team, leading user research and testing."
         },
         "responsibilities": [
           "Worked in a team of 8 across design, development, and QA",
@@ -286,7 +315,7 @@
         "achievements": [
           "Designed User Personas classification system"
         ],
-        "technologies": ["Gamification", "UX Design", "User Research"],
+        "technologies": ["Gamification", "UX Design", "Research"],
         "keyScreenshots": ["/assets/screenshots/SS_Fitkin.png"],
         "links": { "website": "https://fitkingame.com" }
       }
@@ -309,8 +338,7 @@
         "icon": "/assets/icons/Icon_Castellum.png",
         "type": "GAME",
         "overview": {
-          "facts": ["Freelance client", "Team of 4", "Platform [?]", "Brief → delivery", "8 months"],
-          "summary": "Idle brawler game."
+          "summary": "An idle brawler game designed and produced for a freelance client. Producer and designer who owned the project and the client relationship from brief to delivery."
         },
         "responsibilities": [
           "Designed and produced a complete idle brawler game, from brief to delivery",
@@ -348,8 +376,7 @@
         "icon": "/assets/icons/Icon_BWS1.png",
         "type": "GAME",
         "overview": {
-          "facts": ["King", "Team [?]", "Mobile [? + Facebook]", "Live ops", "6 months"],
-          "summary": "[? What the game is: genre and core hook]"
+          "summary": "One of King's founding hits, a bubble-shooter puzzle game run as a live service. Junior level designer on the live game, in a first role at King."
         },
         "responsibilities": [
           "Joined King as Jr. Level Designer on Bubble Witch Saga, a founding hit",
@@ -373,8 +400,7 @@
         "icon": "/assets/icons/Icon_Alphabetty.png",
         "type": "GAME",
         "overview": {
-          "facts": ["King", "Team [?]", "[? Mobile]", "Live ops", "1 year 7 months"],
-          "summary": "Match-3 word game where letters replace candies."
+          "summary": "A match-3 word game where letters replace candies, ranked among the top 5 word games worldwide. Level designer who owned onboarding for a live title played by millions."
         },
         "responsibilities": [
           "Promoted to Level Designer on AlphaBetty Saga, a Top 5 Word game worldwide",
@@ -391,7 +417,7 @@
         ],
         "technologies": ["Level Design", "Puzzle Design", "FTUE & Onboarding", "A/B Testing", "KPI Tracking"],
         "keyScreenshots": ["/assets/screenshots/SS_Alphabetty.png"],
-        "links": { "website": "https://king.com" }
+        "links": { "website": "https://king.com", "youtube": "https://www.youtube.com/watch?v=BX3bAjDRLdM" }
       }
     ]
   },
@@ -412,8 +438,7 @@
         "icon": "/assets/icons/Icon_NG.png",
         "type": "GAME",
         "overview": {
-          "facts": ["Independent", "Solo", "Web (Flash)", "Shipped", "4 years"],
-          "summary": "[? What the games are: genres and highlights]"
+          "summary": "20+ Flash games and tutorials published on Newgrounds, across shooters, puzzles and platformers. Solo developer covering design, art, code, testing and release."
         },
         "responsibilities": [
           "Published 20+ Flash games and tutorials on Newgrounds across many genres",
@@ -423,7 +448,7 @@
         "achievements": [
           "Built a portfolio of 20+ published Flash games across multiple genres"
         ],
-        "technologies": ["Flash", "ActionScript", "Game Design", "Game Art"],
+        "technologies": ["Game Development", "Self-Publishing", "Game Design", "Game Art"],
         "keyScreenshots": [],
         "links": { "website": "https://www.newgrounds.com" }
       },
@@ -437,8 +462,7 @@
         "icon": "/assets/icons/Icon_Bounzy.jpg",
         "type": "GAME",
         "overview": {
-          "facts": ["Independent", "Team [?]", "Web (Flash)", "Shipped", "1 year"],
-          "summary": "Zombie shooter."
+          "summary": "A zombie shooter built around bouncing bullets, released on the web [? portals / sponsor]. Lead designer and artist behind the bouncing-bullet mechanic and all the art."
         },
         "responsibilities": [
           "Designed the core bouncing bullet mechanic, a physics loop rewarding trick shots",
@@ -447,7 +471,7 @@
         "achievements": [
           "Classic Flash era game with massive web reach"
         ],
-        "technologies": ["Flash", "Game Design", "Game Art"],
+        "technologies": ["Mechanics Design", "Game Design", "Game Art"],
         "keyScreenshots": ["/assets/screenshots/SS_Bounzy.jpg"],
         "links": { "website": "https://www.newgrounds.com/portal/view/587105", "youtube": "https://www.youtube.com/watch?v=r6ZpABMwLmQ" }
       },
@@ -461,8 +485,7 @@
         "icon": "/assets/icons/Icon_MF.png",
         "type": "GAME",
         "overview": {
-          "facts": ["Independent", "Team [?]", "Web (Flash)", "Shipped", "9 months"],
-          "summary": "Marble-breaking game, the sequel to Marble Frenzy."
+          "summary": "A match-3 marble breaker, the sequel to Marble Frenzy, with new chain reactions and power-ups. Lead designer and artist who created all the visual assets."
         },
         "responsibilities": [
           "Designed the Match-3 marble mechanics, adding chain reactions and power-ups",
@@ -471,7 +494,7 @@
         "achievements": [
           "Innovative Match-3 hybrid mechanics"
         ],
-        "technologies": ["Flash", "Game Design", "Game Art"],
+        "technologies": ["Mechanics Design", "Game Design", "Game Art"],
         "keyScreenshots": ["/assets/screenshots/SS_MF.png"],
         "links": { "website": "https://www.newgrounds.com/portal/view/540922", "youtube": "https://www.youtube.com/watch?v=wTmoO1LFgWs" }
       }

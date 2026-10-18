@@ -1,9 +1,19 @@
-import { Skill, SkillCategory, SKILLS } from './skillTreeTypes';
+import { Skill, SkillCategory, SKILLS, CATEGORIES } from './skillTreeTypes';
 
 export const PILL_W = 208;
 export const PILL_H = 32;
-export const GAP_X = 60;
-export const GAP_Y = 10;
+export const BADGE_W = 96;
+export const CATEGORY_GAP = 24;
+
+/** Column gap between pill columns (and badge to roots), row gap between pills. */
+export interface TreeSpacing {
+  gapX: number;
+  gapY: number;
+}
+
+export const DEFAULT_SPACING: TreeSpacing = { gapX: 60, gapY: 10 };
+
+export const CATEGORY_ORDER = Object.keys(CATEGORIES) as SkillCategory[];
 
 export const FLOW_SPEED_PX_PER_SEC = 1100;
 export const MIN_SEGMENT_DURATION = 0.06;
@@ -60,108 +70,47 @@ function buildDepthMap(skills: Skill[]): Map<string, number> {
 }
 
 /**
- * Compact column-packed layout (see docs/Design/SkillTree_Compact_Routing_Proposal.md).
- * Column = depth from the nearest null-parent ancestor, unchanged from before.
- *
- * Row assignment never uses more rows than the single busiest column needs
- * (the `ceiling`) — that's the true minimum height the category can ever
- * be — but WITHIN that budget, a node is free to sit wherever keeps its
- * connectors shortest, not just packed toward the top. `packColumn` is the
- * one place that enforces the ceiling; two passes feed it different
- * preferences:
- *
- *   pass 1 (top-down draft): align a node with its PARENT's row. Gives
- *   every node a valid, order-stable position and establishes each
- *   column's left-to-right sibling order for pass 2 to reuse.
- *
- *   pass 2 (bottom-up refine): re-align internal nodes with the mean of
- *   their OWN CHILDREN's (already-refined, deeper-column) rows instead —
- *   a parent with children spread far from its pass-1 position moves to
- *   sit near them, rather than staying pinned wherever pass 1 packed it
- *   next to its own parent. Leaves (no children) keep their pass-1 row,
- *   since there's nothing to refine toward. The deepest column is never
- *   revisited (nothing is deeper), so it stays exactly as pass 1 left it.
+ * Only one sibling group per column is ever open (see getNextExpandedSkillIds), so each group is
+ * centered on its parent's row and groups that never show together may share rows. A category
+ * reserves rows for its biggest sibling group only, so its height never changes as branches open.
  */
-function packColumn(idealRows: number[], ceiling: number): number[] {
-  const n = idealRows.length;
-  let nextFree = 0;
-  return idealRows.map((idealRow, i) => {
-    // Leave enough headroom below for the (n - 1 - i) nodes still to be
-    // placed in this column, so the column as a whole never exceeds the
-    // ceiling — the busiest column itself gets maxAllowedRow === i for
-    // every node, i.e. forced back to plain compact packing, correctly.
-    const maxAllowedRow = ceiling - n + i;
-    const row = Math.min(Math.max(idealRow, nextFree), maxAllowedRow);
-    nextFree = row + 1;
-    return row;
-  });
+function getRowCount(category: SkillCategory): number {
+  const skills = SKILLS.filter(s => s.category === category);
+  const roots = skills.filter(s => s.parent === null);
+  return Math.max(roots.length, ...[...buildChildrenMap(skills).values()].map(kids => kids.length));
 }
 
-export function computeLayout(category: SkillCategory): TreeLayout {
+export function computeLayout(category: SkillCategory, { gapX, gapY }: TreeSpacing): TreeLayout {
   const skills = SKILLS.filter(s => s.category === category);
   const depthOf = buildDepthMap(skills);
+  const childrenOf = buildChildrenMap(skills);
+  const roots = skills.filter(s => s.parent === null);
+  const rowCount = getRowCount(category);
 
-  const maxDepth = Math.max(...skills.map(s => depthOf.get(s.id)!));
-
-  const columnSizes = new Map<number, number>();
-  skills.forEach(s => {
-    const d = depthOf.get(s.id)!;
-    columnSizes.set(d, (columnSizes.get(d) ?? 0) + 1);
-  });
-  const ceiling = Math.max(...columnSizes.values());
-
-  const childrenOf = new Map<string, Skill[]>();
-  skills.forEach(s => {
-    if (s.parent === null) return;
-    const arr = childrenOf.get(s.parent) ?? [];
-    arr.push(s);
-    childrenOf.set(s.parent, arr);
-  });
-
-  // Pass 1: top-down draft, also fixes each column's sibling order.
-  const draftRowOf = new Map<string, number>();
-  const columnOrder = new Map<number, Skill[]>();
-  for (let d = 0; d <= maxDepth; d++) {
-    const columnSkills = [...skills.filter(s => depthOf.get(s.id) === d)].sort(
-      (a, b) => (a.parent ? draftRowOf.get(a.parent)! : 0) - (b.parent ? draftRowOf.get(b.parent)! : 0),
-    );
-    const idealRows = columnSkills.map(s => (s.parent ? draftRowOf.get(s.parent)! : 0));
-    const rows = packColumn(idealRows, ceiling);
-    columnSkills.forEach((s, i) => draftRowOf.set(s.id, rows[i]));
-    columnOrder.set(d, columnSkills);
-  }
-
-  // Pass 2: bottom-up refine, deepest column first, reusing pass 1's order.
-  const rowOf = new Map(draftRowOf);
-  for (let d = maxDepth - 1; d >= 0; d--) {
-    const columnSkills = columnOrder.get(d)!;
-    const idealRows = columnSkills.map(s => {
-      const kids = childrenOf.get(s.id);
-      if (!kids || kids.length === 0) return draftRowOf.get(s.id)!;
-      const mean = kids.reduce((sum, k) => sum + rowOf.get(k.id)!, 0) / kids.length;
-      return Math.round(mean);
+  const rowOf = new Map<string, number>();
+  const placeGroup = (group: Skill[], centerRow: number) => {
+    const firstRow = Math.min(Math.max(Math.round(centerRow - (group.length - 1) / 2), 0), rowCount - group.length);
+    group.forEach((s, i) => {
+      rowOf.set(s.id, firstRow + i);
+      placeGroup(childrenOf.get(s.id) ?? [], firstRow + i);
     });
-    const rows = packColumn(idealRows, ceiling);
-    columnSkills.forEach((s, i) => rowOf.set(s.id, rows[i]));
-  }
+  };
+  placeGroup(roots, (rowCount - 1) / 2);
 
   // The badge is treated as a real column before column 0 — every root
-  // sits one full gutter (GAP_X) to the right of it, exactly like every
+  // sits one full gutter (gapX) to the right of it, exactly like every
   // other parent/child pair, instead of butting up against it directly.
   const nodes: LayoutNode[] = skills.map(s => ({
     skill: s,
-    screenLeft: GAP_X + depthOf.get(s.id)! * (PILL_W + GAP_X),
-    screenTop: rowOf.get(s.id)! * (PILL_H + GAP_Y),
+    screenLeft: gapX + depthOf.get(s.id)! * (PILL_W + gapX),
+    screenTop: rowOf.get(s.id)! * (PILL_H + gapY),
     depth: depthOf.get(s.id)!,
   }));
   const nodeById = new Map(nodes.map(n => [n.skill.id, n]));
 
   // Every bend sits at the exact horizontal midpoint of its gutter — one
   // consistent rule, so every branch point in the tree reads the same way.
-  // This only stays unambiguous because pass 2 above already spreads
-  // sibling branches' row-ranges apart (verified: no two sources sharing a
-  // gutter ever end up with overlapping vertical spans); if that ever
-  // stopped holding, two branches could visually merge again.
+  // Unambiguous because only one source per gutter is ever visible.
   const links: LayoutLink[] = skills
     .filter(s => s.parent !== null)
     .map(s => {
@@ -187,7 +136,6 @@ export function computeLayout(category: SkillCategory): TreeLayout {
   // root or several, so the badge-to-root connector is just an ordinary
   // link through an ordinary full-width gutter rather than a special case.
   // Its vertical position is the mean of the real roots' rows.
-  const roots = skills.filter(s => s.parent === null);
   const rootTop = roots.reduce((sum, r) => sum + nodeById.get(r.id)!.screenTop, 0) / roots.length;
   roots.forEach(r => {
     const target = nodeById.get(r.id)!;
@@ -208,16 +156,50 @@ export function computeLayout(category: SkillCategory): TreeLayout {
     nodes,
     links,
     canvasWidth: Math.max(...nodes.map(n => n.screenLeft)) + PILL_W,
-    canvasHeight: Math.max(...nodes.map(n => n.screenTop)) + PILL_H,
+    canvasHeight: rowCount * (PILL_H + gapY) - gapY,
     rootTop,
   };
 }
 
-export const LAYOUTS: Record<SkillCategory, TreeLayout> = {
-  design: computeLayout('design'),
-  production: computeLayout('production'),
-  leadership: computeLayout('leadership'),
-};
+export type TreeLayouts = Record<SkillCategory, TreeLayout>;
+
+export function computeLayouts(spacing: TreeSpacing): TreeLayouts {
+  return Object.fromEntries(CATEGORY_ORDER.map(cat => [cat, computeLayout(cat, spacing)])) as TreeLayouts;
+}
+
+// What the tree reserves at full depth, so the fitted spacing never has to change as branches open.
+const COLUMN_COUNT = Math.max(...buildDepthMap(SKILLS).values()) + 1;
+const ROW_COUNTS = CATEGORY_ORDER.map(getRowCount);
+const ROW_GAP_COUNT = ROW_COUNTS.reduce((sum, rows) => sum + rows - 1, 0);
+
+/** Full-depth tree width, badge column and side padding included. */
+export function treeWidth(gapX: number, padX: number): number {
+  return 2 * padX + BADGE_W + COLUMN_COUNT * (PILL_W + gapX);
+}
+
+function treeHeight(gapY: number): number {
+  return ROW_COUNTS.reduce((sum, rows) => sum + rows * PILL_H, 0) + ROW_GAP_COUNT * gapY + (CATEGORY_ORDER.length - 1) * CATEGORY_GAP;
+}
+
+export interface TreeSpacingBounds {
+  padX: number;
+  gapXMin: number;
+  gapXMax: number;
+  gapYMax: number;
+}
+
+/**
+ * Spacing that fills a width × height box with the full-depth tree: each gap stretches within its
+ * bounds. Below the minimums the tree is simply wider or taller than the box, and the board's
+ * ScaleToFit shrinks it.
+ */
+export function fitTreeSpacing(width: number, height: number, bounds: TreeSpacingBounds): TreeSpacing {
+  const clamp = (v: number, lo: number, hi: number) => Math.min(Math.max(v, lo), hi);
+  return {
+    gapX: Math.floor(clamp((width - treeWidth(0, bounds.padX)) / COLUMN_COUNT, bounds.gapXMin, bounds.gapXMax)),
+    gapY: Math.floor(clamp((height - treeHeight(0)) / ROW_GAP_COUNT, DEFAULT_SPACING.gapY, bounds.gapYMax)),
+  };
+}
 
 export function getActivePathNodeIds(activeSkill: Skill | null): Set<string> {
   const pathIds = new Set<string>();
@@ -270,6 +252,18 @@ export function isDefaultVisibleDepth(depth: number): boolean {
   return depth < 1;
 }
 
+export function getChildSkills(skillId: string): Skill[] {
+  return SKILLS.filter(s => s.parent === skillId);
+}
+
+export function getRootSkills(category: SkillCategory): Skill[] {
+  return SKILLS.filter(s => s.category === category && s.parent === null);
+}
+
+export function getParentSkill(skill: Skill): Skill | null {
+  return SKILLS.find(s => s.id === skill.parent) ?? null;
+}
+
 function buildChildrenMap(skills: Skill[]): Map<string, Skill[]> {
   const childrenOf = new Map<string, Skill[]>();
   skills.forEach(s => {
@@ -290,7 +284,7 @@ function buildChildrenMap(skills: Skill[]): Map<string, Skill[]> {
  * top-down BFS from the baseline so an entry that becomes unreachable (its
  * own parent got removed from the set) naturally stops contributing, with no
  * explicit pruning needed — see getNextExpandedSkillIds for how the set
- * itself accumulates or resets on each selection.
+ * changes on each selection.
  */
 export function getVisibleSkillIds(category: SkillCategory, expandedSkillIds: Set<string>): Set<string> {
   const skills = SKILLS.filter(s => s.category === category);
@@ -320,52 +314,14 @@ export function getVisibleSkillIds(category: SkillCategory, expandedSkillIds: Se
   return visible;
 }
 
-function isDescendantOrSelf(skill: Skill, ancestorId: string, byId: Map<string, Skill>): boolean {
-  let current: Skill | undefined = skill;
-  while (current) {
-    if (current.id === ancestorId) return true;
-    current = current.parent ? byId.get(current.parent) : undefined;
-  }
-  return false;
-}
-
 /**
- * Next `expandedSkillIds` after clicking `skill`:
- * - Already expanded → unchanged. Clicking never collapses: a click always
- *   means "select and expand".
- * - Not expanded, and it's a descendant of (or equal to) the currently open
- *   branch's root → add it. Siblings and everything else already open stay
- *   open — this is what lets clicking a second child under the same parent
- *   reveal its own children without collapsing the first child's.
- * - Not expanded, and outside the currently open branch (or nothing is
- *   currently expanded) → reset: the whole set becomes just this one skill,
- *   opening a fresh branch. "Outside" is checked against the branch ROOT
- *   specifically (the shallowest currently-expanded skill), not against any
- *   arbitrary member — checking against a deeper member would wrongly treat
- *   a sibling as "outside" its own branch.
+ * Next `expandedSkillIds` after clicking `skill`: only the path from its root down to it stays
+ * open, so every other branch (siblings included, across all categories) collapses. Clicking a
+ * skill that is already open leaves the set unchanged — a click never collapses its own branch.
  */
 export function getNextExpandedSkillIds(expandedSkillIds: Set<string>, skill: Skill): Set<string> {
   if (expandedSkillIds.has(skill.id)) return expandedSkillIds;
-
-  const byId = new Map(SKILLS.map(s => [s.id, s]));
-  const depthOf = buildDepthMap(SKILLS.filter(s => s.category === skill.category));
-  let root: Skill | undefined;
-  let rootDepth = Infinity;
-  for (const id of expandedSkillIds) {
-    const candidate = byId.get(id);
-    if (!candidate || candidate.category !== skill.category) continue;
-    const d = depthOf.get(id) ?? Infinity;
-    if (d < rootDepth) {
-      root = candidate;
-      rootDepth = d;
-    }
-  }
-
-  if (root && isDescendantOrSelf(skill, root.id, byId)) {
-    return new Set(expandedSkillIds).add(skill.id);
-  }
-
-  return new Set([skill.id]);
+  return getActivePathNodeIds(skill);
 }
 
 /**

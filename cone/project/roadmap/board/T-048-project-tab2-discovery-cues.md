@@ -2,7 +2,7 @@
 type: Task
 title: "T-048: Make the Details tab discoverable"
 description: "End-of-Overview 'Full breakdown →' link plus a one-time tutorial hand pointing at the Details tab"
-status: backlog
+status: done
 priority: medium
 parent: T-040
 tags: [roadmap, task, projects, ux]
@@ -21,10 +21,10 @@ Overview is designed to stand on its own, so discovery uses three layered cues. 
 
 ## Acceptance Criteria
 
-- [ ] "Full breakdown →" link at the end of every Overview that switches to Details
-- [ ] Tutorial hand on the first project only, after a short dwell; disappears on the first tab click anywhere
-- [ ] Hand dismissal remembered per visitor (`localStorage`, wrapped so blocked storage just shows the hand again)
-- [ ] Respects `prefers-reduced-motion`
+- [x] "Full breakdown →" link at the end of every Overview that switches to Details *(shipped as "Read more ›" in [T-057](T-057-clipboard-overview-redesign.md))*
+- [x] Tutorial hand on the first project only, after a short dwell; disappears on the first tab click anywhere
+- [x] Hand dismissal remembered per visitor (`localStorage`, wrapped so blocked storage just shows the hand again)
+- [x] Respects `prefers-reduced-motion`
 
 ---
 
@@ -36,4 +36,4 @@ Overview is designed to stand on its own, so discovery uses three layered cues. 
 
 ## Notes
 
-(none yet)
+- 2026-10-15: the hand (lucide `Pointer`, white with an ink outline) appears 2s after the first project's Overview is on screen, under the Details tab pointing up at it, bobbing gently (still under reduced motion). Any tab click or "Read more" retires it on every clipboard at once (`useDetailsHint`, one shared flag) and stores `details-hint-dismissed` in `localStorage`. Verified at 1920, 1366 and 390: hidden before the dwell, absent on other projects, back on returning to the first, gone after a tab click and after reloading.

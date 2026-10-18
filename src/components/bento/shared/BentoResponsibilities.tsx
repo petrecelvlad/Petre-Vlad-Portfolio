@@ -1,13 +1,14 @@
-import { useId, useState } from 'react';
+import { useEffect, useId, useLayoutEffect, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
-import { FileText, Images, ListChecks, type LucideIcon } from 'lucide-react';
+import { ChevronRight, FileText, Images, ListChecks, Pointer, type LucideIcon } from 'lucide-react';
 import { Text } from '@/src/components/atoms/Text';
 import { InstantPhoto } from '@/src/components/atoms/InstantPhoto';
 import { ResponsibilitiesSlotProps } from '@/src/components/bento/ports';
-import { formatDateToQuarter } from '@/src/core/domain/formatDate';
+import { formatDateToQuarter, formatDuration } from '@/src/core/domain/formatDate';
 import { splitUnconfirmed } from '@/src/core/domain/unconfirmedCopy';
+import { dismissDetailsHint, useDetailsHintDismissed } from '@/src/hooks/useDetailsHint';
 import {
-  HERITAGE_PALETTE, saturate, EMBOSS_LIGHT, EMBOSS_DARK, EMBOSS_AMBIENT_SHADOW,
+  HERITAGE_PALETTE, saturate, darken, EMBOSS_LIGHT, EMBOSS_DARK, EMBOSS_AMBIENT_SHADOW,
   BOARD_COLOR, PAPER_COLOR, BOARD_UNDERSHADOW,
 } from './palette';
 
@@ -34,6 +35,8 @@ const SECTIONS: ClipboardSection[] = [
 // so their tops line up with the clip's, plus a tucked-in part hidden behind the board.
 const CLIP_OVERHANG_PX = 27;
 const TAB_TUCK_PX = 14;
+// How long the Overview stays open before the hand points at the Details tab.
+const DETAILS_HINT_DWELL_MS = 2000;
 
 const PAPER_UNDERSHADOW = '2px 2px 0px rgba(43, 32, 22, 0.15)';
 // The project icon itself (frame, scotch tape, shadow) is the shared InstantPhoto atom
@@ -50,6 +53,8 @@ const PAPER_UNDERSHADOW = '2px 2px 0px rgba(43, 32, 22, 0.15)';
 // meant to read as buttons, not paper — via saturate(), the per-component
 // knob palette.ts exists for, rather than hand-picking a one-off tab palette.
 const TAB_ACCENTS = HERITAGE_PALETTE.map((c) => saturate(c, 45));
+// The open tab: a deeper shade of its own color, so which page is open reads at a glance.
+const OPEN_TAB_ACCENTS = HERITAGE_PALETTE.map((c) => darken(saturate(c, 55), 16));
 
 // The heritage emboss (see palette.ts's top-of-file comment, and its
 // EMBOSS_LIGHT/EMBOSS_DARK/EMBOSS_AMBIENT_SHADOW exports) is normally
@@ -76,60 +81,22 @@ const TAB_ACCENTS = HERITAGE_PALETTE.map((c) => saturate(c, 45));
 // clipped rectangle, not a bug to chase further.
 const EMBOSS_LINE_HEIGHT = 3;
 
-// ============================================================================
-// THE RULED-PAPER ALIGNMENT SYSTEM — read this before touching ANY text
-// position inside the clipboard's front sheet.
-//
-// v2 (2026-07-24, Vlad) — replaces the v1 "quantize each block's own height
-// to a RULE_HEIGHT multiple" approach. v1's real flaw wasn't the concept,
-// it was that "quantize" meant hand-computing a margin (mb-[14px]/md:mb-6)
-// for one specific RULE_HEIGHT value (28) — the moment RULE_HEIGHT changed
-// (to 30, tuning the bullets), that margin math silently went stale, and
-// title/role/date-badge drifted again. Fixed properly this time: every text
-// element gets an EXPLICIT LINE NUMBER (the _LINE constants below) instead
-// of an inferred position derived from a neighboring element's height. Move
-// something by changing ITS line number — never by adjusting a margin,
-// height, or a second offset value anywhere in this file.
-//
-// RULE_HEIGHT is the ruled background's own line spacing (used below where
-// the background itself is defined, and by lineTop()).
-//
-// lineTop(n) converts a 1-indexed line number to a pixel offset: line 1 is
-// the very top of the content area (before any rule), line 2's box bottom
-// coincides with the first rule, etc. Any element placed at top: lineTop(n)
-// with height RULE_HEIGHT (or a multiple, for taller/multi-line content)
-// and vertically centered (flex items-center) inside that box reads
-// correctly against the grid by construction — centering, not baseline
-// math, is what makes it font-size-independent. Every header-area text
-// element (title, role, the date badge) uses this now; the icon does too,
-// for its own left/top anchor, even though it isn't line-grid content
-// itself. The bullet list is the one exception that can't use box-
-// centering (it's flowing, wrapping paragraph text, not a fixed-height
-// block) — it keeps its own line-height: RULE_HEIGHT instead, and its
-// start position is set via its own _LINE constant as a marginTop.
-//
-// PAPER_BASELINE_NUDGE is still the one whole-block phase correction against
-// the fixed rule background (applied once, via transform: translateY() on
-// the content wrapper) — it moves EVERYTHING together after all the _LINE
-// constants have placed things correctly relative to each other. Tune the
-// _LINE constants first for relative position; use this only for the final
-// shared phase, same as before.
+// The ruled paper: RULE_HEIGHT is the background's line spacing. Every text element has
+// line-height RULE_HEIGHT, and every fixed-height block (the cover header, a badge's line) is a
+// whole number of lines tall, so all text below it stays on the lines whatever wraps.
+// PAPER_BASELINE_NUDGE is the one whole-block phase correction against the rule background.
 const RULE_HEIGHT = 30;
 const PAPER_BASELINE_NUDGE = 0;
 
-function lineTop(line: number) {
-  return (line - 1) * RULE_HEIGHT;
-}
-
-// Explicit per-element line assignments — the only numbers that should ever
-// need changing to move something. Two elements can share the same line
-// number (e.g. TITLE_LINE === DATE_BADGE_LINE) and will sit side by side on
-// it, since each element's HORIZONTAL position (left/right) is set
-// independently of its line number.
-const TITLE_LINE = 2;
-const ROLE_LINE = 3;
-const DATE_BADGE_LINE = 1;
-const BULLETS_START_LINE = 7;
+// The cover: the photo with the title, role, dates and duration beside it; the summary under the
+// photo, never beside it. The photo is as large as the sheet allows: the first
+// size whose minimum sheet width and height fit. The smallest leaves the text column room for the
+// date badge on a phone, and its slightly smaller text keeps a sideways tablet's page from overflowing.
+const COVER_SIZES = [
+  { minWidth: 480, minHeight: 600, photoClassName: 'w-[160px]', gapClassName: 'gap-5', headerLines: 7, titleClassName: 'text-2xl', roleClassName: 'tracking-widest', summaryClassName: 'text-lg' },
+  { minWidth: 400, minHeight: 0, photoClassName: 'w-[112px]', gapClassName: 'gap-4', headerLines: 5, titleClassName: 'text-xl', roleClassName: 'tracking-widest', summaryClassName: 'text-lg' },
+  { minWidth: 0, minHeight: 0, photoClassName: 'w-[96px]', gapClassName: 'gap-3', headerLines: 5, titleClassName: 'text-lg', roleClassName: 'tracking-wider', summaryClassName: 'text-base' },
+];
 
 // Bulldog-clip silhouette: a tapering trapezoid body with a crease line —
 // reads as "pinned paper" without a wire-loop handle (which read as a bag).
@@ -174,12 +141,75 @@ function CopyWithGaps({ copy }: { copy: string }) {
   );
 }
 
+// One empty ruled line between bullets, dropped when the spaced list would run past the page.
+// Bullet line-height is locked to RULE_HEIGHT so every line, wrapped or not, advances in the
+// same steps as the ruled background.
+function DetailsList({ items }: { items: string[] }) {
+  const listRef = useRef<HTMLUListElement>(null);
+  useLayoutEffect(() => {
+    const list = listRef.current!;
+    const page = list.closest<HTMLElement>('[data-ruled-page]')!;
+    const fit = () => {
+      list.style.rowGap = `${RULE_HEIGHT}px`;
+      if (page.scrollHeight > page.clientHeight) list.style.rowGap = '0px';
+    };
+    const observer = new ResizeObserver(fit);
+    observer.observe(page);
+    observer.observe(list);
+    return () => observer.disconnect();
+  }, []);
+  return (
+    <ul ref={listRef} className="flex flex-col" style={{ rowGap: RULE_HEIGHT }}>
+      {items.map((item, i) => (
+        <li key={i} className="flex gap-2 items-start">
+          <span className="flex-shrink-0 w-1.5 h-1.5 rounded-full bg-ink-base mt-[11px]" />
+          <p
+            style={{ fontFamily: 'var(--font-hand)', lineHeight: `${RULE_HEIGHT}px` }}
+            className="m-0 text-lg text-ink-base"
+          >
+            {item}
+          </p>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
 export function BentoResponsibilities(props: ResponsibilitiesSlotProps) {
-  const { overview, responsibilities, role, title, icon, startDate, endDate, galleryScreenshots } = props;
+  const { overview, responsibilities, role, title, icon, startDate, endDate, galleryScreenshots, showDetailsHint = false } = props;
   const [activeIndex, setActiveIndex] = useState(0);
   const sections = SECTIONS.filter((section) => section.isPresent(props));
   const activeSection = sections[activeIndex];
-  const isCover = activeIndex === 0;
+  const detailsIndex = sections.findIndex((section) => section.type === 'details');
+
+  const sheetRef = useRef<HTMLDivElement>(null);
+  const [cover, setCover] = useState(COVER_SIZES[0]);
+  useLayoutEffect(() => {
+    const sheet = sheetRef.current!;
+    const observer = new ResizeObserver(() => setCover(COVER_SIZES.find(
+      (size) => sheet.clientWidth >= size.minWidth && sheet.clientHeight >= size.minHeight,
+    )!));
+    observer.observe(sheet);
+    return () => observer.disconnect();
+  }, []);
+  const ruledLine = { lineHeight: `${RULE_HEIGHT}px` };
+
+  const isHintDismissed = useDetailsHintDismissed();
+  const isHintDue = showDetailsHint && !isHintDismissed && detailsIndex !== -1 && activeIndex === 0;
+  const [isHintShown, setIsHintShown] = useState(false);
+  useEffect(() => {
+    if (!isHintDue) return;
+    const timer = setTimeout(() => setIsHintShown(true), DETAILS_HINT_DWELL_MS);
+    return () => {
+      clearTimeout(timer);
+      setIsHintShown(false);
+    };
+  }, [isHintDue]);
+
+  const openSection = (index: number) => {
+    setActiveIndex(index);
+    dismissDetailsHint();
+  };
 
   const renderTab = (section: ClipboardSection, index: number) => {
     const isActive = index === activeIndex;
@@ -187,16 +217,16 @@ export function BentoResponsibilities(props: ResponsibilitiesSlotProps) {
       <button
         key={section.type}
         type="button"
-        onClick={() => setActiveIndex(index)}
+        onClick={() => openSection(index)}
         aria-label={section.label}
         aria-current={isActive}
         title={section.label}
-        className={`w-10 md:w-11 flex justify-center pt-[3px] rounded-t-md border-[length:var(--border-width-md)] border-ink-base shadow-[var(--shadow-raised)] transition-transform ${
-          isActive ? 'cursor-default' : 'translate-y-[3px] hover:translate-y-px brightness-95 hover:brightness-100 cursor-pointer'
+        className={`w-10 md:w-11 flex justify-center pt-[3px] rounded-t-md border-[length:var(--border-width-md)] border-ink-base shadow-[var(--shadow-raised)] origin-bottom transition-[translate,scale,background-color] ${
+          isActive ? 'relative z-[1] scale-110 cursor-default' : 'translate-y-[3px] hover:translate-y-px brightness-95 hover:brightness-100 cursor-pointer'
         }`}
         style={{
           height: CLIP_OVERHANG_PX + TAB_TUCK_PX,
-          backgroundColor: TAB_ACCENTS[index % TAB_ACCENTS.length],
+          backgroundColor: (isActive ? OPEN_TAB_ACCENTS : TAB_ACCENTS)[index % TAB_ACCENTS.length],
           color: 'var(--color-ink-base)',
         }}
       >
@@ -210,37 +240,59 @@ export function BentoResponsibilities(props: ResponsibilitiesSlotProps) {
       case 'overview':
         return (
           <>
-            <Text variant="mono" size="sm" color="subtle" style={{ lineHeight: `${RULE_HEIGHT}px` }}>
-              <CopyWithGaps copy={overview.facts.join(' · ')} />
-            </Text>
-            <p
-              style={{ fontFamily: 'var(--font-hand)', lineHeight: `${RULE_HEIGHT}px` }}
-              className="m-0 text-lg text-ink-base"
-            >
+            <div className={`flex items-start ${cover.gapClassName}`} style={{ minHeight: cover.headerLines * RULE_HEIGHT }}>
+              {icon && (
+                <InstantPhoto
+                  src={icon}
+                  alt={title ?? role}
+                  rotation={3}
+                  photoAspect={1}
+                  className={`flex-none mt-2 ${cover.photoClassName}`}
+                />
+              )}
+              <div className="flex-1 min-w-0">
+                <p style={{ fontFamily: 'var(--font-hand)', ...ruledLine }} className={`m-0 text-ink-base ${cover.titleClassName}`}>
+                  {title}
+                </p>
+                <Text variant="mono" size="sm" color="subtle" className={`uppercase ${cover.roleClassName}`} style={ruledLine}>
+                  {role}
+                </Text>
+                {startDate && endDate && (
+                  <>
+                    <div className="flex items-center" style={{ height: RULE_HEIGHT }}>
+                      <Text variant="mono" size="sm" className="px-2 rounded bg-slot-casing text-slot-text whitespace-nowrap" style={{ lineHeight: `${RULE_HEIGHT - 4}px` }}>
+                        {formatDateToQuarter(startDate)} - {formatDateToQuarter(endDate)}
+                      </Text>
+                    </div>
+                    <div className="flex items-center" style={{ height: RULE_HEIGHT }}>
+                      <span className="px-2 rounded border-[1.5px] border-slot-casing font-mono font-bold text-xs uppercase tracking-wider text-slot-casing whitespace-nowrap" style={{ lineHeight: `${RULE_HEIGHT - 10}px` }}>
+                        {formatDuration(startDate, endDate)}
+                      </span>
+                    </div>
+                  </>
+                )}
+              </div>
+            </div>
+            <p style={{ fontFamily: 'var(--font-hand)', ...ruledLine }} className={`m-0 text-ink-base ${cover.summaryClassName}`}>
               <CopyWithGaps copy={overview.summary} />
             </p>
+            {detailsIndex !== -1 && (
+              <div className="mt-auto flex justify-end">
+                <button
+                  type="button"
+                  onClick={() => openSection(detailsIndex)}
+                  style={{ fontFamily: 'var(--font-hand)', ...ruledLine }}
+                  className="flex items-center gap-0.5 text-lg font-bold text-sky-deep underline decoration-2 underline-offset-4 hover:text-ink-base cursor-pointer"
+                >
+                  Read more
+                  <ChevronRight className="w-4 h-4" strokeWidth={3} aria-hidden />
+                </button>
+              </div>
+            )}
           </>
         );
       case 'details':
-        // Bullet line-height is locked to RULE_HEIGHT so every line, wrapped or
-        // not, advances in the same steps as the ruled background. Starts on
-        // BULLETS_START_LINE by construction when the header above is shown
-        // (that container's height is lineTop(BULLETS_START_LINE)), else line 1.
-        return (
-          <ul>
-            {responsibilities.map((item, i) => (
-              <li key={i} className="flex gap-2 items-start">
-                <span className="flex-shrink-0 w-1.5 h-1.5 rounded-full bg-ink-base mt-[11px]" />
-                <p
-                  style={{ fontFamily: 'var(--font-hand)', lineHeight: `${RULE_HEIGHT}px` }}
-                  className="m-0 text-lg text-ink-base"
-                >
-                  {item}
-                </p>
-              </li>
-            ))}
-          </ul>
-        );
+        return <DetailsList items={responsibilities} />;
       case 'gallery':
         return (
           <div className="flex flex-wrap justify-center gap-6 pt-4">
@@ -276,6 +328,31 @@ export function BentoResponsibilities(props: ResponsibilitiesSlotProps) {
         </>
       )}
 
+      {/* Tutorial hand: a row mirroring the left tabs, above the board, with the hand under the
+          Details tab's slot pointing up at it. */}
+      <AnimatePresence>
+        {isHintShown && (
+          <motion.div
+            className="absolute left-6 top-0 z-30 flex gap-1 pointer-events-none"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            aria-hidden
+          >
+            {sections.slice(0, detailsIndex + 1).map((section, i) => section.side === 'left' && (
+              <div key={section.type} className="w-10 md:w-11 flex justify-center">
+                {i === detailsIndex && (
+                  <div className="hint-bob">
+                    <Pointer className="w-9 h-9 text-ink-base drop-shadow-[2px_3px_0_rgba(43,32,22,0.35)]" fill="#FFFFFF" strokeWidth={2} />
+                  </div>
+                )}
+              </div>
+            ))}
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* Clipboard board — bottom layer, rounded corners, the only rounded
           element in the stack; the papers on top stay sharp-cornered. */}
       <div
@@ -292,12 +369,12 @@ export function BentoResponsibilities(props: ResponsibilitiesSlotProps) {
             (right) side instead of moving to the left as intended (and a
             second attempt via a Tailwind `-scale-x-100` class compiled to
             `transform: none` entirely, dropping the rotate/translate too —
-            verified via getComputedStyle). rotate(-3deg) translateX(-4px)
-            is the direct, unambiguous mirror of the original
-            rotate(3deg) translateX(4px). */}
+            verified via getComputedStyle). Negating both values of the
+            original rotate(3deg) translateX(4px) is the direct mirror;
+            the angle was later eased to 1deg (2026-10-17). */}
         <div
           className="absolute inset-[10px] md:inset-3 border border-ink-whisper"
-          style={{ backgroundColor: PAPER_COLOR, transform: 'rotate(-3deg) translateX(-4px)' }}
+          style={{ backgroundColor: PAPER_COLOR, transform: 'rotate(-1deg) translateX(-4px)' }}
           aria-hidden
         />
 
@@ -307,6 +384,7 @@ export function BentoResponsibilities(props: ResponsibilitiesSlotProps) {
             confirmed with Vlad that a true scaleX(-1) here (which would also
             mirror all the text/photo, rendering it backwards) was not wanted. */}
         <div
+          ref={sheetRef}
           className="relative z-20 h-full border-[1.5px] border-ink-base overflow-hidden rotate-[1deg]"
           style={{
             backgroundColor: PAPER_COLOR,
@@ -316,6 +394,7 @@ export function BentoResponsibilities(props: ResponsibilitiesSlotProps) {
           <AnimatePresence mode="wait" initial={false}>
             <motion.div
               key={activeIndex}
+              data-ruled-page
               initial={{ rotateX: -100, opacity: 0 }}
               animate={{ rotateX: 0, opacity: 1 }}
               exit={{ rotateX: 100, opacity: 0 }}
@@ -336,7 +415,7 @@ export function BentoResponsibilities(props: ResponsibilitiesSlotProps) {
                   var(--color-rule-soft) ${RULE_HEIGHT - 1}px, var(--color-rule-soft) ${RULE_HEIGHT}px
                 )`,
               }}
-              className="absolute inset-0 p-6 md:p-8 overflow-hidden"
+              className="relative tablet:absolute tablet:inset-0 p-6 md:p-8 overflow-hidden flex flex-col"
             >
               {/* Single shared phase correction for EVERYTHING below — see
                   the RULE_HEIGHT/PAPER_BASELINE_NUDGE comment above. Every
@@ -345,79 +424,7 @@ export function BentoResponsibilities(props: ResponsibilitiesSlotProps) {
                   height is a RULE_HEIGHT multiple, centered within it) —
                   this wrapper's translateY is the ONLY absolute offset
                   against the fixed rule background in the whole subtree. */}
-              <div className="relative" style={{ transform: `translateY(${PAPER_BASELINE_NUDGE}px)` }}>
-                {isCover && startDate && endDate && (
-                  // Text's props don't include `style` (this project has no
-                  // @types/react installed, so React.HTMLAttributes doesn't
-                  // resolve for it — a pre-existing gap, not something to
-                  // fix here) — the line-number position goes on this
-                  // wrapper div instead; Text itself just fills it (h-full)
-                  // and centers its own content.
-                  <div
-                    className="absolute right-4 md:right-5 z-10"
-                    style={{ top: lineTop(DATE_BADGE_LINE), height: RULE_HEIGHT }}
-                  >
-                    <Text
-                      variant="mono"
-                      size="sm"
-                      className="h-full px-2 flex items-center rounded bg-slot-casing text-slot-text"
-                    >
-                      {formatDateToQuarter(startDate)} - {formatDateToQuarter(endDate)}
-                    </Text>
-                  </div>
-                )}
-
-                {isCover && (
-                  // Explicit line-number placement (see the system comment
-                  // above) — icon anchored top-left, title/role each
-                  // independently positioned via their own _LINE constant
-                  // instead of being centered as a stack within a height
-                  // inferred from the icon. This container's own height is
-                  // set to exactly lineTop(BULLETS_START_LINE) so the ul
-                  // (next in normal flow, right after this div) starts
-                  // there automatically — no separate margin to keep in
-                  // sync with RULE_HEIGHT by hand anymore.
-                  <div className="relative" style={{ height: lineTop(BULLETS_START_LINE) }}>
-                    {icon && (
-                      <InstantPhoto
-                        src={icon}
-                        alt={title ?? role}
-                        rotation={3}
-                        photoAspect={1}
-                        className="absolute left-0 top-0 w-[126px] md:w-[144px]"
-                      />
-                    )}
-                    {/* left matches icon width (126/144) + the old gap-3
-                        (12px); right leaves room for the date badge, same
-                        pr-20/pr-28 the row used to reserve. Setting both
-                        left and right on an absolutely positioned element
-                        defines its width via the gap between them — no
-                        separate width/max-width needed. */}
-                    <p
-                      style={{ fontFamily: 'var(--font-hand)', top: lineTop(TITLE_LINE), height: RULE_HEIGHT }}
-                      className="absolute left-[138px] md:left-[156px] right-20 md:right-28 m-0 flex items-center text-xl md:text-2xl leading-tight text-ink-base truncate"
-                    >
-                      {title}
-                    </p>
-                    {/* Same Text-has-no-style-prop workaround as the date
-                        badge above — position on the wrapper, Text fills
-                        it (h-full) and centers its own content. */}
-                    <div
-                      className="absolute left-[138px] md:left-[156px] right-20 md:right-28"
-                      style={{ top: lineTop(ROLE_LINE), height: RULE_HEIGHT }}
-                    >
-                      <Text
-                        variant="mono"
-                        size="sm"
-                        color="subtle"
-                        className="h-full flex items-center uppercase tracking-widest"
-                      >
-                        {role}
-                      </Text>
-                    </div>
-                  </div>
-                )}
-
+              <div className="relative flex-1 flex flex-col" style={{ transform: `translateY(${PAPER_BASELINE_NUDGE}px)` }}>
                 {activeSection && renderSectionBody(activeSection.type)}
               </div>
             </motion.div>

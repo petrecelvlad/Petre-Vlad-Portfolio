@@ -3,6 +3,9 @@ import { IExperience } from '@/src/core/domain/models';
 import { useTimelineOrchestrator, PageSection, PageSectionRefs } from '@/src/hooks/useTimelineOrchestrator';
 import { TimelineRail } from '@/src/components/timeline/TimelineRail';
 import { ProjectStage } from '@/src/components/timeline/ProjectStage';
+import { ProjectDetails } from '@/src/components/timeline/ProjectDetails';
+import { WoodBackground } from '@/src/components/bento/shared/WoodBackground';
+import { useScreenTier } from '@/src/hooks/useScreenTier';
 
 interface TimelineProps {
   experiences: IExperience[];
@@ -35,16 +38,48 @@ export function Timeline({ experiences, containerRef, sectionRefs, onActiveSecti
     return experiences.flatMap(exp => exp.projects);
   }, [experiences]);
 
+  const isMobile = useScreenTier() === 'mobile';
+
   const {
     activeIndex,
     itemRefs,
     isTimelineInFullView,
     activeSection
-  } = useTimelineOrchestrator({ itemCount: projects.length, containerRef, sectionRefs });
+  } = useTimelineOrchestrator({ itemCount: projects.length, containerRef, sectionRefs, triggerLayout: isMobile ? 'flow' : 'stage' });
 
   useEffect(() => {
     onActiveSectionChange(activeSection);
   }, [activeSection, onActiveSectionChange]);
+
+  // Mobile scrolls normally, so there is no one-screen stage to swap content in: every project is
+  // laid out in turn, as tall as its content, and each one is its own scroll trigger. The top
+  // padding keeps each project's start clear of the horizontal rail pinned under the navbar.
+  if (isMobile) {
+    return (
+      <div ref={ref} className="relative w-full">
+        <TimelineRail
+          projects={projects}
+          activeIndex={activeIndex}
+          isInFullView={isTimelineInFullView}
+          onNavigate={(index) => itemRefs.current[index]?.scrollIntoView({ behavior: 'instant', block: 'start' })}
+        />
+        {projects.map((project, index) => (
+          <div
+            key={project.id}
+            ref={el => { itemRefs.current[index] = el; }}
+            className="relative px-[var(--tier-gutter)] pt-9"
+          >
+            <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
+              <WoodBackground />
+            </div>
+            <div className="relative z-0">
+              <ProjectDetails project={project} isActive={index === activeIndex} showDetailsHint={index === 0 && index === activeIndex} />
+            </div>
+          </div>
+        ))}
+      </div>
+    );
+  }
 
   return (
     <div ref={ref} className="relative w-full grid">
@@ -91,7 +126,7 @@ export function Timeline({ experiences, containerRef, sectionRefs, onActiveSecti
           section behind it (SkillTree/whatever's above) showed through. */}
       {activeIndex !== -1 && (
         <div className="[grid-area:1/1] sticky top-0 h-[calc(100vh-var(--chrome-navbar-height))] w-full">
-          <ProjectStage project={projects[activeIndex]} />
+          <ProjectStage project={projects[activeIndex]} showDetailsHint={activeIndex === 0} />
         </div>
       )}
     </div>

@@ -2,7 +2,7 @@
 type: Task
 title: "T-045: Add more projects (recent jobs)"
 description: "Portfolio needs additional project entries covering more recent jobs"
-status: backlog
+status: in-progress
 priority: high
 parent: T-040
 tags: [roadmap, task, projects, content]
@@ -34,6 +34,9 @@ cover the user's more recent roles.
 ---
 
 ## Notes
+
+2026-10-17 (session 11): PlayMusic (Styngr, Apr–Aug 2026) added as `proj-playmusic`. Still
+missing for it: icon, skill tree links (`skillTreeTypes.ts`), role title confirmed.
 
 Worth sequencing after [T-044](T-044-project-tabs-standardization.md) so these are authored
 directly into the final tab structure instead of needing a second pass.

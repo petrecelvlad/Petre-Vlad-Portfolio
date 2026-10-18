@@ -1,18 +1,6 @@
 import React from 'react';
-import {
-  Gamepad2,
-  Palette,
-  Coins,
-  Layout,
-  Users,
-  BarChart3,
-  Search,
-  Layers,
-  Code2,
-  Box,
-  LucideProps,
-} from 'lucide-react';
 import { SkillsSlotProps } from '@/src/components/bento/ports';
+import { SKILL_ICONS } from '@/src/core/domain/skillIcons';
 import { HERITAGE_PALETTE } from './palette';
 
 // No panel — these sit loose on the wood, like real sticky notes. Six fixed
@@ -78,21 +66,6 @@ const NOTE_FOLD_CORNERS: FoldCorner[] = [
   'top-right',
   'bottom-left',
 ];
-
-function getIcon(skill: string): React.ReactElement<LucideProps> {
-  const s = skill.toLowerCase();
-  if (s.includes('game design')) return <Gamepad2 />;
-  if (s.includes('economy')) return <Palette />;
-  if (s.includes('monetization')) return <Coins />;
-  if (s.includes('product')) return <Box />;
-  if (s.includes('ux') || s.includes('layout')) return <Layout />;
-  if (s.includes('team') || s.includes('management')) return <Users />;
-  if (s.includes('marketing') || s.includes('analysis')) return <BarChart3 />;
-  if (s.includes('research')) return <Search />;
-  if (s.includes('level design')) return <Layers />;
-  if (s.includes('blockchain') || s.includes('code')) return <Code2 />;
-  return <Box />;
-}
 
 // Re-derived from raw pixel sampling of image.png (GetPixel grids at the
 // actual corner, not a visual guess) on BOTH reference notes — orange
@@ -201,9 +174,10 @@ interface StickyNoteProps {
 
 function StickyNote({ color, rotation, skill, effect, pinColor, foldCorner }: StickyNoteProps) {
   const isFold = effect === 'fold';
+  const Icon = SKILL_ICONS[skill];
   return (
     <div
-      className="relative w-[124px] h-[124px] md:w-[148px] md:h-[148px] flex-shrink-0"
+      className="relative [container-type:size] w-[124px] h-[124px] tablet:w-[var(--note-size)] tablet:h-[var(--note-size)] flex-shrink-0"
       style={{
         transform: `rotate(${rotation}deg)`,
         // clip-path (the fold notch) clips away box-shadow along with it, so
@@ -228,11 +202,11 @@ function StickyNote({ color, rotation, skill, effect, pinColor, foldCorner }: St
         }}
       >
         <div className="text-ink-base flex-shrink-0">
-          {React.cloneElement(getIcon(skill), { size: 36, strokeWidth: 2 })}
+          <Icon strokeWidth={2} className="w-[24.3cqw] h-[24.3cqw]" />
         </div>
         <span
           style={{ fontFamily: 'var(--font-hand)' }}
-          className="text-[17px] leading-[1.05] text-ink-base text-center line-clamp-2"
+          className="text-[11.5cqw] leading-[1.05] text-ink-base text-center line-clamp-2"
         >
           {skill}
         </span>
@@ -268,7 +242,12 @@ export function BentoSkills({ skills }: SkillsSlotProps) {
           the skills a project actually has get a note, spread evenly across
           the same width regardless of count, rather than reserving all 6
           positions and marking the rest empty. */}
-      <div className="flex justify-evenly w-full gap-2">
+      {/* Mobile: 124px notes, two per row. Tablet and up: one row, each note 148px or whatever the
+          row's width allows for this many notes. */}
+      <div
+        className="flex flex-wrap justify-center gap-x-6 gap-y-4 tablet:flex-nowrap tablet:justify-evenly tablet:gap-2 w-full [container-type:inline-size] max-w-[300px] tablet:max-w-none"
+        style={{ '--note-size': `min(148px, calc((100cqw - ${displaySkills.length - 1} * 8px) / ${displaySkills.length}))` } as React.CSSProperties}
+      >
         {displaySkills.map((skill, i) => (
           <StickyNote
             key={i}

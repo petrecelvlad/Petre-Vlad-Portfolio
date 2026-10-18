@@ -306,14 +306,16 @@ The connecting line from root splits into two branches using a horizontal segmen
 
 - **Board** (`GamifiedBoard`): flat wood frame, 4px ink outline, `--bevel-width` bevel, `--ui-depth-lg` (8px) hard bottom edge; flat butter corner caps (`GamifiedCornerCaps`); recessed cork tray keeps `--shadow-sunken`.
 - **Banner**: `PixelRibbonBanner` reading "Skilltree" — the same 8-bit ribbon as the Hero (user, 2026-10-13).
-- **Fit** (`ScaleToFit`): the tree shrinks uniformly to the board, never enlarges. Each category canvas takes only the width of its open columns, so the default view stays near 100% and the tree eases out as deeper columns open; anchored left so the badges never move sideways.
+- **Spacing** (2026-10-14, T-055): the column and row gaps are parameters (`TreeSpacing`, `computeLayouts`), not constants. `SkillTreeBoard` measures the board and `fitTreeSpacing` stretches the gaps so the full-depth tree fills it, within the screen tier's bounds (`--skilltree-gap-min/max`, `--skilltree-row-gap-max`, `--skilltree-pad`; `TOKEN_CONTRACT.md` §15). Pills stay at 100%.
+- **Fit** (`ScaleToFit`): when even the minimum gaps don't fit (tablets), the tree shrinks uniformly to the board, never enlarges. Each category canvas takes only the width of its open columns, so the default view stays near 100% and the tree eases out as deeper columns open; anchored left so the badges never move sideways.
+- **Details column**: clamp(tier min, what the full tree at minimum gaps leaves, tier max): 600px desktop, 330–400px laptop, 330px tablet sideways. On an upright tablet the details and photos move under the board.
 - **Pills**: `PILL_W` 208 × `PILL_H` 32, Jersey 15 at 16px (fits the longest name, "Cross-Functional Comms"). Selected = category fill + 2px white outline (user: never recolor the selected pill); on-path = category-tint outline.
 - **Category badges**: 96×72 tiles, icon above label (PenTool / Factory / Crown on `CategoryConfig.icon`), centered on the anchor connector.
 - **Connectors**: opaque ink casing (10px), solid wood core (6px), category color lights the active path. No dashes, no white gloss.
 
-### 6.5 Mobile Layout (< lg)
+### 6.5 Mobile Layout (mobile screen tier)
 
-On mobile the 4-column grid collapses. Each category tree stacks vertically, separated by a divider. The full tree remains visible — it's just scrollable within the section rather than side-by-side. The detail panel appears below the active skill's node as an inline expand (pushes content below it down).
+Superseded 2026-10-14 (T-055, approved artifact https://claude.ai/artifact/J7N3sEbnCVjLWyaARDYjgH). `SkillTreeMobile` shows one column at a time: category tabs, a back button and breadcrumb, the focused skill, then its children with a connector. The listed column is the selected skill's children, or its siblings when it has none, so drilling in and stepping back are ordinary selections through `useSkillTreeState` — no extra state. The selection's details sit in a sheet docked at the bottom of the board (static, not draggable), without the project photos, which are too small to read at phone width. The section is at least one screen tall and grows with its content instead of scrolling inside (a long column, a phone held sideways).
 
 ---
 

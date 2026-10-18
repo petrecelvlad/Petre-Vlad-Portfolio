@@ -10,6 +10,9 @@ export const BUTTON_COLORS = {
   periwinkle: { fill: 'var(--color-periwinkle)', deep: 'var(--color-periwinkle-darkest)' },
   linkedin: { fill: 'var(--color-linkedin)', deep: 'var(--color-linkedin-deep)' },
   white: { fill: 'var(--color-button-white)', deep: 'var(--color-button-white-deep)' },
+  butter: { fill: 'var(--color-butter)', deep: 'var(--color-butter-deep)' },
+  mint: { fill: 'var(--color-mint)', deep: 'var(--color-mint-deep)' },
+  coral: { fill: 'var(--color-coral)', deep: 'var(--color-coral-deep)' },
 } satisfies Record<string, ButtonColor>;
 
 const SHAPES = {

@@ -3,6 +3,7 @@ import React, { useState, useEffect, useRef } from 'react';
 export interface PixelRibbonBannerProps {
   children: React.ReactNode;
   className?: string;
+  hasTails?: boolean;
   faceColor?: string;
   highlightColor?: string;
   tailColor?: string;
@@ -27,6 +28,7 @@ const HEIGHT = 14 * PX;
 export const PixelRibbonBanner: React.FC<PixelRibbonBannerProps> = ({
   children,
   className = '',
+  hasTails = true,
   faceColor = '#FF2A6D',
   highlightColor = '#FF8AAF',
   tailColor = '#D9245D',
@@ -64,7 +66,7 @@ export const PixelRibbonBanner: React.FC<PixelRibbonBannerProps> = ({
   return (
     <div ref={containerRef} className={`relative ${className}`} style={{ height: HEIGHT }}>
       {/* Back layer: the tails. */}
-      <svg {...svgProps} style={{ zIndex: 0 }}>
+      {hasTails && <svg {...svgProps} style={{ zIndex: 0 }}>
         <g transform={`translate(0, ${u})`} fill={outlineColor} stroke={outlineColor} strokeWidth={OUTLINE} strokeLinejoin="miter">
           <path d={leftTail} />
           <path d={rightTail} />
@@ -78,7 +80,7 @@ export const PixelRibbonBanner: React.FC<PixelRibbonBannerProps> = ({
         <rect x={W - 10 * u} y={12 * u} width={10 * u} height={u} fill={shadeColor} />
         <rect x={8 * u} y={11 * u} width={2 * u} height={2 * u} fill={foldColor} />
         <rect x={W - 10 * u} y={11 * u} width={2 * u} height={2 * u} fill={foldColor} />
-      </svg>
+      </svg>}
 
       {/* Front layer: the body and its label. */}
       <svg {...svgProps} style={{ zIndex: 20 }}>

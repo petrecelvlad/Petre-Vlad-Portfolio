@@ -226,8 +226,7 @@
   --press-depth: var(--ui-depth);
   --press-inset-depth: var(--ui-depth);
 
-  /* Chrome dimensions */
-  --chrome-navbar-height: 64px;
+  /* Chrome dimensions (--chrome-navbar-height varies per screen tier, see below) */
   --chrome-icon-slot-size: 90px;
   --chrome-icon-size: 36px;
 
@@ -241,7 +240,7 @@
    * pixel-identical across every skin, including future mockups — see
    * Skin_System.md's Locked Constraints.
    */
-  --chrome-device-shell: #191919;
+  --chrome-device-shell: #000000;
   --chrome-device-shadow: 0 4px 0 0 #000000;
 
   /* Background texture */
@@ -250,6 +249,64 @@
   --texture-overlay-opacity: 0.96;
   --texture-stripe-width: 2px;
   --texture-stripe-period: 8px;
+}
+
+/*
+ * Screen tiers (T-055). The four media conditions live only here: components
+ * use the variants below, and JS reads --screen-tier. tablet:/laptop:/desktop:
+ * apply from that tier up, like Tailwind's own breakpoints; mobile: applies to
+ * mobile only. Under 600px tall counts as mobile so a phone held sideways
+ * never gets a snap layout it can't fit.
+ */
+@custom-variant mobile (@media (width < 768px), (height < 600px));
+@custom-variant tablet (@media (width >= 768px) and (height >= 600px));
+@custom-variant laptop (@media (width >= 1280px) and (height >= 600px));
+@custom-variant desktop (@media (width >= 1600px) and (height >= 600px));
+
+/* The skill tree's details column is clamp(min, what the full-size tree leaves, max) at every tier. */
+:root {
+  --screen-tier: mobile;
+  --chrome-navbar-height: 56px;
+  --tier-gutter: 12px;
+  --tier-gutter-y: 12px;
+  --tier-column-gap: 12px;
+  --tier-hero-name-size: 56px;
+
+  @variant tablet {
+    --screen-tier: tablet;
+    --chrome-navbar-height: 64px;
+    --tier-gutter: 16px;
+    --tier-gutter-y: 24px;
+    --tier-column-gap: 24px;
+    --tier-hero-name-size: 72px;
+    --skilltree-pad: 8px;
+    --skilltree-gap-min: 16px;
+    --skilltree-gap-max: 60px;
+    --skilltree-row-gap-max: 10px;
+    --skilltree-details-min-width: 330px;
+    --skilltree-details-max-width: 330px;
+  }
+  @variant laptop {
+    --screen-tier: laptop;
+    --tier-gutter: 24px;
+    --tier-column-gap: 32px;
+    --skilltree-pad: 12px;
+    --skilltree-gap-min: 24px;
+    --skilltree-details-max-width: 400px;
+  }
+  @variant desktop {
+    --screen-tier: desktop;
+    --tier-gutter: 48px;
+    --tier-gutter-y: 40px;
+    --tier-column-gap: 48px;
+    --tier-hero-name-size: 96px;
+    --skilltree-pad: 24px;
+    --skilltree-gap-min: 60px;
+    --skilltree-gap-max: 160px;
+    --skilltree-row-gap-max: 20px;
+    --skilltree-details-min-width: 600px;
+    --skilltree-details-max-width: 600px;
+  }
 }
 
 /*
@@ -485,5 +542,33 @@ body::before {
 
 .animate-terminal-cursor {
   animation: terminalCursorBlink 0.8s step-start infinite;
+}
+
+/* Endless motion stays transform-only so the browser runs it on the GPU: the outlined text is
+   painted once and slid, instead of being repainted (22 text shadows, one blurred) every frame. */
+@keyframes heroNameBob {
+  0%, 50%, 100% { transform: translateY(0); }
+  12.5% { transform: translateY(-1.5px); }
+  25% { transform: translateY(-3px); }
+  37.5% { transform: translateY(-1.5px); }
+  62.5% { transform: translateY(1.5px); }
+  75% { transform: translateY(3px); }
+  87.5% { transform: translateY(1.5px); }
+}
+
+.hero-name-letter {
+  display: inline-block;
+  will-change: transform;
+  animation: heroNameBob var(--bob-duration) ease-in-out var(--bob-delay) infinite;
+}
+
+@keyframes hintBob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+.hint-bob {
+  will-change: transform;
+  animation: hintBob 1.1s ease-in-out infinite;
 }
 
