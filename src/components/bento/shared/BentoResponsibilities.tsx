@@ -1,5 +1,5 @@
 import { useEffect, useId, useLayoutEffect, useRef, useState } from 'react';
-import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
+import { AnimatePresence, motion } from 'motion/react';
 import { ChevronRight, FileText, Images, ListChecks, Pointer, type LucideIcon } from 'lucide-react';
 import { Text } from '@/src/components/atoms/Text';
 import { InstantPhoto } from '@/src/components/atoms/InstantPhoto';
@@ -88,8 +88,8 @@ const EMBOSS_LINE_HEIGHT = 3;
 const RULE_HEIGHT = 30;
 const PAPER_BASELINE_NUDGE = 0;
 
-// The cover: the photo with the title, role, dates and duration beside it; the summary and the
-// facts under the photo, never beside it. The photo is as large as the sheet allows: the first
+// The cover: the photo with the title, role, dates and duration beside it; the summary under the
+// photo, never beside it. The photo is as large as the sheet allows: the first
 // size whose minimum sheet width and height fit. The smallest leaves the text column room for the
 // date badge on a phone, and its slightly smaller text keeps a sideways tablet's page from overflowing.
 const COVER_SIZES = [
@@ -205,7 +205,6 @@ export function BentoResponsibilities(props: ResponsibilitiesSlotProps) {
       setIsHintShown(false);
     };
   }, [isHintDue]);
-  const isReducedMotion = useReducedMotion();
 
   const openSection = (index: number) => {
     setActiveIndex(index);
@@ -277,16 +276,6 @@ export function BentoResponsibilities(props: ResponsibilitiesSlotProps) {
             <p style={{ fontFamily: 'var(--font-hand)', ...ruledLine }} className={`m-0 text-ink-base ${cover.summaryClassName}`}>
               <CopyWithGaps copy={overview.summary} />
             </p>
-            <ul className="grid grid-cols-2 gap-x-4" style={{ marginTop: RULE_HEIGHT }}>
-              {overview.facts.map((fact, i) => (
-                <li key={i} className="flex gap-2 items-start min-w-0">
-                  <span className="flex-shrink-0 w-1.5 h-1.5 rounded-full bg-ink-base mt-[12px]" />
-                  <Text variant="mono" size="sm" color="subtle" className="min-w-0" style={ruledLine}>
-                    <CopyWithGaps copy={fact} />
-                  </Text>
-                </li>
-              ))}
-            </ul>
             {detailsIndex !== -1 && (
               <div className="mt-auto flex justify-end">
                 <button
@@ -354,12 +343,9 @@ export function BentoResponsibilities(props: ResponsibilitiesSlotProps) {
             {sections.slice(0, detailsIndex + 1).map((section, i) => section.side === 'left' && (
               <div key={section.type} className="w-10 md:w-11 flex justify-center">
                 {i === detailsIndex && (
-                  <motion.div
-                    animate={isReducedMotion ? undefined : { y: [0, -6, 0] }}
-                    transition={{ duration: 1.1, repeat: Infinity, ease: 'easeInOut' }}
-                  >
+                  <div className="hint-bob">
                     <Pointer className="w-9 h-9 text-ink-base drop-shadow-[2px_3px_0_rgba(43,32,22,0.35)]" fill="#FFFFFF" strokeWidth={2} />
-                  </motion.div>
+                  </div>
                 )}
               </div>
             ))}
@@ -383,12 +369,12 @@ export function BentoResponsibilities(props: ResponsibilitiesSlotProps) {
             (right) side instead of moving to the left as intended (and a
             second attempt via a Tailwind `-scale-x-100` class compiled to
             `transform: none` entirely, dropping the rotate/translate too —
-            verified via getComputedStyle). rotate(-3deg) translateX(-4px)
-            is the direct, unambiguous mirror of the original
-            rotate(3deg) translateX(4px). */}
+            verified via getComputedStyle). Negating both values of the
+            original rotate(3deg) translateX(4px) is the direct mirror;
+            the angle was later eased to 1deg (2026-10-17). */}
         <div
           className="absolute inset-[10px] md:inset-3 border border-ink-whisper"
-          style={{ backgroundColor: PAPER_COLOR, transform: 'rotate(-3deg) translateX(-4px)' }}
+          style={{ backgroundColor: PAPER_COLOR, transform: 'rotate(-1deg) translateX(-4px)' }}
           aria-hidden
         />
 

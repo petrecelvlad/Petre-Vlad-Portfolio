@@ -1,12 +1,12 @@
-import { useMemo, useEffect, useLayoutEffect, useRef, useState, lazy, Suspense } from 'react';
-import { motion } from 'motion/react';
+import { useMemo, useLayoutEffect, useRef, useState, lazy, Suspense, type CSSProperties } from 'react';
+import { useReducedMotion } from 'motion/react';
 import { AchievementShaderCanvas, ShaderType } from '@/src/components/backgrounds/AchievementShaderCanvas';
 import { FloatingIslandBackdrop } from '@/src/components/backgrounds/FloatingIslandBackdrop';
 import { Button, BUTTON_COLORS } from '@/src/components/atoms/Button';
 import { PixelRibbonBanner } from '@/src/components/atoms/PixelRibbonBanner';
 import { TornPaperPanel } from '@/src/components/atoms/TornPaperPanel';
+import { StackedAlphaVideo } from '@/src/components/atoms/StackedAlphaVideo';
 import { useIsVisible } from '@/src/hooks/useIsVisible';
-import { useIsScrolling } from '@/src/hooks/useIsScrolling';
 import { useDeferredMount } from '@/src/hooks/useDeferredMount';
 import { useIslandPosition } from '@/src/context/IslandPositionContext';
 import { useScreenTier } from '@/src/hooks/useScreenTier';
@@ -34,45 +34,17 @@ interface AchievementData {
 }
 
 export function Hero() {
-  const videoRef = useRef<HTMLVideoElement>(null);
   const { ref: heroRef, isVisible } = useIsVisible<HTMLDivElement>();
-  // Pauses the Three.js background's render loop (shadows, wind shaders, grass instancing,
-  // camera orbit) for the whole scroll gesture, not just once Hero's visibility ratio crosses
-  // a threshold — the threshold-based approach still let a full-cost frame render for however
-  // long it took to scroll past 50%. Scroll detection now owns that job, so isVisible itself
-  // is back to the default 0 (only "fully offscreen" stops it) for its other consumers (the
-  // <video> below, the achievement canvases), which don't need scroll-gesture precision.
-  const isScrolling = useIsScrolling();
+  const isReducedMotion = useReducedMotion();
   const { config: islandPosition } = useIslandPosition();
   // Text/layout renders immediately; WebGL shader canvases mount a beat
   // later so they never delay first paint.
   const canvasesReady = useDeferredMount();
 
   const webmSrc = `${import.meta.env.BASE_URL}loopB.webm`;
-  const mp4Src = `${import.meta.env.BASE_URL}loop1.mp4`;
-
-  useEffect(() => {
-    if (videoRef.current) {
-      videoRef.current.defaultMuted = true;
-      videoRef.current.muted = true;
-      videoRef.current.play().catch((err) => {
-        console.warn('Video autoplay prevented:', err);
-      });
-    }
-  }, []);
-
-  // Pause/resume decorative playback once Hero scrolls out of/into view —
-  // the WebGL canvases below skip their own draw calls via isVisible, but
-  // <video> decode/composite cost has to be stopped explicitly.
-  useEffect(() => {
-    const video = videoRef.current;
-    if (!video) return;
-    if (isVisible) {
-      video.play().catch(() => {});
-    } else {
-      video.pause();
-    }
-  }, [isVisible]);
+  // Rebuilt from loopB.webm whenever the character changes (the libvpx-vp9 decoder is what reads the alpha):
+  // ffmpeg -c:v libvpx-vp9 -i loopB.webm -an -filter_complex "[0:v]format=rgba,split[c][a];[a]alphaextract[m];[c][m]hstack" -c:v libx264 -pix_fmt yuv420p -crf 18 -preset slow -movflags +faststart loopB-stacked.mp4
+  const stackedSrc = `${import.meta.env.BASE_URL}loopB-stacked.mp4`;
 
   // Laptop and up: three columns side by side. Tablet: name, then character beside ribbon and bio,
   // then the achievements, then Explore. Mobile: all of it in one column.
@@ -118,7 +90,7 @@ export function Hero() {
       {/* ── Layer 0: Base Background ── */}
       {canvasesReady && (
         <Suspense fallback={null}>
-          <ThreeNatureFieldBackground isVisible={isVisible && !isScrolling} />
+          <ThreeNatureFieldBackground isVisible={isVisible} />
         </Suspense>
       )}
 
@@ -151,18 +123,12 @@ export function Hero() {
             </div>
           )}
           {/* Character Selection Video overlaid on top of the island pedestal */}
-          <video
-            ref={videoRef}
-            autoPlay
-            loop
-            muted
-            playsInline
-            preload="metadata"
+          <StackedAlphaVideo
+            src={stackedSrc}
+            fallbackSrc={webmSrc}
+            isVisible={isVisible && !isReducedMotion}
             className="relative z-10 w-full h-full laptop:h-auto laptop:max-w-[600px] laptop:max-h-[750px] object-contain drop-shadow-2xl mx-auto pointer-events-none"
-          >
-            <source src={webmSrc} type="video/webm" />
-            <source src={mp4Src} type="video/mp4" />
-          </video>
+          />
           </div>
         </div>
 
@@ -177,21 +143,16 @@ export function Hero() {
               <div className="w-full text-center flex flex-col items-center">
                 <h1 className="font-jersey font-bold text-[length:var(--tier-hero-name-size)] [--pixel-outline-unit:calc(var(--tier-hero-name-size)/96)] uppercase tracking-wider leading-none text-center pixel-text-outline flex flex-wrap justify-center items-center select-none py-1">
                   {Array.from("VLAD PETRE").map((char, index) => (
-                    <motion.span
+                    <span
                       key={index}
-                      className="inline-block"
-                      animate={{
-                        y: [0, -1.5, -3, -1.5, 0, 1.5, 3, 1.5, 0],
-                      }}
-                      transition={{
-                        duration: 3.0 + ((index * 3) % 7) * 0.12,
-                        repeat: Infinity,
-                        ease: "easeInOut",
-                        delay: index * 0.16,
-                      }}
+                      className="hero-name-letter"
+                      style={{
+                        '--bob-duration': `${3.0 + ((index * 3) % 7) * 0.12}s`,
+                        '--bob-delay': `${index * 0.16}s`,
+                      } as CSSProperties}
                     >
                       {char === ' ' ? '\u00A0' : char}
-                    </motion.span>
+                    </span>
                   ))}
                 </h1>
               </div>

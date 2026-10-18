@@ -51,7 +51,7 @@ Individual Kanban cards — see [BOARD.md](../BOARD.md) for the protocol (states
     * [T-042](T-042-project-scroll-animations.md) - Scroll-triggered layout animations for the project section *(backlog)*
     * [T-043](T-043-project-cards-polish.md) - Polish the 4 existing project cards *(backlog)*
     * [T-044](T-044-project-tabs-standardization.md) - Semantic project tabs (Overview / Details / optional Gallery), top edge *(in-progress — Overview/Details/Gallery live, unconfirmed copy in red)*
-    * [T-045](T-045-add-more-projects.md) - Add more projects (recent jobs) *(backlog)*
+    * [T-045](T-045-add-more-projects.md) - Add more projects (recent jobs) *(in-progress)*
     * [T-046](T-046-rewrite-project-copy.md) - Rewrite project copy toward Game Producer framing *(in-progress — Overview copy live, awaiting user answers on red items)*
     * [T-048](T-048-project-tab2-discovery-cues.md) - Make the Details tab discoverable *(done)*
     * [T-049](T-049-project-gallery-tab.md) - Optional Gallery tab *(done)*
@@ -60,3 +60,10 @@ Individual Kanban cards — see [BOARD.md](../BOARD.md) for the protocol (states
   * [T-050](T-050-career-clock.md) - Career clock (2007-01-01 anchor) for Hero + skill tree *(done)*
   * [T-055](T-055-screen-tiers.md) - Screen tiers: desktop, laptop, tablet, mobile for the whole site *(done)*
     * [T-056](T-056-screen-tiers-proposal.md) - Tiers proposal artifact *(done)*
+* [T-058](T-058-performance-common-sense-system.md) - Make performance part of how every agent works *(backlog)*
+  * [T-059](T-059-perf-pattern-checks.md) - Automatic checks for known-bad code patterns *(backlog)*
+  * [T-060](T-060-perf-test-harness.md) - Saved performance test with a baseline *(backlog)*
+  * [T-061](T-061-performance-guardrails.md) - Performance rules in the guardrails *(backlog)*
+  * [T-062](T-062-constitution-cost-questions.md) - Cost questions in the constitution *(backlog)*
+  * [T-063](T-063-lesson-promotion-back-sweep.md) - Lessons become rules, plus a back-sweep of existing code *(backlog)*
+  * [T-064](T-064-moving-parts-audit-fixes.md) - Fix the Moving Parts Audit findings *(in-progress — fixes in, awaiting the user's visual check)*

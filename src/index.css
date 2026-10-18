@@ -544,3 +544,31 @@ body::before {
   animation: terminalCursorBlink 0.8s step-start infinite;
 }
 
+/* Endless motion stays transform-only so the browser runs it on the GPU: the outlined text is
+   painted once and slid, instead of being repainted (22 text shadows, one blurred) every frame. */
+@keyframes heroNameBob {
+  0%, 50%, 100% { transform: translateY(0); }
+  12.5% { transform: translateY(-1.5px); }
+  25% { transform: translateY(-3px); }
+  37.5% { transform: translateY(-1.5px); }
+  62.5% { transform: translateY(1.5px); }
+  75% { transform: translateY(3px); }
+  87.5% { transform: translateY(1.5px); }
+}
+
+.hero-name-letter {
+  display: inline-block;
+  will-change: transform;
+  animation: heroNameBob var(--bob-duration) ease-in-out var(--bob-delay) infinite;
+}
+
+@keyframes hintBob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+.hint-bob {
+  will-change: transform;
+  animation: hintBob 1.1s ease-in-out infinite;
+}
+

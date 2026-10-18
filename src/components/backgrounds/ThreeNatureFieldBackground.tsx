@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
+import { useReducedMotion } from 'motion/react';
 import * as THREE from 'three';
+import { useIsScrolling } from '@/src/hooks/useIsScrolling';
 
 /**
  * @propolis
@@ -17,7 +19,7 @@ import * as THREE from 'three';
  *     "horizontal cursor movement is ignored so it never fights the orbit's own horizontal sweep.",
  *     "camera.position always stays on the orbit track and never reacts to the cursor."
  *   ],
- *   "agent_instructions": "isVisible is a prop, not an internal IntersectionObserver like the source used — Hero threads a real isVisible down from its own visibility hook."
+ *   "agent_instructions": "isVisible is a prop, not an internal IntersectionObserver like the source used — Hero threads a real isVisible down from its own visibility hook. The render loop also pauses for every scroll gesture (useIsScrolling) and holds a still frame under reduced motion; time spent paused is dropped, never applied on resume."
  * }
  */
 
@@ -38,14 +40,22 @@ const WORLD_UP = new THREE.Vector3(0, 1, 0);
 const TAU = Math.PI * 2;
 const CAMERA_LOOK_OFFSET = 0.6; // world units the look target shifts vertically at max cursor deflection (~2.9° at CAMERA_RADIUS) — position never moves, only gaze
 const CAMERA_LOOK_SMOOTHING = 1.6; // lower = slower, gentler catch-up to the cursor (avoids a snappy/jagged feel)
+const MAX_FRAME_DELTA = 0.1; // seconds; a stalled frame eases on instead of snapping the orbit and the cursor gaze
 const SUN_BACK_DISTANCE = 45; // world units behind the camera, along its view direction
 const SUN_HEIGHT_OFFSET = 35; // world units above the camera
 const SUN_SIDE_OFFSET = 15; // lateral offset for a three-quarter lighting angle rather than a flat backlight
 
 export function ThreeNatureFieldBackground({ className = '', isVisible = true }: ThreeNatureFieldBackgroundProps) {
   const containerRef = useRef<HTMLDivElement>(null);
+  // Paused for the whole scroll gesture, not only once Hero's visibility crosses a threshold:
+  // a threshold still let full-cost frames render for however long the scroll took to cross it.
+  // Read here rather than in Hero, so a scroll anywhere on the page re-renders only this component.
+  const isScrolling = useIsScrolling();
   const isVisibleRef = useRef(isVisible);
-  isVisibleRef.current = isVisible;
+  isVisibleRef.current = isVisible && !isScrolling;
+  const isReducedMotion = useReducedMotion();
+  const isReducedMotionRef = useRef(isReducedMotion);
+  isReducedMotionRef.current = isReducedMotion;
   const [webglUnavailable, setWebglUnavailable] = useState(false);
 
   useEffect(() => {
@@ -71,11 +81,11 @@ export function ThreeNatureFieldBackground({ className = '', isVisible = true }:
       setWebglUnavailable(true);
       return;
     }
+    // Shadow maps and PBR shading cost more than all the geometry together on integrated GPUs
+    // (measured on an HD 4600), for no visible difference in this flat-shaded scene.
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.toneMappingExposure = 1.2;
-    renderer.shadowMap.enabled = true;
-    renderer.shadowMap.type = THREE.PCFShadowMap; // cheaper than PCFSoftShadowMap's multi-tap filtering
     container.appendChild(renderer.domElement);
 
     // --- Lighting ---
@@ -88,17 +98,6 @@ export function ThreeNatureFieldBackground({ className = '', isVisible = true }:
 
     const sunLight = new THREE.DirectionalLight(0xfff5cc, 1.8);
     sunLight.position.set(40, 60, 40);
-    sunLight.castShadow = true;
-    sunLight.shadow.mapSize.width = 1024;
-    sunLight.shadow.mapSize.height = 1024;
-    sunLight.shadow.camera.near = 0.5;
-    sunLight.shadow.camera.far = 200;
-    const d = 60;
-    sunLight.shadow.camera.left = -d;
-    sunLight.shadow.camera.right = d;
-    sunLight.shadow.camera.top = d;
-    sunLight.shadow.camera.bottom = -d;
-    sunLight.shadow.bias = -0.0005;
     scene.add(sunLight);
     // Added to the scene (not left as the light's implicit default target) so its
     // matrixWorld actually updates when we reposition it every frame to follow the camera.
@@ -135,25 +134,20 @@ export function ThreeNatureFieldBackground({ className = '', isVisible = true }:
 
     // --- Ground Terrain ---
     const groundGeo = new THREE.CylinderGeometry(120, 120, 2, 64);
-    const groundMat = new THREE.MeshStandardMaterial({
+    const groundMat = new THREE.MeshLambertMaterial({
       color: 0x1e8449,
-      roughness: 0.8,
-      metalness: 0.1,
       flatShading: true,
     });
     const ground = new THREE.Mesh(groundGeo, groundMat);
     ground.position.y = -1;
-    ground.receiveShadow = true;
     scene.add(ground);
 
     // --- Instanced Grass with Wind Shader ---
     const grassGeoBase = new THREE.ConeGeometry(0.25, 0.85, 3, 1);
     grassGeoBase.translate(0, 0.85 / 2, 0); // pivot at base
 
-    const grassMat = new THREE.MeshStandardMaterial({
+    const grassMat = new THREE.MeshLambertMaterial({
       color: 0x2ecc71,
-      roughness: 0.4,
-      metalness: 0.1,
       flatShading: true,
     });
 
@@ -201,10 +195,6 @@ export function ThreeNatureFieldBackground({ className = '', isVisible = true }:
     };
 
     const grassInstancedMesh = new THREE.InstancedMesh(grassGeoBase, grassMat, GRASS_COUNT);
-    // Casting shadows from 12k individual blades is the single biggest cost in this scene
-    // for a shadow contribution that's barely visible on thin cone geometry anyway.
-    grassInstancedMesh.castShadow = false;
-    grassInstancedMesh.receiveShadow = true;
 
     const offsets: number[] = [];
     const scales: number[] = [];
@@ -256,8 +246,8 @@ export function ThreeNatureFieldBackground({ className = '', isVisible = true }:
     const treeMaterials: THREE.Material[] = [];
 
     const trunkGeo = new THREE.CylinderGeometry(0.6, 0.9, 5, 6);
-    const trunkMat = new THREE.MeshStandardMaterial({ color: 0x795548, roughness: 0.9, flatShading: true });
-    const canopyMat = new THREE.MeshStandardMaterial({ color: 0x27ae60, roughness: 0.5, flatShading: true });
+    const trunkMat = new THREE.MeshLambertMaterial({ color: 0x795548, flatShading: true });
+    const canopyMat = new THREE.MeshLambertMaterial({ color: 0x27ae60, flatShading: true });
     const canopyGeo1 = new THREE.ConeGeometry(4, 5, 5);
     const canopyGeo2 = new THREE.ConeGeometry(3, 4, 5);
     const canopyGeo3 = new THREE.ConeGeometry(1.8, 3, 5);
@@ -267,12 +257,8 @@ export function ThreeNatureFieldBackground({ className = '', isVisible = true }:
     treePositions.forEach((pos) => {
       const treeGroup = new THREE.Group();
 
-      // castShadow disabled on all 4 parts (perf): shadow mapping is disproportionately
-      // expensive on integrated GPUs, and 12 trees x 4 parts each was a big chunk of that cost
-      // for shadows that aren't really visible on this low-poly foliage anyway.
       const trunk = new THREE.Mesh(trunkGeo, trunkMat);
       trunk.position.y = 2.5;
-      trunk.receiveShadow = true;
       treeGroup.add(trunk);
 
       const canopy1 = new THREE.Mesh(canopyGeo1, canopyMat);
@@ -292,8 +278,8 @@ export function ThreeNatureFieldBackground({ className = '', isVisible = true }:
     });
 
     // --- Mario Pipe Props (ground-level, flat-shaded to match the rest of the scene) ---
-    const pipeBodyMat = new THREE.MeshStandardMaterial({ color: 0x1a9c4b, roughness: 0.5, flatShading: true });
-    const pipeRimMat = new THREE.MeshStandardMaterial({ color: 0x14803c, roughness: 0.5, flatShading: true });
+    const pipeBodyMat = new THREE.MeshLambertMaterial({ color: 0x1a9c4b, flatShading: true });
+    const pipeRimMat = new THREE.MeshLambertMaterial({ color: 0x14803c, flatShading: true });
     const pipeBodyGeo = new THREE.CylinderGeometry(1.3, 1.3, 4, 12);
     const pipeRimGeo = new THREE.CylinderGeometry(1.6, 1.6, 0.6, 12);
 
@@ -348,13 +334,10 @@ export function ThreeNatureFieldBackground({ className = '', isVisible = true }:
 
       const body = new THREE.Mesh(pipeBodyGeo, pipeBodyMat);
       body.position.y = 2;
-      body.castShadow = true;
-      body.receiveShadow = true;
       pipeGroup.add(body);
 
       const rim = new THREE.Mesh(pipeRimGeo, pipeRimMat);
       rim.position.y = 4.3;
-      rim.castShadow = true;
       pipeGroup.add(rim);
 
       pipeGroup.position.set(pos.x, 0, pos.z);
@@ -363,7 +346,7 @@ export function ThreeNatureFieldBackground({ className = '', isVisible = true }:
 
     // --- Marshmallow Clouds ---
     const cloudGroup = new THREE.Group();
-    const cloudMat = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 1.0, flatShading: true });
+    const cloudMat = new THREE.MeshLambertMaterial({ color: 0xffffff, flatShading: true });
     const cloudGeometries: THREE.BufferGeometry[] = [];
 
     // Breathing displacement, same onBeforeCompile technique as the grass wind shader below:
@@ -430,7 +413,7 @@ export function ThreeNatureFieldBackground({ className = '', isVisible = true }:
     }
     const birds: THREE.Group[] = [];
     const birdGroup = new THREE.Group();
-    const birdMat = new THREE.MeshStandardMaterial({ color: 0x333333, roughness: 0.8, flatShading: true });
+    const birdMat = new THREE.MeshLambertMaterial({ color: 0x333333, flatShading: true });
 
     const bodyGeo = new THREE.ConeGeometry(0.2, 0.8, 3);
     bodyGeo.rotateX(Math.PI / 2);
@@ -476,6 +459,8 @@ export function ThreeNatureFieldBackground({ className = '', isVisible = true }:
       camera.aspect = width / height;
       camera.updateProjectionMatrix();
       renderer.setSize(width, height);
+      // setSize clears the canvas; a paused or still (reduced-motion) scene would otherwise stay blank.
+      renderer.render(scene, camera);
     };
     resize();
     const resizeObserver = new ResizeObserver(resize);
@@ -487,6 +472,7 @@ export function ThreeNatureFieldBackground({ className = '', isVisible = true }:
     let mouseTargetY = 0;
     let mouseSmoothY = 0;
     const handlePointerMove = (e: PointerEvent) => {
+      if (!isVisibleRef.current) return;
       const rect = container.getBoundingClientRect();
       const ny = -(((e.clientY - rect.top) / rect.height) * 2 - 1);
       mouseTargetY = THREE.MathUtils.clamp(ny, -1, 1);
@@ -496,6 +482,8 @@ export function ThreeNatureFieldBackground({ className = '', isVisible = true }:
     // --- Animation Loop ---
     const clock = new THREE.Clock();
     let animationFrameId: number;
+    let sceneTime = 0;
+    let hasRenderedFrame = false;
     let cameraAngle = 0;
     const forwardVec = new THREE.Vector3();
     const rightVec = new THREE.Vector3();
@@ -504,16 +492,16 @@ export function ThreeNatureFieldBackground({ className = '', isVisible = true }:
 
     const animate = () => {
       animationFrameId = requestAnimationFrame(animate);
-      if (!isVisibleRef.current) return;
 
-      // clock.getElapsedTime() calls getDelta() internally — calling getDelta() again
-      // right after measures only the gap between these two synchronous calls (~0), not
-      // the real per-frame time. Call getDelta() once and read the accumulated total off
-      // the instance instead (root cause of T-025: this starved every delta-driven effect —
-      // camera auto-orbit and the cursor-gaze smoothing — while time-driven effects like the
-      // wind shader and bird motion, which only ever called getElapsedTime(), stayed correct).
-      const delta = clock.getDelta();
-      const time = clock.elapsedTime;
+      // getDelta() runs every frame, paused or not, so time spent paused is dropped instead of
+      // applied in one jump on resume (the orbit, clouds and birds used to skip ahead by the whole
+      // pause). The clamp covers the one gap it can't see: a background tab, where rAF stops.
+      // Call it once per frame: a second call measures only the gap between the two (T-025).
+      const delta = Math.min(clock.getDelta(), MAX_FRAME_DELTA);
+      if (!isVisibleRef.current) return;
+      if (isReducedMotionRef.current && hasRenderedFrame) return;
+      sceneTime += delta;
+      const time = sceneTime;
 
       // Shader phases are wrapped to one cycle here, in double precision: the GPU's sin() loses
       // accuracy as its argument grows (on an Intel HD 4600, ~0.02 off after an hour of raw
@@ -564,10 +552,7 @@ export function ThreeNatureFieldBackground({ className = '', isVisible = true }:
       // this reads as "looking up/down from a fixed point," not "moving the camera." Horizontal
       // cursor movement is intentionally not read here — the orbit already owns horizontal
       // motion, and blending cursor-driven horizontal into it would fight the globe-like spin.
-      // Clamp delta for this calc only — a stalled/dropped frame would otherwise produce
-      // a large one-off jump toward the cursor instead of a gradual ease, reading as a
-      // jagged snap rather than a smooth pan.
-      const smoothing = 1 - Math.exp(-CAMERA_LOOK_SMOOTHING * Math.min(delta, 0.1));
+      const smoothing = 1 - Math.exp(-CAMERA_LOOK_SMOOTHING * delta);
       mouseSmoothY += (mouseTargetY - mouseSmoothY) * smoothing;
 
       forwardVec.subVectors(CAMERA_TARGET, camera.position).normalize();
@@ -592,6 +577,7 @@ export function ThreeNatureFieldBackground({ className = '', isVisible = true }:
       camera.lookAt(lookTargetVec);
 
       renderer.render(scene, camera);
+      hasRenderedFrame = true;
     };
     animate();
 

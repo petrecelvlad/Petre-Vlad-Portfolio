@@ -1,18 +1,6 @@
 import React from 'react';
-import {
-  Gamepad2,
-  Palette,
-  Coins,
-  Layout,
-  Users,
-  BarChart3,
-  Search,
-  Layers,
-  Code2,
-  Box,
-  LucideProps,
-} from 'lucide-react';
 import { SkillsSlotProps } from '@/src/components/bento/ports';
+import { SKILL_ICONS } from '@/src/core/domain/skillIcons';
 import { HERITAGE_PALETTE } from './palette';
 
 // No panel — these sit loose on the wood, like real sticky notes. Six fixed
@@ -78,21 +66,6 @@ const NOTE_FOLD_CORNERS: FoldCorner[] = [
   'top-right',
   'bottom-left',
 ];
-
-function getIcon(skill: string): React.ReactElement<LucideProps> {
-  const s = skill.toLowerCase();
-  if (s.includes('game design')) return <Gamepad2 />;
-  if (s.includes('economy')) return <Palette />;
-  if (s.includes('monetization')) return <Coins />;
-  if (s.includes('product')) return <Box />;
-  if (s.includes('ux') || s.includes('layout')) return <Layout />;
-  if (s.includes('team') || s.includes('management')) return <Users />;
-  if (s.includes('marketing') || s.includes('analysis')) return <BarChart3 />;
-  if (s.includes('research')) return <Search />;
-  if (s.includes('level design')) return <Layers />;
-  if (s.includes('blockchain') || s.includes('code')) return <Code2 />;
-  return <Box />;
-}
 
 // Re-derived from raw pixel sampling of image.png (GetPixel grids at the
 // actual corner, not a visual guess) on BOTH reference notes — orange
@@ -201,6 +174,7 @@ interface StickyNoteProps {
 
 function StickyNote({ color, rotation, skill, effect, pinColor, foldCorner }: StickyNoteProps) {
   const isFold = effect === 'fold';
+  const Icon = SKILL_ICONS[skill];
   return (
     <div
       className="relative [container-type:size] w-[124px] h-[124px] tablet:w-[var(--note-size)] tablet:h-[var(--note-size)] flex-shrink-0"
@@ -228,7 +202,7 @@ function StickyNote({ color, rotation, skill, effect, pinColor, foldCorner }: St
         }}
       >
         <div className="text-ink-base flex-shrink-0">
-          {React.cloneElement(getIcon(skill), { strokeWidth: 2, className: 'w-[24.3cqw] h-[24.3cqw]' })}
+          <Icon strokeWidth={2} className="w-[24.3cqw] h-[24.3cqw]" />
         </div>
         <span
           style={{ fontFamily: 'var(--font-hand)' }}

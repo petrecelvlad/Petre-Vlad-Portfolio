@@ -1,13 +1,5 @@
 import type { LucideIcon } from 'lucide-react';
-import {
-  Gamepad2, Layers, Coins, Layout, Palette, Cpu, Ruler,
-  ListTodo, GitBranch, ScrollText, FolderKanban, FlaskConical, Radio,
-  Users, GraduationCap, Map as MapIcon, Network, MessageSquare,
-  Search, Trophy, TrendingUp, Megaphone, Globe, Component,
-  Scale, Footprints, Repeat, Puzzle, Workflow,
-  Radar, MessageCircle, Gauge, SplitSquareHorizontal, Target,
-  PenTool, Factory, Crown,
-} from 'lucide-react';
+import { PenTool, Factory, Crown } from 'lucide-react';
 
 export type SkillCategory = 'design' | 'production' | 'leadership';
 
@@ -16,7 +8,6 @@ export interface Skill {
   name: string;
   category: SkillCategory;
   parent: string | null;
-  icon: LucideIcon;
   description: string;
   projects: string[];
 }
@@ -87,91 +78,76 @@ export const SKILLS: Skill[] = [
   // DESIGN
   {
     id: 'system-design', name: 'System Design', category: 'design', parent: null,
-    icon: Cpu,
     description: 'Architecting end-to-end systems that are internally consistent, predictable, and scalable, from feature sets to full product experiences.',
     projects: ['proj-fe-high-voltage', 'proj-lead-level-designer', 'proj-deca-rotmg', 'proj-idle-td', 'proj-newton-slots', 'proj-clash-of-towers', 'proj-fitkin', 'proj-castellum', 'proj-alphabetty-saga', 'proj-marble-frenzy-2', 'proj-bounzy', 'proj-newgrounds'],
   },
   {
     id: 'game-design', name: 'Game Design', category: 'design', parent: 'system-design',
-    icon: Gamepad2,
     description: 'Designing core loops, game modes, and feature systems that balance engagement with long-term retention.',
     projects: ['proj-fe-high-voltage', 'proj-idle-td', 'proj-newton-slots', 'proj-merge-mansion', 'proj-deca-rotmg', 'proj-castellum', 'proj-clash-of-towers', 'proj-fitkin', 'proj-alphabetty-saga', 'proj-marble-frenzy-2', 'proj-bounzy', 'proj-newgrounds'],
   },
   {
     id: 'level-design', name: 'Level Design', category: 'design', parent: 'game-design',
-    icon: Layers,
     description: 'Crafting and producing levels at scale, from handcrafted puzzles to pipelines delivering thousands.',
     projects: ['proj-lead-level-designer', 'proj-idle-td', 'proj-merge-mansion', 'proj-bubble-witch-saga', 'proj-alphabetty-saga', 'proj-bounzy'],
   },
   {
     id: 'balancing', name: 'Balancing', category: 'design', parent: 'game-design',
-    icon: Scale,
     description: 'Tuning difficulty curves, enemy and level stats, and content pacing to keep challenge fair across a full progression arc.',
     projects: ['proj-idle-td', 'proj-lead-level-designer', 'proj-merge-mansion', 'proj-bubble-witch-saga', 'proj-fe-high-voltage', 'proj-newton-slots', 'proj-alphabetty-saga', 'proj-bounzy', 'proj-deca-rotmg'],
   },
   {
     id: 'economy-design', name: 'Economy Design', category: 'design', parent: 'game-design',
-    icon: Coins,
     description: 'Balancing in-game economies: currency generators and sinks, drop rates, payout formulas, progression curves, and NFT asset integration.',
     projects: ['proj-idle-td', 'proj-clash-of-towers', 'proj-castellum', 'proj-bounzy'],
   },
   {
     id: 'monetization', name: 'Monetization', category: 'design', parent: 'game-design',
-    icon: TrendingUp,
     description: 'Designing monetization systems: IAP pack pricing and discount structures, loot boxes, payout formulas, and progression gates.',
     projects: ['proj-newton-slots', 'proj-idle-td', 'proj-clash-of-towers', 'proj-castellum', 'proj-marble-frenzy-2', 'proj-bounzy'],
   },
   {
     id: 'gamification', name: 'Gamification', category: 'design', parent: 'game-design',
-    icon: Trophy,
     description: 'Applying game mechanics (rewards, quests, progression) to non-game contexts to drive engagement and behavior change.',
     projects: ['proj-idle-td', 'proj-newton-slots', 'proj-fitkin'],
   },
   {
     id: 'prototyping', name: 'Prototyping', category: 'design', parent: null,
-    icon: FlaskConical,
     description: 'Building rapid prototypes to validate mechanics, loops, and design decisions before committing to full implementation.',
     projects: ['proj-idle-td', 'proj-castellum', 'proj-newgrounds', 'proj-clash-of-towers', 'proj-marble-frenzy-2', 'proj-bounzy'],
   },
   {
     id: 'meta-core-loops', name: 'Meta Core Loops', category: 'design', parent: 'game-design',
-    icon: Repeat,
     description: 'Designing the session-to-session meta loop (long-term goals, unlocks, and progression systems that pull players back) and iterating on it post-launch using live performance data.',
     projects: ['proj-idle-td', 'proj-fe-high-voltage', 'proj-newton-slots', 'proj-clash-of-towers', 'proj-castellum', 'proj-marble-frenzy-2', 'proj-bounzy', 'proj-newgrounds'],
   },
   {
     id: 'web-design', name: 'Layout Design', category: 'design', parent: 'system-design',
-    icon: Globe,
     description: 'Designing digital interfaces and systems for web and app-based products, spanning UI, UX, and design system architecture.',
     projects: ['proj-fe-high-voltage', 'proj-fitkin', 'proj-castellum', 'proj-idle-td'],
   },
   {
     id: 'ui-design', name: 'UI Design', category: 'design', parent: 'web-design',
-    icon: Palette,
     description: 'Crafting visual interfaces with strong aesthetic direction: typography, color, component hierarchy, and screen composition guided by the user flow.',
     projects: ['proj-fe-high-voltage', 'proj-castellum', 'proj-idle-td', 'proj-clash-of-towers', 'proj-marble-frenzy-2', 'proj-bounzy', 'proj-newgrounds'],
   },
   {
     id: 'ux-design', name: 'UX Design', category: 'design', parent: 'web-design',
-    icon: Layout,
     description: 'Designing screen flows, interaction patterns, and interface logic for mobile-first game and product experiences.',
     projects: ['proj-fe-high-voltage', 'proj-castellum', 'proj-idle-td', 'proj-clash-of-towers', 'proj-marble-frenzy-2', 'proj-bounzy'],
   },
   {
     id: 'ftue-onboarding', name: 'FTUE & Onboarding', category: 'design', parent: 'web-design',
-    icon: Footprints,
     description: 'Owning the end-to-end first-time user experience: onboarding strategy, tutorial sequencing, and the cadence of introducing new mechanics to new players.',
     projects: ['proj-idle-td', 'proj-alphabetty-saga', 'proj-clash-of-towers', 'proj-castellum', 'proj-marble-frenzy-2', 'proj-bounzy'],
   },
   {
     id: 'design-systems', name: 'Design Systems', category: 'design', parent: 'web-design',
-    icon: Component,
     description: 'Designing the complete design system for a digital product or game: token architecture, component libraries, and visual/interaction consistency end-to-end.',
     projects: ['proj-idle-td'],
   },
   {
     id: 'research', name: 'Research', category: 'design', parent: null,
-    icon: Search,
     description: 'Conducting competitive analysis, domain research, and player behavior research to ground design in evidence.',
     projects: ['proj-fe-high-voltage', 'proj-lead-level-designer', 'proj-newton-slots', 'proj-fitkin', 'proj-castellum', 'proj-alphabetty-saga'],
   },
@@ -179,73 +155,61 @@ export const SKILLS: Skill[] = [
   // PRODUCTION
   {
     id: 'backlog-mgmt', name: 'Backlog Mgmt', category: 'production', parent: 'agile-planning',
-    icon: ListTodo,
     description: 'Prioritizing and refining feature backlogs across concurrent game production tracks and multiple teams.',
     projects: ['proj-lead-level-designer', 'proj-idle-td', 'proj-clash-of-towers', 'proj-castellum'],
   },
   {
     id: 'agile-planning', name: 'Agile Planning', category: 'production', parent: 'project-mgmt',
-    icon: GitBranch,
     description: 'Running sprints, standups, and iterative delivery cycles across multi-team game production environments.',
     projects: ['proj-lead-level-designer', 'proj-idle-td', 'proj-clash-of-towers', 'proj-castellum'],
   },
   {
     id: 'documentation', name: 'Documentation', category: 'production', parent: 'agile-planning',
-    icon: ScrollText,
     description: 'Writing GDDs, design specs, process guides, and standardized procedures that outlast the project.',
     projects: ['proj-lead-level-designer', 'proj-fe-high-voltage', 'proj-idle-td', 'proj-alphabetty-saga', 'proj-fitkin', 'proj-castellum', 'proj-deca-rotmg', 'proj-newton-slots', 'proj-clash-of-towers'],
   },
   {
     id: 'standards-patterns', name: 'Standards & Patterns', category: 'production', parent: 'agile-planning',
-    icon: Ruler,
     description: 'Identifying recurring patterns across a project and codifying them into heuristic rules and standards that ensure systemic coherence and predictability.',
     projects: ['proj-lead-level-designer'],
   },
   {
     id: 'project-mgmt', name: 'Project Mgmt', category: 'production', parent: null,
-    icon: FolderKanban,
     description: 'Owning project timelines and milestone planning for game and software delivery end-to-end.',
     projects: ['proj-lead-level-designer', 'proj-idle-td', 'proj-clash-of-towers', 'proj-castellum', 'proj-marble-frenzy-2', 'proj-bounzy'],
   },
   {
     id: 'pipeline-design', name: 'Pipeline Design', category: 'production', parent: 'project-mgmt',
-    icon: Workflow,
     description: 'Designing the production pipeline itself: the shared workflow, framework, and sprint methodology a team operates under.',
     projects: ['proj-lead-level-designer'],
   },
   {
     id: 'player-ops', name: 'Player Ops', category: 'production', parent: null,
-    icon: Radar,
     description: 'Owning the player-facing side of a live game: community, marketing, live operations, and the data that measures whether it’s all working.',
     projects: ['proj-idle-td', 'proj-deca-rotmg'],
   },
   {
     id: 'live-ops', name: 'Live Ops', category: 'production', parent: 'player-ops',
-    icon: Radio,
     description: 'Running the live-service content cadence for continuously operated titles: event scheduling, live balancing, and retention-driven updates post-launch.',
     projects: ['proj-deca-rotmg', 'proj-merge-mansion', 'proj-lead-level-designer', 'proj-idle-td', 'proj-alphabetty-saga'],
   },
   {
     id: 'marketing', name: 'Marketing', category: 'production', parent: 'community-mgmt',
-    icon: Megaphone,
     description: 'Producing promotional content and running campaigns that build awareness and drive acquisition for a shipped title.',
     projects: ['proj-idle-td', 'proj-castellum', 'proj-marble-frenzy-2', 'proj-bounzy'],
   },
   {
     id: 'community-mgmt', name: 'Community Mgmt', category: 'production', parent: 'player-ops',
-    icon: MessageCircle,
     description: 'Listening to and engaging an existing player base directly: moderating community channels, responding to feedback, and folding it back into design decisions.',
     projects: ['proj-idle-td', 'proj-castellum'],
   },
   {
     id: 'kpi-tracking', name: 'KPI Tracking', category: 'production', parent: 'player-ops',
-    icon: Gauge,
     description: 'Defining the metrics that measure a live game’s success and using the resulting data to drive design decisions, from onboarding tuning to core and meta loop redesigns.',
     projects: ['proj-alphabetty-saga', 'proj-idle-td', 'proj-lead-level-designer'],
   },
   {
     id: 'ab-testing', name: 'A/B Testing', category: 'production', parent: 'kpi-tracking',
-    icon: SplitSquareHorizontal,
     description: 'Running controlled experiments, like parallel onboarding difficulty tracks, to measure impact on retention and engagement before committing to a single design.',
     projects: ['proj-alphabetty-saga', 'proj-idle-td'],
   },
@@ -253,43 +217,36 @@ export const SKILLS: Skill[] = [
   // LEADERSHIP
   {
     id: 'team-leadership', name: 'Team Leadership', category: 'leadership', parent: null,
-    icon: Users,
     description: 'Managing up to 15 people across 6 concurrent teams: setting direction, unblocking, and maintaining quality.',
     projects: ['proj-lead-level-designer', 'proj-fe-high-voltage', 'proj-castellum', 'proj-clash-of-towers', 'proj-idle-td', 'proj-marble-frenzy-2', 'proj-bounzy'],
   },
   {
     id: 'strategy', name: 'Strategy', category: 'leadership', parent: 'team-leadership',
-    icon: Target,
     description: 'Defining the holistic strategy for a game as a product: core pillars and design direction, economy, live events, monetization, release cadence, and the KPIs used to track it all end-to-end.',
     projects: ['proj-idle-td', 'proj-lead-level-designer', 'proj-castellum', 'proj-marble-frenzy-2', 'proj-bounzy'],
   },
   {
     id: 'coaching', name: 'Coaching', category: 'leadership', parent: 'cross-team-coord',
-    icon: GraduationCap,
     description: 'Training junior designers from scratch: 9 Junior Level Designers brought from onboarding to production-ready.',
     projects: ['proj-lead-level-designer', 'proj-alphabetty-saga'],
   },
   {
     id: 'roadmapping', name: 'Roadmapping', category: 'leadership', parent: 'strategy',
-    icon: MapIcon,
     description: 'Defining phased delivery plans that sequence features by risk, dependency, and business value.',
     projects: ['proj-lead-level-designer', 'proj-idle-td', 'proj-clash-of-towers', 'proj-castellum'],
   },
   {
     id: 'cross-team-coord', name: 'Coordination', category: 'leadership', parent: 'team-leadership',
-    icon: Network,
     description: 'Acting as lead coordinator across 6 teams, synchronizing dependencies and keeping production lanes unblocked.',
     projects: ['proj-lead-level-designer'],
   },
   {
     id: 'stakeholder-comms', name: 'Stakeholder Comms', category: 'leadership', parent: 'cross-team-coord',
-    icon: MessageSquare,
     description: 'Managing client relationships and translating between creative vision and business requirements.',
     projects: ['proj-lead-level-designer', 'proj-fe-high-voltage'],
   },
   {
     id: 'cross-functional-comms', name: 'Cross-Functional Comms', category: 'leadership', parent: 'cross-team-coord',
-    icon: Puzzle,
     description: 'Coordinating laterally across art, development, and QA to keep departments aligned and working efficiently toward the same delivery.',
     projects: ['proj-fitkin', 'proj-lead-level-designer', 'proj-fe-high-voltage', 'proj-alphabetty-saga', 'proj-bubble-witch-saga'],
   },

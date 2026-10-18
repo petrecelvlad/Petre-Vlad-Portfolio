@@ -16,8 +16,10 @@ const RIM_DRIP_TRANSFORMS = [
 
 /**
  * Flat 2D replacement for the old three.js voxel island — pure SVG + CSS
- * keyframe animation (compositor-only, no RAF/WebGL) so it costs nothing
- * to keep mounted permanently in the background.
+ * keyframe animation, no RAF/WebGL. Not compositor-only: animating parts inside
+ * an SVG (the waterfall's dash offset, the pebbles' transforms) repaints the
+ * island every frame. Measured near zero CPU on an HD 4600 (2026-10-18), so it
+ * stays; anything heavier added here should move out of the SVG.
  */
 export function FloatingIslandBackdrop({ className = '' }: FloatingIslandBackdropProps) {
   return (

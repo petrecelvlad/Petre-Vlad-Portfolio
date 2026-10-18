@@ -243,7 +243,7 @@ export function BentoVideoFrame({ screenshot, youtubeUrl, isActive }: BentoVideo
               <div className="flex-grow flex items-center justify-center">
                 <button
                   onClick={togglePlay}
-                  className="pointer-events-auto text-white/0 group-hover:text-white/90 hover:!text-white transition-all duration-300 cursor-pointer drop-shadow-lg"
+                  className="pointer-events-auto text-white/0 group-hover:text-white/90 hover:!text-white transition-colors duration-300 cursor-pointer drop-shadow-lg"
                   aria-label={isPlaying ? "Pause" : "Play"}
                 >
                   {isPlaying ? <Pause size={56} fill="currentColor" /> : <Play size={56} fill="currentColor" />}

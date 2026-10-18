@@ -57,10 +57,14 @@ export default function App() {
               <Hero />
             </ErrorBoundary>
           </div>
-          <Suspense fallback={null}>
-            <div ref={skillsRef} className="snap-start snap-always min-h-[calc(100vh-var(--chrome-navbar-height))] tablet:h-[calc(100vh-var(--chrome-navbar-height))] w-full relative z-0 flex flex-col">
+          {/* The skills slot sits outside Suspense so it exists from first paint: without it, a scroll
+              before the lazy chunks arrive snaps straight to the footer, the only section after Hero. */}
+          <div ref={skillsRef} className="snap-start snap-always min-h-[calc(100vh-var(--chrome-navbar-height))] tablet:h-[calc(100vh-var(--chrome-navbar-height))] w-full relative z-0 flex flex-col">
+            <Suspense fallback={null}>
               <SkillTree experiences={experiences} />
-            </div>
+            </Suspense>
+          </div>
+          <Suspense fallback={null}>
             <Timeline
               ref={projectsRef}
               experiences={experiences}

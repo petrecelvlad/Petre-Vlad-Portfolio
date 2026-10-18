@@ -173,9 +173,13 @@ role, quarter dates and duration beside it), then the `summary`, then the facts.
 - **Facts:** Studio · Team · Platform · Stage, shown one per line. No duration: the cover works it
   out from `startDate`/`endDate` (`formatDuration`) and shows it under the dates.
 
+**2026-10-17 (session 11):** the facts are gone — user: team, team size etc. are not needed.
+`IProjectOverview` is `summary` only; the page is the cover, then the summary. The `[?]` facts
+gaps above no longer apply.
+
 ## Open questions for the user
 
-1. Fill every `[?]` (team sizes, platforms, stages, metrics).
+1. Fill every `[?]` left in the summaries and the drafts' metrics.
 2. Rename "Lead Level Designer" to a project name?
 3. For the four achievement-card repeats: drop the bullet, or change the card's achievement?
 4. The three Flash-era entries carry little producer signal. Keep as three, or merge into one "Flash era" entry?

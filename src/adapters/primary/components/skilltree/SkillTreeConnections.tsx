@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { AnimatePresence, motion } from 'motion/react';
+import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
 import { Skill, SkillCategory, CATEGORIES } from '@/src/core/domain/skillTreeTypes';
 import {
   getActivePathNodeIds, getActivePathOrder, getVisibleSkillIds, getLinkRevealTiming,
@@ -18,6 +18,7 @@ function segmentPathLength(link: LayoutLink): number {
 // duration) and each connector's exit (delay = this duration, so it starts
 // retracting the instant the pill has finished disappearing).
 const PILL_EXIT_DURATION = 0.15;
+const PILL_HIDDEN_SCALE = 0.85;
 const UNLIT_CORE = '#8C5828';
 
 export interface TreeCanvasProps {
@@ -31,6 +32,7 @@ export interface TreeCanvasProps {
 export function TreeCanvas({ category, layout, activeSkill, expandedSkillIds, onSelect }: TreeCanvasProps) {
   const { nodes: allNodes, links: allLinks, canvasWidth, canvasHeight } = layout;
   const catConfig = CATEGORIES[category];
+  const isReducedMotion = useReducedMotion();
 
   // Depth 0/1 always shown; deeper layers mount/unmount as `expandedSkillIds`
   // grows/shrinks — one layer at a time (a skill's children only reveal once
@@ -204,16 +206,22 @@ export function TreeCanvas({ category, layout, activeSkill, expandedSkillIds, on
               key={node.skill.id}
               className="absolute z-10"
               style={{ left: node.screenLeft, top: node.screenTop }}
-              initial={{ opacity: 0, scale: 0.85 }}
+              // A `transform` string runs on the GPU where `scale` runs in JS, but Motion's
+              // reduced-motion switch only covers `scale`, hence the explicit check.
+              initial={{ opacity: 0, transform: `scale(${PILL_HIDDEN_SCALE})` }}
               animate={{
                 opacity: 1,
-                scale: 1,
-                transition: { delay: timing.delay + timing.duration, duration: 0.2, ease: 'easeOut' },
+                transform: 'scale(1)',
+                transition: isReducedMotion
+                  ? { duration: 0 }
+                  : { delay: timing.delay + timing.duration, duration: 0.2, ease: 'easeOut' },
               }}
               exit={{
                 opacity: 0,
-                scale: 0.85,
-                transition: { delay: 0, duration: PILL_EXIT_DURATION, ease: 'easeIn' },
+                transform: `scale(${PILL_HIDDEN_SCALE})`,
+                transition: isReducedMotion
+                  ? { duration: 0 }
+                  : { delay: 0, duration: PILL_EXIT_DURATION, ease: 'easeIn' },
               }}
             >
               <SkillPill

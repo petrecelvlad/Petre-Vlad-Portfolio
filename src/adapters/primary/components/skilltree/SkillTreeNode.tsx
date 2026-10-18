@@ -1,5 +1,6 @@
 import React from 'react';
 import { Skill, CATEGORIES } from '@/src/core/domain/skillTreeTypes';
+import { SKILL_ICONS } from '@/src/core/domain/skillIcons';
 import { getArcadeButtonColor, getArcadeHighlight, getArcadeOutlineStyle } from './arcadeStyle';
 import { Button } from '@/src/components/atoms/Button';
 import { PILL_W, PILL_H } from '@/src/core/domain/skillTreeGeometry';
@@ -34,7 +35,7 @@ export function SkillPill({
   onSelect,
   fluid = false,
 }: SkillPillProps) {
-  const Icon = skill.icon;
+  const Icon = SKILL_ICONS[skill.name];
   const catConfig = CATEGORIES[skill.category];
   const state = active ? 'active' : isOnPath ? 'onPath' : 'default';
 

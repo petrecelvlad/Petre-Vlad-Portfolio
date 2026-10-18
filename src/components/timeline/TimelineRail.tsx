@@ -1,4 +1,4 @@
-import { AnimatePresence, motion } from 'motion/react';
+import { AnimatePresence, motion, useReducedMotion, type Transition } from 'motion/react';
 import { IProject } from '@/src/core/domain/models';
 import { useScreenTier } from '@/src/hooks/useScreenTier';
 
@@ -12,6 +12,13 @@ interface TimelineRailProps {
 // Own-width percentage: the rail's center sits at most one width from the
 // viewport's left edge, so -200% always clears it at every breakpoint.
 const OFFSCREEN_X = '-200%';
+// Motion runs `transform` strings on the GPU (x/y/scale run in JS), but its reduced-motion switch
+// only covers x/y/scale, so every motion in this file checks the setting itself.
+const RAIL_SLIDE: Transition = { duration: 0.4, ease: [0.16, 1, 0.3, 1] };
+
+function getProgress(activeIndex: number, projectCount: number): number {
+  return projectCount > 1 ? activeIndex / (projectCount - 1) : 0;
+}
 
 // Persistent, viewport-fixed progress tracker: one dot per project, evenly
 // spaced top-to-bottom, independent of the per-section snap-scroll (each
@@ -29,6 +36,7 @@ const OFFSCREEN_X = '-200%';
 // states: idle uses lilac/periwinkle-deep for a quiet ramp, passed uses lilac/
 // periwinkle-darkest for a visibly richer one. color-mix keeps it tied to the tokens.
 function RailDot({ isPassed, className }: { isPassed: boolean; className: string }) {
+  const isReducedMotion = useReducedMotion();
   const emboss = isPassed
     ? 'inset 0 2px 0 0 color-mix(in srgb, var(--color-lilac) 70%, transparent), inset 0 -2px 0 0 color-mix(in srgb, var(--color-periwinkle-darkest) 55%, transparent)'
     : 'inset 0 2px 0 0 rgba(255, 255, 255, 0.6), inset 0 -2px 0 0 color-mix(in srgb, var(--color-periwinkle-deep) 35%, transparent)';
@@ -38,9 +46,9 @@ function RailDot({ isPassed, className }: { isPassed: boolean; className: string
         isPassed ? 'bg-periwinkle border-periwinkle-deep' : 'bg-lilac border-periwinkle'
       } ${className}`}
       style={{ boxShadow: emboss }}
-      animate={{ scale: isPassed ? 1 : 0.92 }}
-      transition={{ type: 'spring', stiffness: 420, damping: 14 }}
-      whileHover={{ scale: 1.1 }}
+      animate={{ transform: `scale(${isPassed ? 1 : 0.92})` }}
+      transition={isReducedMotion ? { duration: 0 } : { type: 'spring', stiffness: 420, damping: 14 }}
+      whileHover={{ transform: 'scale(1.1)' }}
     />
   );
 }
@@ -49,24 +57,22 @@ function RailDot({ isPassed, className }: { isPassed: boolean; className: string
 // sliding down from behind the navbar instead of in from the left. Dots are drawn at 16px; each
 // one's tap area is its whole slice of the width, so all of them fit a phone.
 function HorizontalRail({ projects, activeIndex, onNavigate }: Omit<TimelineRailProps, 'isInFullView'>) {
+  const isReducedMotion = useReducedMotion();
   const halfSlice = `calc(100% / ${projects.length * 2})`;
   return (
     <motion.div
       key="timeline-rail-horizontal"
       className="fixed left-2 right-2 top-[var(--chrome-navbar-height)] h-11 z-40 pointer-events-none"
-      initial={{ y: '-100%' }}
-      animate={{ y: 0 }}
-      exit={{ y: '-100%' }}
-      transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+      initial={{ transform: 'translateY(-100%)' }}
+      animate={{ transform: 'translateY(0%)' }}
+      exit={{ transform: 'translateY(-100%)' }}
+      transition={isReducedMotion ? { duration: 0 } : RAIL_SLIDE}
     >
       <div className="relative h-full flex">
         <div className="absolute top-1/2 -translate-y-1/2 h-1 bg-lilac rounded-full" style={{ left: halfSlice, right: halfSlice }} />
         <div
-          className="absolute top-1/2 -translate-y-1/2 h-1 bg-periwinkle-deep rounded-full transition-[width] duration-500 ease-out"
-          style={{
-            left: halfSlice,
-            width: projects.length > 1 ? `calc((100% - 100% / ${projects.length}) * ${activeIndex / (projects.length - 1)})` : 0,
-          }}
+          className="absolute top-1/2 -translate-y-1/2 h-1 bg-periwinkle-deep rounded-full origin-left transition-transform duration-500 ease-out"
+          style={{ left: halfSlice, right: halfSlice, transform: `scaleX(${getProgress(activeIndex, projects.length)})` }}
         />
         {projects.map((project, index) => (
           <button
@@ -87,6 +93,7 @@ function HorizontalRail({ projects, activeIndex, onNavigate }: Omit<TimelineRail
 
 export function TimelineRail({ projects, activeIndex, isInFullView, onNavigate }: TimelineRailProps) {
   const isMobile = useScreenTier() === 'mobile';
+  const isReducedMotion = useReducedMotion();
   const isShown = isInFullView && activeIndex !== -1;
   if (isMobile) {
     return (
@@ -101,10 +108,10 @@ export function TimelineRail({ projects, activeIndex, isInFullView, onNavigate }
         <motion.div
           key="timeline-rail"
           className="fixed left-[44px] top-0 h-screen -translate-x-1/2 z-40 pointer-events-none"
-          initial={{ x: OFFSCREEN_X }}
-          animate={{ x: 0 }}
-          exit={{ x: OFFSCREEN_X }}
-          transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+          initial={{ transform: `translateX(${OFFSCREEN_X})` }}
+          animate={{ transform: 'translateX(0%)' }}
+          exit={{ transform: `translateX(${OFFSCREEN_X})` }}
+          transition={isReducedMotion ? { duration: 0 } : RAIL_SLIDE}
         >
           {/*
             --rail-inset is the exact distance from this container's top/bottom
@@ -127,12 +134,11 @@ export function TimelineRail({ projects, activeIndex, isInFullView, onNavigate }
             />
             {/* Filled portion up to the active project */}
             <div
-              className="absolute w-1.5 -translate-x-1/2 left-1/2 bg-periwinkle-deep rounded-full transition-[height] duration-500 ease-out"
+              className="absolute w-1.5 -translate-x-1/2 left-1/2 bg-periwinkle-deep rounded-full origin-top transition-transform duration-500 ease-out"
               style={{
                 top: 'var(--rail-inset)',
-                height: projects.length > 1
-                  ? `calc((100% - (var(--rail-inset) * 2)) * ${activeIndex / (projects.length - 1)})`
-                  : 0,
+                bottom: 'var(--rail-inset)',
+                transform: `scaleY(${getProgress(activeIndex, projects.length)})`,
               }}
             />
 
