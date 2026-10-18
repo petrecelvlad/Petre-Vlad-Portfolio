@@ -66,4 +66,4 @@ Individual Kanban cards — see [BOARD.md](../BOARD.md) for the protocol (states
   * [T-061](T-061-performance-guardrails.md) - Performance rules in the guardrails *(backlog)*
   * [T-062](T-062-constitution-cost-questions.md) - Cost questions in the constitution *(backlog)*
   * [T-063](T-063-lesson-promotion-back-sweep.md) - Lessons become rules, plus a back-sweep of existing code *(backlog)*
-  * [T-064](T-064-moving-parts-audit-fixes.md) - Fix the Moving Parts Audit findings *(in-progress — fixes in, awaiting the user's visual check)*
+  * [T-064](T-064-moving-parts-audit-fixes.md) - Fix the Moving Parts Audit findings *(done)*

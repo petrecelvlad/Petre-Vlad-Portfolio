@@ -2,7 +2,7 @@
 type: Task
 title: "T-064: Fix the Moving Parts Audit findings"
 description: "Fix the junior-style animations found by the Moving Parts Audit (P1–P14), except the parked cards (P6)"
-status: in-progress
+status: done
 priority: high
 parent: T-058
 tags: [roadmap, task, performance, animation]
@@ -34,11 +34,13 @@ Part of [T-058](T-058-performance-common-sense-system.md): the first back-sweep 
 - [x] P13 video play icon: `transition-colors`
 - [x] P14 reduced motion: `MotionConfig reducedMotion="user"`; background holds a still frame; video shows its first frame; GPU `transform` animations check the setting themselves
 - [x] `tsc --noEmit` clean, `vite build` passes
-- [ ] Side-by-side visual check by the user (letters, video, skill tree open/close, rail)
+- [x] Side-by-side visual check by the user (letters, video, skill tree open/close, rail)
 
 ---
 
 ## Notes
+
+- Done 2026-10-18: the user checked all five visual points and confirmed the site runs noticeably smoother. P6 (cards) stays with the parked MP4 step, not this card.
 
 - P12: on closer reading the timeline's per-scroll position checks are near free (layout is already computed during a scroll, and React skips identical state updates). Rewriting them onto observers would risk the rail's documented edge cases for no measurable gain, so they stay.
 - P7: the audit's trade-off was wrong. The details panel's width doesn't depend on the tree's box, so nothing moves differently.

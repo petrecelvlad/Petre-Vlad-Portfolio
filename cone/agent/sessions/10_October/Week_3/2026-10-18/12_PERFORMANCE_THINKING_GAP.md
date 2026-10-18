@@ -13,7 +13,7 @@ timestamp: 2026-10-18T00:00:00Z
 - **Date:** 2026-10-18
 - **Agent:** Claude Code (claude-opus-5-5)
 - **Goal:** Pick up the hero performance handoff, explain the name-letter animation's cost, and turn the reasoning gap behind it into a board card.
-- **Status:** IN-PROGRESS
+- **Status:** COMPLETE ✅
 - **Previous:** [Session 11](../2026-10-17/11_OVERVIEW_FACTS_REMOVAL.md)
 
 ---
@@ -26,7 +26,8 @@ timestamp: 2026-10-18T00:00:00Z
 - [x] Created the [T-058](../../../../../project/roadmap/board/T-058-performance-common-sense-system.md) epic with five sub-tasks (T-059 to T-063)
 - [x] Audited every animation on the site, read from code only: 14 problems (P1–P14) with fixes, published as "Moving Parts Audit" (https://claude.ai/artifact/HiFbFMvshAGcyn9Fo6u3PC), user approved all
 - [x] Fixed P1–P5, P7–P14 ([T-064](../../../../../project/roadmap/board/T-064-moving-parts-audit-fixes.md)); P6 cards still parked; `tsc` and `vite build` pass
-- [ ] User's side-by-side visual check of the fixes
+- [x] User's side-by-side visual check of the fixes: all five pass, T-064 closed
+- [x] Committed everything from sessions 11–12 (`5be2c4c`, branch `Unifier`, not pushed)
 
 ---
 
