@@ -38,10 +38,8 @@ export function AchievementFactorySvg({ className }: { className?: string; isVis
   );
 }
 
-// Level-Up's real hand-authored animation (see cone/project/specs/SVG_Recreation_Prompts.md Prompt 1
-// for the plain-language brief; the asset itself was built directly off LevelUpShaderCanvas's cycleTime
-// math in AchievementLiveShaders.tsx for closer fidelity). Same self-contained, JS-free, <img>-rendered
-// pattern as AchievementFactorySvg above.
+// Level-Up's animation: 8 bars fill the gauge, each bumping it, then the full gauge launches its
+// payoff, all on one 5 s loop, framed 16:9 (800x450) like the other 3.
 export function AchievementLevelUpSvg({ className }: { className?: string; isVisible?: boolean }) {
   return (
     <img
@@ -52,11 +50,8 @@ export function AchievementLevelUpSvg({ className }: { className?: string; isVis
   );
 }
 
-// Teams Lead's real hand-authored animation (see cone/project/specs/SVG_Recreation_Prompts.md Prompt 3
-// for the plain-language brief; node positions, badge colors and the hero's walk timing are pulled
-// directly from TeamsLeadShaderCanvas's NODE1..4/tLoop math in AchievementLiveShaders.tsx — the organic
-// island coastlines are a hand-drawn stand-in for the shader's FBM noise, which a vector recreation
-// can't reproduce exactly). Same self-contained, JS-free, <img>-rendered pattern as the others above.
+// Teams Lead's animation: a leader picks up a teammate on each island and the team celebrates on the
+// last one, all on one 13.5 s loop, framed 16:9 (800x450) like the other 3.
 export function AchievementTeamsLeadSvg({ className }: { className?: string; isVisible?: boolean }) {
   return (
     <img
