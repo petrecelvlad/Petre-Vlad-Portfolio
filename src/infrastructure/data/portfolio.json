@@ -10,7 +10,7 @@
       {
         "id": "proj-playmusic",
         "title": "PlayMusic",
-        "role": "Game Designer & Developer (Contract)",
+        "role": "Game Designer & Developer",
         "startDate": "2026-04-13",
         "endDate": "2026-08-31",
         "description": "Styngr's PlayMusic is a game platform where creators customize ready-made game templates instead of building games from scratch, with music at the core: the song a creator picks drives the gameplay. Designed and developed new game templates end to end, from design docs to code, polish and release.",
@@ -50,23 +50,27 @@
       {
         "id": "proj-merge-mansion",
         "title": "Merge Mansion",
-        "role": "Level Designer (Contract)",
+        "role": "Level Designer",
         "startDate": "2024-08-01",
         "endDate": "2025-01-30",
-        "description": "One of the world's top-grossing merge games. Contracted to design levels for live events and core game progression.",
+        "description": "One of the world's top-grossing merge games. Level designer who rebalanced the Maze region and smoothed out its progression.",
         "icon": "/assets/icons/Icon_MM.png",
         "type": "GAME",
         "overview": {
-          "summary": "One of the world's top-grossing merge games, run as a live service by Metacore. Contract level designer on live events and the core progression."
+          "summary": "One of the world's top-grossing merge games, run as a live service by Metacore. Level designer who rebalanced the Maze region's progression."
         },
         "responsibilities": [
-          "Designed and balanced levels for live events and core game progression",
-          "Contributed to Game Design and Game Balance on a top-grossing mobile title"
+          "Rebalanced the Maze region's quest requirements for a smoother progression",
+          "Studied the region's KPIs and metrics to find where its progression broke down",
+          "Read player feedback and cross-referenced it with the data to find the real problems",
+          "Redistributed the quest requirements along the region's new map progression",
+          "Checked how items shared with other regions would be affected, with their designers",
+          "Worked with Story and Narrative so the story still fit the new progression"
         ],
         "achievements": [
-          "Contributed to one of the world's top-grossing merge games"
+          "Rebalanced the Maze region of one of the world's top-grossing merge games"
         ],
-        "technologies": ["Game Design", "Balancing", "Level Design"],
+        "technologies": ["Level Design", "Balancing", "Research"],
         "keyScreenshots": ["/assets/screenshots/MergeMansion/SS_MergeMansion_1.jpg"],
         "links": { "youtube": "https://www.youtube.com/watch?v=DUZSjukx2OI", "pages": [{ "kind": "website", "url": "https://mergemansion.com/" }, { "kind": "appStore", "url": "https://apps.apple.com/app/id1484442152" }, { "kind": "googlePlay", "url": "https://play.google.com/store/apps/details?id=com.everywear.game5" }, { "kind": "facebook", "url": "https://www.facebook.com/MergeMansionOfficial" }, { "kind": "instagram", "url": "https://www.instagram.com/mergemansion" }, { "kind": "x", "url": "https://x.com/Mergemansion" }] }
       }
@@ -87,23 +91,29 @@
         "role": "Sr. Game Designer",
         "startDate": "2023-05-01",
         "endDate": "2023-10-31",
-        "description": "Senior Game Design across DECA's live portfolio of acquired titles, managing live operations and feature design for Realm of the Mad God.",
+        "description": "A long-running MMO in DECA Games' portfolio. Designed the system behind Crucible events and two class sets released in Exalt 4.0.4.0, and proposed new weapon stats as an A/B test.",
         "icon": "/assets/icons/Icon_ROTMG.png",
         "type": "GAME",
         "overview": {
-          "summary": "A long-running MMO in DECA Games' portfolio of live games. Senior designer running live operations and feature design for the title."
+          "summary": "A long-running MMO in DECA Games' portfolio of live games. Senior designer on the system behind its Crucible events, two new class sets and an A/B test of new weapon stats."
         },
         "responsibilities": [
-          "Provided Senior Game Design across DECA's portfolio of acquired titles",
-          "Managed live ops and feature design for Realm of the Mad God, a long-running MMO",
-          "Optimized live ops event structures to improve engagement and retention"
+          "Designed the internal system behind Crucibles, events built from stat modifiers",
+          "Modifiers mix freely (x2 enemy damage with x3 better loot), so each event is distinct",
+          "Events can be scheduled in advance, so new ones ship by changing numbers alone",
+          "Gathered the event manager's needs and mapped the existing tech with the developers",
+          "Designed the UI and UX the team uses to set up events internally",
+          "Proposed an A/B test of rolled weapon damage, so every drop would have unique stats",
+          "Rolled min and max damage around the same averages, for variety without power creep",
+          "Designed a full weapon set to bring the tested stats in gradually",
+          "Designed the Sorcerer's Storm Shaman Set and the Knight's Mad Minotaur Set"
         ],
         "achievements": [
-          "Optimized live ops events for higher player engagement"
+          "Designed the event system behind Crucibles, released in Exalt 4.0.4.0"
         ],
-        "technologies": ["Game Design", "Live Ops", "Economy Design"],
+        "technologies": ["Game Design", "System Design", "Live Ops", "UX Design", "A/B Testing"],
         "keyScreenshots": ["/assets/screenshots/ROTMG/SS_ROTMG_1.jpg", "/assets/screenshots/ROTMG/SS_ROTMG_2.jpg"],
-        "links": { "youtube": "https://www.youtube.com/watch?v=fFNaSLSmp2k", "pages": [{ "kind": "website", "url": "https://www.realmofthemadgod.com/" }, { "kind": "steam", "url": "https://store.steampowered.com/app/200210/" }, { "kind": "facebook", "url": "https://www.facebook.com/rotmg" }, { "kind": "x", "url": "https://x.com/RotMG_news" }, { "kind": "discord", "url": "https://discord.gg/rotmg" }] }
+        "links": { "youtube": "https://www.youtube.com/watch?v=fFNaSLSmp2k", "pages": [{ "kind": "website", "url": "https://www.realmofthemadgod.com/" }, { "kind": "steam", "url": "https://store.steampowered.com/app/200210/" }, { "kind": "article", "label": "Update 4.0.4.0", "url": "https://www.realmeye.com/wiki/release-history-2023#exalt-version-4-0-4-0" }, { "kind": "article", "label": "Storm Shaman Set", "url": "https://www.realmeye.com/wiki/storm-shaman-set" }, { "kind": "article", "label": "Mad Minotaur Set", "url": "https://www.realmeye.com/wiki/mad-minotaur-set" }, { "kind": "facebook", "url": "https://www.facebook.com/rotmg" }, { "kind": "x", "url": "https://x.com/RotMG_news" }, { "kind": "discord", "url": "https://discord.gg/rotmg" }] }
       }
     ]
   },
@@ -341,7 +351,7 @@
         "role": "Freelance Game Designer",
         "startDate": "2015-11-01",
         "endDate": "2016-06-30",
-        "description": "Contracted to design and produce an idle brawler game for a client. Managed the full production cycle including client communication.",
+        "description": "Designed and produced an idle brawler game for a client. Managed the full production cycle including client communication.",
         "icon": "/assets/icons/Icon_Castellum.png",
         "type": "GAME",
         "overview": {
