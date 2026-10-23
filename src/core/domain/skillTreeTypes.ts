@@ -84,7 +84,7 @@ export const SKILLS: Skill[] = [
   {
     id: 'game-design', name: 'Game Design', category: 'design', parent: 'system-design',
     description: 'Designing core loops, game modes, and feature systems that balance engagement with long-term retention.',
-    projects: ['proj-fe-high-voltage', 'proj-idle-td', 'proj-newton-slots', 'proj-merge-mansion', 'proj-deca-rotmg', 'proj-castellum', 'proj-clash-of-towers', 'proj-fitkin', 'proj-alphabetty-saga', 'proj-marble-frenzy-2', 'proj-bounzy', 'proj-newgrounds'],
+    projects: ['proj-fe-high-voltage', 'proj-idle-td', 'proj-newton-slots', 'proj-deca-rotmg', 'proj-castellum', 'proj-clash-of-towers', 'proj-fitkin', 'proj-alphabetty-saga', 'proj-marble-frenzy-2', 'proj-bounzy', 'proj-newgrounds'],
   },
   {
     id: 'level-design', name: 'Level Design', category: 'design', parent: 'game-design',
@@ -134,7 +134,7 @@ export const SKILLS: Skill[] = [
   {
     id: 'ux-design', name: 'UX Design', category: 'design', parent: 'web-design',
     description: 'Designing screen flows, interaction patterns, and interface logic for mobile-first game and product experiences.',
-    projects: ['proj-fe-high-voltage', 'proj-castellum', 'proj-idle-td', 'proj-clash-of-towers', 'proj-marble-frenzy-2', 'proj-bounzy'],
+    projects: ['proj-fe-high-voltage', 'proj-castellum', 'proj-idle-td', 'proj-clash-of-towers', 'proj-marble-frenzy-2', 'proj-bounzy', 'proj-deca-rotmg'],
   },
   {
     id: 'ftue-onboarding', name: 'FTUE & Onboarding', category: 'design', parent: 'web-design',
@@ -149,7 +149,7 @@ export const SKILLS: Skill[] = [
   {
     id: 'research', name: 'Research', category: 'design', parent: null,
     description: 'Conducting competitive analysis, domain research, and player behavior research to ground design in evidence.',
-    projects: ['proj-fe-high-voltage', 'proj-lead-level-designer', 'proj-newton-slots', 'proj-fitkin', 'proj-castellum', 'proj-alphabetty-saga'],
+    projects: ['proj-fe-high-voltage', 'proj-lead-level-designer', 'proj-merge-mansion', 'proj-newton-slots', 'proj-fitkin', 'proj-castellum', 'proj-alphabetty-saga'],
   },
 
   // PRODUCTION
@@ -191,7 +191,7 @@ export const SKILLS: Skill[] = [
   {
     id: 'live-ops', name: 'Live Ops', category: 'production', parent: 'player-ops',
     description: 'Running the live-service content cadence for continuously operated titles: event scheduling, live balancing, and retention-driven updates post-launch.',
-    projects: ['proj-deca-rotmg', 'proj-merge-mansion', 'proj-lead-level-designer', 'proj-idle-td', 'proj-alphabetty-saga'],
+    projects: ['proj-deca-rotmg', 'proj-lead-level-designer', 'proj-idle-td', 'proj-alphabetty-saga'],
   },
   {
     id: 'marketing', name: 'Marketing', category: 'production', parent: 'community-mgmt',
@@ -211,7 +211,7 @@ export const SKILLS: Skill[] = [
   {
     id: 'ab-testing', name: 'A/B Testing', category: 'production', parent: 'kpi-tracking',
     description: 'Running controlled experiments, like parallel onboarding difficulty tracks, to measure impact on retention and engagement before committing to a single design.',
-    projects: ['proj-alphabetty-saga', 'proj-idle-td'],
+    projects: ['proj-alphabetty-saga', 'proj-idle-td', 'proj-deca-rotmg'],
   },
 
   // LEADERSHIP
