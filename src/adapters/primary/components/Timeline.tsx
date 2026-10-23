@@ -35,7 +35,15 @@ interface TimelineProps {
 // state, not as "which DOM node happens to be scrolled into view."
 export function Timeline({ experiences, containerRef, sectionRefs, onActiveSectionChange, ref }: TimelineProps) {
   const projects = useMemo(() => {
-    return experiences.flatMap(exp => exp.projects);
+    return experiences.flatMap(exp => exp.projects.map(project => {
+      const madeFor = project.client ?? exp;
+      return {
+        ...project,
+        company: madeFor.company,
+        companyLogo: madeFor.companyLogo,
+        companyUrl: madeFor.companyUrl,
+      };
+    }));
   }, [experiences]);
 
   const isMobile = useScreenTier() === 'mobile';
