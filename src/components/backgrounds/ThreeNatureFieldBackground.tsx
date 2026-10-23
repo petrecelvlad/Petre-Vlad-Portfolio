@@ -17,7 +17,12 @@ import { useIsScrolling } from '@/src/hooks/useIsScrolling';
  *     "behavior is kept, reimplemented as a manual camera orbit. A separate cursor-driven gaze was",
  *     "added on top: the lookAt target eases up/down with the cursor's vertical position only —",
  *     "horizontal cursor movement is ignored so it never fights the orbit's own horizontal sweep.",
- *     "camera.position always stays on the orbit track and never reacts to the cursor."
+ *     "camera.position always stays on the orbit track and never reacts to the cursor.",
+ *     "C-008: WebGL, so drawing every frame is the exception the rule allows",
+ *     "C-009: always on; measured on the reference PC 2026-10-18 (Hero Performance Report, Background Before and After)",
+ *     "C-010: holds one still frame under reduced motion",
+ *     "C-011: pauses off screen and while scrolling; paused time is dropped on resume",
+ *     "C-012: antialiasing and full pixel ratio stay; savings must not show"
  *   ],
  *   "agent_instructions": "isVisible is a prop, not an internal IntersectionObserver like the source used — Hero threads a real isVisible down from its own visibility hook. The render loop also pauses for every scroll gesture (useIsScrolling) and holds a still frame under reduced motion; time spent paused is dropped, never applied on resume."
  * }

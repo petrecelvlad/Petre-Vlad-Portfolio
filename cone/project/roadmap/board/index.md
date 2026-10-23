@@ -56,14 +56,17 @@ Individual Kanban cards — see [BOARD.md](../BOARD.md) for the protocol (states
     * [T-048](T-048-project-tab2-discovery-cues.md) - Make the Details tab discoverable *(done)*
     * [T-049](T-049-project-gallery-tab.md) - Optional Gallery tab *(done)*
     * [T-057](T-057-clipboard-overview-redesign.md) - Clipboard Overview redesign: layout C, summaries, duration, Read more, clearer tabs *(done)*
+    * [T-065](T-065-clipboard-logo-and-links.md) - Company logo (or ink stamp) and project link tags on the clipboard *(in-progress)*
+    * [T-066](T-066-never-an-empty-frame.md) - Never an empty phone frame: thumbnail or screenshot while a video loads, every screenshot in the Gallery *(in-progress)*
+    * [T-067](T-067-frame-slideshow.md) - Screenshot slideshow in the phone frame for projects without a video *(in-progress)*
   * [T-047](T-047-footer-mvp-additions.md) - Footer MVP additions *(backlog)*
   * [T-050](T-050-career-clock.md) - Career clock (2007-01-01 anchor) for Hero + skill tree *(done)*
   * [T-055](T-055-screen-tiers.md) - Screen tiers: desktop, laptop, tablet, mobile for the whole site *(done)*
     * [T-056](T-056-screen-tiers-proposal.md) - Tiers proposal artifact *(done)*
 * [T-058](T-058-performance-common-sense-system.md) - Make performance part of how every agent works *(backlog)*
   * [T-059](T-059-perf-pattern-checks.md) - Automatic checks for known-bad code patterns *(backlog)*
-  * [T-060](T-060-perf-test-harness.md) - Saved performance test with a baseline *(backlog)*
-  * [T-061](T-061-performance-guardrails.md) - Performance rules in the guardrails *(backlog)*
+  * [T-060](T-060-perf-test-harness.md) - Saved performance test with a baseline *(in-progress — built, first run and baseline pending)*
+  * [T-061](T-061-performance-guardrails.md) - Performance rules in the guardrails *(done)*
   * [T-062](T-062-constitution-cost-questions.md) - Cost questions in the constitution *(backlog)*
   * [T-063](T-063-lesson-promotion-back-sweep.md) - Lessons become rules, plus a back-sweep of existing code *(backlog)*
   * [T-064](T-064-moving-parts-audit-fixes.md) - Fix the Moving Parts Audit findings *(done)*

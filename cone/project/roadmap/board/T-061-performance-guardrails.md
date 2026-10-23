@@ -2,7 +2,7 @@
 type: Task
 title: "T-061: Performance rules in the guardrails"
 description: "Fill GUARDRAILS.md's empty Performance category with real constraints, cited in the files they govern"
-status: backlog
+status: done
 priority: high
 parent: T-058
 tags: [roadmap, task, performance, guardrails]
@@ -19,12 +19,12 @@ Part of [T-058](T-058-performance-common-sense-system.md). [GUARDRAILS.md](../..
 
 ## Acceptance Criteria
 
-- [ ] Performance constraints added with the next `C-NNN` IDs, each with its motivation, wording approved by the user. Candidates from session 12:
-  - continuous animation moves or fades only (`transform`/`opacity`), run by CSS or the browser, never recomputed in JavaScript every frame
-  - an always-on visual isn't done until measured with [T-060](T-060-perf-test-harness.md)'s test
-  - continuous motion respects the reduced-motion setting
-- [ ] Every component that animates continuously cites the IDs in its `@propolis` block
+- [x] Performance constraints added with the next `C-NNN` IDs, each with its motivation, wording approved by the user: C-008 Cheap Motion, C-009 Measured Before Done, C-010 Reduced Motion, plus two the user added, C-011 Pause and Resume Cleanly and C-012 Invisible Savings Only
+- [x] Every component that animates continuously cites the IDs in its `@propolis` block: `Hero.tsx`, `ThreeNatureFieldBackground.tsx`, `FloatingIslandBackdrop.tsx`, `StackedAlphaVideo.tsx`, `AchievementSvgPlaceholders.tsx`, `BentoResponsibilities.tsx`, `SkillTreeNode.tsx`
 
 ---
 
 ## Notes
+
+- Done 2026-10-18 (session 12). Known violations are cited as such rather than hidden: the island's in-SVG animation (C-008 exception, measured near zero) and the parked cards (C-008, C-010, C-011).
+- Components with brief motion only (rail, skill pills, ScaleToFit) follow C-008 and C-010 but carry no `@propolis` block yet; the card scoped citations to continuous animation.

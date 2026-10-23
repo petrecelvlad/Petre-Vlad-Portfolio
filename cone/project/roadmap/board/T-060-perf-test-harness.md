@@ -2,7 +2,7 @@
 type: Task
 title: "T-060: Saved performance test with a baseline"
 description: "One command that measures the hero's fps, CPU and RAM and compares them to saved numbers from the user's PC"
-status: backlog
+status: in-progress
 priority: high
 parent: T-058
 tags: [roadmap, task, performance, tooling]

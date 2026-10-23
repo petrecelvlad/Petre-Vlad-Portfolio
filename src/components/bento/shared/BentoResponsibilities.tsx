@@ -1,3 +1,14 @@
+/**
+ * @propolis
+ * {
+ *   "role": "UI_COMPONENT",
+ *   "constraints": [
+ *     "C-008: the details hint hand bobs as a CSS transform animation (index.css .hint-bob)",
+ *     "C-010: the hand stops through index.css's reduced-motion rule; the tab flip's rotateX is covered by MotionConfig"
+ *   ],
+ *   "agent_instructions": "The clipboard for one project. Only the hint hand moves nonstop, and only until the visitor's first tab click."
+ * }
+ */
 import { useEffect, useId, useLayoutEffect, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 import { ChevronRight, FileText, Images, ListChecks, Pointer, type LucideIcon } from 'lucide-react';

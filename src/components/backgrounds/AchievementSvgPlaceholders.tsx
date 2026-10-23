@@ -1,3 +1,16 @@
+/**
+ * @propolis
+ * {
+ *   "role": "UI_COMPONENT",
+ *   "constraints": [
+ *     "Known C-008 violation: each card animates inside an SVG shown as an <img>, so the browser repaints the whole picture on the CPU every frame (measured +18% CPU for the 4 cards, 2026-10-18)",
+ *     "Known C-010 violation: index.css's reduced-motion rule can't reach inside an <img>",
+ *     "Known C-011 violation: isVisible is accepted and ignored",
+ *     "All three are parked by the user until the cards move to MP4 (Hero Smoothness Plan step 3, Moving Parts Audit P6)"
+ *   ],
+ *   "agent_instructions": "The 4 hero achievement cards as they ship today. Don't add motion here; the planned fix replaces these SVGs with short videos."
+ * }
+ */
 import type { LiveShaderType } from './AchievementLiveShaders';
 
 // Placeholder-only stand-ins for the SVG animation path. Swap each entry's <svg> content for the

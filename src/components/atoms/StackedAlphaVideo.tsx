@@ -1,3 +1,17 @@
+/**
+ * @propolis
+ * {
+ *   "role": "UI_COMPONENT",
+ *   "constraints": [
+ *     "C-008: video and WebGL, so drawing each frame is the exception the rule allows",
+ *     "C-009: always on; measured on the reference PC 2026-10-18 (+42% to +7% CPU vs the VP9 WebM)",
+ *     "C-010: the caller passes isVisible=false under reduced motion; the first frame is still drawn",
+ *     "C-011: draws only when the video presents a frame, so a paused video costs nothing",
+ *     "C-012: drawn at its displayed size, never above the source"
+ *   ],
+ *   "agent_instructions": "Plays transparent video the GPU can decode (stacked-alpha H.264). The WebM fallback is CPU-decoded on many GPUs, so it's only for browsers without WebGL or requestVideoFrameCallback."
+ * }
+ */
 import { useEffect, useRef, useState } from 'react';
 
 interface StackedAlphaVideoProps {

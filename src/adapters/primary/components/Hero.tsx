@@ -1,3 +1,16 @@
+/**
+ * @propolis
+ * {
+ *   "role": "UI_CONTAINER",
+ *   "constraints": [
+ *     "C-008: the name letters bob as a CSS transform animation (index.css .hero-name-letter), never Motion's y",
+ *     "C-009: the hero runs nonstop; any new always-on layer is measured before it ships",
+ *     "C-010: the letters stop through index.css's reduced-motion rule; the character video stays paused",
+ *     "C-011: isVisible pauses the video and the background off screen; the achievement cards ignore it (known violation, parked)"
+ *   ],
+ *   "agent_instructions": "Hosts every always-on layer of the hero: the 3D background, the island, the character video, the name letters and the 4 achievement cards. Its cost is the sum of those layers, so check C-008 to C-012 in GUARDRAILS.md before adding or changing any motion here."
+ * }
+ */
 import { useMemo, useLayoutEffect, useRef, useState, lazy, Suspense, type CSSProperties } from 'react';
 import { useReducedMotion } from 'motion/react';
 import { AchievementShaderCanvas, ShaderType } from '@/src/components/backgrounds/AchievementShaderCanvas';
