@@ -9,7 +9,8 @@
     "preview": "vite preview",
     "clean": "rm -rf dist",
     "lint": "tsc --noEmit",
-    "capture:shader": "node tools/shader-capture/capture.mjs"
+    "capture:shader": "node tools/shader-capture/capture.mjs",
+    "perf": "node tools/perf/hero-perf.mjs"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.14",

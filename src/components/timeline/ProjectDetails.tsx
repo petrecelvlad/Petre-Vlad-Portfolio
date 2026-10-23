@@ -1,16 +1,16 @@
+import { useState } from 'react';
 import type React from 'react';
-import { IProject } from '@/src/core/domain/models';
+import { ITimelineProject } from '@/src/core/domain/models';
 import { BentoHeader } from '../bento/shared/BentoHeader';
 import { BentoResponsibilities } from '../bento/shared/BentoResponsibilities';
 import { BentoSkills } from '../bento/shared/BentoSkills';
 import { BentoAchievement } from '../bento/shared/BentoAchievement';
 import { BentoVideoFrame } from '../bento/BentoVideoFrame';
 import { Stack } from '../atoms/Stack';
-import { getGalleryScreenshots } from '@/src/core/domain/projectMedia';
 
 interface ProjectDetailsProps {
   key?: React.Key;
-  project: IProject;
+  project: ITimelineProject;
   isActive: boolean;
   showDetailsHint?: boolean;
 }
@@ -19,6 +19,17 @@ interface ProjectDetailsProps {
 // Portrait tablet: the same pieces stacked, the clipboard at a fixed height so it still fits one
 // screen. Mobile: stacked at natural heights, as tall as the content.
 export function ProjectDetails({ project, isActive, showDetailsHint = false }: ProjectDetailsProps) {
+  const [slide, setSlide] = useState(0);
+  // Coming into view or leaving it, the slideshow starts over from the first screenshot.
+  const [wasActive, setWasActive] = useState(isActive);
+  if (wasActive !== isActive) {
+    setWasActive(isActive);
+    setSlide(0);
+  }
+  const pages = project.isDiscontinued && project.links.youtube
+    ? [...project.links.pages, { kind: 'youtube' as const, url: project.links.youtube }]
+    : project.links.pages;
+
   return (
     <Stack gap="md" className="w-full tablet:h-full min-h-0 tablet:overflow-y-auto overflow-x-hidden px-1 py-7">
       <div className="grid grid-cols-1 tablet:landscape:grid-cols-[46%_1fr] laptop:landscape:grid-cols-[40%_1fr] tablet:portrait:grid-rows-[470px_minmax(0,1fr)] flex-grow gap-4 md:gap-6 items-stretch min-h-0">
@@ -40,7 +51,12 @@ export function ProjectDetails({ project, isActive, showDetailsHint = false }: P
               icon={project.icon}
               startDate={project.startDate}
               endDate={project.endDate}
-              galleryScreenshots={getGalleryScreenshots(project)}
+              galleryScreenshots={project.keyScreenshots.map(shot => shot.src)}
+              company={project.company}
+              companyLogo={project.companyLogo}
+              companyUrl={project.companyUrl}
+              links={[...pages, ...(project.keyScreenshots[slide]?.links ?? [])]}
+              isDiscontinued={project.isDiscontinued}
               showDetailsHint={showDetailsHint}
             />
           </div>
@@ -58,7 +74,9 @@ export function ProjectDetails({ project, isActive, showDetailsHint = false }: P
           <div className="aspect-video tablet:aspect-auto flex-grow min-h-0 flex flex-col">
             <BentoVideoFrame
               key={isActive ? 'player' : 'screenshot'}
-              screenshot={project.keyScreenshots[0]}
+              screenshots={project.keyScreenshots}
+              slide={slide}
+              onSlideChange={setSlide}
               youtubeUrl={isActive ? project.links.youtube : undefined}
               isActive={isActive}
             />

@@ -149,17 +149,17 @@ export function BacklogView({ experiences }: Props) {
     exp.projects.map(proj => {
       const iconSt    = checkUrl(proj.icon);
       const logoSt    = checkUrl(exp.companyLogo);
-      const shots     = checkUrlArray(proj.keyScreenshots);
+      const shots     = checkUrlArray(proj.keyScreenshots.map(shot => shot.src));
       const respSt:   FieldStatus = proj.responsibilities.length > 0 ? 'ok' : 'missing';
       const achievSt: FieldStatus = proj.achievements.length > 0    ? 'ok' : 'missing';
       const techSt:   FieldStatus = proj.technologies.length > 0    ? 'ok' : 'missing';
-      const wsSt    = checkUrl(proj.links.website);
+      const wsSt    = checkUrl(proj.links.pages.find(page => page.kind === 'website' || page.kind === 'newgrounds')?.url);
       const ytSt    = checkUrl(proj.links.youtube);
-      const storeSt = checkUrl(proj.links.store);
+      const storeSt = checkUrl(proj.links.pages.find(page => page.kind === 'appStore' || page.kind === 'googlePlay' || page.kind === 'steam')?.url);
       const linkSt: FieldStatus = (wsSt === 'ok' || ytSt === 'ok' || storeSt === 'ok') ? 'ok' : 'missing';
 
       // If the project links to Newgrounds, pull scraped metadata so that column is populated
-      const ngUrl = proj.links.website?.includes('newgrounds.com') ? proj.links.website : undefined;
+      const ngUrl = proj.links.pages.find(page => page.kind === 'newgrounds')?.url;
       const ng    = (scraperHasRun && ngUrl) ? (ngScrapedMap.get(ngUrl) ?? null) : null;
 
       return {

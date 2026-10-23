@@ -1,3 +1,14 @@
+/**
+ * @propolis
+ * {
+ *   "role": "UI_COMPONENT",
+ *   "constraints": [
+ *     "C-008: the on-path dot pulses with Tailwind's animate-pulse (CSS opacity)",
+ *     "C-010: the pulse stops through index.css's reduced-motion rule"
+ *   ],
+ *   "agent_instructions": "A skill pill. The pulsing dot runs nonstop while its skill is on the selected path; any other motion added here follows C-008."
+ * }
+ */
 import React from 'react';
 import { Skill, CATEGORIES } from '@/src/core/domain/skillTreeTypes';
 import { SKILL_ICONS } from '@/src/core/domain/skillIcons';

@@ -1,486 +1,280 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="450" height="250" style="background:#5c94fc; image-rendering: pixelated; shape-rendering: crispEdges;">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 110 800 450" width="800" height="450" style="background:#5c94fc; shape-rendering: crispEdges;">
   <defs>
     <style>
-      /* --- PARALLAX &amp; WORLD SCROLLING --- */
-      .layer-clouds { animation: scroll-clouds 6s linear infinite; }
-      .layer-hills  { animation: scroll-hills 6s linear infinite; }
-      .layer-main   { animation: scroll-main 6s linear infinite; }
+      .layer-clouds { animation: scroll-clouds 12s linear infinite; }
+      .layer-hills  { animation: scroll-hills 12s linear infinite; }
+      .layer-main   { animation: scroll-main 12s linear infinite; }
+      @keyframes scroll-clouds { from { transform: translateX(0); } to { transform: translateX(-400px); } }
+      @keyframes scroll-hills  { from { transform: translateX(0); } to { transform: translateX(-800px); } }
+      @keyframes scroll-main   { from { transform: translateX(0); } to { transform: translateX(-1600px); } }
 
-      @keyframes scroll-clouds {
-        0%   { transform: translateX(0px); }
-        100% { transform: translateX(-200px); }
+      /* Mario's height: every jump is a true parabola (one gravity), timed to the level's obstacles. */
+      .hero-y { animation: hero-y 12s linear infinite; }
+      @keyframes hero-y {
+        0.000% { transform: translateY(0px); animation-timing-function: linear; }
+        9.875% { transform: translateY(0px); animation-timing-function: cubic-bezier(0.333, 0.667, 0.667, 1); }
+        14.239% { transform: translateY(-96px); animation-timing-function: cubic-bezier(0.333, 0, 0.667, 0.333); }
+        18.604% { transform: translateY(0px); animation-timing-function: linear; }
+        21.375% { transform: translateY(0px); animation-timing-function: cubic-bezier(0.333, 0.667, 0.667, 1); }
+        26.004% { transform: translateY(-108px); animation-timing-function: cubic-bezier(0.333, 0, 0.667, 0.333); }
+        28.959% { transform: translateY(-64px); animation-timing-function: linear; }
+        29.875% { transform: translateY(-64px); animation-timing-function: cubic-bezier(0.333, 0.667, 0.667, 1); }
+        32.692% { transform: translateY(-104px); animation-timing-function: cubic-bezier(0.333, 0, 0.667, 0.333); }
+        34.874% { transform: translateY(-80px); animation-timing-function: linear; }
+        35.375% { transform: translateY(-80px); animation-timing-function: cubic-bezier(0.333, 0.667, 0.667, 1); }
+        37.557% { transform: translateY(-104px); animation-timing-function: cubic-bezier(0.333, 0, 0.667, 0.333); }
+        41.337% { transform: translateY(-32px); animation-timing-function: cubic-bezier(0.333, 0.667, 0.667, 1); }
+        44.787% { transform: translateY(-92px); animation-timing-function: cubic-bezier(0.333, 0, 0.667, 0.333); }
+        49.060% { transform: translateY(0px); animation-timing-function: linear; }
+        53.125% { transform: translateY(0px); animation-timing-function: cubic-bezier(0.333, 0.667, 0.667, 1); }
+        56.398% { transform: translateY(-54px); animation-timing-function: cubic-bezier(0.333, 0, 0.667, 0.333); }
+        59.672% { transform: translateY(0px); animation-timing-function: linear; }
+        62.500% { transform: translateY(0px); animation-timing-function: cubic-bezier(0.333, 0.667, 0.667, 1); }
+        66.864% { transform: translateY(-96px); animation-timing-function: cubic-bezier(0.333, 0, 0.667, 0.333); }
+        71.229% { transform: translateY(0px); animation-timing-function: linear; }
+        83.812% { transform: translateY(0px); animation-timing-function: cubic-bezier(0.333, 0.667, 0.667, 1); }
+        87.376% { transform: translateY(-64px); animation-timing-function: cubic-bezier(0.333, 0, 0.667, 0.333); }
+        90.939% { transform: translateY(0px); animation-timing-function: linear; }
+        100.000% { transform: translateY(0px); animation-timing-function: linear; }
       }
-      @keyframes scroll-hills {
-        0%   { transform: translateX(0px); }
-        100% { transform: translateX(-400px); }
-      }
-      @keyframes scroll-main {
-        0%   { transform: translateX(0px); }
-        100% { transform: translateX(-800px); }
-      }
+      .pose-run  { animation: pose-run 12s step-end infinite; }
+      .pose-jump { animation: pose-jump 12s step-end infinite; }
+      @keyframes pose-run  { 0% { opacity: 1; } 9.875% { opacity: 0; } 18.604% { opacity: 1; } 21.375% { opacity: 0; } 28.959% { opacity: 1; } 29.875% { opacity: 0; } 34.874% { opacity: 1; } 35.375% { opacity: 0; } 49.060% { opacity: 1; } 53.125% { opacity: 0; } 59.672% { opacity: 1; } 62.500% { opacity: 0; } 71.229% { opacity: 1; } 83.812% { opacity: 0; } 90.939% { opacity: 1; } 100% { opacity: 1; } }
+      @keyframes pose-jump { 0% { opacity: 0; } 9.875% { opacity: 1; } 18.604% { opacity: 0; } 21.375% { opacity: 1; } 28.959% { opacity: 0; } 29.875% { opacity: 1; } 34.874% { opacity: 0; } 35.375% { opacity: 1; } 49.060% { opacity: 0; } 53.125% { opacity: 1; } 59.672% { opacity: 0; } 62.500% { opacity: 1; } 71.229% { opacity: 0; } 83.812% { opacity: 1; } 90.939% { opacity: 0; } 100% { opacity: 0; } }
+      .leg-a { animation: leg-a 0.24s step-end infinite; }
+      .leg-b { animation: leg-b 0.24s step-end infinite; }
+      .body-bob { animation: body-bob 0.24s step-end infinite; }
+      @keyframes leg-a { 0% { opacity: 1; } 50% { opacity: 0; } }
+      @keyframes leg-b { 0% { opacity: 0; } 50% { opacity: 1; } }
+      @keyframes body-bob { 0% { transform: translateY(0); } 50% { transform: translateY(2px); } }
 
-      /* --- HERO VERTICAL JUMP TIMING --- */
-      /* Synchronized with 6s world loop:
-         0.00s - 1.25s: Running on ground
-         1.25s - 2.55s: JUMP 1 (Big arc over the pit)
-         2.55s - 3.10s: Running on ground
-         3.10s - 3.90s: JUMP 2 (Medium arc over tall pipe)
-         3.90s - 4.60s: Running on ground
-         4.60s - 5.15s: JUMP 3 (Quick hop over enemy)
-         5.15s - 6.00s: Running on ground
-      */
-      .hero-vertical {
-        animation: hero-jump 6s linear infinite;
-      }
+      /* Goomba walks toward Mario, is flattened by the stomp, then vanishes. */
+      .goomba-walk { animation: goomba-walk 12s linear infinite; }
+      .goomba-alive { animation: goomba-alive 12s step-end infinite; }
+      .goomba-flat { animation: goomba-flat 12s step-end infinite; }
+      .gfeet-a { animation: leg-a 0.3s step-end infinite; }
+      .gfeet-b { animation: leg-b 0.3s step-end infinite; }
+      @keyframes goomba-walk { 0% { transform: translateX(0); } 41.337% { transform: translateX(-198.42px); } 100% { transform: translateX(-198.42px); } }
+      @keyframes goomba-alive { 0% { opacity: 1; } 41.337% { opacity: 0; } }
+      @keyframes goomba-flat { 0% { opacity: 0; } 41.337% { opacity: 1; } 45.503% { opacity: 0; } }
 
-      @keyframes hero-jump {
-        0%, 20.83% { transform: translateY(0px); }
-        /* Jump 1: Pit Arc */
-        25.8%  { transform: translateY(-85px); }
-        30.83% { transform: translateY(-135px); }
-        36.5%  { transform: translateY(-85px); }
-        42.50% { transform: translateY(0px); }
-        /* Ground Run */
-        51.67% { transform: translateY(0px); }
-        /* Jump 2: Pipe Arc */
-        55.0%  { transform: translateY(-55px); }
-        58.33% { transform: translateY(-90px); }
-        61.6%  { transform: translateY(-55px); }
-        65.00% { transform: translateY(0px); }
-        /* Ground Run */
-        76.67% { transform: translateY(0px); }
-        /* Jump 3: Enemy Hop */
-        79.0%  { transform: translateY(-30px); }
-        81.25% { transform: translateY(-50px); }
-        83.5%  { transform: translateY(-30px); }
-        85.83% { transform: translateY(0px); }
-        100%   { transform: translateY(0px); }
-      }
+      .coin-take-0 { animation: coin-take-0 12s step-end infinite; }
+      .coin-take-1 { animation: coin-take-1 12s step-end infinite; }
+      .coin-take-2 { animation: coin-take-2 12s step-end infinite; }
+      @keyframes coin-take-0 { 0% { opacity: 1; } 41.750% { opacity: 0; } 100% { opacity: 0; } }
+      @keyframes coin-take-1 { 0% { opacity: 1; } 43.350% { opacity: 0; } 100% { opacity: 0; } }
+      @keyframes coin-take-2 { 0% { opacity: 1; } 45.183% { opacity: 0; } 100% { opacity: 0; } }
+      .coin-spin { animation: coin-spin 0.6s steps(4) infinite; transform-origin: center; transform-box: fill-box; }
+      @keyframes coin-spin { 0%, 100% { transform: scaleX(1); } 25%, 75% { transform: scaleX(0.5); } 50% { transform: scaleX(0.1); } }
 
-      /* --- HERO POSE TOGGLE (Run vs Jump) --- */
-      .hero-pose-run  { animation: show-run 6s linear infinite; }
-      .hero-pose-jump { animation: show-jump 6s linear infinite; }
-
-      @keyframes show-run {
-        0%, 20.82%   { opacity: 1; }
-        20.83%, 42.49% { opacity: 0; }
-        42.50%, 51.66% { opacity: 1; }
-        51.67%, 64.99% { opacity: 0; }
-        65.00%, 76.66% { opacity: 1; }
-        76.67%, 85.82% { opacity: 0; }
-        85.83%, 100%   { opacity: 1; }
-      }
-      @keyframes show-jump {
-        0%, 20.82%   { opacity: 0; }
-        20.83%, 42.49% { opacity: 1; }
-        42.50%, 51.66% { opacity: 0; }
-        51.67%, 64.99% { opacity: 1; }
-        65.00%, 76.66% { opacity: 0; }
-        76.67%, 85.82% { opacity: 1; }
-        85.83%, 100%   { opacity: 0; }
-      }
-
-      /* --- HERO LEGS ANIMATION (RUN CYCLE) --- */
-      .leg-frame-1 { animation: leg-swap1 0.24s infinite steps(1); }
-      .leg-frame-2 { animation: leg-swap2 0.24s infinite steps(1); }
-      .hero-body-bob { animation: body-bob 0.24s infinite steps(1); }
-
-      @keyframes leg-swap1 {
-        0%, 100% { opacity: 1; }
-        50%      { opacity: 0; }
-      }
-      @keyframes leg-swap2 {
-        0%, 100% { opacity: 0; }
-        50%      { opacity: 1; }
-      }
-      @keyframes body-bob {
-        0%, 100% { transform: translateY(0px); }
-        50%      { transform: translateY(2px); }
-      }
-
-      /* --- ITEM ANIMATIONS --- */
-      .coin-spin {
-        animation: coin-flip 0.6s infinite steps(4);
-        transform-origin: center;
-        transform-box: fill-box;
-      }
-      @keyframes coin-flip {
-        0%   { transform: scaleX(1); }
-        25%  { transform: scaleX(0.5); }
-        50%  { transform: scaleX(0.1); }
-        75%  { transform: scaleX(0.5); }
-        100% { transform: scaleX(1); }
-      }
-
-      .q-block-glow { animation: q-glow 0.8s infinite alternate; }
-      @keyframes q-glow {
-        0%   { fill: #fc9838; }
-        100% { fill: #fce0a8; }
-      }
-
-      .enemy-waddle { animation: waddle 0.3s infinite alternate steps(1); }
-      @keyframes waddle {
-        0%   { transform: translateX(0px) skewY(0deg); }
-        100% { transform: translateX(2px) skewY(2deg); }
-      }
-
-      .flag-wave { animation: wave 0.6s infinite alternate steps(2); }
-      @keyframes wave {
-        0%   { transform: skewY(0deg); }
-        100% { transform: skewY(-4deg); }
-      }
+      /* ? block: a soft shine (opacity only); once bumped it jumps, turns used, and pops a coin. */
+      .q-shine { animation: q-shine 0.8s ease-in-out infinite alternate; }
+      @keyframes q-shine { from { opacity: 0; } to { opacity: 0.3; } }
+      .q-bump { animation: q-bump 12s linear infinite; }
+      @keyframes q-bump { 0%, 56.398% { transform: translateY(0); } 57.023% { transform: translateY(-8px); } 57.648%, 100% { transform: translateY(0); } }
+      .q-fresh { animation: q-fresh 12s step-end infinite; }
+      .q-used { animation: q-used 12s step-end infinite; }
+      @keyframes q-fresh { 0% { opacity: 1; } 56.398% { opacity: 0; } }
+      @keyframes q-used { 0% { opacity: 0; } 56.398% { opacity: 1; } }
+      .q-coin { animation: q-coin-move 12s linear infinite, q-coin-show 12s step-end infinite; }
+      @keyframes q-coin-move { 0%, 56.398% { transform: translateY(0); animation-timing-function: cubic-bezier(0.333, 0.667, 0.667, 1); } 58.898% { transform: translateY(-52px); animation-timing-function: cubic-bezier(0.333, 0, 0.667, 0.333); } 60.565%, 100% { transform: translateY(-16px); } }
+      @keyframes q-coin-show { 0% { opacity: 0; } 56.398% { opacity: 1; } 60.565% { opacity: 0; } }
     </style>
 
-    <!-- ================= SPRITE DEFINITIONS ================= -->
-
-    <!-- DIRT TILE (32x32) -->
     <g id="tile-dirt">
-      <rect x="0" y="0" width="32" height="32" fill="#c84c0c"/>
-      <rect x="0" y="0" width="32" height="2" fill="#802800"/>
-      <rect x="0" y="0" width="2" height="32" fill="#802800"/>
-      <rect x="30" y="0" width="2" height="32" fill="#e45c10"/>
-      <rect x="0" y="30" width="32" height="2" fill="#e45c10"/>
-      <!-- Pixel detail spots -->
-      <rect x="6" y="6" width="4" height="4" fill="#802800"/>
-      <rect x="20" y="10" width="6" height="4" fill="#e45c10"/>
-      <rect x="10" y="20" width="4" height="6" fill="#802800"/>
-      <rect x="22" y="22" width="4" height="4" fill="#e45c10"/>
+      <rect width="32" height="32" fill="#c84c0c"/>
+      <rect width="32" height="2" fill="#802800"/><rect width="2" height="32" fill="#802800"/>
+      <rect x="30" width="2" height="32" fill="#e45c10"/><rect y="30" width="32" height="2" fill="#e45c10"/>
+      <rect x="6" y="6" width="4" height="4" fill="#802800"/><rect x="20" y="10" width="6" height="4" fill="#e45c10"/>
+      <rect x="10" y="20" width="4" height="6" fill="#802800"/><rect x="22" y="22" width="4" height="4" fill="#e45c10"/>
     </g>
-
-    <!-- GRASS TOP TILE (32x32) -->
     <g id="tile-grass">
-      <!-- Dirt Base -->
-      <use href="#tile-dirt" x="0" y="0"/>
-      <!-- Grass Top Cap -->
-      <rect x="0" y="0" width="32" height="12" fill="#00a800"/>
-      <rect x="0" y="0" width="32" height="4" fill="#00d820"/>
-      <!-- Pixel Fringe / Fringe Teeth -->
+      <use href="#tile-dirt"/>
+      <rect width="32" height="12" fill="#00a800"/><rect width="32" height="4" fill="#00d820"/>
       <path d="M0,12 H4 V16 H0 Z M8,12 H12 V14 H8 Z M16,12 H20 V16 H16 Z M24,12 H28 V15 H24 Z" fill="#00a800"/>
-      <path d="M0,4 H32 V2 H0 Z" fill="#58f858" opacity="0.6"/>
+      <rect y="2" width="32" height="2" fill="#58f858" opacity="0.6"/>
     </g>
+    <pattern id="grass-pat" patternUnits="userSpaceOnUse" x="0" y="460" width="32" height="32"><use href="#tile-grass"/></pattern>
+    <pattern id="dirt-pat" patternUnits="userSpaceOnUse" x="0" y="492" width="32" height="32"><use href="#tile-dirt"/></pattern>
 
-    <!-- BRICK BLOCK (32x32) -->
     <g id="tile-brick">
-      <rect x="0" y="0" width="32" height="32" fill="#000000"/>
-      <rect x="2" y="2" width="28" height="28" fill="#b84418"/>
-      <!-- Mortar lines -->
-      <rect x="2" y="2" width="28" height="2" fill="#f87858"/>
-      <rect x="2" y="15" width="28" height="2" fill="#000000"/>
-      <rect x="2" y="17" width="28" height="2" fill="#f87858"/>
-      <rect x="15" y="2" width="2" height="13" fill="#000000"/>
-      <rect x="8" y="17" width="2" height="13" fill="#000000"/>
-      <rect x="24" y="17" width="2" height="13" fill="#000000"/>
+      <rect width="32" height="32" fill="#000"/><rect x="2" y="2" width="28" height="28" fill="#b84418"/>
+      <rect x="2" y="2" width="28" height="2" fill="#f87858"/><rect x="2" y="15" width="28" height="2" fill="#000"/>
+      <rect x="2" y="17" width="28" height="2" fill="#f87858"/><rect x="15" y="2" width="2" height="13" fill="#000"/>
+      <rect x="8" y="17" width="2" height="13" fill="#000"/><rect x="24" y="17" width="2" height="13" fill="#000"/>
     </g>
-
-    <!-- QUESTION BLOCK (32x32) -->
+    <g id="q-mark">
+      <rect x="10" y="6" width="12" height="2"/><rect x="8" y="8" width="4" height="4"/><rect x="20" y="8" width="4" height="6"/>
+      <rect x="16" y="14" width="6" height="2"/><rect x="14" y="16" width="4" height="4"/><rect x="14" y="22" width="4" height="4"/>
+    </g>
     <g id="tile-q">
-      <rect x="0" y="0" width="32" height="32" fill="#000000"/>
-      <rect x="2" y="2" width="28" height="28" class="q-block-glow"/>
-      <rect x="2" y="2" width="26" height="2" fill="#fce0a8"/>
-      <rect x="2" y="2" width="2" height="26" fill="#fce0a8"/>
-      <rect x="28" y="4" width="2" height="26" fill="#802800"/>
-      <rect x="4" y="28" width="26" height="2" fill="#802800"/>
-      <!-- Corner Dots -->
-      <rect x="4" y="4" width="2" height="2" fill="#802800"/>
-      <rect x="26" y="4" width="2" height="2" fill="#802800"/>
-      <rect x="4" y="26" width="2" height="2" fill="#802800"/>
-      <rect x="26" y="26" width="2" height="2" fill="#802800"/>
-      <!-- Question Mark "?" -->
-      <path d="M10,8 H22 V14 H18 V18 H14 V12 H18 V10 H10 Z M14,20 H18 V24 H14 Z" fill="#802800"/>
-      <path d="M10,6 H22 V12 H18 V16 H14 V10 H18 V8 H10 Z M14,19 H18 V23 H14 Z" fill="#ffffff"/>
+      <rect width="32" height="32" fill="#000"/><rect x="2" y="2" width="28" height="28" fill="#fc9838"/>
+      <rect x="2" y="2" width="28" height="2" fill="#fcbc78"/><rect x="2" y="2" width="2" height="28" fill="#fcbc78"/>
+      <rect x="28" y="4" width="2" height="26" fill="#c84c0c"/><rect x="4" y="28" width="26" height="2" fill="#c84c0c"/>
+      <rect x="2" y="2" width="28" height="28" fill="#fff" class="q-shine"/>
+      <rect x="4" y="4" width="2" height="2" fill="#000"/><rect x="26" y="4" width="2" height="2" fill="#000"/>
+      <rect x="4" y="26" width="2" height="2" fill="#000"/><rect x="26" y="26" width="2" height="2" fill="#000"/>
+      <use href="#q-mark" x="2" y="2" fill="#802800"/><use href="#q-mark" fill="#fff8e0"/>
     </g>
-
-    <!-- COIN (16x20) -->
+    <g id="tile-used">
+      <rect width="32" height="32" fill="#000"/><rect x="2" y="2" width="28" height="28" fill="#c84c0c"/>
+      <rect x="28" y="4" width="2" height="26" fill="#802800"/><rect x="4" y="28" width="26" height="2" fill="#802800"/>
+      <rect x="4" y="4" width="2" height="2" fill="#000"/><rect x="26" y="4" width="2" height="2" fill="#000"/>
+      <rect x="4" y="26" width="2" height="2" fill="#000"/><rect x="26" y="26" width="2" height="2" fill="#000"/>
+    </g>
     <g id="coin" class="coin-spin">
-      <rect x="2" y="0" width="12" height="20" fill="#000000"/>
-      <rect x="0" y="2" width="16" height="16" fill="#000000"/>
-      <rect x="4" y="2" width="8" height="16" fill="#f8d820"/>
-      <rect x="2" y="4" width="12" height="12" fill="#f8d820"/>
-      <rect x="4" y="4" width="2" height="12" fill="#ffffff"/>
-      <rect x="10" y="4" width="2" height="12" fill="#b87000"/>
+      <rect x="2" width="12" height="20" fill="#000"/><rect y="2" width="16" height="16" fill="#000"/>
+      <rect x="4" y="2" width="8" height="16" fill="#f8d820"/><rect x="2" y="4" width="12" height="12" fill="#f8d820"/>
+      <rect x="4" y="4" width="2" height="12" fill="#fff"/><rect x="10" y="4" width="2" height="12" fill="#b87000"/>
     </g>
-
-    <!-- SHORT WARP PIPE (48x50) -->
     <g id="pipe-short">
-      <!-- Pipe Rim -->
-      <rect x="0" y="0" width="48" height="20" fill="#000000"/>
-      <rect x="2" y="2" width="44" height="16" fill="#00a800"/>
-      <rect x="6" y="2" width="6" height="16" fill="#b8f818"/>
-      <rect x="12" y="2" width="4" height="16" fill="#00d820"/>
+      <rect width="48" height="20" fill="#000"/><rect x="2" y="2" width="44" height="16" fill="#00a800"/>
+      <rect x="6" y="2" width="6" height="16" fill="#b8f818"/><rect x="12" y="2" width="4" height="16" fill="#00d820"/>
       <rect x="36" y="2" width="8" height="16" fill="#005000"/>
-      <!-- Pipe Body -->
-      <rect x="4" y="20" width="40" height="30" fill="#000000"/>
-      <rect x="6" y="20" width="36" height="30" fill="#00a800"/>
-      <rect x="10" y="20" width="6" height="30" fill="#b8f818"/>
-      <rect x="16" y="20" width="4" height="30" fill="#00d820"/>
+      <rect x="4" y="20" width="40" height="30" fill="#000"/><rect x="6" y="20" width="36" height="30" fill="#00a800"/>
+      <rect x="10" y="20" width="6" height="30" fill="#b8f818"/><rect x="16" y="20" width="4" height="30" fill="#00d820"/>
       <rect x="34" y="20" width="6" height="30" fill="#005000"/>
     </g>
-
-    <!-- TALL WARP PIPE (48x80) -->
     <g id="pipe-tall">
-      <use href="#pipe-short" x="0" y="0"/>
-      <rect x="4" y="50" width="40" height="30" fill="#000000"/>
-      <rect x="6" y="50" width="36" height="30" fill="#00a800"/>
-      <rect x="10" y="50" width="6" height="30" fill="#b8f818"/>
-      <rect x="16" y="50" width="4" height="30" fill="#00d820"/>
+      <use href="#pipe-short"/>
+      <rect x="4" y="50" width="40" height="30" fill="#000"/><rect x="6" y="50" width="36" height="30" fill="#00a800"/>
+      <rect x="10" y="50" width="6" height="30" fill="#b8f818"/><rect x="16" y="50" width="4" height="30" fill="#00d820"/>
       <rect x="34" y="50" width="6" height="30" fill="#005000"/>
     </g>
-
-    <!-- PIXEL ENEMY / GOOMBA-STYLE CRITTER (32x32) -->
-    <g id="enemy" class="enemy-waddle">
-      <!-- Head / Body -->
-      <rect x="8" y="0" width="16" height="4" fill="#000000"/>
-      <rect x="4" y="4" width="24" height="4" fill="#000000"/>
-      <rect x="2" y="8" width="28" height="16" fill="#000000"/>
-      <rect x="8" y="2" width="16" height="2" fill="#c84c0c"/>
-      <rect x="4" y="6" width="24" height="2" fill="#c84c0c"/>
-      <rect x="4" y="8" width="24" height="14" fill="#c84c0c"/>
-      <!-- Face Stems -->
+    <g id="goomba-body">
+      <rect x="8" width="16" height="4" fill="#000"/><rect x="4" y="4" width="24" height="4" fill="#000"/>
+      <rect x="2" y="8" width="28" height="16" fill="#000"/><rect x="8" y="2" width="16" height="2" fill="#c84c0c"/>
+      <rect x="4" y="6" width="24" height="2" fill="#c84c0c"/><rect x="4" y="8" width="24" height="14" fill="#c84c0c"/>
       <rect x="8" y="22" width="16" height="4" fill="#f8ce90"/>
-      <!-- Angry Eyes -->
-      <rect x="6" y="10" width="6" height="8" fill="#ffffff"/>
-      <rect x="20" y="10" width="6" height="8" fill="#ffffff"/>
-      <rect x="10" y="12" width="2" height="6" fill="#000000"/>
-      <rect x="20" y="12" width="2" height="6" fill="#000000"/>
-      <path d="M6,10 L12,14 V10 Z M26,10 L20,14 V10 Z" fill="#000000"/>
-      <!-- Feet -->
-      <g class="enemy-feet">
-        <rect x="0" y="26" width="10" height="6" fill="#000000"/>
-        <rect x="22" y="26" width="10" height="6" fill="#000000"/>
-        <rect x="2" y="28" width="6" height="3" fill="#502000"/>
-        <rect x="24" y="28" width="6" height="3" fill="#502000"/>
+      <rect x="6" y="10" width="6" height="8" fill="#fff"/><rect x="20" y="10" width="6" height="8" fill="#fff"/>
+      <rect x="10" y="12" width="2" height="6" fill="#000"/><rect x="20" y="12" width="2" height="6" fill="#000"/>
+      <path d="M6,10 L12,14 V10 Z M26,10 L20,14 V10 Z" fill="#000"/>
+    </g>
+    <g id="goomba-squashed">
+      <rect x="4" y="2" width="24" height="2" fill="#000"/><rect x="2" y="4" width="28" height="8" fill="#000"/>
+      <rect x="4" y="4" width="24" height="6" fill="#c84c0c"/>
+      <rect x="8" y="6" width="4" height="2" fill="#fff"/><rect x="20" y="6" width="4" height="2" fill="#fff"/>
+      <rect x="8" y="10" width="16" height="2" fill="#f8ce90"/>
+      <rect y="12" width="12" height="4" fill="#000"/><rect x="20" y="12" width="12" height="4" fill="#000"/>
+    </g>
+    <path id="bush" d="M0,24 V24 H4 V12 H8 V8 H12 V8 H16 V8 H20 V8 H24 V8 H28 V4 H32 V4 H36 V4 H40 V4 H44 V8 H48 V8 H52 V8 H56 V8 H60 V8 H64 V12 H68 V24 H72 V24 Z" fill="#3cc81c" stroke="#000" stroke-width="2"/>
+    <path id="cloud-big" d="M0,30 V30 H4 V16 H8 V16 H12 V12 H16 V12 H20 V12 H24 V16 H28 V12 H32 V8 H36 V8 H40 V8 H44 V8 H48 V8 H52 V8 H56 V12 H60 V16 H64 V12 H68 V12 H72 V12 H76 V16 H80 V16 H84 V30 H88 V30 Z" fill="#fff" stroke="#000" stroke-width="2"/>
+    <path id="cloud-small" d="M0,24 V24 H4 V12 H8 V12 H12 V8 H16 V8 H20 V12 H24 V8 H28 V8 H32 V8 H36 V8 H40 V8 H44 V8 H48 V12 H52 V12 H56 V16 H60 V24 H64 V24 Z" fill="#fff" stroke="#000" stroke-width="2"/>
+
+    <!-- 400-wide hill block. Both hills reach the bottom, so a pit shows them carrying on down. -->
+    <g id="hills-400">
+      <path d="M152,600 V600 H156 V600 H160 V600 H164 V600 H168 V600 H172 V600 H176 V600 H180 V600 H184 V600 H188 V600 H192 V600 H196 V600 H200 V600 H204 V600 H208 V600 H212 V600 H216 V600 H220 V600 H224 V600 H228 V600 H232 V600 H236 V600 H240 V460 H244 V452 H248 V448 H252 V440 H256 V432 H260 V428 H264 V412 H268 V404 H272 V400 H276 V396 H280 V392 H284 V392 H288 V388 H292 V388 H296 V388 H300 V388 H304 V388 H308 V388 H312 V392 H316 V392 H320 V396 H324 V400 H328 V404 H332 V412 H336 V428 H340 V432 H344 V440 H348 V448 H352 V452 H356 V460 H360 V600 H364 V600 H368 V600 H372 V600 H376 V600 H380 V600 H384 V600 H388 V600 H392 V600 H396 V600 H400 V600 H404 V600 H408 V600 H412 V600 H416 V600 H420 V600 H424 V600 H428 V600 H432 V600 H436 V600 H440 V600 H444 V600 H448 V600 Z" fill="#00a800" stroke="#000" stroke-width="2"/>
+      <path d="M-92,600 V600 H-88 V600 H-84 V600 H-80 V600 H-76 V600 H-72 V600 H-68 V600 H-64 V600 H-60 V600 H-56 V600 H-52 V600 H-48 V600 H-44 V600 H-40 V600 H-36 V600 H-32 V600 H-28 V600 H-24 V600 H-20 V600 H-16 V600 H-12 V600 H-8 V600 H-4 V460 H0 V452 H4 V448 H8 V440 H12 V436 H16 V428 H20 V420 H24 V416 H28 V408 H32 V404 H36 V396 H40 V388 H44 V384 H48 V364 H52 V356 H56 V348 H60 V344 H64 V340 H68 V336 H72 V336 H76 V332 H80 V332 H84 V328 H88 V328 H92 V328 H96 V328 H100 V328 H104 V328 H108 V328 H112 V328 H116 V332 H120 V332 H124 V336 H128 V336 H132 V340 H136 V344 H140 V348 H144 V356 H148 V364 H152 V384 H156 V388 H160 V396 H164 V404 H168 V408 H172 V416 H176 V420 H180 V428 H184 V436 H188 V440 H192 V448 H196 V452 H200 V460 H204 V600 H208 V600 H212 V600 H216 V600 H220 V600 H224 V600 H228 V600 H232 V600 H236 V600 H240 V600 H244 V600 H248 V600 H252 V600 H256 V600 H260 V600 H264 V600 H268 V600 H272 V600 H276 V600 H280 V600 H284 V600 H288 V600 H292 V600 Z" fill="#00a800" stroke="#000" stroke-width="2"/>
+      <g fill="#005000">
+        <rect x="84" y="372" width="4" height="8"/><rect x="112" y="400" width="4" height="8"/><rect x="72" y="424" width="4" height="8"/>
+        <rect x="128" y="440" width="4" height="8"/><rect x="292" y="420" width="4" height="8"/><rect x="312" y="444" width="4" height="8"/>
       </g>
     </g>
-
-    <!-- 200px PARALLAX CLOUD BLOCK -->
-    <g id="clouds-200">
-      <!-- Cloud 1 -->
-      <g transform="translate(20, 40)">
-        <rect x="10" y="0" width="30" height="20" fill="#ffffff"/>
-        <rect x="0" y="10" width="50" height="15" fill="#ffffff"/>
-        <rect x="0" y="20" width="50" height="5" fill="#92a0d8"/>
-        <rect x="5" y="25" width="40" height="3" fill="#70a4b8"/>
-      </g>
-      <!-- Cloud 2 -->
-      <g transform="translate(130, 70)">
-        <rect x="8" y="0" width="20" height="14" fill="#ffffff"/>
-        <rect x="0" y="6" width="36" height="12" fill="#ffffff"/>
-        <rect x="0" y="14" width="36" height="4" fill="#92a0d8"/>
-      </g>
-    </g>
-
-    <!-- 400px PARALLAX HILL BLOCK -->
-    <g id="hill-400">
-      <!-- Big Hill -->
-      <path d="M 40,300 L 120,180 L 200,300 Z" fill="#00a800"/>
-      <path d="M 120,180 L 200,300 H 120 Z" fill="#007800"/> <!-- Shadow side -->
-      <path d="M 105,200 L 120,180 L 135,200 Z" fill="#58f858"/> <!-- Highlight peak -->
-      <!-- Small Hill -->
-      <path d="M 260,300 L 320,220 L 380,300 Z" fill="#00a800"/>
-      <path d="M 320,220 L 380,300 H 320 Z" fill="#007800"/>
-      <!-- Hill Outline Spots -->
-      <circle cx="120" cy="220" r="3" fill="#00d820"/>
-      <circle cx="90" cy="260" r="4" fill="#00d820"/>
-      <circle cx="150" cy="250" r="4" fill="#005000"/>
-    </g>
-
-    <!-- ONE COMPLETE 800px LEVEL TILE SECTION -->
-    <g id="level-tile-800">
-      <!-- Ground Floor Blocks (0..448px) -->
-      <!-- Row 1: Grass Surface at Y=460 -->
-      <use href="#tile-grass" x="0" y="460"/><use href="#tile-grass" x="32" y="460"/>
-      <use href="#tile-grass" x="64" y="460"/><use href="#tile-grass" x="96" y="460"/>
-      <use href="#tile-grass" x="128" y="460"/><use href="#tile-grass" x="160" y="460"/>
-      <use href="#tile-grass" x="192" y="460"/><use href="#tile-grass" x="224" y="460"/>
-      <use href="#tile-grass" x="256" y="460"/><use href="#tile-grass" x="288" y="460"/>
-      <use href="#tile-grass" x="320" y="460"/><use href="#tile-grass" x="352" y="460"/>
-      <use href="#tile-grass" x="384" y="460"/><use href="#tile-grass" x="416" y="460"/>
-
-      <!-- Underground Dirt Rows (0..448px) -->
-      <g>
-        <!-- Y=492 -->
-        <use href="#tile-dirt" x="0" y="492"/><use href="#tile-dirt" x="32" y="492"/><use href="#tile-dirt" x="64" y="492"/><use href="#tile-dirt" x="96" y="492"/><use href="#tile-dirt" x="128" y="492"/><use href="#tile-dirt" x="160" y="492"/><use href="#tile-dirt" x="192" y="492"/><use href="#tile-dirt" x="224" y="492"/><use href="#tile-dirt" x="256" y="492"/><use href="#tile-dirt" x="288" y="492"/><use href="#tile-dirt" x="320" y="492"/><use href="#tile-dirt" x="352" y="492"/><use href="#tile-dirt" x="384" y="492"/><use href="#tile-dirt" x="416" y="492"/>
-        <!-- Y=524 -->
-        <use href="#tile-dirt" x="0" y="524"/><use href="#tile-dirt" x="32" y="524"/><use href="#tile-dirt" x="64" y="524"/><use href="#tile-dirt" x="96" y="524"/><use href="#tile-dirt" x="128" y="524"/><use href="#tile-dirt" x="160" y="524"/><use href="#tile-dirt" x="192" y="524"/><use href="#tile-dirt" x="224" y="524"/><use href="#tile-dirt" x="256" y="524"/><use href="#tile-dirt" x="288" y="524"/><use href="#tile-dirt" x="320" y="524"/><use href="#tile-dirt" x="352" y="524"/><use href="#tile-dirt" x="384" y="524"/><use href="#tile-dirt" x="416" y="524"/>
-        <!-- Y=556 -->
-        <use href="#tile-dirt" x="0" y="556"/><use href="#tile-dirt" x="32" y="556"/><use href="#tile-dirt" x="64" y="556"/><use href="#tile-dirt" x="96" y="556"/><use href="#tile-dirt" x="128" y="556"/><use href="#tile-dirt" x="160" y="556"/><use href="#tile-dirt" x="192" y="556"/><use href="#tile-dirt" x="224" y="556"/><use href="#tile-dirt" x="256" y="556"/><use href="#tile-dirt" x="288" y="556"/><use href="#tile-dirt" x="320" y="556"/><use href="#tile-dirt" x="352" y="556"/><use href="#tile-dirt" x="384" y="556"/><use href="#tile-dirt" x="416" y="556"/>
-      </g>
-
-      <!-- THE PIT GAP (448px to 576px) -> Dark pit abyss walls -->
-      <rect x="448" y="460" width="8" height="140" fill="#000000"/>
-      <rect x="568" y="460" width="8" height="140" fill="#000000"/>
-
-      <!-- Ground Floor Blocks (576px to 800px) -->
-      <!-- Row 1: Grass Surface at Y=460 -->
-      <use href="#tile-grass" x="576" y="460"/><use href="#tile-grass" x="608" y="460"/>
-      <use href="#tile-grass" x="640" y="460"/><use href="#tile-grass" x="672" y="460"/>
-      <use href="#tile-grass" x="704" y="460"/><use href="#tile-grass" x="736" y="460"/>
-      <use href="#tile-grass" x="768" y="460"/>
-
-      <!-- Underground Dirt Rows (576..800px) -->
-      <g>
-        <use href="#tile-dirt" x="576" y="492"/><use href="#tile-dirt" x="608" y="492"/><use href="#tile-dirt" x="640" y="492"/><use href="#tile-dirt" x="672" y="492"/><use href="#tile-dirt" x="704" y="492"/><use href="#tile-dirt" x="736" y="492"/><use href="#tile-dirt" x="768" y="492"/>
-        <use href="#tile-dirt" x="576" y="524"/><use href="#tile-dirt" x="608" y="524"/><use href="#tile-dirt" x="640" y="524"/><use href="#tile-dirt" x="672" y="524"/><use href="#tile-dirt" x="704" y="524"/><use href="#tile-dirt" x="736" y="524"/><use href="#tile-dirt" x="768" y="524"/>
-        <use href="#tile-dirt" x="576" y="556"/><use href="#tile-dirt" x="608" y="556"/><use href="#tile-dirt" x="640" y="556"/><use href="#tile-dirt" x="672" y="556"/><use href="#tile-dirt" x="704" y="556"/><use href="#tile-dirt" x="736" y="556"/><use href="#tile-dirt" x="768" y="556"/>
-      </g>
-
-      <!-- ================= LEVEL STRUCTURES & ITEMS ================= -->
-
-      <!-- Enemy near start (X=96, reaches hero at t=4.87s -> Hero Hop 3) -->
-      <use href="#enemy" x="96" y="428"/>
-
-      <!-- Floating Block Formation 1 (X=160..256, Y=332) -->
-      <use href="#tile-brick" x="160" y="332"/>
-      <use href="#tile-q"     x="192" y="332"/>
-      <use href="#tile-brick" x="224" y="332"/>
-      <use href="#tile-q"     x="256" y="332"/>
-      <!-- Coins Floating Above Blocks -->
-      <use href="#coin" x="168" y="288"/>
-      <use href="#coin" x="200" y="288"/>
-      <use href="#coin" x="232" y="288"/>
-      <use href="#coin" x="264" y="288"/>
-
-      <!-- Coins Arc Over Pit (X=448..576) -->
-      <use href="#coin" x="472" y="390"/>
-      <use href="#coin" x="504" y="340"/>
-      <use href="#coin" x="536" y="390"/>
-
-      <!-- Brick Staircase Structure (X=608..672) -->
-      <use href="#tile-brick" x="608" y="428"/>
-      <use href="#tile-brick" x="640" y="428"/>
-      <use href="#tile-brick" x="640" y="396"/>
-
-      <!-- Tall Pipe (X=704, reaches hero at t=3.37s -> Hero Jump 2) -->
-      <use href="#pipe-tall" x="704" y="380"/>
-
-      <!-- Bushes on ground -->
-      <path d="M 320,460 Q 330,440 340,460 Q 350,440 360,460 Z" fill="#00d820" stroke="#000000" stroke-width="2"/>
+    <g id="clouds-400">
+      <use href="#cloud-big" x="40" y="160"/>
+      <use href="#cloud-small" x="250" y="276"/>
     </g>
   </defs>
 
-  <!-- ================= SCENERY LAYERS ================= -->
-
-  <!-- SKY BACKGROUND FILL -->
   <rect width="800" height="600" fill="#5c94fc"/>
-
-  <!-- PARALLAX LAYER 1: CLOUDS (Slower, 200px loop) -->
-  <g class="layer-clouds">
-    <use href="#clouds-200" x="0" y="0"/>
-    <use href="#clouds-200" x="200" y="0"/>
-    <use href="#clouds-200" x="400" y="0"/>
-    <use href="#clouds-200" x="600" y="0"/>
-    <use href="#clouds-200" x="800" y="0"/>
-    <use href="#clouds-200" x="1000" y="0"/>
-  </g>
-
-  <!-- PARALLAX LAYER 2: HILLS (Midground, 400px loop) -->
-  <g class="layer-hills">
-    <use href="#hill-400" x="0" y="160"/>
-    <use href="#hill-400" x="400" y="160"/>
-    <use href="#hill-400" x="800" y="160"/>
-    <use href="#hill-400" x="1200" y="160"/>
-  </g>
-
-  <!-- PARALLAX LAYER 3: MAIN GAME WORLD (Full speed, 800px seamless loop) -->
+  <g class="layer-clouds"><use href="#clouds-400" x="0"/><use href="#clouds-400" x="400"/><use href="#clouds-400" x="800"/><use href="#clouds-400" x="1200"/></g>
+  <g class="layer-hills"><use href="#hills-400" x="0" y="0"/><use href="#hills-400" x="400" y="0"/><use href="#hills-400" x="800" y="0"/><use href="#hills-400" x="1200" y="0"/><use href="#hills-400" x="1600" y="0"/></g>
+  <!-- The 1600-wide level, drawn twice for a seamless scroll. Written out rather than <use>d: animations inside
+       a <use> copy can't be paused or seeked from outside, and everything here that changes state must stay in step. -->
   <g class="layer-main">
-    <use href="#level-tile-800" x="0" y="0"/>
-    <use href="#level-tile-800" x="800" y="0"/>
+    <g>
+      <use href="#bush" x="296" y="436"/><use href="#bush" x="968" y="436"/><use href="#bush" x="1440" y="436"/>
+      <rect x="0" y="460" width="32" height="32" fill="url(#grass-pat)"/><rect x="0" y="492" width="32" height="108" fill="url(#dirt-pat)"/>
+      <rect x="96" y="460" width="352" height="32" fill="url(#grass-pat)"/><rect x="96" y="492" width="352" height="108" fill="url(#dirt-pat)"/>
+      <rect x="544" y="460" width="1056" height="32" fill="url(#grass-pat)"/><rect x="544" y="492" width="1056" height="108" fill="url(#dirt-pat)"/>
+      <use href="#tile-brick" x="656" y="428"/>
+      <use href="#tile-brick" x="688" y="428"/><use href="#tile-brick" x="688" y="396"/>
+      <use href="#tile-brick" x="720" y="428"/><use href="#tile-brick" x="720" y="396"/>
+      <use href="#pipe-tall" x="800" y="380"/>
+      <use href="#pipe-short" x="1312" y="410"/>
+      <use href="#tile-brick" x="1120" y="332"/><use href="#tile-brick" x="1184" y="332"/>
+      <g transform="translate(1160, 312)"><use href="#coin" class="q-coin"/></g>
+      <g transform="translate(1152, 332)">
+        <g class="q-bump"><use href="#tile-q" class="q-fresh"/><use href="#tile-used" class="q-used"/></g>
+      </g>
+      <use href="#coin" x="946.06" y="353.03" class="coin-take-0"/>
+      <use href="#coin" x="974.59" y="337" class="coin-take-1"/>
+      <use href="#coin" x="1003.93" y="353.94" class="coin-take-2"/>
+      <g transform="translate(1109.81, 428)">
+        <g class="goomba-walk">
+          <g class="goomba-alive">
+            <use href="#goomba-body"/>
+            <g class="gfeet-a"><rect y="26" width="12" height="6" fill="#000"/><rect x="2" y="28" width="8" height="3" fill="#502000"/><rect x="20" y="28" width="10" height="4" fill="#000"/></g>
+            <g class="gfeet-b"><rect x="2" y="28" width="10" height="4" fill="#000"/><rect x="20" y="26" width="12" height="6" fill="#000"/><rect x="22" y="28" width="8" height="3" fill="#502000"/></g>
+          </g>
+          <use href="#goomba-squashed" y="16" class="goomba-flat"/>
+        </g>
+      </g></g>
+    <g transform="translate(1600, 0)">
+      <use href="#bush" x="296" y="436"/><use href="#bush" x="968" y="436"/><use href="#bush" x="1440" y="436"/>
+      <rect x="0" y="460" width="32" height="32" fill="url(#grass-pat)"/><rect x="0" y="492" width="32" height="108" fill="url(#dirt-pat)"/>
+      <rect x="96" y="460" width="352" height="32" fill="url(#grass-pat)"/><rect x="96" y="492" width="352" height="108" fill="url(#dirt-pat)"/>
+      <rect x="544" y="460" width="1056" height="32" fill="url(#grass-pat)"/><rect x="544" y="492" width="1056" height="108" fill="url(#dirt-pat)"/>
+      <use href="#tile-brick" x="656" y="428"/>
+      <use href="#tile-brick" x="688" y="428"/><use href="#tile-brick" x="688" y="396"/>
+      <use href="#tile-brick" x="720" y="428"/><use href="#tile-brick" x="720" y="396"/>
+      <use href="#pipe-tall" x="800" y="380"/>
+      <use href="#pipe-short" x="1312" y="410"/>
+      <use href="#tile-brick" x="1120" y="332"/><use href="#tile-brick" x="1184" y="332"/>
+      <g transform="translate(1160, 312)"><use href="#coin" class="q-coin"/></g>
+      <g transform="translate(1152, 332)">
+        <g class="q-bump"><use href="#tile-q" class="q-fresh"/><use href="#tile-used" class="q-used"/></g>
+      </g>
+      <use href="#coin" x="946.06" y="353.03" class="coin-take-0"/>
+      <use href="#coin" x="974.59" y="337" class="coin-take-1"/>
+      <use href="#coin" x="1003.93" y="353.94" class="coin-take-2"/>
+      <g transform="translate(1109.81, 428)">
+        <g class="goomba-walk">
+          <g class="goomba-alive">
+            <use href="#goomba-body"/>
+            <g class="gfeet-a"><rect y="26" width="12" height="6" fill="#000"/><rect x="2" y="28" width="8" height="3" fill="#502000"/><rect x="20" y="28" width="10" height="4" fill="#000"/></g>
+            <g class="gfeet-b"><rect x="2" y="28" width="10" height="4" fill="#000"/><rect x="20" y="26" width="12" height="6" fill="#000"/><rect x="22" y="28" width="8" height="3" fill="#502000"/></g>
+          </g>
+          <use href="#goomba-squashed" y="16" class="goomba-flat"/>
+        </g>
+      </g></g>
   </g>
 
-  <!-- ================= FOREGROUND HERO CHARACTER ================= -->
-  <!-- Screen Position: Fixed horizontally at X=250, Base Y=420 (feet at Y=460) -->
-  <g transform="translate(250, 420)">
-    <!-- Vertical Jump Container -->
-    <g class="hero-vertical">
-
-      <!-- POSE 1: RUNNING CYCLE (Active on ground) -->
-      <g class="hero-pose-run">
-        <g class="hero-body-bob">
-          <!-- Cap / Head -->
-          <rect x="6" y="0" width="22" height="6" fill="#f82000"/>
-          <rect x="4" y="4" width="28" height="6" fill="#f82000"/>
-          <rect x="22" y="4" width="8" height="2" fill="#ffffff"/> <!-- Cap Emblem -->
-          <!-- Face / Eyes -->
-          <rect x="6" y="10" width="20" height="8" fill="#f8c0a0"/>
-          <rect x="18" y="12" width="4" height="6" fill="#000000"/> <!-- Eye -->
-          <rect x="20" y="12" width="2" height="2" fill="#ffffff"/> <!-- Eye Shine -->
-          <rect x="22" y="14" width="6" height="4" fill="#f8c0a0"/> <!-- Nose -->
-          <rect x="16" y="18" width="10" height="3" fill="#502000"/> <!-- Mustache -->
-          <!-- Shirt & Overalls Body -->
-          <rect x="8" y="20" width="16" height="10" fill="#f82000"/>
-          <rect x="10" y="22" width="12" height="10" fill="#0040f8"/>
-          <rect x="12" y="24" width="2" height="2" fill="#f8d800"/> <!-- Button -->
-          <rect x="20" y="24" width="2" height="2" fill="#f8d800"/> <!-- Button -->
-          <!-- Arms / White Gloves -->
-          <rect x="2" y="22" width="6" height="6" fill="#ffffff"/>
-          <rect x="22" y="20" width="6" height="6" fill="#ffffff"/>
+  <!-- Mario: fixed on screen, feet on the grass at y=460. -->
+  <g transform="translate(250, 418)">
+    <g class="hero-y">
+      <g class="pose-run">
+        <g class="body-bob">
+          <rect x="6" width="22" height="6" fill="#f82000"/><rect x="4" y="4" width="28" height="6" fill="#f82000"/>
+          <rect x="22" y="4" width="8" height="2" fill="#fff"/>
+          <rect x="6" y="10" width="20" height="8" fill="#f8c0a0"/><rect x="18" y="12" width="4" height="6" fill="#000"/>
+          <rect x="20" y="12" width="2" height="2" fill="#fff"/><rect x="22" y="14" width="6" height="4" fill="#f8c0a0"/>
+          <rect x="16" y="18" width="10" height="3" fill="#502000"/>
+          <rect x="8" y="20" width="16" height="10" fill="#f82000"/><rect x="10" y="22" width="12" height="10" fill="#0040f8"/>
+          <rect x="12" y="24" width="2" height="2" fill="#f8d800"/><rect x="20" y="24" width="2" height="2" fill="#f8d800"/>
+          <rect x="2" y="22" width="6" height="6" fill="#fff"/><rect x="22" y="20" width="6" height="6" fill="#fff"/>
         </g>
-
-        <!-- Dynamic Legs (Alternating 2-frame run) -->
-        <!-- Leg Frame A -->
-        <g class="leg-frame-1">
-          <rect x="4" y="32" width="8" height="6" fill="#0040f8"/>
-          <rect x="2" y="38" width="10" height="4" fill="#683000"/> <!-- Boot Left -->
-          <rect x="18" y="32" width="8" height="4" fill="#0040f8"/>
-          <rect x="20" y="36" width="10" height="6" fill="#683000"/> <!-- Boot Right -->
+        <g class="leg-a">
+          <rect x="4" y="32" width="8" height="6" fill="#0040f8"/><rect x="2" y="38" width="10" height="4" fill="#683000"/>
+          <rect x="18" y="32" width="8" height="4" fill="#0040f8"/><rect x="20" y="36" width="10" height="6" fill="#683000"/>
         </g>
-        <!-- Leg Frame B -->
-        <g class="leg-frame-2">
-          <rect x="18" y="32" width="8" height="6" fill="#0040f8"/>
-          <rect x="18" y="38" width="10" height="4" fill="#683000"/> <!-- Boot Right -->
-          <rect x="4" y="32" width="8" height="4" fill="#0040f8"/>
-          <rect x="0" y="36" width="10" height="6" fill="#683000"/> <!-- Boot Left -->
+        <g class="leg-b">
+          <rect x="18" y="32" width="8" height="6" fill="#0040f8"/><rect x="18" y="38" width="10" height="4" fill="#683000"/>
+          <rect x="4" y="32" width="8" height="4" fill="#0040f8"/><rect y="36" width="10" height="6" fill="#683000"/>
         </g>
       </g>
-
-      <!-- POSE 2: AIRBORNE JUMP POSE (Active during hops) -->
-      <g class="hero-pose-jump" transform="rotate(-6, 16, 20)">
-        <!-- Cap / Head (Tilted back) -->
-        <rect x="4" y="0" width="22" height="6" fill="#f82000"/>
-        <rect x="2" y="4" width="28" height="6" fill="#f82000"/>
-        <rect x="20" y="4" width="8" height="2" fill="#ffffff"/>
-        <!-- Face -->
-        <rect x="6" y="10" width="20" height="8" fill="#f8c0a0"/>
-        <rect x="18" y="11" width="4" height="5" fill="#000000"/>
-        <rect x="20" y="11" width="2" height="2" fill="#ffffff"/>
-        <rect x="16" y="17" width="10" height="3" fill="#502000"/>
-        <!-- Body / Overalls -->
-        <rect x="6" y="18" width="16" height="12" fill="#0040f8"/>
-        <rect x="8" y="18" width="12" height="6" fill="#f82000"/>
+      <g class="pose-jump">
+        <rect x="4" width="22" height="6" fill="#f82000"/><rect x="2" y="4" width="28" height="6" fill="#f82000"/>
+        <rect x="20" y="4" width="8" height="2" fill="#fff"/>
+        <rect x="6" y="10" width="20" height="8" fill="#f8c0a0"/><rect x="18" y="11" width="4" height="5" fill="#000"/>
+        <rect x="20" y="11" width="2" height="2" fill="#fff"/><rect x="16" y="17" width="10" height="3" fill="#502000"/>
+        <rect x="6" y="18" width="16" height="12" fill="#0040f8"/><rect x="8" y="18" width="12" height="6" fill="#f82000"/>
         <rect x="10" y="22" width="2" height="2" fill="#f8d800"/>
-        <!-- Raised Victory Arm -->
-        <rect x="20" y="8" width="6" height="10" fill="#f82000"/>
-        <rect x="20" y="4" width="8" height="6" fill="#ffffff"/> <!-- High Glove -->
-        <rect x="0" y="20" width="6" height="6" fill="#ffffff"/> <!-- Back Glove -->
-        <!-- Bent Jumping Legs -->
-        <rect x="2" y="28" width="10" height="6" fill="#0040f8"/>
-        <rect x="0" y="34" width="10" height="6" fill="#683000"/> <!-- Tucked Boot -->
-        <rect x="16" y="30" width="8" height="10" fill="#0040f8"/>
-        <rect x="16" y="40" width="10" height="4" fill="#683000"/> <!-- Extended Boot -->
+        <rect x="20" y="8" width="6" height="10" fill="#f82000"/><rect x="20" y="4" width="8" height="6" fill="#fff"/>
+        <rect y="20" width="6" height="6" fill="#fff"/>
+        <rect x="2" y="28" width="10" height="6" fill="#0040f8"/><rect y="34" width="10" height="6" fill="#683000"/>
+        <rect x="16" y="30" width="8" height="8" fill="#0040f8"/><rect x="16" y="38" width="10" height="4" fill="#683000"/>
       </g>
-
     </g>
-  </g>
-
-  <!-- ================= FIXED RETRO HUD OVERLAY ================= -->
-  <g transform="translate(0, 0)">
-    <!-- Top Bar Dark Backdrop -->
-    <rect x="0" y="0" width="800" height="44" fill="#000000" opacity="0.3"/>
-
-    <!-- Score Column -->
-    <text x="50" y="20" font-family="'Courier New', monospace" font-weight="900" font-size="16" fill="#ffffff">MARIO</text>
-    <text x="50" y="36" font-family="'Courier New', monospace" font-weight="900" font-size="16" fill="#ffffff">004820</text>
-
-    <!-- Coins Column -->
-    <use href="#coin" x="280" y="18" transform="scale(0.8)"/>
-    <text x="300" y="32" font-family="'Courier New', monospace" font-weight="900" font-size="16" fill="#ffffff">x14</text>
-
-    <!-- World Column -->
-    <text x="480" y="20" font-family="'Courier New', monospace" font-weight="900" font-size="16" fill="#ffffff">WORLD</text>
-    <text x="496" y="36" font-family="'Courier New', monospace" font-weight="900" font-size="16" fill="#ffffff">1-1</text>
-
-    <!-- Time Column -->
-    <text x="670" y="20" font-family="'Courier New', monospace" font-weight="900" font-size="16" fill="#ffffff">TIME</text>
-    <text x="678" y="36" font-family="'Courier New', monospace" font-weight="900" font-size="16" fill="#ffffff">294</text>
   </g>
 </svg>

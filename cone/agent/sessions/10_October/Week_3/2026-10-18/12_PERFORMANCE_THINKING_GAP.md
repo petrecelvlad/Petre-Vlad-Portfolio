@@ -13,7 +13,7 @@ timestamp: 2026-10-18T00:00:00Z
 - **Date:** 2026-10-18
 - **Agent:** Claude Code (claude-opus-5-5)
 - **Goal:** Pick up the hero performance handoff, explain the name-letter animation's cost, and turn the reasoning gap behind it into a board card.
-- **Status:** COMPLETE ✅
+- **Status:** IN-PROGRESS
 - **Previous:** [Session 11](../2026-10-17/11_OVERVIEW_FACTS_REMOVAL.md)
 
 ---
@@ -27,7 +27,12 @@ timestamp: 2026-10-18T00:00:00Z
 - [x] Audited every animation on the site, read from code only: 14 problems (P1–P14) with fixes, published as "Moving Parts Audit" (https://claude.ai/artifact/HiFbFMvshAGcyn9Fo6u3PC), user approved all
 - [x] Fixed P1–P5, P7–P14 ([T-064](../../../../../project/roadmap/board/T-064-moving-parts-audit-fixes.md)); P6 cards still parked; `tsc` and `vite build` pass
 - [x] User's side-by-side visual check of the fixes: all five pass, T-064 closed
-- [x] Committed everything from sessions 11–12 (`5be2c4c`, branch `Unifier`, not pushed)
+- [x] Committed everything from sessions 11–12 (`5be2c4c`), merged to `main` via PR #9, deployed
+- [x] T-061: performance guardrails C-008 to C-012 approved and added; the 7 always-on components cite them
+- [ ] T-060: saved performance test built (`npm run perf`, `tools/perf/`); first run and baseline still to record
+- [x] Saved the PlayMusic icon locally (`public/assets/icons/Icon_PlayMusic.svg`) and linked it
+- [x] Proposals canvas "Clipboard Logos and Links" (https://claude.ai/artifact/QvqEehHsMonPHhkystbm14); user picked paper tags, logo bottom right with no paper, Read more after the summary, ink stamp when there is no logo
+- [ ] [T-065](../../../../../project/roadmap/board/T-065-clipboard-logo-and-links.md): built and screenshot-checked; real company logos and verified links per game added; awaiting the user's side-by-side check
 
 ---
 
@@ -36,6 +41,7 @@ timestamp: 2026-10-18T00:00:00Z
 - **Lambert lighting stays:** the user approved the flatter grass. Session 11's open question is closed; `MeshLambertMaterial` remains in `ThreeNatureFieldBackground.tsx` (still uncommitted).
 - **Cards → MP4 parked:** the user doesn't want it now.
 - **T-058 as an epic with five children:** the five fixes were identified and scoped, so they got `backlog` cards now (Planner: no withheld fragmentation).
+- **Project links are a typed list (`links.pages`), logo stays per company:** the two are separate concepts; `ITimelineProject` carries the company to the clipboard. The game-icon `companyLogo` values were cleared, so every company shows its stamp until real logos are found.
 
 ---
 
@@ -55,4 +61,4 @@ timestamp: 2026-10-18T00:00:00Z
 
 ---
 
-*Last updated: 2026-10-18*
+*Last updated: 2026-10-19*

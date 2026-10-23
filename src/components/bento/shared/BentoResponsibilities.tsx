@@ -1,9 +1,24 @@
+/**
+ * @propolis
+ * {
+ *   "role": "UI_COMPONENT",
+ *   "constraints": [
+ *     "C-008: the details hint hand bobs as a CSS transform animation (index.css .hint-bob)",
+ *     "C-010: the hand stops through index.css's reduced-motion rule; the tab flip's rotateX is covered by MotionConfig"
+ *   ],
+ *   "agent_instructions": "The clipboard for one project. Only the hint hand moves nonstop, and only until the visitor's first tab click."
+ * }
+ */
 import { useEffect, useId, useLayoutEffect, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
-import { ChevronRight, FileText, Images, ListChecks, Pointer, type LucideIcon } from 'lucide-react';
+import {
+  ChevronRight, Facebook, FileText, Gamepad2, Globe, Images, Instagram, ListChecks, MessageCircle, Newspaper,
+  Play, Pointer, Smartphone, Twitter, Youtube, type LucideIcon,
+} from 'lucide-react';
 import { Text } from '@/src/components/atoms/Text';
 import { InstantPhoto } from '@/src/components/atoms/InstantPhoto';
 import { ResponsibilitiesSlotProps } from '@/src/components/bento/ports';
+import type { IProjectLink, ProjectLinkKind } from '@/src/core/domain/models';
 import { formatDateToQuarter, formatDuration } from '@/src/core/domain/formatDate';
 import { splitUnconfirmed } from '@/src/core/domain/unconfirmedCopy';
 import { dismissDetailsHint, useDetailsHintDismissed } from '@/src/hooks/useDetailsHint';
@@ -131,6 +146,80 @@ function BinderClip() {
   );
 }
 
+// Tag order is this object's order: pages to play or read about the game first, social pages after.
+const LINK_KINDS: Record<ProjectLinkKind, { label: string; Icon: LucideIcon }> = {
+  website: { label: 'Website', Icon: Globe },
+  article: { label: 'Article', Icon: Newspaper },
+  newgrounds: { label: 'Newgrounds', Icon: Play },
+  appStore: { label: 'App Store', Icon: Smartphone },
+  googlePlay: { label: 'Google Play', Icon: Play },
+  steam: { label: 'Steam', Icon: Gamepad2 },
+  youtube: { label: 'YouTube', Icon: Youtube },
+  facebook: { label: 'Facebook', Icon: Facebook },
+  instagram: { label: 'Instagram', Icon: Instagram },
+  x: { label: 'X', Icon: Twitter },
+  discord: { label: 'Discord', Icon: MessageCircle },
+};
+const LINK_ORDER = Object.keys(LINK_KINDS) as ProjectLinkKind[];
+
+function LinkTags({ links }: { links: IProjectLink[] }) {
+  const sortedLinks = [...links].sort((a, b) => LINK_ORDER.indexOf(a.kind) - LINK_ORDER.indexOf(b.kind));
+  return (
+    <div className="flex flex-wrap gap-x-2 gap-y-2.5">
+      {sortedLinks.map((link, i) => {
+        const { label, Icon } = LINK_KINDS[link.kind];
+        return (
+          <a
+            key={link.url}
+            href={link.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1.5 h-8 px-2.5 rounded border-2 border-ink-base shadow-[0_2px_0_var(--color-ink-base)] font-mono font-bold text-xs uppercase tracking-wide text-ink-base whitespace-nowrap transition-transform hover:-translate-y-px"
+            style={{ backgroundColor: HERITAGE_PALETTE[i % HERITAGE_PALETTE.length], rotate: `${i % 2 === 0 ? -1.5 : 1.5}deg` }}
+          >
+            <Icon className="w-3.5 h-3.5" strokeWidth={2.5} aria-hidden />
+            {link.label ?? label}
+          </a>
+        );
+      })}
+    </div>
+  );
+}
+
+function CompanyMark({ company, companyLogo }: { company: string; companyLogo?: string }) {
+  return companyLogo
+    ? <img src={companyLogo} alt={`${company} logo`} className="max-w-[128px] max-h-[72px] object-contain mix-blend-multiply" />
+    : <CompanyStamp company={company} />;
+}
+
+// Stands in for a company logo: freelance and independent work has none, and some companies'
+// can't be found. The name curves around the top like an official seal; a qualifier like "(Flash Era)" is dropped.
+function CompanyStamp({ company }: { company: string }) {
+  const pathId = useId();
+  const name = company.replace(/\s*\(.*\)/, '');
+  // The name's arc is about 120 units long; a mono glyph advances 0.6em plus the 1-unit letter spacing.
+  // Above 9 units the capitals reach the inner ring.
+  const nameSize = Math.min(9, (120 / name.length - 1) / 0.6);
+  return (
+    <svg viewBox="0 0 100 100" className="w-[116px] h-[116px] -rotate-12 opacity-85 text-sky-deep" role="img" aria-label={name}>
+      <defs>
+        <path id={`${pathId}top`} d="M 21 63.5 A 32 32 0 1 1 79 63.5" />
+      </defs>
+      <g fill="none" stroke="currentColor">
+        <circle cx="50" cy="50" r="47" strokeWidth="3" />
+        <circle cx="50" cy="50" r="42" strokeWidth="1.2" />
+        <circle cx="50" cy="50" r="22" strokeWidth="1.2" />
+      </g>
+      <g fill="currentColor" className="font-mono font-bold uppercase">
+        <text fontSize={nameSize} letterSpacing="1">
+          <textPath href={`#${pathId}top`} startOffset="50%" textAnchor="middle">{name}</textPath>
+        </text>
+        <polygon points="50,38 52.94,45.95 61.41,46.29 54.76,51.55 57.05,59.71 50,55 42.95,59.71 45.24,51.55 38.59,46.29 47.06,45.95" />
+      </g>
+    </svg>
+  );
+}
+
 function CopyWithGaps({ copy }: { copy: string }) {
   return (
     <>
@@ -176,7 +265,10 @@ function DetailsList({ items }: { items: string[] }) {
 }
 
 export function BentoResponsibilities(props: ResponsibilitiesSlotProps) {
-  const { overview, responsibilities, role, title, icon, startDate, endDate, galleryScreenshots, showDetailsHint = false } = props;
+  const {
+    overview, responsibilities, role, title, icon, startDate, endDate, galleryScreenshots,
+    company, companyLogo, companyUrl, links, isDiscontinued = false, showDetailsHint = false,
+  } = props;
   const [activeIndex, setActiveIndex] = useState(0);
   const sections = SECTIONS.filter((section) => section.isPresent(props));
   const activeSection = sections[activeIndex];
@@ -275,20 +367,47 @@ export function BentoResponsibilities(props: ResponsibilitiesSlotProps) {
             </div>
             <p style={{ fontFamily: 'var(--font-hand)', ...ruledLine }} className={`m-0 text-ink-base ${cover.summaryClassName}`}>
               <CopyWithGaps copy={overview.summary} />
+              {detailsIndex !== -1 && (
+                <>
+                  {' '}
+                  <button
+                    type="button"
+                    onClick={() => openSection(detailsIndex)}
+                    className="inline-flex items-center gap-0.5 font-bold text-sky-deep underline decoration-2 underline-offset-4 whitespace-nowrap hover:text-ink-base cursor-pointer"
+                  >
+                    Read more
+                    <ChevronRight className="w-4 h-4" strokeWidth={3} aria-hidden />
+                  </button>
+                </>
+              )}
             </p>
-            {detailsIndex !== -1 && (
-              <div className="mt-auto flex justify-end">
-                <button
-                  type="button"
-                  onClick={() => openSection(detailsIndex)}
-                  style={{ fontFamily: 'var(--font-hand)', ...ruledLine }}
-                  className="flex items-center gap-0.5 text-lg font-bold text-sky-deep underline decoration-2 underline-offset-4 hover:text-ink-base cursor-pointer"
-                >
-                  Read more
-                  <ChevronRight className="w-4 h-4" strokeWidth={3} aria-hidden />
-                </button>
+            <div className="mt-auto flex items-end gap-4 pt-4">
+              {(links.length > 0 || isDiscontinued) && (
+                <div className="flex flex-col gap-1.5 min-w-0">
+                  {isDiscontinued && (
+                    <span className="font-mono text-[11px] uppercase tracking-wider text-ink-subtle">
+                      Game shut down
+                    </span>
+                  )}
+                  {links.length > 0 && <LinkTags links={links} />}
+                </div>
+              )}
+              <div className="ml-auto flex-none">
+                {companyUrl ? (
+                  <a
+                    href={companyUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={`${company} website`}
+                    className="block transition-transform hover:-translate-y-0.5"
+                  >
+                    <CompanyMark company={company} companyLogo={companyLogo} />
+                  </a>
+                ) : (
+                  <CompanyMark company={company} companyLogo={companyLogo} />
+                )}
               </div>
-            )}
+            </div>
           </>
         );
       case 'details':

@@ -37,7 +37,7 @@ Fixes, strongest first: mechanical checks and measurement catch mistakes without
 
 - [T-059](T-059-perf-pattern-checks.md) — Automatic checks for known-bad code patterns *(backlog, after T-061)*
 - [T-060](T-060-perf-test-harness.md) — Saved performance test with a baseline *(backlog)*
-- [T-061](T-061-performance-guardrails.md) — Performance rules in the guardrails *(backlog)*
+- [T-061](T-061-performance-guardrails.md) — Performance rules in the guardrails *(done)*
 - [T-062](T-062-constitution-cost-questions.md) — Cost questions in the constitution *(backlog)*
 - [T-063](T-063-lesson-promotion-back-sweep.md) — Lessons become rules, plus a back-sweep of existing code *(backlog, after T-061)*
 - [T-064](T-064-moving-parts-audit-fixes.md) — Fix the Moving Parts Audit findings *(done)*

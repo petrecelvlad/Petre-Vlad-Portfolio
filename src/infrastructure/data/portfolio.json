@@ -2,7 +2,8 @@
   {
     "id": "exp-styngr-2026",
     "company": "Styngr",
-    "companyLogo": "",
+    "companyLogo": "/assets/logos/Logo_Styngr.svg",
+    "companyUrl": "https://www.styngr.com/",
     "startDate": "2026-04-13",
     "endDate": "2026-08-31",
     "projects": [
@@ -13,6 +14,7 @@
         "startDate": "2026-04-13",
         "endDate": "2026-08-31",
         "description": "Styngr's PlayMusic is a game platform where creators customize ready-made game templates instead of building games from scratch, with music at the core: the song a creator picks drives the gameplay. Designed and developed new game templates end to end, from design docs to code, polish and release.",
+        "icon": "/assets/icons/Icon_PlayMusic.svg",
         "type": "GAME",
         "overview": {
           "summary": "A music game platform by Styngr where creators customize ready-made game templates, and the song they pick drives the gameplay. Game designer and developer who built new templates from concept to release."
@@ -31,15 +33,16 @@
           "Built 4 rhythm game templates that play with any song"
         ],
         "technologies": ["Game Design", "System Design", "Game Development", "Claude Code", "GitHub"],
-        "keyScreenshots": [],
-        "links": { "website": "https://playmusic.gg/", "youtube": "https://www.youtube.com/watch?v=mrIzOBLPwA0" }
+        "keyScreenshots": ["/assets/screenshots/PlayMusic/SS_PlayMusic_1.jpg"],
+        "links": { "youtube": "https://www.youtube.com/watch?v=mrIzOBLPwA0", "pages": [{ "kind": "website", "url": "https://playmusic.gg/" }, { "kind": "facebook", "url": "https://www.facebook.com/profile.php?id=61583843487005" }, { "kind": "instagram", "url": "https://www.instagram.com/playmusic.gg" }, { "kind": "x", "url": "https://x.com/playmusic_gg" }, { "kind": "discord", "url": "https://discord.gg/SwyzcgME5z" }] }
       }
     ]
   },
   {
     "id": "exp-metacore-2024",
     "company": "Metacore",
-    "companyLogo": "",
+    "companyLogo": "/assets/logos/Logo_Metacore.svg",
+    "companyUrl": "https://metacoregames.com/",
     "location": "Remote",
     "startDate": "2024-08-01",
     "endDate": "2025-01-30",
@@ -64,17 +67,16 @@
           "Contributed to one of the world's top-grossing merge games"
         ],
         "technologies": ["Game Design", "Balancing", "Level Design"],
-        "keyScreenshots": [],
-        "links": {
-          "youtube": "https://www.youtube.com/watch?v=DUZSjukx2OI"
-        }
+        "keyScreenshots": ["/assets/screenshots/MergeMansion/SS_MergeMansion_1.jpg"],
+        "links": { "youtube": "https://www.youtube.com/watch?v=DUZSjukx2OI", "pages": [{ "kind": "website", "url": "https://mergemansion.com/" }, { "kind": "appStore", "url": "https://apps.apple.com/app/id1484442152" }, { "kind": "googlePlay", "url": "https://play.google.com/store/apps/details?id=com.everywear.game5" }, { "kind": "facebook", "url": "https://www.facebook.com/MergeMansionOfficial" }, { "kind": "instagram", "url": "https://www.instagram.com/mergemansion" }, { "kind": "x", "url": "https://x.com/Mergemansion" }] }
       }
     ]
   },
   {
     "id": "exp-deca-games-2023",
     "company": "DECA Games",
-    "companyLogo": "",
+    "companyLogo": "/assets/logos/Logo_DECA.png",
+    "companyUrl": "https://decagames.com/",
     "location": "Remote",
     "startDate": "2023-05-01",
     "endDate": "2023-10-31",
@@ -100,17 +102,16 @@
           "Optimized live ops events for higher player engagement"
         ],
         "technologies": ["Game Design", "Live Ops", "Economy Design"],
-        "keyScreenshots": [],
-        "links": {
-          "youtube": "https://www.youtube.com/watch?v=fFNaSLSmp2k"
-        }
+        "keyScreenshots": ["/assets/screenshots/ROTMG/SS_ROTMG_1.jpg", "/assets/screenshots/ROTMG/SS_ROTMG_2.jpg"],
+        "links": { "youtube": "https://www.youtube.com/watch?v=fFNaSLSmp2k", "pages": [{ "kind": "website", "url": "https://www.realmofthemadgod.com/" }, { "kind": "steam", "url": "https://store.steampowered.com/app/200210/" }, { "kind": "facebook", "url": "https://www.facebook.com/rotmg" }, { "kind": "x", "url": "https://x.com/RotMG_news" }, { "kind": "discord", "url": "https://discord.gg/rotmg" }] }
       }
     ]
   },
   {
     "id": "exp-amber-2019-2023",
     "company": "Amber Studio",
-    "companyLogo": "/assets/icons/Icon_Amber.png",
+    "companyLogo": "/assets/logos/Logo_Amber.svg",
+    "companyUrl": "https://amberstudio.com/",
     "location": "Bucharest",
     "startDate": "2019-03-01",
     "endDate": "2023-04-30",
@@ -141,8 +142,15 @@
           "Managed 6 concurrent teams while maintaining delivery quality and production velocity"
         ],
         "technologies": ["Level Design", "Team Leadership", "Agile Planning", "Process Standardization"],
-        "keyScreenshots": ["/assets/screenshots/SS_Alphabetty.png"],
-        "links": {}
+        "keyScreenshots": [
+          { "src": "/assets/screenshots/Amber/SS_DiamondDiaries_1.jpg", "caption": "Diamond Diaries Saga", "links": [{ "kind": "website", "url": "https://www.king.com/game/diamonddiaries" }, { "kind": "appStore", "url": "https://apps.apple.com/app/id1313343774" }, { "kind": "googlePlay", "url": "https://play.google.com/store/apps/details?id=com.king.diamonddiariessaga" }, { "kind": "article", "label": "Case study", "url": "https://amberstudio.com/insights/case-studies/collaborating-with-king-to-deliver-high-quality-content-for-diamond-diaries-saga" }] },
+          { "src": "/assets/screenshots/Amber/SS_BWS_2.jpg", "caption": "Bubble Witch 2 Saga", "links": [{ "kind": "website", "url": "https://www.king.com/game/bubblewitch2" }, { "kind": "appStore", "url": "https://apps.apple.com/app/id834393815" }, { "kind": "googlePlay", "url": "https://play.google.com/store/apps/details?id=com.midasplayer.apps.bubblewitchsaga2" }] },
+          { "src": "/assets/screenshots/Amber/SS_BWS_3.jpg", "caption": "Bubble Witch 3 Saga", "links": [{ "kind": "website", "url": "https://www.king.com/game/bubblewitch3" }, { "kind": "appStore", "url": "https://apps.apple.com/app/id1095254858" }, { "kind": "googlePlay", "url": "https://play.google.com/store/apps/details?id=com.king.bubblewitch3" }] },
+          { "src": "/assets/screenshots/Amber/SS_PetRescue_4.jpg", "caption": "Pet Rescue Saga", "links": [{ "kind": "website", "url": "https://www.king.com/game/petrescue" }, { "kind": "appStore", "url": "https://apps.apple.com/app/id572821456" }, { "kind": "googlePlay", "url": "https://play.google.com/store/apps/details?id=com.king.petrescuesaga" }] },
+          { "src": "/assets/screenshots/Amber/SS_Frozen_5.webp", "caption": "Frozen Free Fall", "links": [{ "kind": "appStore", "url": "https://apps.apple.com/app/id692412579" }, { "kind": "googlePlay", "url": "https://play.google.com/store/apps/details?id=com.disney.frozensaga_goo" }] },
+          { "src": "/assets/screenshots/Amber/SS_WildThings_6.jpg", "caption": "Wild Things: Animal Adventures", "links": [{ "kind": "appStore", "url": "https://apps.apple.com/app/id1615431398" }, { "kind": "googlePlay", "url": "https://play.google.com/store/apps/details?id=com.netflix.NGP.WildThingsAnimalAdventures" }, { "kind": "article", "label": "Video", "url": "https://amberstudio.com/insights/video/wild-things-animal-adventures-a-new-mobile-game-delight" }] }
+        ],
+        "links": { "pages": [] }
       },
       {
         "id": "proj-fe-high-voltage",
@@ -167,10 +175,10 @@
           "Integrated NFT Cars and Drivers as playable team management assets"
         ],
         "technologies": ["Blockchain / NFTs", "Game Design", "Economy Design", "UX Design"],
-        "keyScreenshots": ["/assets/screenshots/Game_FEHV.png"],
-        "links": {
-          "youtube": "https://www.youtube.com/watch?v=NlQGp6XngcI"
-        }
+        "keyScreenshots": ["/assets/screenshots/FEHV/SS_FEHV_1.png", "/assets/screenshots/FEHV/SS_FEHV_2.jpg", "/assets/screenshots/FEHV/SS_FEHV_3.jpg", "/assets/screenshots/FEHV/SS_FEHV_4.png", "/assets/screenshots/FEHV/SS_FEHV_5.png"],
+        "links": { "youtube": "https://www.youtube.com/watch?v=NlQGp6XngcI", "pages": [{ "kind": "facebook", "url": "https://www.facebook.com/FormulaEHighVoltage" }, { "kind": "x", "url": "https://x.com/FormulaE_HV" }, { "kind": "discord", "url": "https://discord.com/invite/Ge6mKzteCZ" }] },
+        "isDiscontinued": true,
+        "client": { "company": "Animoca Brands", "companyLogo": "/assets/logos/Logo_Animoca.svg", "companyUrl": "https://www.animocabrands.com/" }
       }
     ]
   },
@@ -206,17 +214,17 @@
           "100K App Installs"
         ],
         "technologies": ["Game Production", "Game Design", "Economy Design", "Level Design", "UX Design", "Community Mgmt", "Monetization", "KPI Tracking"],
-        "keyScreenshots": [],
-        "links": {
-          "youtube": "https://www.youtube.com/watch?v=6OuN6ncCRNo"
-        }
+        "keyScreenshots": ["/assets/screenshots/TapTD/SS_TapTD_1.png", "/assets/screenshots/TapTD/SS_TapTD_2.png", "/assets/screenshots/TapTD/SS_TapTD_3.png", "/assets/screenshots/TapTD/SS_TapTD_4.png", "/assets/screenshots/TapTD/SS_TapTD_5.png", "/assets/screenshots/TapTD/SS_TapTD_6.png", "/assets/screenshots/TapTD/SS_TapTD_7.png"],
+        "links": { "youtube": "https://www.youtube.com/watch?v=6OuN6ncCRNo", "pages": [] },
+        "isDiscontinued": true
       }
     ]
   },
   {
     "id": "exp-newton-slots-2017-2018",
     "company": "Newton Slots",
-    "companyLogo": "/assets/icons/Icon_Slots.jpg",
+    "companyLogo": "/assets/logos/Logo_Newton.png",
+    "companyUrl": "https://www.newtonslots.com/",
     "startDate": "2017-10-01",
     "endDate": "2018-04-30",
     "projects": [
@@ -244,15 +252,15 @@
           "Innovative Spin Mechanic, a first-of-kind Slots + Match-3 hybrid interaction"
         ],
         "technologies": ["Game Design", "Economy Design", "Mechanics Design"],
-        "keyScreenshots": ["/assets/screenshots/SS_Slots.jpg"],
-        "links": { "website": "https://newtonslots.com" }
+        "keyScreenshots": ["/assets/screenshots/LuckySlots/SS_LuckySlots_1.jpg"],
+        "links": { "pages": [{ "kind": "website", "url": "https://newtonslots.com" }] }
       }
     ]
   },
   {
     "id": "exp-clash-of-towers-2017",
     "company": "Independent",
-    "companyLogo": "/assets/icons/Icon_COT.jpg",
+    "companyLogo": "",
     "startDate": "2017-07-01",
     "endDate": "2017-09-30",
     "projects": [
@@ -277,17 +285,15 @@
           "Game released in 2 months"
         ],
         "technologies": ["Game Production", "Game Design", "Game Art"],
-        "keyScreenshots": ["/assets/screenshots/SS_COT.png", "/assets/screenshots/SS_COT_2.png"],
-        "links": {
-          "youtube": "https://www.youtube.com/watch?v=jEIxA66bLrc"
-        }
+        "keyScreenshots": ["/assets/screenshots/COT/SS_COT_1.png", "/assets/screenshots/COT/SS_COT_2.png"],
+        "links": { "youtube": "https://www.youtube.com/watch?v=jEIxA66bLrc", "pages": [{ "kind": "website", "url": "https://clashoftowers.com/" }, { "kind": "googlePlay", "url": "https://play.google.com/store/apps/details?id=com.towersclash.app" }, { "kind": "x", "url": "https://x.com/towersclashgame" }] }
       }
     ]
   },
   {
     "id": "exp-intense-life-2016-2017",
     "company": "Intense Life",
-    "companyLogo": "/assets/icons/Icon_Fitkin.png",
+    "companyLogo": "",
     "startDate": "2016-07-01",
     "endDate": "2017-06-30",
     "projects": [
@@ -316,8 +322,9 @@
           "Designed User Personas classification system"
         ],
         "technologies": ["Gamification", "UX Design", "Research"],
-        "keyScreenshots": ["/assets/screenshots/SS_Fitkin.png"],
-        "links": { "website": "https://fitkingame.com" }
+        "keyScreenshots": ["/assets/screenshots/FitKin/SS_FitKin_1.png"],
+        "links": { "pages": [] },
+        "isDiscontinued": true
       }
     ]
   },
@@ -352,17 +359,17 @@
           "Delivered a complete game to a freelance client"
         ],
         "technologies": ["Game Design", "UX Design", "UI Design"],
-        "keyScreenshots": ["/assets/screenshots/SS_Castellum.jpg", "/assets/screenshots/SS_Castellum_2.png"],
-        "links": {
-          "youtube": "https://www.youtube.com/watch?v=dRoPBmkO5iY"
-        }
+        "keyScreenshots": ["/assets/screenshots/Castellum/SS_Castellum_1.jpg", "/assets/screenshots/Castellum/SS_Castellum_2.png"],
+        "links": { "youtube": "https://www.youtube.com/watch?v=dRoPBmkO5iY", "pages": [] },
+        "isDiscontinued": true
       }
     ]
   },
   {
     "id": "exp-king-2013-2015",
     "company": "King",
-    "companyLogo": "/assets/icons/Icon_BWS1.png",
+    "companyLogo": "/assets/logos/Logo_King.svg",
+    "companyUrl": "https://www.king.com/",
     "startDate": "2013-10-01",
     "endDate": "2015-10-30",
     "projects": [
@@ -387,8 +394,9 @@
           "Contributed to one of King's founding hits"
         ],
         "technologies": ["Level Design", "Puzzle Design"],
-        "keyScreenshots": ["/assets/screenshots/SS_BWS2.jpg"],
-        "links": { "website": "https://king.com" }
+        "keyScreenshots": ["/assets/screenshots/BWS/SS_BWS_1.jpg"],
+        "links": { "pages": [{ "kind": "facebook", "url": "https://www.facebook.com/BubbleWitchSaga" }] },
+        "isDiscontinued": true
       },
       {
         "id": "proj-alphabetty-saga",
@@ -416,8 +424,9 @@
           "Shipped a live King title reaching millions of players"
         ],
         "technologies": ["Level Design", "Puzzle Design", "FTUE & Onboarding", "A/B Testing", "KPI Tracking"],
-        "keyScreenshots": ["/assets/screenshots/SS_Alphabetty.png"],
-        "links": { "website": "https://king.com", "youtube": "https://www.youtube.com/watch?v=BX3bAjDRLdM" }
+        "keyScreenshots": ["/assets/screenshots/AlphaBetty/SS_AlphaBetty_1.png"],
+        "links": { "youtube": "https://www.youtube.com/watch?v=BX3bAjDRLdM", "pages": [] },
+        "isDiscontinued": true
       }
     ]
   },
@@ -450,7 +459,7 @@
         ],
         "technologies": ["Game Development", "Self-Publishing", "Game Design", "Game Art"],
         "keyScreenshots": [],
-        "links": { "website": "https://www.newgrounds.com" }
+        "links": { "pages": [{ "kind": "newgrounds", "url": "https://argentin.newgrounds.com/games" }] }
       },
       {
         "id": "proj-bounzy",
@@ -472,8 +481,8 @@
           "Classic Flash era game with massive web reach"
         ],
         "technologies": ["Mechanics Design", "Game Design", "Game Art"],
-        "keyScreenshots": ["/assets/screenshots/SS_Bounzy.jpg"],
-        "links": { "website": "https://www.newgrounds.com/portal/view/587105", "youtube": "https://www.youtube.com/watch?v=r6ZpABMwLmQ" }
+        "keyScreenshots": ["/assets/screenshots/Bounzy/SS_Bounzy_1.jpg"],
+        "links": { "youtube": "https://www.youtube.com/watch?v=r6ZpABMwLmQ", "pages": [{ "kind": "newgrounds", "url": "https://www.newgrounds.com/portal/view/587105" }] }
       },
       {
         "id": "proj-marble-frenzy-2",
@@ -495,8 +504,9 @@
           "Innovative Match-3 hybrid mechanics"
         ],
         "technologies": ["Mechanics Design", "Game Design", "Game Art"],
-        "keyScreenshots": ["/assets/screenshots/SS_MF.png"],
-        "links": { "website": "https://www.newgrounds.com/portal/view/540922", "youtube": "https://www.youtube.com/watch?v=wTmoO1LFgWs" }
+        "keyScreenshots": ["/assets/screenshots/MF2/SS_MF2_1.png"],
+        "links": { "youtube": "https://www.youtube.com/watch?v=wTmoO1LFgWs", "pages": [{ "kind": "newgrounds", "url": "https://www.newgrounds.com/portal/view/540922" }] },
+        "isDiscontinued": true
       }
     ]
   }

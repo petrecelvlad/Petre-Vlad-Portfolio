@@ -1,10 +1,15 @@
 import { useState, useEffect, useRef } from 'react';
 import { Volume2, VolumeX, Play, Pause } from 'lucide-react';
+import { useReducedMotion } from 'motion/react';
 import { useVideoPrefs } from '@/src/context/VideoPrefsContext';
 import { getYoutubeId } from '@/src/core/domain/projectMedia';
+import type { IScreenshot } from '@/src/core/domain/models';
 
 interface BentoVideoFrameProps {
-  screenshot?: string;
+  screenshots: IScreenshot[];
+  // The screenshot showing; held by the caller, since the clipboard shows that screenshot's links.
+  slide: number;
+  onSlideChange: (index: number) => void;
   youtubeUrl?: string;
   isActive?: boolean;
 }
@@ -41,14 +46,133 @@ declare global {
   }
 }
 
-export function BentoVideoFrame({ screenshot, youtubeUrl, isActive }: BentoVideoFrameProps) {
+// YouTube makes the full-size thumbnail for only some uploads; for the rest it answers with a
+// 120×90 grey placeholder, which must never cover the frame (C-013).
+const hasFullThumbnail = new Map<string, boolean>();
+
+function fullThumbnailUrl(videoId: string): string {
+  return `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
+}
+
+// The full-size thumbnail's URL, null when the video has none, undefined while still checking.
+function useFullThumbnail(videoId: string | null): string | null | undefined {
+  const [checked, setChecked] = useState<{ videoId: string; exists: boolean } | null>(null);
+
+  useEffect(() => {
+    if (!videoId || hasFullThumbnail.has(videoId)) return;
+    let cancelled = false;
+    const image = new Image();
+    const settle = (exists: boolean) => {
+      hasFullThumbnail.set(videoId, exists);
+      if (!cancelled) setChecked({ videoId, exists });
+    };
+    image.onload = () => settle(image.naturalWidth > 120);
+    image.onerror = () => settle(false);
+    image.src = fullThumbnailUrl(videoId);
+    return () => { cancelled = true; };
+  }, [videoId]);
+
+  if (!videoId) return null;
+  const exists = hasFullThumbnail.get(videoId) ?? (checked?.videoId === videoId ? checked.exists : undefined);
+  if (exists === undefined) return undefined;
+  return exists ? fullThumbnailUrl(videoId) : null;
+}
+
+function NoPreview() {
+  return (
+    <div className="w-full h-full flex items-center justify-center bg-surface-base border-[length:var(--border-width-sm)] border-dashed border-ink-base/20 rounded-[32px]">
+      <span className="font-mono text-xs text-ink-base/25 uppercase tracking-widest text-center select-none">
+        No Preview<br/>Available
+      </span>
+    </div>
+  );
+}
+
+const SLIDE_MS = 4000;
+
+// Crossfades through the screenshots while its project is in view (T-067). Slides already shown
+// stay mounted so the outgoing one can fade out; only the next one is added ahead, to load in time.
+// A dot click jumps straight there, and the 4 s wait starts over from it.
+function Slideshow({ screenshots, isActive, shown, onShow }: {
+  screenshots: IScreenshot[];
+  isActive?: boolean;
+  shown: number;
+  onShow: (index: number) => void;
+}) {
+  const isReducedMotion = useReducedMotion();
+  const [reached, setReached] = useState(shown);
+  if (shown > reached) setReached(shown);
+  const runs = isActive && !isReducedMotion && screenshots.length > 1;
+
+  useEffect(() => {
+    if (!runs) return;
+    const timer = setInterval(() => {
+      if (!document.hidden) onShow((shown + 1) % screenshots.length);
+    }, SLIDE_MS);
+    return () => clearInterval(timer);
+  }, [runs, shown, screenshots.length, onShow]);
+
+  const hasCaptions = screenshots.some(shot => shot.caption);
+  return (
+    <>
+      {screenshots.slice(0, runs ? reached + 2 : shown + 1).map((shot, i) => (
+        <img
+          key={shot.src}
+          src={shot.src}
+          alt={shot.caption ?? 'Project screenshot'}
+          className="absolute inset-0 w-full h-full object-cover rounded-[32px] transition-opacity duration-700"
+          style={{ opacity: i === shown ? 1 : 0 }}
+        />
+      ))}
+      {(hasCaptions || screenshots.length > 1) && (
+        <div className="absolute inset-x-0 bottom-0 flex flex-col items-center gap-1.5 pt-10 pb-3 md:pb-4 rounded-b-[32px] bg-gradient-to-t from-black/60 to-transparent pointer-events-none">
+          {/* All captions share one grid cell, so each fades in step with its screenshot. */}
+          {hasCaptions && (
+            <div className="grid text-center" aria-hidden>
+              {screenshots.map((shot, i) => (
+                <span
+                  key={shot.src}
+                  className="[grid-area:1/1] px-6 text-sm md:text-base font-semibold text-white drop-shadow-md transition-opacity duration-700"
+                  style={{ opacity: i === shown ? 1 : 0 }}
+                >
+                  {shot.caption}
+                </span>
+              ))}
+            </div>
+          )}
+          {screenshots.length > 1 && (
+            <div className="flex pointer-events-auto">
+              {screenshots.map((shot, i) => (
+                <button
+                  key={shot.src}
+                  onClick={() => onShow(i)}
+                  className="p-1.5 cursor-pointer group/dot"
+                  aria-label={shot.caption ?? `Screenshot ${i + 1}`}
+                  aria-current={i === shown}
+                >
+                  <span
+                    className={`block w-2 h-2 rounded-full transition-colors ${i === shown ? 'bg-white' : 'bg-white/45 group-hover/dot:bg-white/80'}`}
+                  />
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+    </>
+  );
+}
+
+export function BentoVideoFrame({ screenshots, slide, onSlideChange, youtubeUrl, isActive }: BentoVideoFrameProps) {
+  const screenshot = screenshots[0]?.src;
   const videoId = youtubeUrl ? getYoutubeId(youtubeUrl) : null;
   const { isMuted, autoPlay, setMuted, setAutoPlay } = useVideoPrefs();
   const [isPlaying, setIsPlaying] = useState(false);
   const [isPlayerReady, setIsPlayerReady] = useState(false);
   const [showCurtain, setShowCurtain] = useState(true);
   const playerRef = useRef<YTPlayer | null>(null);
-  const thumbnailUrl = videoId ? `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg` : null;
+  const fullThumbnail = useFullThumbnail(videoId);
+  const curtainImage = fullThumbnail === null ? screenshot : fullThumbnail;
 
   // Initialize YouTube player once per videoId
   useEffect(() => {
@@ -196,25 +320,18 @@ export function BentoVideoFrame({ screenshot, youtubeUrl, isActive }: BentoVideo
                <div className="absolute inset-0 z-20 bg-transparent pointer-events-auto" />
             </div>
           ) : screenshot ? (
-            <img
-              src={screenshot}
-              alt="Project screenshot"
-              className="w-full h-full object-cover rounded-[32px]"
-            />
+            <Slideshow screenshots={screenshots} isActive={isActive} shown={slide} onShow={onSlideChange} />
           ) : (
-            <div className="w-full h-full flex items-center justify-center bg-surface-base border-[length:var(--border-width-sm)] border-dashed border-ink-base/20 rounded-[32px]">
-              <span className="font-mono text-xs text-ink-base/25 uppercase tracking-widest text-center select-none">
-                No Preview<br/>Available
-              </span>
-            </div>
+            <NoPreview />
           )}
 
-          {/* Poster curtain: thumbnail covers YouTube's startup animation, fades out on first PLAYING event */}
+          {/* Poster curtain: covers YouTube's startup animation, fades out on first PLAYING event.
+              Full-size thumbnail, else our screenshot, else the placeholder (C-013); black while checking. */}
           {videoId && (
             <div
               className="absolute inset-0 z-30 bg-black bg-cover bg-center pointer-events-none"
               style={{
-                backgroundImage: thumbnailUrl ? `url(${thumbnailUrl})` : undefined,
+                backgroundImage: curtainImage ? `url(${curtainImage})` : undefined,
                 opacity: showCurtain ? 1 : 0,
                 visibility: showCurtain ? 'visible' : 'hidden',
                 // instant show, then 0.8s hold before fading — covers YouTube's ~0.8s button animation
@@ -222,7 +339,9 @@ export function BentoVideoFrame({ screenshot, youtubeUrl, isActive }: BentoVideo
                   ? 'none'
                   : 'opacity 0.5s 0.8s ease-out, visibility 0s 1.3s',
               }}
-            />
+            >
+              {fullThumbnail === null && !screenshot && <NoPreview />}
+            </div>
           )}
 
           {/* Custom Controls Overlay */}

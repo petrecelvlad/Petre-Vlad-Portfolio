@@ -1,3 +1,15 @@
+/**
+ * @propolis
+ * {
+ *   "role": "UI_COMPONENT",
+ *   "constraints": [
+ *     "C-008 exception: the waterfall's dash offset and the pebbles animate inside the SVG, so the island repaints every frame",
+ *     "C-009: measured near zero CPU on the reference PC 2026-10-18, which is why the exception stands",
+ *     "C-010: CSS animations, stopped by index.css's reduced-motion rule"
+ *   ],
+ *   "agent_instructions": "Always-on hero layer. Keep new motion out of the SVG: put it on its own element and animate transform or opacity (C-008), then measure (C-009)."
+ * }
+ */
 interface FloatingIslandBackdropProps {
   className?: string;
 }
