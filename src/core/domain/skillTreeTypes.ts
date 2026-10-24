@@ -124,17 +124,17 @@ export const SKILLS: Skill[] = [
   {
     id: 'web-design', name: 'Layout Design', category: 'design', parent: 'system-design',
     description: 'Designing digital interfaces and systems for web and app-based products, spanning UI, UX, and design system architecture.',
-    projects: ['proj-fe-high-voltage', 'proj-fitkin', 'proj-castellum', 'proj-idle-td'],
+    projects: ['proj-fitkin', 'proj-castellum', 'proj-idle-td'],
   },
   {
     id: 'ui-design', name: 'UI Design', category: 'design', parent: 'web-design',
     description: 'Crafting visual interfaces with strong aesthetic direction: typography, color, component hierarchy, and screen composition guided by the user flow.',
-    projects: ['proj-fe-high-voltage', 'proj-castellum', 'proj-idle-td', 'proj-clash-of-towers', 'proj-marble-frenzy-2', 'proj-bounzy', 'proj-newgrounds'],
+    projects: ['proj-castellum', 'proj-idle-td', 'proj-clash-of-towers', 'proj-marble-frenzy-2', 'proj-bounzy', 'proj-newgrounds'],
   },
   {
     id: 'ux-design', name: 'UX Design', category: 'design', parent: 'web-design',
     description: 'Designing screen flows, interaction patterns, and interface logic for mobile-first game and product experiences.',
-    projects: ['proj-fe-high-voltage', 'proj-castellum', 'proj-idle-td', 'proj-clash-of-towers', 'proj-marble-frenzy-2', 'proj-bounzy', 'proj-deca-rotmg'],
+    projects: ['proj-castellum', 'proj-idle-td', 'proj-clash-of-towers', 'proj-marble-frenzy-2', 'proj-bounzy', 'proj-deca-rotmg'],
   },
   {
     id: 'ftue-onboarding', name: 'FTUE & Onboarding', category: 'design', parent: 'web-design',
@@ -217,7 +217,7 @@ export const SKILLS: Skill[] = [
   // LEADERSHIP
   {
     id: 'team-leadership', name: 'Team Leadership', category: 'leadership', parent: null,
-    description: 'Managing up to 15 people across 6 concurrent teams: setting direction, unblocking, and maintaining quality.',
+    description: 'Building and leading 5 teams and training 12 designers: setting direction, unblocking, and maintaining quality.',
     projects: ['proj-lead-level-designer', 'proj-fe-high-voltage', 'proj-castellum', 'proj-clash-of-towers', 'proj-idle-td', 'proj-marble-frenzy-2', 'proj-bounzy'],
   },
   {
@@ -227,7 +227,7 @@ export const SKILLS: Skill[] = [
   },
   {
     id: 'coaching', name: 'Coaching', category: 'leadership', parent: 'cross-team-coord',
-    description: 'Training junior designers from scratch: 9 Junior Level Designers brought from onboarding to production-ready.',
+    description: 'Training junior designers from scratch: 12 Level Designers trained from QA staff, brought from onboarding to production-ready.',
     projects: ['proj-lead-level-designer', 'proj-alphabetty-saga'],
   },
   {
@@ -237,7 +237,7 @@ export const SKILLS: Skill[] = [
   },
   {
     id: 'cross-team-coord', name: 'Coordination', category: 'leadership', parent: 'team-leadership',
-    description: 'Acting as lead coordinator across 6 teams, synchronizing dependencies and keeping production lanes unblocked.',
+    description: 'Acting as lead coordinator across 5 teams, synchronizing dependencies and keeping production lanes unblocked.',
     projects: ['proj-lead-level-designer'],
   },
   {

@@ -13,21 +13,20 @@
         "role": "Game Designer & Developer",
         "startDate": "2026-04-13",
         "endDate": "2026-08-31",
-        "description": "Styngr's PlayMusic is a game platform where creators customize ready-made game templates instead of building games from scratch, with music at the core: the song a creator picks drives the gameplay. Designed and developed new game templates end to end, from design docs to code, polish and release.",
+        "description": "Styngr's music game platform, where creators customize ready-made game templates and the chosen song drives the gameplay. Designed and developed new templates end to end.",
         "icon": "/assets/icons/Icon_PlayMusic.svg",
         "type": "GAME",
         "overview": {
           "summary": "A music game platform by Styngr where creators customize ready-made game templates, and the song they pick drives the gameplay. Game designer and developer who built new templates from concept to release."
         },
         "responsibilities": [
-          "Designed and coded new games from scratch, from design docs to release",
-          "Made the music drive the game: each song is split into drums, bass and vocals",
-          "Tied each part to a game action (drums spawn enemies), so faster songs play faster",
-          "Decided what creators could customize, from the visuals to the song itself",
-          "Built game templates modeled on osu!, Mania, Catch the Fruit and Taiko",
-          "Designed a shooter concept, a pinball prototype and a 2D runner platformer",
-          "Helped design the shared game architecture that keeps every template modular",
-          "Coded with Claude Code; shipped through GitHub commits and pull requests"
+          "Designed and developed new game templates end to end, from design docs to release",
+          "Designed music-driven gameplay, where each song's structure sets the pace and action of play",
+          "Built 4 rhythm game templates modeled on osu!, Mania, Catch the Fruit and Taiko",
+          "Prototyped a music-driven pinball game: a modular board creators build freely, every element reacting to the song",
+          "Designed a modular shooter where every component is a config, so creators can build any kind of shooter",
+          "Redesigned and rebuilt the team's internal Editor, turning ad-hoc features into one coherent UI and UX",
+          "Co-designed the modular architecture shared by every template"
         ],
         "achievements": [
           "Built 4 rhythm game templates that play with any song"
@@ -53,19 +52,17 @@
         "role": "Level Designer",
         "startDate": "2024-08-01",
         "endDate": "2025-01-30",
-        "description": "One of the world's top-grossing merge games. Level designer who rebalanced the Maze region and smoothed out its progression.",
+        "description": "One of the world's top-grossing merge games. Rebalanced the progression of its Maze region.",
         "icon": "/assets/icons/Icon_MM.png",
         "type": "GAME",
         "overview": {
           "summary": "One of the world's top-grossing merge games, run as a live service by Metacore. Level designer who rebalanced the Maze region's progression."
         },
         "responsibilities": [
-          "Rebalanced the Maze region's quest requirements for a smoother progression",
-          "Studied the region's KPIs and metrics to find where its progression broke down",
-          "Read player feedback and cross-referenced it with the data to find the real problems",
-          "Redistributed the quest requirements along the region's new map progression",
-          "Checked how items shared with other regions would be affected, with their designers",
-          "Worked with Story and Narrative so the story still fit the new progression"
+          "Led a data-driven rebalance of the Maze region's progression",
+          "Diagnosed progression pain points from KPIs and player feedback",
+          "Restructured quest requirements for a smoother, better-paced experience",
+          "Aligned the changes across regions with fellow designers and the Narrative team"
         ],
         "achievements": [
           "Rebalanced the Maze region of one of the world's top-grossing merge games"
@@ -91,21 +88,17 @@
         "role": "Sr. Game Designer",
         "startDate": "2023-05-01",
         "endDate": "2023-10-31",
-        "description": "A long-running MMO in DECA Games' portfolio. Designed the system behind Crucible events and two class sets released in Exalt 4.0.4.0, and proposed new weapon stats as an A/B test.",
+        "description": "A long-running MMO in DECA Games' portfolio. Designed the Crucible event system and two class sets released in Exalt 4.0.4.0.",
         "icon": "/assets/icons/Icon_ROTMG.png",
         "type": "GAME",
         "overview": {
-          "summary": "A long-running MMO in DECA Games' portfolio of live games. Senior designer on the system behind its Crucible events, two new class sets and an A/B test of new weapon stats."
+          "summary": "A long-running MMO in DECA Games' portfolio of live games. Senior designer on live event systems, loot design and new class content."
         },
         "responsibilities": [
-          "Designed the internal system behind Crucibles, events built from stat modifiers",
-          "Modifiers mix freely (x2 enemy damage with x3 better loot), so each event is distinct",
-          "Events can be scheduled in advance, so new ones ship by changing numbers alone",
-          "Gathered the event manager's needs and mapped the existing tech with the developers",
-          "Designed the UI and UX the team uses to set up events internally",
-          "Proposed an A/B test of rolled weapon damage, so every drop would have unique stats",
-          "Rolled min and max damage around the same averages, for variety without power creep",
-          "Designed a full weapon set to bring the tested stats in gradually",
+          "Designed Crucibles, a modular event system that multiplies live event variety at minimal cost",
+          "Owned it end to end: requirements, technical scoping with engineering, and the internal tool's UX",
+          "Proposed a dynamic weapon stat system to make every loot drop feel unique, prepared as an A/B test",
+          "Designed a full weapon set for the new system's phased rollout",
           "Designed the Sorcerer's Storm Shaman Set and the Knight's Mad Minotaur Set"
         ],
         "achievements": [
@@ -132,30 +125,29 @@
         "role": "Lead Level Designer",
         "startDate": "2019-03-01",
         "endDate": "2022-10-30",
-        "description": "Coordinated 6 teams to produce and deliver levels for multiple King puzzle games. Responsible for King's partnership and day-to-day project coordination, planning, and delivery for level content.",
+        "description": "Level production for puzzle games from King and other clients at Amber Studio. Built and led 5 level design teams, each until it ran on its own.",
         "icon": "/assets/icons/Icon_Amber.png",
         "type": "GAME",
         "overview": {
-          "summary": "Level production for several live King puzzle games [? which titles], delivered by Amber Studio. Led 6 concurrent teams and owned the King partnership as the main contact for King's studio leads."
+          "summary": "Level production for live puzzle games from King and other clients, delivered by Amber Studio. Lead level designer who built and led 5 teams, and the main contact for King's projects."
         },
         "responsibilities": [
-          "Led 6 concurrent level design teams across multiple King puzzle titles",
-          "Owned the King partnership as main contact for King's studio leads",
-          "Managed 15 designers: standups, reviews, and milestone planning",
-          "Trained 9 Junior Level Designers through a structured training pipeline",
-          "Personally built 2,500+ levels; teams delivered 10,000+ in total",
-          "Standardized Level Design procedures into a shared knowledge base",
-          "Completed Leadership Training in people management and team coordination",
-          "Mentored a university student through a Game Design internship"
+          "Built and led 5 level design teams, running each for about 6 months until it worked autonomously",
+          "Main contact for King on Diamond Diaries, Pet Rescue and Bubble Witch 2, turning client needs into team direction",
+          "Trained 12 Level Designers from QA staff with designer potential",
+          "Volunteered for Amber's student training program, mentoring a design student from Mexico for 3 months",
+          "Designed the level pipeline, from sprint cadence and reviews to the definition of done, closed by client feedback",
+          "Centralized the documentation into one design standard, so every batch felt made by one team",
+          "Created the Puzzle Tag System, classifying level archetypes to plan varied batches; later extended to other projects",
+          "Built 1,000+ levels personally, within 5,000+ shipped across the teams"
         ],
         "achievements": [
-          "Managed 6 concurrent teams while maintaining delivery quality and production velocity"
+          "Built and led 5 level design teams for King and other clients"
         ],
-        "technologies": ["Level Design", "Team Leadership", "Agile Planning", "Process Standardization"],
+        "technologies": ["Level Design", "Team Leadership", "Pipeline Design", "Agile Planning", "Process Standardization"],
         "keyScreenshots": [
           { "src": "/assets/screenshots/Amber/SS_DiamondDiaries_1.jpg", "caption": "Diamond Diaries Saga", "links": [{ "kind": "website", "url": "https://www.king.com/game/diamonddiaries" }, { "kind": "appStore", "url": "https://apps.apple.com/app/id1313343774" }, { "kind": "googlePlay", "url": "https://play.google.com/store/apps/details?id=com.king.diamonddiariessaga" }, { "kind": "article", "label": "Case study", "url": "https://amberstudio.com/insights/case-studies/collaborating-with-king-to-deliver-high-quality-content-for-diamond-diaries-saga" }] },
           { "src": "/assets/screenshots/Amber/SS_BWS_2.jpg", "caption": "Bubble Witch 2 Saga", "links": [{ "kind": "website", "url": "https://www.king.com/game/bubblewitch2" }, { "kind": "appStore", "url": "https://apps.apple.com/app/id834393815" }, { "kind": "googlePlay", "url": "https://play.google.com/store/apps/details?id=com.midasplayer.apps.bubblewitchsaga2" }] },
-          { "src": "/assets/screenshots/Amber/SS_BWS_3.jpg", "caption": "Bubble Witch 3 Saga", "links": [{ "kind": "website", "url": "https://www.king.com/game/bubblewitch3" }, { "kind": "appStore", "url": "https://apps.apple.com/app/id1095254858" }, { "kind": "googlePlay", "url": "https://play.google.com/store/apps/details?id=com.king.bubblewitch3" }] },
           { "src": "/assets/screenshots/Amber/SS_PetRescue_4.jpg", "caption": "Pet Rescue Saga", "links": [{ "kind": "website", "url": "https://www.king.com/game/petrescue" }, { "kind": "appStore", "url": "https://apps.apple.com/app/id572821456" }, { "kind": "googlePlay", "url": "https://play.google.com/store/apps/details?id=com.king.petrescuesaga" }] },
           { "src": "/assets/screenshots/Amber/SS_Frozen_5.webp", "caption": "Frozen Free Fall", "links": [{ "kind": "appStore", "url": "https://apps.apple.com/app/id692412579" }, { "kind": "googlePlay", "url": "https://play.google.com/store/apps/details?id=com.disney.frozensaga_goo" }] },
           { "src": "/assets/screenshots/Amber/SS_WildThings_6.jpg", "caption": "Wild Things: Animal Adventures", "links": [{ "kind": "appStore", "url": "https://apps.apple.com/app/id1615431398" }, { "kind": "googlePlay", "url": "https://play.google.com/store/apps/details?id=com.netflix.NGP.WildThingsAnimalAdventures" }, { "kind": "article", "label": "Video", "url": "https://amberstudio.com/insights/video/wild-things-animal-adventures-a-new-mobile-game-delight" }] }
@@ -168,23 +160,24 @@
         "role": "Principal Game Designer",
         "startDate": "2022-11-01",
         "endDate": "2023-04-30",
-        "description": "Developed by Animoca Brands, the game integrates with the broader REVV token ecosystem and features Cars and Drivers as NFTs, enabling players to manage their own Formula E teams.",
+        "description": "A Formula E team-management game by Animoca Brands, with NFT cars and drivers in the REVV token ecosystem. Principal designer who owned every core gameplay system.",
         "icon": "/assets/icons/Icon_FEHV.png",
         "type": "GAME",
         "overview": {
           "summary": "A Formula E team-management game with NFT cars and drivers, made for Animoca Brands. Principal designer who owned the design of every core gameplay system."
         },
         "responsibilities": [
-          "Oversaw all core gameplay design, aligned with the REVV token economy",
-          "Designed core systems from scratch: Game Modes, Team Management, AI Personas",
-          "Created the full screen flow diagram and worked with the UX and UI teams",
-          "Validated and balanced all game values with the Game Economy Designer",
-          "Researched Formula E in depth to keep gameplay true to the real sport"
+          "Led the high-level design of the game's core systems and features",
+          "Researched real Formula E cars, races and circuits, translating them into mechanics and true-to-life tracks",
+          "Designed the energy system governing each car's energy use and Nitro boost timing",
+          "Designed the Skills system: active and passive skills earned through NFTs, scaled by rarity",
+          "Aligned the core systems with the UI department and the Economy Designer",
+          "Assisted with integrating the weather system into the core gameplay"
         ],
         "achievements": [
           "Integrated NFT Cars and Drivers as playable team management assets"
         ],
-        "technologies": ["Blockchain / NFTs", "Game Design", "Economy Design", "UX Design"],
+        "technologies": ["Blockchain / NFTs", "Game Design", "System Design", "Research"],
         "keyScreenshots": ["/assets/screenshots/FEHV/SS_FEHV_1.png", "/assets/screenshots/FEHV/SS_FEHV_2.jpg", "/assets/screenshots/FEHV/SS_FEHV_3.jpg", "/assets/screenshots/FEHV/SS_FEHV_4.png", "/assets/screenshots/FEHV/SS_FEHV_5.png"],
         "links": { "youtube": "https://www.youtube.com/watch?v=NlQGp6XngcI", "pages": [{ "kind": "facebook", "url": "https://www.facebook.com/FormulaEHighVoltage" }, { "kind": "x", "url": "https://x.com/FormulaE_HV" }, { "kind": "discord", "url": "https://discord.com/invite/Ge6mKzteCZ" }] },
         "isDiscontinued": true,
@@ -205,25 +198,30 @@
         "role": "Game Producer",
         "startDate": "2018-05-01",
         "endDate": "2019-02-28",
-        "description": "Tap TD combines an addictive idle gameplay with the complexity of tower defense. Produced independently in partnership with 3 former King employees.",
+        "description": "A first-of-its-kind active tower defense for mobile, blending idle clicking with tower defense. Conceived and produced it, owning everything but the code and art.",
         "icon": "/assets/icons/Icon_TapTD.png",
         "type": "GAME",
         "overview": {
-          "summary": "An idle tower-defense game for mobile, [? self-published] with three former King developers. Producer and design lead who took it from concept to launch and live updates."
+          "summary": "A first-of-its-kind active tower-defense game for mobile, self-published with three former King developers. Producer who conceived the game and owned its design, monetization and marketing from concept to launch."
         },
         "responsibilities": [
-          "Produced the game with 3 former King employees, leading planning to launch",
-          "Designed all tower defense maps and level progression",
-          "Designed the full UX flow from first-time user experience through endgame loops",
-          "Balanced Enemy and Tower stats and the economy: sinks, drop rates, rewards",
-          "Defined monetization strategy: IAP pricing, discounts, ads, premium unlocks",
-          "Used KPI data to redesign core and meta loops",
-          "Ran the Reddit community and YouTube channel: gameplay, dev vlogs, trailers"
+          "Conceived Tap TD, a first-of-its-kind active tower defense where players fight enemies directly on the map",
+          "Produced the game end to end with 3 former King employees, from concept to launch and live updates",
+          "Coordinated the team's art and programming while owning every other discipline",
+          "Owned the marketing strategy, producing the promotional videos and running social media and the community",
+          "Designed and balanced the full game economy",
+          "Balanced enemy HP scaling against tower damage and abilities across the whole progression",
+          "Defined the monetization strategy: the shop, its full content and premium pack pricing",
+          "Designed the ad strategy, placing fully optional rewarded ads where players choose to watch",
+          "Designed the maps and the map progression meta loop, plus the abilities and skills players use",
+          "Designed the UI and UX of the menus and the gameplay interface",
+          "Created the game's story, lore and branding, one cohesive identity across towers and enemies",
+          "Redesigned the core and meta loops from live KPI data"
         ],
         "achievements": [
           "100K App Installs"
         ],
-        "technologies": ["Game Production", "Game Design", "Economy Design", "Level Design", "UX Design", "Community Mgmt", "Monetization", "KPI Tracking"],
+        "technologies": ["Game Production", "Game Design", "Marketing", "Economy Design", "Monetization", "Level Design", "UX Design", "Community Mgmt", "KPI Tracking"],
         "keyScreenshots": ["/assets/screenshots/TapTD/SS_TapTD_1.png", "/assets/screenshots/TapTD/SS_TapTD_2.png", "/assets/screenshots/TapTD/SS_TapTD_3.png", "/assets/screenshots/TapTD/SS_TapTD_4.png", "/assets/screenshots/TapTD/SS_TapTD_5.png", "/assets/screenshots/TapTD/SS_TapTD_6.png", "/assets/screenshots/TapTD/SS_TapTD_7.png"],
         "links": { "youtube": "https://www.youtube.com/watch?v=6OuN6ncCRNo", "pages": [] },
         "isDiscontinued": true
@@ -244,19 +242,18 @@
         "role": "Game Designer",
         "startDate": "2017-10-01",
         "endDate": "2018-04-30",
-        "description": "Newton Slots has a unique take on Slot games, introducing the option to interact with elements on the screen. A Slots + Match-3 hybrid.",
+        "description": "A slots game where players interact with the reels, a Slots + Match-3 hybrid. Designed its first-of-its-kind hybrid mechanic from concept to implementation.",
         "icon": "/assets/icons/Icon_Slots.jpg",
         "type": "GAME",
         "overview": {
           "summary": "A slots game where players interact with the reels, mixing slots with match-3. Game designer who took the new hybrid mechanic from concept to implementation."
         },
         "responsibilities": [
-          "Redesigned a Slots game with Match-3 mechanics, a first-of-its-kind hybrid",
-          "Researched and documented the Swapping mechanic's rules and edge cases",
-          "Designed new Bonus Games mechanics for more variety and replayability",
-          "Coordinated implementation of all design features with the dev team",
-          "Balanced the payout formula, tuning win rates against retention targets",
-          "Designed the Loot Box system including drop tables, rarity tiers, and reward progression"
+          "Redesigned a Slots game around Match-3 mechanics, a first-of-its-kind hybrid",
+          "Defined the Swapping mechanic's full rule set and drove its implementation with the dev team",
+          "Designed new Bonus Game mechanics for more variety and replayability",
+          "Balanced the payout formula against retention targets",
+          "Designed the Loot Box system and its reward progression"
         ],
         "achievements": [
           "Innovative Spin Mechanic, a first-of-kind Slots + Match-3 hybrid interaction"
@@ -313,23 +310,20 @@
         "role": "Game Designer",
         "startDate": "2016-07-01",
         "endDate": "2017-06-30",
-        "description": "FitKin is a gamified app designed to encourage users to live a healthy lifestyle. Users advance the story's progress by tracking their steps in the real world.",
+        "description": "A gamified health app where real-world steps advance the story. Designed the game and led its user research.",
         "icon": "/assets/icons/Icon_Fitkin.png",
         "type": "GAME",
         "overview": {
           "summary": "A gamified health app where real-world steps advance the story. Game designer on an 8-person team, leading user research and testing."
         },
         "responsibilities": [
-          "Worked in a team of 8 across design, development, and QA",
-          "Wrote all Game Design docs: feature specs, system rules, progression",
-          "Designed scenes and a story that advances with real-world activity",
-          "Prototyped features in fast iterations before full implementation",
-          "Built behavioral Personas from research to tailor the experience",
-          "Ran User Behavior research on how players engaged with fitness mechanics",
-          "Organized and ran User Testing events to validate design assumptions with real players"
+          "Designed the game and its story, where real-world activity drives progression",
+          "Authored all Game Design docs: feature specs, system rules and progression",
+          "Led user research and testing, turning player behavior into the Personas the experience is built around",
+          "Prototyped features in fast iterations ahead of full implementation"
         ],
         "achievements": [
-          "Designed User Personas classification system"
+          "Designed a User Personas classification system"
         ],
         "technologies": ["Gamification", "UX Design", "Research"],
         "keyScreenshots": ["/assets/screenshots/FitKin/SS_FitKin_1.png"],
@@ -351,19 +345,18 @@
         "role": "Freelance Game Designer",
         "startDate": "2015-11-01",
         "endDate": "2016-06-30",
-        "description": "Designed and produced an idle brawler game for a client. Managed the full production cycle including client communication.",
+        "description": "An idle brawler game designed and produced for a client. Owned the full production cycle and the client relationship.",
         "icon": "/assets/icons/Icon_Castellum.png",
         "type": "GAME",
         "overview": {
           "summary": "An idle brawler game designed and produced for a freelance client. Producer and designer who owned the project and the client relationship from brief to delivery."
         },
         "responsibilities": [
-          "Designed and produced a complete idle brawler game, from brief to delivery",
-          "Managed a team of 4 across design, art, and development",
-          "Ran regular client update calls and iterated on the design from feedback",
-          "Authored the full Game Design Document: mechanics, progression, economy",
-          "Handled UX and UI Design: wireframes and screen flows for the full journey",
-          "Produced promotional videos for the client to use in marketing and investor presentations"
+          "Designed and produced a complete idle brawler game, from client brief to delivery",
+          "Led a team of 4 across design, art and development",
+          "Owned the client relationship, steering the design through regular reviews",
+          "Authored the full Game Design Document and designed the UX and UI end to end",
+          "Produced promotional videos supporting the client's marketing and investor pitches"
         ],
         "achievements": [
           "Delivered a complete game to a freelance client"
@@ -389,16 +382,15 @@
         "role": "Jr. Level Designer",
         "startDate": "2013-10-01",
         "endDate": "2014-03-30",
-        "description": "One of King's founding hits. Started as Jr. Level Designer learning core Level Design principles.",
+        "description": "One of King's founding hits, a bubble-shooter puzzle game. Designed and balanced live levels as Jr. Level Designer.",
         "icon": "/assets/icons/Icon_BWS1.png",
         "type": "GAME",
         "overview": {
           "summary": "One of King's founding hits, a bubble-shooter puzzle game run as a live service. Junior level designer on the live game, in a first role at King."
         },
         "responsibilities": [
-          "Joined King as Jr. Level Designer on Bubble Witch Saga, a founding hit",
           "Designed and balanced live levels with King's proprietary tools and standards",
-          "Learned core Level Design: difficulty curves, player psychology, pacing"
+          "Applied core Level Design principles: difficulty curves, player psychology and pacing"
         ],
         "achievements": [
           "Contributed to one of King's founding hits"
@@ -414,21 +406,18 @@
         "role": "Level Designer",
         "startDate": "2014-04-01",
         "endDate": "2015-10-30",
-        "description": "AlphaBetty Saga is a unique match-3 puzzle game that replaces colored candies with letters. Link letters to create Words & Blasters! Ranked as the Top 5th Word game in the world.",
+        "description": "A match-3 word game where letters replace candies, ranked among the top 5 word games worldwide. Level designer who owned onboarding and difficulty tuning.",
         "icon": "/assets/icons/Icon_Alphabetty.png",
         "type": "GAME",
         "overview": {
           "summary": "A match-3 word game where letters replace candies, ranked among the top 5 word games worldwide. Level designer who owned onboarding for a live title played by millions."
         },
         "responsibilities": [
-          "Promoted to Level Designer on AlphaBetty Saga, a Top 5 Word game worldwide",
-          "Owned the FTUE and onboarding: strategy, mechanic pacing, and tutorials",
-          "Ran A/B tests on onboarding difficulty tracks against retention metrics",
-          "Worked with Data Science to tune level difficulty and pacing using player data",
-          "Trained 1 Junior Level Designer, mentoring them through the full production workflow",
-          "Kept design docs aligned with live content changes",
+          "Owned the FTUE and onboarding: strategy, mechanic pacing and tutorials",
+          "Ran A/B tests on onboarding difficulty against retention metrics",
+          "Tuned level difficulty and pacing with Data Science, driven by player data",
           "Presented Level Design insights and best practices across King studios",
-          "Took part in King's internal design leadership programs"
+          "Mentored a Junior Level Designer through the full production workflow"
         ],
         "achievements": [
           "Shipped a live King title reaching millions of players"
