@@ -70,3 +70,4 @@ Individual Kanban cards — see [BOARD.md](../BOARD.md) for the protocol (states
   * [T-062](T-062-constitution-cost-questions.md) - Cost questions in the constitution *(backlog)*
   * [T-063](T-063-lesson-promotion-back-sweep.md) - Lessons become rules, plus a back-sweep of existing code *(backlog)*
   * [T-064](T-064-moving-parts-audit-fixes.md) - Fix the Moving Parts Audit findings *(done)*
+  * [T-068](T-068-timeline-bar-breathing.md) - Timeline bar changes width while scrolling *(in-progress — third fix in, awaiting user check)*

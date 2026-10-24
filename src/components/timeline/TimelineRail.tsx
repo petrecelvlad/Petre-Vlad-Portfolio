@@ -34,12 +34,14 @@ function getProgress(activeIndex: number, projectCount: number): number {
 // dark line is a warm near-black ink (rgba(36,26,16,0.3)), which is exactly what read
 // as "grey/black" here. Same inset-highlight/inset-shadow shape, purple family both
 // states: idle uses lilac/periwinkle-deep for a quiet ramp, passed uses lilac/
-// periwinkle-darkest for a visibly richer one. color-mix keeps it tied to the tokens.
+// periwinkle-darkest for a visibly richer one. The rgba values are those tokens
+// (#D8B4FE, #7E22CE, #9333EA) at fixed alphas, not color-mix(): Chrome before 111
+// drops the whole box-shadow over it, leaving the dots flat (see BentoSkills.tsx).
 function RailDot({ isPassed, className }: { isPassed: boolean; className: string }) {
   const isReducedMotion = useReducedMotion();
   const emboss = isPassed
-    ? 'inset 0 2px 0 0 color-mix(in srgb, var(--color-lilac) 70%, transparent), inset 0 -2px 0 0 color-mix(in srgb, var(--color-periwinkle-darkest) 55%, transparent)'
-    : 'inset 0 2px 0 0 rgba(255, 255, 255, 0.6), inset 0 -2px 0 0 color-mix(in srgb, var(--color-periwinkle-deep) 35%, transparent)';
+    ? 'inset 0 2px 0 0 rgba(216, 180, 254, 0.7), inset 0 -2px 0 0 rgba(126, 34, 206, 0.55)'
+    : 'inset 0 2px 0 0 rgba(255, 255, 255, 0.6), inset 0 -2px 0 0 rgba(147, 51, 234, 0.35)';
   return (
     <motion.span
       className={`rounded-full border-[length:var(--border-width-sm)] transition-colors duration-300 ${
@@ -127,14 +129,16 @@ export function TimelineRail({ projects, activeIndex, isInFullView, onNavigate }
             matching just the endpoints is enough to line up every dot in between.
           */}
           <div className="relative h-full flex flex-col items-center justify-between py-24 [--rail-inset:7.25rem]">
-            {/* Base line spanning all dot centers */}
+            {/* Base line spanning all dot centers. The line and button widths are px, not rem: the root
+                font isn't 16px, so rem put the line's edges between pixels, and the GPU layer Chrome
+                uses while scrolling rounds those differently from a normal paint (1px narrower). */}
             <div
-              className="absolute w-1.5 -translate-x-1/2 left-1/2 bg-lilac rounded-full"
+              className="absolute w-[6px] -translate-x-1/2 left-1/2 bg-lilac rounded-full"
               style={{ top: 'var(--rail-inset)', bottom: 'var(--rail-inset)' }}
             />
             {/* Filled portion up to the active project */}
             <div
-              className="absolute w-1.5 -translate-x-1/2 left-1/2 bg-periwinkle-deep rounded-full origin-top transition-transform duration-500 ease-out"
+              className="absolute w-[6px] -translate-x-1/2 left-1/2 bg-periwinkle-deep rounded-full origin-top transition-transform duration-500 ease-out"
               style={{
                 top: 'var(--rail-inset)',
                 bottom: 'var(--rail-inset)',
@@ -149,7 +153,7 @@ export function TimelineRail({ projects, activeIndex, isInFullView, onNavigate }
                 onClick={() => onNavigate(index)}
                 aria-label={`Jump to ${project.title}`}
                 aria-current={index === activeIndex}
-                className="relative z-10 flex items-center justify-center w-10 h-10 pointer-events-auto cursor-pointer"
+                className="relative z-10 flex items-center justify-center w-[40px] h-10 pointer-events-auto cursor-pointer"
               >
                 <RailDot isPassed={index <= activeIndex} className="w-[25px] h-[25px]" />
               </button>
