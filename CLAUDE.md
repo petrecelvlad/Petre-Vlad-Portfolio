@@ -2,6 +2,8 @@
 
 You are a Claude agent working on this project. Read this immediately after `AGENT.md`. This is your provider-specific onboarding — it makes you effective in one pass.
 
+**Every reply:** answer only what was asked, in the fewest lines. More only when the user asks for depth. Full rule: `cone/agent/personas/COMMUNICATOR.md`.
+
 ## Onboarding Sequence
 
 Read in this order. Each step gives you a specific capability:
