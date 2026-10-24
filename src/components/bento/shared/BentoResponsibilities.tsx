@@ -314,7 +314,7 @@ export function BentoResponsibilities(props: ResponsibilitiesSlotProps) {
         aria-current={isActive}
         title={section.label}
         className={`w-10 md:w-11 flex justify-center pt-[3px] rounded-t-md border-[length:var(--border-width-md)] border-ink-base shadow-[var(--shadow-raised)] origin-bottom transition-[translate,scale,background-color] ${
-          isActive ? 'relative z-[1] scale-110 cursor-default' : 'translate-y-[3px] hover:translate-y-px brightness-95 hover:brightness-100 cursor-pointer'
+          isActive ? 'relative z-[1] cursor-default' : 'translate-y-[4px] hover:translate-y-px brightness-95 hover:brightness-100 cursor-pointer'
         }`}
         style={{
           height: CLIP_OVERHANG_PX + TAB_TUCK_PX,
