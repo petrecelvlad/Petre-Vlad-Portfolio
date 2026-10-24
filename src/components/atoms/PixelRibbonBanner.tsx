@@ -94,9 +94,14 @@ export const PixelRibbonBanner: React.FC<PixelRibbonBannerProps> = ({
 
       <div
         className="absolute left-0 top-0 z-20 w-full flex items-center justify-center font-press-start text-base text-white uppercase tracking-[1px] leading-none drop-shadow-[0_3px_0_#1C1610]"
-        style={{ height: 11 * u, paddingLeft: 9 * u, paddingRight: 9 * u, WebkitTextStroke: `4px ${outlineColor}`, paintOrder: 'stroke fill' }}
+        style={{ height: 11 * u, paddingLeft: 9 * u, paddingRight: 9 * u }}
       >
-        {children}
+        {/* The outline is a stroked copy behind the white text, not paint-order: Chrome before
+            123 ignores paint-order on HTML text and strokes over the fill, hiding the white. */}
+        <div className="grid">
+          <div aria-hidden className="[grid-area:1/1]" style={{ color: outlineColor, WebkitTextStroke: `4px ${outlineColor}` }}>{children}</div>
+          <div className="[grid-area:1/1]">{children}</div>
+        </div>
       </div>
     </div>
   );
